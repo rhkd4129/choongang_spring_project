@@ -1,1 +1,18 @@
 마스터입니다.
+
+$ git checkout -b develop
+하면 devlop 브랜치 만들어진다.
+
+git push를 하면
+git push --set-upstream origin develop
+
+develop라는 브랜치가 github에는 안만들어져 있어서 이 develop브랜치를 올리는작업
+
+
+브랜치 보호정책
+Look branch  개개인 함부로 푸쉬할수없다
+
+Require a pull request before merging
+반드시 pull   request 통해서만 master에 푸시할수 잇다.
+
+
