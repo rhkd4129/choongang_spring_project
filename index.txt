@@ -1,1 +1,6 @@
 마스터입니다.
+
+
+
+git remote add origin 클론할 주소 
+git push origin master  (현재 로컬 저장소에서 master브랜치로 올린다?)
