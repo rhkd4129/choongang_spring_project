@@ -1,5 +1,6 @@
 마스터입니다.
 
+
 $ git checkout -b develop
 하면 devlop 브랜치 만들어진다.
 
@@ -14,5 +15,10 @@ Look branch  개개인 함부로 푸쉬할수없다
 
 Require a pull request before merging
 반드시 pull   request 통해서만 master에 푸시할수 잇다.
+git remote add origin 클론할 주소 
+git push origin master  (현재 로컬 저장소에서 master브랜치로 올린다?)
+
+
+
 
 
