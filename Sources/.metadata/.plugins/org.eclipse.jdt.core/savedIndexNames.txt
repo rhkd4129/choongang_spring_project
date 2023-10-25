@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+C:\githubRepository\choongang_spring_project\Sources\.metadata\.plugins\org.eclipse.jdt.core
-1602128660.index
-1800603163.index
