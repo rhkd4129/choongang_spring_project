@@ -5,7 +5,7 @@ choongang_spring_project
 # Naming_RULE
 
 
-  ser:  service <br/> 
+  ser:  service       <br/> 
   ctr:  controller     <br/>
   cfg:  configuration   <br/>
   dmi:  domain          <br/>

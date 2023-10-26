@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+	 
+	 
+<mapper namespace="com.oracle.s202350101.">
+	 
+
+	
+
+</mapper>
+
