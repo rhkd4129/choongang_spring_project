@@ -284,7 +284,7 @@ CREATE TABLE USER_INFO (
 	attach_name VARCHAR2(100), /* 첨부파일명 */
 	attach_path VARCHAR2(200), /* 첨부파일경로 */
 	del_status NUMBER(1) DEFAULT 0, /* 삭제여부 */
-	chat_room_ses VARCHAR2(300) /* 채팅방_세션 */
+	chat_room_ses varchar2(300) /* 채팅방_세션 */
 );
 
 CREATE UNIQUE INDEX MEMBER_JOIN
@@ -524,7 +524,7 @@ ALTER TABLE PRJ_MEM_LIST
 
 /* 채팅방 */
 CREATE TABLE CHAT_ROOM (
-	chat_room_Id VARCHAR2(300) NOT NULL, /* 채팅방ID */
+	chat_room_Id number(5) NOT NULL, /* 채팅방ID */
 	sender_id VARCHAR2(30), /* 발신자ID */
 	receiver_id VARCHAR2(30) /* 수신자ID */
 );
@@ -543,8 +543,8 @@ ALTER TABLE CHAT_ROOM
 
 /* 메세지 */
 CREATE TABLE CHAT_MSG (
-	chat_room_Id VARCHAR2(300) NOT NULL, /* 채팅방ID */
-	msg_Id NUMBER NOT NULL, /* 메세지ID */
+	chat_room_Id number(5) NOT NULL, /* 채팅방ID */
+	msg_Id NUMBER(8) NOT NULL, /* 메세지ID */
 	sender_id VARCHAR2(30) NOT NULL, /* 발신자ID */
 	msg_con VARCHAR2(1500), /* 메세지내용 */
 	send_time DATE, /* 보낸시간 */
