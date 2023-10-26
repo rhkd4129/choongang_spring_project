@@ -1,4 +1,3 @@
-
 drop table CODE;
 drop table BD_FREE_GOOD;
 drop table TASK_ATTACH;
@@ -9,11 +8,12 @@ drop table CHAT_ROOM;
 drop table PRJ_MEM_LIST;
 drop table BD_DATA_COMT;
 drop table TASK_SUB;
-drop table METTING_MEMBER;
+drop table MEETING_MEMBER;
 drop table BD_FREE_COMT;
 drop table TASK;
 drop table USER_ENV;
 drop table MEETING;
+drop table PRJ_CALENDAR;
 drop table TODO;
 drop table BD_QNA;
 drop table BD_FREE;
@@ -27,5 +27,3 @@ drop table PRJ_INFO;
 drop table CLASS_ROOM;
 
 commit;
------
-
