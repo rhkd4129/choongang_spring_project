@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<link href="/common/css/common.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/common/js/common.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			url			: '/main_header.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#header').html(data);
+			}
+		});
+		
+		$.ajax({
+			url			: '/main_left.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#left').html(data);
+			}
+		});
+		
+/* 		$.ajax({
+			url			: '/blank.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#center').html(data);
+			}
+		}); */
+		
+	});
+</script>
+</head>
+<body>
+	<div id="header">
+	</div>
+ 	<div id="main" class="main">
+ 		<div id="left" class="menu-left">	
+ 		</div>
+		<div id="content">
+			<div id="center" class="content-body">
+
+
+				<!------------------------------------ 삽입 위치 START ------------------------------------>
+				<div class="container">
+					<form action="p2.html">
+						<div style="text-align: center">
+							<p>
+							<h2>요구사항 분석</h2>
+							<hr>
+						</div>
+						<div class="input-group mb-3">
+							<textarea class="form-control" aria-label="With textarea" rows="15">
+					프로젝트를 수행하기 위해 단계적으로 필요한 요구 사항을 분석합니다.
+					개발하고자 하는 소프트웨어를 구성하는 여러 기능을 체계적으로 정의하고,
+					목표 사용자가 제공하는 요구 사항을 명확히 할 수 있습니다.
+							</textarea>
+						</div>
+						<div align="center">
+							<button type="reset" class="btn btn-secondary">다시쓰기</button>
+							<button type="submit" class="btn btn-secondary">수정완료</button>
+						</div>
+					</form>
+				</div>
+				<!------------------------------------ 삽입 위치 END ------------------------------------>
+
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
