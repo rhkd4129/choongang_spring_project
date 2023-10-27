@@ -32,7 +32,7 @@
 	$(function() {
 		
 		$.ajax({
-			url			: '../header.html',
+			url			: '/header.html',
 			dataType 	: 'text',
 			success		: function(data) {
 				$('#header').html(data);
@@ -40,7 +40,7 @@
 		});
 		
 		$.ajax({
-			url			: '../menubar.html',
+			url			: '/menubar.html',
 			dataType 	: 'text',
 			success		: function(data) {
 				$('#menubar').html(data);
@@ -49,7 +49,7 @@
 		
 	
 		$.ajax({
-			url			: '../footer.html',
+			url			: '/footer.html',
 			dataType 	: 'text',
 			success		: function(data) {
 				$('#footer').html(data);

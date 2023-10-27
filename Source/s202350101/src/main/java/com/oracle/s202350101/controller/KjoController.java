@@ -14,9 +14,22 @@ public class KjoController {
 		log.info("hi");
 		return "admin/hello";
 	}
+	
+	@GetMapping("/boardManage")
+	public String boardManage() {
+		log.info("boardManage");
+		return "admin/boardManage";
+	}
+	
+	@GetMapping("/createnote")
+	public String createnote() {
+		log.info("createnote");
+		return "admin/createnote";
+	}
+	
 	@GetMapping("/captainManage")
 	public String captainManage() {
-		log.info("hi");
+		log.info("captainManage");
 		return "admin/captainManage";
 	}
 
