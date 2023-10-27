@@ -61,10 +61,11 @@ public class KjoController {
 		return "admin/admin_projectmanager";
 	}
 	
+//	(defaultValue = "1")
 	//	팀장 권한 페이지 GET
 	@GetMapping("/admin_projectmanagerRest")
 	@ResponseBody
-	public HttpEntity<List> admin_projectmanagerRest(@RequestParam(defaultValue = "1") int cl_id, Model model) {
+	public HttpEntity<List> admin_projectmanagerRest(@RequestParam int cl_id, Model model) {
 //		log.info("captainManage");
 //		List<ClassRoom> CRList =CRser.findAllClassRoom();
 //		log.info(CRList.toString());
