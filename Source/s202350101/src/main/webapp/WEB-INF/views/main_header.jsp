@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="/pms.html">PMS</a>
@@ -32,10 +34,10 @@
 					<li><a class="dropdown-item" href="#">로그아웃</a></li>
 				</ul>
 			</div>
-			<form class="d-flex" role="search" style="margin-left:10px">        
+			<div class="d-flex" role="search" style="margin-left:10px">        
 				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 				<button class="btn btn-outline-secondary" type="submit">Search</button>
-			</form>
+			</div>
 		</div>
 	</div>
 </nav>

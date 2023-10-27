@@ -5,17 +5,17 @@
 <!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
 	 mapper 여러개 쓰셔도 됩니다. -->
 	 
-	 
-<mapper namespace="com.oracle.s202350101.ClassRoomMapper">
-	<!-- ClassRoom -->
+
+<mapper namespace="com.oracle.s202350101.UserInfoMapper">
+	<!-- UserInfo -->
 	
-	<select id="findAllClassRoom" resultType="ClassRoom">
+	<select id="findAllUser" resultType="UserInfo">
 		
-		select * from class_room
+		select * from user_info
 	</select>
-	<select id="findAreaClassRoom" parameterType="ClassRoom" resultType="ClassRoom">
+	<select id="findbyClassUser" parameterType="int" resultType="UserInfo">
 		
-		select * from class_room where class_area=#{class_area}
+		select * from user_info where class_id = #{cl_id} and user_auth != 'admin'
 	</select>
 </mapper>
-	 
+

@@ -198,12 +198,7 @@ ALTER TABLE TODO
 			todo_no
 		);
 
-/* 프로젝트용 캘린더 */
-CREATE TABLE PRJ_CALENDAR (
-	calendar_id NUMBER(4) NOT NULL, /* 캘린더ID */
-	project_id NUMBER(4) NOT NULL, /* 프로젝트ID */
-	meeting_id NUMBER(4) NOT NULL /* 회의록번호 */
-);
+
 
 CREATE UNIQUE INDEX PK_PRJ_CALENDAR
 	ON PRJ_CALENDAR (
