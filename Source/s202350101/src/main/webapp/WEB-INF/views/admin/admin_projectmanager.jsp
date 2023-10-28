@@ -48,7 +48,7 @@
 	function cl_room() {
 		var cl_room_val = $('#cl_room_List').val();
 		console.log(cl_room_val);
-		var sendurl = '/admin_projectmanagerRest/?cl_id='+cl_room_val;
+		var sendurl = '/admin_projectmanagerRest/'+cl_room_val;
 		console.log(sendurl);
 
 		$.ajax({
@@ -148,7 +148,7 @@
 							</tbody>
 
 						</table>
-						<button class="btn btn-primary" onclick="location.href='#'"
+						<button class="btn btn-primary" onclick=""
 							type="button">권한 수정</button>
 					</form>
 				</div>

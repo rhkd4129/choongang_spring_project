@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,28 +64,17 @@ public class KjoController {
 		
 		return "admin/admin_projectmanager";
 	}
-	
-//	(defaultValue = "1")
-	//	팀장 권한 페이지 GET
-	@GetMapping("/admin_projectmanagerRest")
+
+	//	팀장 권한 페이지 RestGET
+	@GetMapping("/admin_projectmanagerRest/{cl_id}")
 	@ResponseBody
-	public HttpEntity<List> admin_projectmanagerRest(@RequestParam(defaultValue = "1") int cl_id, Model model) {
-//		log.info("captainManage");
-//		List<ClassRoom> CRList =CRser.findAllClassRoom();
-//		log.info(CRList.toString());
-//		log.info("");
+	public ResponseEntity<List> admin_projectmanagerRest(@PathVariable int cl_id, Model model) {
 		log.info("admin_projectmanagerRest");
 		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);
-		HttpEntity<List> entity = new HttpEntity<>(UIList);
-		
-//		model.addAttribute("CRList",CRList);
 		model.addAttribute("UIList",UIList);
+
 		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
-		log.info("admin_projectmanagerRest");
-		
-		
-		return entity;
+		return ResponseEntity.ok(UIList);
 	}
-	
-	
+
 }
