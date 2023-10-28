@@ -1,6 +1,7 @@
 package com.oracle.s202350101.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
@@ -49,13 +50,14 @@ public class KjoController {
 	@GetMapping("/admin_projectmanager")
 	public String captainManage(@RequestParam(defaultValue = "1") int cl_id, Model model) {
 		log.info("captainManage");
-		List<ClassRoom> CRList =CRser.findAllClassRoom();
+		List<ClassRoom> CRList =CRser.findAllClassRoom();			// 모든 강의실 조회
 		log.info(CRList.toString());
-//		log.info("");
-		List<UserInfo> USList = UIser.findbyclassuser(cl_id);
+//		List<UserInfo> USList = UIser.findbyclassuser(cl_id);		// 특정 강의실 학생 조회
+		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);		// 특정 강의실 학생 조회
+
 		
 		model.addAttribute("CRList",CRList);
-		model.addAttribute("USList",USList);
+		model.addAttribute("UIList",UIList);
 		
 		
 		return "admin/admin_projectmanager";
@@ -65,17 +67,18 @@ public class KjoController {
 	//	팀장 권한 페이지 GET
 	@GetMapping("/admin_projectmanagerRest")
 	@ResponseBody
-	public HttpEntity<List> admin_projectmanagerRest(@RequestParam int cl_id, Model model) {
+	public HttpEntity<List> admin_projectmanagerRest(@RequestParam(defaultValue = "1") int cl_id, Model model) {
 //		log.info("captainManage");
 //		List<ClassRoom> CRList =CRser.findAllClassRoom();
 //		log.info(CRList.toString());
 //		log.info("");
 		log.info("admin_projectmanagerRest");
-		List<UserInfo> USList = UIser.findbyclassuser(cl_id);
-		HttpEntity<List> entity = new HttpEntity<List>(USList);
+		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);
+		HttpEntity<List> entity = new HttpEntity<>(UIList);
 		
 //		model.addAttribute("CRList",CRList);
-		model.addAttribute("USList",USList);
+		model.addAttribute("UIList",UIList);
+		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
 		log.info("admin_projectmanagerRest");
 		
 		

@@ -56,6 +56,30 @@
 			dataType : 'text',
 			success : function(data){
 				console.log(data);
+				var jsonData = JSON.parse(data); // JSON 데이터를 파싱하여 jsonData에 저장
+				console.log(jsonData);
+				var tbody = $('#user_list'); // tbody 요소를 선택
+				// 테이블 초기화
+				tbody.empty();
+				// 데이터를 순회하면서 테이블에 추가
+				$.each(jsonData, function(index, user) {
+					var tr = $('<tr>'); // 새로운 <tr> 엘리먼트 생성
+
+					// <td> 엘리먼트 생성 및 데이터 추가
+					tr.append('<td>' + user.user_name + '</td>');
+					tr.append('<td>' + user.project_name + '</td>');
+
+					var authCheckbox = $('<input type="checkbox" name="user_auth">'); // 체크박스 생성
+
+					if (user.user_auth === 'manager') {
+						authCheckbox.prop('checked', true); // 'manager'인 경우 체크
+					}
+
+					var authTd = $('<td>').append(authCheckbox); // <td>에 체크박스 추가
+					tr.append(authTd);
+
+					tbody.append(tr); // <tr>을 <tbody>에 추가
+				});
 			}
 
 		});
@@ -105,12 +129,11 @@
 									<th>권한여부</th>
 								</tr>
 							</thead>
-							<tbody>
-								<c:forEach items="${USList }" var="user">
+							<tbody id="user_list">
+								<c:forEach items="${UIList }" var="user">
 									<tr>
 										<td>${user.user_name}</td>
-										<td>${user.user_name}</td>
-										<td>${user.user_name}</td>
+										<td>${user.project_name}</td>
 										<c:choose>
 											<c:when test="${user.user_auth eq 'manager'}">
 												<td><input type="checkbox" name="user_auth" checked></td>
@@ -119,31 +142,8 @@
 												<td><input type="checkbox" name="user_auth"></td>
 											</c:when>
 										</c:choose>
-
-
 									</tr>
 								</c:forEach>
-								<tr>
-									<td>1</td>
-									<td>2</td>
-									<td>3</td>
-									<td><input type="checkbox" name="xxx" value="yyy"
-										unchecked></td>
-								</tr>
-								<tr>
-									<td>1</td>
-									<td>2</td>
-									<td>3</td>
-									<td><input type="checkbox" name="xxx" value="yyy"
-										unchecked></td>
-								</tr>
-								<tr>
-									<td>1</td>
-									<td>2</td>
-									<td>3</td>
-									<td><input type="checkbox" name="xxx" value="yyy"
-										unchecked></td>
-								</tr>
 
 							</tbody>
 

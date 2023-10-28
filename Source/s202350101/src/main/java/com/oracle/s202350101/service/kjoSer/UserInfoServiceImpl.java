@@ -24,4 +24,12 @@ public class UserInfoServiceImpl implements UserInfoService{
 		return UIList;
 	}
 
+	@Override
+	public List<UserInfo> findbyClassUserProject(int cl_Id) {
+		log.info("findbyClassUserProject start");
+		List<UserInfo> UIList = UIdao.findbyClassUserProject(cl_Id);
+		return UIList;
+
+	}
+
 }

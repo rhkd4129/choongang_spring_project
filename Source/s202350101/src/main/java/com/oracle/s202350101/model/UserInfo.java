@@ -26,4 +26,7 @@ public class UserInfo {
 	private String 	attach_path;
 	private int		del_status;
 	private String 	chat_room_ses;
+
+//	조회용
+	private String project_name;
 }

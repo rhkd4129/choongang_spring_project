@@ -1,6 +1,7 @@
 package com.oracle.s202350101.dao.kjoDao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,8 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		log.info("findAllClassRoom start");
 		try {
 			CRList = session.selectList("findAllClassRoom");
+			System.out.println(CRList.stream().collect(Collectors.toList()));
+
 			log.info("findAllClassRoom finish");
 		}catch (Exception e) {
 			e.printStackTrace();

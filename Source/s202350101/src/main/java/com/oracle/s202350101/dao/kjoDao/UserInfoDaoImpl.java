@@ -1,6 +1,7 @@
 package com.oracle.s202350101.dao.kjoDao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		List<UserInfo> UIList = null;
 		try {
 			UIList = session.selectList("findbyClassUser", cl_id);
+			System.out.println(UIList.stream().collect(Collectors.toList()));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -30,5 +32,20 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		
 		return UIList;
 	}
+
+	@Override
+	public List<UserInfo> findbyClassUserProject(int cl_id) {
+		log.info("findbyClassUserProject start");
+		List<UserInfo> UIList = null;
+		try {
+			UIList = session.selectList("findbyClassUserProject", cl_id);
+			System.out.println(UIList.stream().collect(Collectors.toList()));
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return UIList;
+	}
+
 
 }

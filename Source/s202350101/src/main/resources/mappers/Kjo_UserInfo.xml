@@ -10,12 +10,21 @@
 	<!-- UserInfo -->
 	
 	<select id="findAllUser" resultType="UserInfo">
-		
 		select * from user_info
 	</select>
 	<select id="findbyClassUser" parameterType="int" resultType="UserInfo">
-		
 		select * from user_info where class_id = #{cl_id} and user_auth != 'admin'
 	</select>
+
+	<select id="findbyClassUserProject" parameterType="int" resultType="UserInfo">
+        select *
+        from user_info u
+                 left join prj_info p
+                           on u.project_id = p.project_id
+        where class_id = #{cl_id}
+          and user_auth != 'admin'
+    </select>
+
+
 </mapper>
 
