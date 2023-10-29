@@ -147,21 +147,21 @@
                     <div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
                 </div>
 
-                <form action="/admin_add_class" method="post">
+                <form action="/admin_add_class" method="post" style="width:50%">
                     <h2>반생성</h2>
-                    반 번호 : <input class="form-control" type="text" name="CLASS_ROOM_NUM"><br>
-                    담당 강사 : <input class="form-control" type="text" name="CLASS_MASTER"><br>
-                    강의 이름 : <input class="form-control" type="text" name="CLASS_NAME"><br>
+                    반 번호 : <input class="form-control" type="text" name="class_room_num"><br>
+                    담당 강사 : <input class="form-control" type="text" name="class_master"><br>
+                    강의 이름 : <input class="form-control" type="text" name="class_name"><br>
                     학원 위치 :
-                    <select class="form-select" name="CLASS_AREA">
+                    <select class="form-select" name="class_area">
                         <option value="이대">이대</option>
                         <option value="강남">강남</option>
                     </select> <br>
-                    시작 날짜 : <input type="date" name="CLASS_START_DATE"><br>
-                    종료 날짜 : <input type="date" name="CLASS_END_DATE"><br>
+                    시작 날짜 : <input type="date" name="class_start_date"><br>
+                    종료 날짜 : <input type="date" name="class_end_date"><br><br>
 
-                    <button type="submit">반 생성하기</button>
-                    <button type="reset">
+                    <button class="btn btn-secondary" type="submit">반 생성하기</button>
+                    <button class="btn btn-secondary" type="reset">
                         초기화하기
                     </button>
                 </form>

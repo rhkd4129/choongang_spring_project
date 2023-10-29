@@ -8,6 +8,7 @@ public interface ClassRoomService {
 
 //	모든 강의실 조회
 	List<ClassRoom> findAllClassRoom();
-	
 
+
+	int saveClassRoom(ClassRoom cr);
 }

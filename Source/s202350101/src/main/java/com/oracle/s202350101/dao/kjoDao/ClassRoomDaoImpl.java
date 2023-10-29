@@ -16,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ClassRoomDaoImpl implements ClassRoomDao{
 	
-
 	private final SqlSession session;
 
+	//	모든 ClassRoom 조회
 	@Override
 	public List<ClassRoom> findAllClassRoom() {
 		List<ClassRoom> CRList = null;
@@ -34,7 +34,19 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		return CRList;
 		
 	}
-	
-	
+
+	//	ClassRoom	생성
+	@Override
+	public int saveClassRoom(ClassRoom cr) {
+		log.info("saveClassRoom start");
+		int result = 0;
+		try {
+			result = session.insert("saveClassRoom",cr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 
 }

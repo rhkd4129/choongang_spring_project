@@ -18,13 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 public class UserInfoDaoImpl implements UserInfoDao{
 
 	private final SqlSession session;
-	
+
+	//	특정 강의실 전체 학생 조회
 	@Override
 	public List<UserInfo> findbyclassuser(int cl_id) {
 		log.info("findbyclassuser start");
 		List<UserInfo> UIList = null;
 		try {
 			UIList = session.selectList("findbyClassUser", cl_id);
+			//	결과	출력
 			System.out.println(UIList.stream().collect(Collectors.toList()));
 			
 		}catch (Exception e) {
@@ -34,6 +36,7 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		return UIList;
 	}
 
+	//	특정 강의실 내 전체 학생 및 참여 프로젝트 조회
 	@Override
 	public List<UserInfo> findbyClassUserProject(int cl_id) {
 		log.info("findbyClassUserProject start");
@@ -49,6 +52,7 @@ public class UserInfoDaoImpl implements UserInfoDao{
 	}
 
 
+	//	학생들	Manager권한	수정
 	@Override
 	public int auth_modify_manager(List<String> userManager) {
 		log.info("auth_modify_manager start");
@@ -63,6 +67,7 @@ public class UserInfoDaoImpl implements UserInfoDao{
 
 	}
 
+	//	학생들	Student권한	수정
 	@Override
 	public int auth_modify_student(List<String> userStudent) {
 		log.info("auth_modify_student start");

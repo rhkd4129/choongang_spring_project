@@ -4,18 +4,31 @@
 
 <!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
 	 mapper 여러개 쓰셔도 됩니다. -->
-	 
-	 
+
+
 <mapper namespace="com.oracle.s202350101.ClassRoomMapper">
 	<!-- ClassRoom -->
-	
+
 	<select id="findAllClassRoom" resultType="ClassRoom">
-		
-		select * from class_room
+
+		select *
+		from class_room
 	</select>
 	<select id="findAreaClassRoom" parameterType="ClassRoom" resultType="ClassRoom">
-		
-		select * from class_room where class_area=#{class_area}
+
+		select *
+		from class_room
+		where class_area = #{class_area}
 	</select>
+
+	<select id="cntClassRoom" resultType="int">
+		select count(class_id)
+		from class_room
+	</select>
+
+	<insert id="saveClassRoom" parameterType="ClassRoom">
+		insert into class_room
+		values ((SELECT COUNT(class_id) + 1 FROM class_room), #{class_room_num}, #{class_start_date}, #{class_end_date}, #{class_master}, #{class_name}, #{class_area})
+	</insert>
 </mapper>
 	 

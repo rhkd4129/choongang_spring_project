@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 public class KjoController {
 	
 	private final ClassRoomService CRser;
-	
 	private final UserInfoService UIser;
 
 	@GetMapping("/hello")
@@ -40,25 +39,27 @@ public class KjoController {
 		log.info("admin_add_class GET");
 		return "admin/admin_add_class";
 	}
-	//	반 생성	Post
+	//	반 생성 페이지	Post
 	@PostMapping("/admin_add_class")
 	public String admin_add_class(ClassRoom cr, Model model) {
 		log.info("admin_add_class POST");
-		List<ClassRoom> CRList =CRser.findAllClassRoom();			// 모든 강의실 조회
-		
-		model.addAttribute("CRList",CRList);
-
-		return "admin/admin_add_class";
+		int result = CRser.saveClassRoom(cr);            // 강의실 생성
+		log.info("반 생성 개수: "+result);
+		return "redirect:/admin_class_list";
 	}
 
-	@GetMapping("/admin/admin_class_list")
+	//	반 목록 페이지	GET
+	@GetMapping("/admin_class_list")
 	public String admin_class_list(Model model) {
 		log.info("admin_class_list");
+		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+
+		model.addAttribute("CRList", CRList);
 
 		return "admin/admin_class_list";
 	}
 
-	//	게시판 관리 페이지 Get
+	//	게시판 관리 페이지	GET
 	@GetMapping("/admin_board")
 	public String admin_board(Model model) {
 

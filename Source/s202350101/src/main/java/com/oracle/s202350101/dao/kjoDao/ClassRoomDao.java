@@ -8,4 +8,5 @@ public interface ClassRoomDao {
 	
 	List<ClassRoom> findAllClassRoom();
 
+    int saveClassRoom(ClassRoom cr);
 }
