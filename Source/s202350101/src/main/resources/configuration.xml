@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config
 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-config.dtd">
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-	<typeAliases>
-		
-	<typeAlias alias="AppInfo"   	type="com.oracle.s202350101.model.AppInfo"/>	
-    <typeAlias alias="BdDataComt" type="com.oracle.s202350101.model.BdDataComt" />
-    <typeAlias alias="BdDataGood" type="com.oracle.s202350101.model.BdDataGood" />
-    <typeAlias alias="BdFree" type="com.oracle.s202350101.model.BdFree" />
-    <typeAlias alias="BdFreeComt" type="com.oracle.s202350101.model.BdFreeComt" />
-    <typeAlias alias="BdFreeGood" type="com.oracle.s202350101.model.BdFreeGood" />
-    <typeAlias alias="BdQna" type="com.oracle.s202350101.model.BdQna" />
-    <typeAlias alias="BdQnaGood" type="com.oracle.s202350101.model.BdQnaGood" />
-    <typeAlias alias="BdRepComt" type="com.oracle.s202350101.model.BdRepComt" />
-    <typeAlias alias="ChatMsg" type="com.oracle.s202350101.model.ChatMsg" />
-    <typeAlias alias="ChatRoom" type="com.oracle.s202350101.model.ChatRoom" />
-    <typeAlias alias="ClassRoom" type="com.oracle.s202350101.model.ClassRoom" />
-    <typeAlias alias="Code" type="com.oracle.s202350101.model.Code" />
-    <typeAlias alias="Meeting" type="com.oracle.s202350101.model.Meeting" />
-    <typeAlias alias="Meeting_member" type="com.oracle.s202350101.model.Meeting_member" />
-    <typeAlias alias="PrjBdData" type="com.oracle.s202350101.model.PrjBdData" />
-    <typeAlias alias="PrjBdRep" type="com.oracle.s202350101.model.PrjBdRep" />
-    <typeAlias alias="PrjInfo" type="com.oracle.s202350101.model.PrjInfo" />
-    <typeAlias alias="PrjMemList" type="com.oracle.s202350101.model.PrjMemList" />
-    <typeAlias alias="PrjStep" type="com.oracle.s202350101.model.PrjStep" />
-    <typeAlias alias="Task" type="com.oracle.s202350101.model.Task" />
-    <typeAlias alias="TaskAttach" type="com.oracle.s202350101.model.TaskAttach" />
-    <typeAlias alias="TaskSub" type="com.oracle.s202350101.model.TaskSub" />
-    <typeAlias alias="Todo" type="com.oracle.s202350101.model.Todo" />
-    <typeAlias alias="UserEnv" type="com.oracle.s202350101.model.UserEnv" />
-    <typeAlias alias="UserInfo" type="com.oracle.s202350101.model.UserInfo" />
-</typeAliases>
-		
+    <typeAliases>
+
+        <typeAlias alias="AppInfo" type="com.oracle.s202350101.model.AppInfo"/>
+        <typeAlias alias="BdDataComt" type="com.oracle.s202350101.model.BdDataComt"/>
+        <typeAlias alias="BdDataGood" type="com.oracle.s202350101.model.BdDataGood"/>
+        <typeAlias alias="BdFree" type="com.oracle.s202350101.model.BdFree"/>
+        <typeAlias alias="BdFreeComt" type="com.oracle.s202350101.model.BdFreeComt"/>
+        <typeAlias alias="BdFreeGood" type="com.oracle.s202350101.model.BdFreeGood"/>
+        <typeAlias alias="BdQna" type="com.oracle.s202350101.model.BdQna"/>
+        <typeAlias alias="BdQnaGood" type="com.oracle.s202350101.model.BdQnaGood"/>
+        <typeAlias alias="BdRepComt" type="com.oracle.s202350101.model.BdRepComt"/>
+        <typeAlias alias="ChatMsg" type="com.oracle.s202350101.model.ChatMsg"/>
+        <typeAlias alias="ChatRoom" type="com.oracle.s202350101.model.ChatRoom"/>
+        <typeAlias alias="ClassRoom" type="com.oracle.s202350101.model.ClassRoom"/>
+        <typeAlias alias="Code" type="com.oracle.s202350101.model.Code"/>
+        <typeAlias alias="Meeting" type="com.oracle.s202350101.model.Meeting"/>
+        <typeAlias alias="Meeting_member" type="com.oracle.s202350101.model.Meeting_member"/>
+        <typeAlias alias="PrjBdData" type="com.oracle.s202350101.model.PrjBdData"/>
+        <typeAlias alias="PrjBdRep" type="com.oracle.s202350101.model.PrjBdRep"/>
+        <typeAlias alias="PrjInfo" type="com.oracle.s202350101.model.PrjInfo"/>
+        <typeAlias alias="PrjMemList" type="com.oracle.s202350101.model.PrjMemList"/>
+        <typeAlias alias="PrjStep" type="com.oracle.s202350101.model.PrjStep"/>
+        <typeAlias alias="Task" type="com.oracle.s202350101.model.Task"/>
+        <typeAlias alias="TaskAttach" type="com.oracle.s202350101.model.TaskAttach"/>
+        <typeAlias alias="TaskSub" type="com.oracle.s202350101.model.TaskSub"/>
+        <typeAlias alias="Todo" type="com.oracle.s202350101.model.Todo"/>
+        <typeAlias alias="UserEnv" type="com.oracle.s202350101.model.UserEnv"/>
+        <typeAlias alias="UserInfo" type="com.oracle.s202350101.model.UserInfo"/>
+
+
+    </typeAliases>
+
 </configuration>

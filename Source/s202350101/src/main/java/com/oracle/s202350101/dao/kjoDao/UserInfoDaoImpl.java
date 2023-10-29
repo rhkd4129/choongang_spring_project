@@ -3,6 +3,7 @@ package com.oracle.s202350101.dao.kjoDao;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.oracle.s202350101.model.KjoRequestDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -45,6 +46,34 @@ public class UserInfoDaoImpl implements UserInfoDao{
 			e.printStackTrace();
 		}
 		return UIList;
+	}
+
+
+	@Override
+	public int auth_modify_manager(List<String> userManager) {
+		log.info("auth_modify_manager start");
+		int result = 0;
+		try {
+			result= session.update("auth_modify_manager", userManager);
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
+
+	@Override
+	public int auth_modify_student(List<String> userStudent) {
+		log.info("auth_modify_student start");
+		int result = 0;
+		try {
+			result= session.update("auth_modify_student", userStudent);
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 

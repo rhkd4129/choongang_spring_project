@@ -23,8 +23,26 @@
                            on u.project_id = p.project_id
         where class_id = #{cl_id}
           and user_auth != 'admin'
+
     </select>
 
+    <update id="auth_modify_manager" parameterType="java.util.List">
+        UPDATE USER_INFO
+        SET user_auth = 'manager'
+        where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            '${item}'
+        </foreach>
+    </update>
+
+    <update id="auth_modify_student" parameterType="java.util.List">
+        UPDATE USER_INFO
+        SET user_auth = 'student'
+        where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            '${item}'
+        </foreach>
+    </update>
 
 </mapper>
 

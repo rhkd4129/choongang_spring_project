@@ -3,15 +3,14 @@ package com.oracle.s202350101.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.oracle.s202350101.model.KjoRequestDto;
+import lombok.Data;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.UserInfo;
@@ -53,28 +52,33 @@ public class KjoController {
 	public String captainManage(@RequestParam(defaultValue = "1") int cl_id, Model model) {
 		log.info("captainManage");
 		List<ClassRoom> CRList =CRser.findAllClassRoom();			// 모든 강의실 조회
-		log.info(CRList.toString());
-//		List<UserInfo> USList = UIser.findbyclassuser(cl_id);		// 특정 강의실 학생 조회
 		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);		// 특정 강의실 학생 조회
 
-		
 		model.addAttribute("CRList",CRList);
 		model.addAttribute("UIList",UIList);
-		
-		
+
 		return "admin/admin_projectmanager";
 	}
 
 	//	팀장 권한 페이지 RestGET
 	@GetMapping("/admin_projectmanagerRest/{cl_id}")
 	@ResponseBody
-	public ResponseEntity<List> admin_projectmanagerRest(@PathVariable int cl_id, Model model) {
+	public  List<UserInfo> admin_projectmanagerRest(@PathVariable int cl_id, Model model) {
 		log.info("admin_projectmanagerRest");
 		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);
-		model.addAttribute("UIList",UIList);
-
+		//	model을 사용하지 않는 이유: return으로 Json에 UIList를 전달하여
+		//			jsp를 통해 값을 보여준다.
 		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
-		return ResponseEntity.ok(UIList);
+		return UIList;
+	}
+
+	//	팀장 권한 수정
+	@PostMapping("/auth_mod")
+	@ResponseBody
+	public ResponseEntity<?> auth_mod(@RequestBody KjoRequestDto kjorequest) {
+		//	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
+		int result = UIser.auth_modify(kjorequest);
+		return ResponseEntity.ok(result);
 	}
 
 }

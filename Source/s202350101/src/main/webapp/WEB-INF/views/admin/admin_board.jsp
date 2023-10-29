@@ -8,15 +8,13 @@
 
 <style text="text/css">
 #test {
-	margin-top: 15%;
+	margin-top: 5%;
 	margin-bottom: 15%;
 }
 </style>
 
 <script type="text/javascript">
 	$(function() {
-
-
 		$.ajax({
 			url			: '/main_header',
 			dataType 	: 'text',
@@ -64,7 +62,13 @@
 				<!------------------------------ //개발자 소스 입력 START ------------------------------->
 
 				<div id="test">
-					<div class="btn btn-secondary">공지사항</div>
+					<div id="admin_page_list">
+						<div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
+						<div class="btn btn-primary" onclick="location.href='/admin_board'">게시판 관리</div>
+						<div class="btn btn-secondary" onclick="location.href='/admin_project'">프로젝트 생성 승인</div>
+						<div class="btn btn-secondary" onclick="location.href='/admin_add_class'">반 생성</div>
+						<div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
+					</div>
 					<p></p>
 					<table class="table">
 						<thead>
@@ -115,7 +119,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div id="test">
+				<div id="ev">
 					<div class="btn btn-secondary">이벤트</div>
 					<p></p>
 					<table class="table">
