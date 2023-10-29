@@ -3,11 +3,46 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oracle.s202350101.TaskMapper">
-  <select id="teamWorkStats" resultType="Task">
+  <select id="taskStatusList" resultType="int">
     <![CDATA[
-	SELECT task_status FROM task
-	WHERE project_id = 1
-     
+			select  count(*) as task_status_count from task
+			where project_id = 1
+			group by task_status
+			order by TASK_STATUS
     ]]>
+    
   </select>
+  
+  	<select id ="boardTable" resultType="Task">
+  		select u.user_name ,t.*  from task t , user_info u
+		where t.user_id = u.user_id
+
+  	</select>
+  
+  
+    <select id="boardTask" resultType="Task">
+  	<![CDATA[   select  project_id , task_status ,task_subject from task order by TASK_STATUS  ]]>
+   </select>
+  
+  
+  
+    <select id="taskUserWorkStatus" resultType="Task">
+    <![CDATA[
+    	
+			SELECT t.user_id, u.user_name,  t.task_status, count(t.task_status) status_count 
+			from TASK t , USER_INFO u
+			WHERE  t.project_id=1 and t.USER_ID = u.USER_ID
+			group by u.user_name,t.task_status,t.user_id
+			order by u.user_name, t.task_status
+
+    ]]>
+    
+  </select>
+  
+  
+
+  
+  
+
+   
 </mapper>

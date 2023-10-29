@@ -1,5 +1,5 @@
 server:
-  port: 8282
+  port: 8283
   
 # Oracle Connect
 spring:
@@ -8,7 +8,6 @@ spring:
     url: jdbc:oracle:thin:@localhost:1521/xe
     username: s202350101_lkh
     password: tiger
-
 # JPA Setting
   jpa:
     show-sql: true
@@ -17,8 +16,9 @@ spring:
       ddl-auto: update
 
   
-  # view Resolver
+  # view,css, js  Resolver
   mvc:
+    static-path-pattern: /static/**
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp

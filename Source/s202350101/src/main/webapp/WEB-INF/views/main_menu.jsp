@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <style>
 #menubar {
 	max-width: 280px;
@@ -81,7 +83,6 @@
  				</div> -->
  				
 				<p style="height:10px"></p>
- 				<p class="menu-title"><a href="/mypage/mypage_read.html">My Page</a></p>
  				<p class="menu-title">내 글 모음</p>
 				<ul>
 					<li class="menu-box"><a href="/project/manager/p1.html">내가 쓴 게시글</a></li>

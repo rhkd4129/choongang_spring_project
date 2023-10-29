@@ -6,5 +6,12 @@ import com.oracle.s202350101.model.Task;
 
 public interface LkhDao {
 	
-	List<Task> work_status();
+	
+	//이것도 깨질라나...
+	List<Integer> 		task_status_count();
+	
+	List<Task>			task_user_workStatus();
+	List<Task>			task_board();
+	List<Task>			task_table();
+	
 }

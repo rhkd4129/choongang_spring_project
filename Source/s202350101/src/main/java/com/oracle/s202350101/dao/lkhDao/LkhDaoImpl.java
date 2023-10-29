@@ -6,37 +6,69 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.oracle.s202350101.controller.LkhController;
 import com.oracle.s202350101.model.Task;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class LkhDaoImpl implements LkhDao {
 	private final SqlSession sqlSession;
 	
 	@Override
-	public List<Task> work_status() {
-		List<Task> teamWorkStats= null;
-		Map<String, String> teamwork = null;
-		
-		System.out.println("Aa");
+	public List<Integer> task_status_count() {
+		List<Integer> taskStatusList= null;
 		try {
-			teamWorkStats = sqlSession.selectList("teamWorkStats");
-		
-			for(Task  task:teamWorkStats) {
-//					if(task =='1') {
-//						
-//					}
-				}
-			
-			
-				
+			taskStatusList = sqlSession.selectList("taskStatusList");		
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			log.info("dao : task_status_count error Message -> {}",e.getMessage());
 		}
-		
-		return teamWorkStats;
-		}
+		return taskStatusList;
 	}
+
+	
+	@Override
+	public List<Task> task_user_workStatus() {
+		List<Task> taskUserWorkStatusList= null;
+		try {
+			taskUserWorkStatusList = sqlSession.selectList("taskUserWorkStatus");		
+		} catch (Exception e) {
+			log.info("dao : task_user_workStatus error Message -> {}",e.getMessage());
+		}
+		return taskUserWorkStatusList;
+	}
+
+
+	@Override
+	public List<Task> task_board() {
+		List<Task> boardList= null;
+		try {
+			boardList = sqlSession.selectList("boardTask");		
+		} catch (Exception e) {
+			log.info("dao :task_board error Message -> {}",e.getMessage());
+		}
+		return boardList;
+	
+	}
+
+
+	@Override
+	public List<Task> task_table() {
+		List<Task> boardTableList= null;
+		try {
+			boardTableList = sqlSession.selectList("boardTable");		
+		} catch (Exception e) {
+			log.info("dao :task_board error Message -> {}",e.getMessage());
+		}
+		return boardTableList;
+	
+	
+	}
+	
+	
+	
+}
