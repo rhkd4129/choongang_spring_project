@@ -148,7 +148,7 @@
 					</div>
 
 					<form>
-						<select id="cl_room_List" onchange="cl_room();">
+						<select class="form-select" id="cl_room_List" onchange="cl_room();">
 							<c:forEach items="${CRList}" var="list">
 								<option name="class_room_num" value="${list.class_id}">${list.class_area}
 									${list.class_room_num}</option>

@@ -34,10 +34,39 @@ public class KjoController {
 		log.info("hi");
 		return "admin/hello";
 	}
-	
+	//	반 생성 페이지 Get
+	@GetMapping("/admin_add_class")
+	public String admin_add_class(Model model) {
+		log.info("admin_add_class GET");
+		return "admin/admin_add_class";
+	}
+	//	반 생성	Post
+	@PostMapping("/admin_add_class")
+	public String admin_add_class(ClassRoom cr, Model model) {
+		log.info("admin_add_class POST");
+		List<ClassRoom> CRList =CRser.findAllClassRoom();			// 모든 강의실 조회
+		
+		model.addAttribute("CRList",CRList);
+
+		return "admin/admin_add_class";
+	}
+
+	@GetMapping("/admin/admin_class_list")
+	public String admin_class_list(Model model) {
+		log.info("admin_class_list");
+
+		return "admin/admin_class_list";
+	}
+
+	//	게시판 관리 페이지 Get
 	@GetMapping("/admin_board")
-	public String boardManage() {
-		log.info("boardManage");
+	public String admin_board(Model model) {
+
+		log.info("admin_board");
+		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+
+		model.addAttribute("CRList", CRList);
+
 		return "admin/admin_board";
 	}
 	
@@ -61,18 +90,18 @@ public class KjoController {
 	}
 
 	//	팀장 권한 페이지 RestGET
-	@GetMapping("/admin_projectmanagerRest/{cl_id}")
+	@GetMapping("/admin_projectmanagerRest/{cl_id}")	//	cl_id = Class_Room(class_id)
 	@ResponseBody
 	public  List<UserInfo> admin_projectmanagerRest(@PathVariable int cl_id, Model model) {
 		log.info("admin_projectmanagerRest");
-		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);
+		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);	// 반 학생의 정보 + 참여 프로젝트 명
 		//	model을 사용하지 않는 이유: return으로 Json에 UIList를 전달하여
 		//			jsp를 통해 값을 보여준다.
 		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
 		return UIList;
 	}
 
-	//	팀장 권한 수정
+	//	팀장 권한 수정	Rest
 	@PostMapping("/auth_mod")
 	@ResponseBody
 	public ResponseEntity<?> auth_mod(@RequestBody KjoRequestDto kjorequest) {

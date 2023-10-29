@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,14 +71,14 @@
 					</div>
 					<p></p>
 					<table class="table">
-						<thead>
-							<button class="btn btn-primary" onclick="location.href='#'"
-								type="button">501</button>
-							<button class="btn btn-primary" onclick="location.href='#'"
-								type="button">502</button>
-							<button class="btn btn-primary" onclick="location.href='#'"
-								type="button">601</button>
+						<select id="cl_room_List" onchange="cl_room();">
+							<c:forEach items="${CRList}" var="list">
+								<option name="class_room_num" value="${list.class_id}">${list.class_area}
+										${list.class_room_num}</option>
+							</c:forEach>
+						</select>
 
+						<thead>
 							<tr>
 								<th>번호</th>
 								<th>제목</th>
