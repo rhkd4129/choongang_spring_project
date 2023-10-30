@@ -38,7 +38,13 @@
     ]]>
     
   </select>
-  
+
+    <insert id="task_create"     parameterType="Task" >
+            insert into task values ( #{task_id},    #{project_id}, #{project_step_seq},  #{user_id},
+                                     #{task_subject}, #{task_content},   #{task_stat_time}, #{task_end_item},
+                                      #{TASK_PRIORITY} , #{task_status}, ${GARBAGE})
+
+    </insert>
   
 
   

@@ -191,7 +191,11 @@
 </head>
 <body>
     <h1>Task List</h1>
-   <select id="order_by">
+    <a href="task_create_view">새작업 </a>
+
+
+
+    <select id="order_by">
         <option value="task_status">상태별</option>
         <option value="task_priority">우선순위별</option>
         <option value="task_end_itme" selected>작업 마감일별</option>

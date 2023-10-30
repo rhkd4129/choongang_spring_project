@@ -11,6 +11,7 @@ import com.oracle.s202350101.model.Task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Repository
@@ -68,7 +69,18 @@ public class LkhDaoImpl implements LkhDao {
 	
 	
 	}
-	
-	
-	
+
+	@Override
+	@PostMapping("create_task")
+	public int task_create(Task task) {
+		int result = 0;
+		try {
+			int i = sqlSession.insert("task_create",task);
+		} catch (Exception e) {
+			log.info("dao :task_board error Message -> {}",e.getMessage());
+		}
+		return result;
+	}
+
+
 }

@@ -13,5 +13,7 @@ public interface LkhDao {
 	List<Task>			task_user_workStatus();
 	List<Task>			task_board();
 	List<Task>			task_table();
+
+	int 				task_create(Task task);
 	
 }

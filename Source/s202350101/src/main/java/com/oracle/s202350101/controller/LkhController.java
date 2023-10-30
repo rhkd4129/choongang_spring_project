@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.s202350101.dao.lkhDao.LkhDaoImpl;
@@ -64,6 +65,19 @@ public class LkhController {
 
 
 
+	@GetMapping("task_create_view")
+	public String task_create_view(){
+
+		return "project/board/taskInsertView";
+	}
+
+	@PostMapping("task_create")
+	public String task_create(Model model   ){
+
+
+		return "redirect:viewer_table";
+
+	}
 
 
 	//@ResponseBody
