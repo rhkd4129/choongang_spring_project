@@ -65,4 +65,13 @@ public class UserInfoServiceImpl implements UserInfoService {
         return manager_cnt+student_cnt;
     }
 
+    @Override
+    public List<UserInfo> pageUserInfo( UserInfo userInfo) {
+
+        log.info("pageUserInfo start");
+        List<UserInfo> UI1 = UIdao.pageUserInfo(userInfo);
+        log.info("TOT cnt : => " + UI1.size());
+        return UI1;
+    }
+
 }

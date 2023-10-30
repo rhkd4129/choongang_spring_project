@@ -13,4 +13,6 @@ public interface UserInfoService {
 	List<UserInfo> findbyClassUserProject(int clId);
 
     int auth_modify(KjoRequestDto kjorequest);
+
+	List<UserInfo> pageUserInfo(UserInfo userInfo);
 }

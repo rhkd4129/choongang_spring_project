@@ -12,4 +12,6 @@ public interface UserInfoDao {
 	int auth_modify_manager(List<String> userManager);
 
 	int auth_modify_student(List<String> userStudent);
+
+    List<UserInfo> pageUserInfo(UserInfo userInfo);
 }

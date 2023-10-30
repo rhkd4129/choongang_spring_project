@@ -81,5 +81,10 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		return result;
 	}
 
+	@Override
+	public List<UserInfo> pageUserInfo(UserInfo userInfo) {
+		return null;
+	}
+
 
 }

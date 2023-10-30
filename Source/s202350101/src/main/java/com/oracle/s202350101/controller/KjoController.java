@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.oracle.s202350101.model.KjoRequestDto;
+import com.oracle.s202350101.model.Paging;
 import lombok.Data;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -71,7 +72,7 @@ public class KjoController {
 
 		return "admin/admin_board";
 	}
-
+//	채팅방 팝업
 	@GetMapping("/chat_room")
 	public String chat_room() {
 		log.info("chat_room");
@@ -99,14 +100,25 @@ public class KjoController {
 		return "admin/admin_projectmanager";
 	}
 
+	//	페이징하기
 	//	팀장 권한 페이지 RestGET
 	@GetMapping("/admin_projectmanagerRest/{cl_id}")	//	cl_id = Class_Room(class_id)
 	@ResponseBody
-	public  List<UserInfo> admin_projectmanagerRest(@PathVariable int cl_id, Model model) {
+	public  List<UserInfo> admin_projectmanagerRest(UserInfo userInfo, String currentPage, @PathVariable int cl_id, Model model) {
 		log.info("admin_projectmanagerRest");
-		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);	// 반 학생의 정보 + 참여 프로젝트 명
+//		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);	// 반 학생의 정보 + 참여 프로젝트 명
 		//	model을 사용하지 않는 이유: return으로 Json에 UIList를 전달하여
 		//			jsp를 통해 값을 보여준다.
+		int totalUi = UIser.findbyclassuser(cl_id).size();
+
+		Paging page = new Paging(totalUi, currentPage);
+		userInfo.setStart(page.getStart());
+		userInfo.setEnd(page.getEnd());
+		userInfo.setTotal(totalUi);
+		List<UserInfo> UIList = UIser.pageUserInfo(userInfo);	// 반 학생의 정보 + 참여 프로젝트 명
+
+//		전송할 데이터 : page, UIList
+
 		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
 		return UIList;
 	}
