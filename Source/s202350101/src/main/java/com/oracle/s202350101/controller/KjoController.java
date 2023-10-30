@@ -33,6 +33,7 @@ public class KjoController {
 		log.info("hi");
 		return "admin/hello";
 	}
+
 	//	반 생성 페이지 Get
 	@GetMapping("/admin_add_class")
 	public String admin_add_class(Model model) {
@@ -71,10 +72,10 @@ public class KjoController {
 		return "admin/admin_board";
 	}
 	
-	@GetMapping("/createnote")
-	public String createnote() {
-		log.info("createnote");
-		return "admin/createnote";
+	@GetMapping("/chat_room")
+	public String chat_room() {
+		log.info("chat_room");
+		return "admin/chat_room";
 	}
 	
 	//	팀장 권한 페이지 GET
