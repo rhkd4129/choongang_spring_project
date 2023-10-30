@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/views/header.jsp" %>
@@ -17,14 +18,23 @@
             flex-direction: column;
             align-items: center;
         }
-        #chat_bottom{
-            display:flex;
+
+        #chat_bottom {
+            display: flex;
 
         }
-        #chat_content{
+
+        #chat_content {
             height: 400px;
             width: 90%;
             background-color: yellow;
+            overflow-x: hidden;
+        }
+
+        #chat_student_list {
+
+            display: flex;
+            justify-content: space-evenly;
             overflow-x: hidden;
         }
     </style>
@@ -57,14 +67,15 @@
                 }
             });
         });
-        function chat_button(){
+
+        function chat_button() {
 
             alert("hi");
 
             var con = document.getElementById("chatbox");
-            if(con.style.display=='none'){
+            if (con.style.display == 'none') {
                 con.style.display = 'block';
-            }else{
+            } else {
                 con.style.display = 'none';
             }
         }
@@ -92,40 +103,24 @@
 
             <div id="chatbox">
                 <div id="chat_top">
-                    <p>상대방 이름</p>
+                    <p>학생 목록</p>
                 </div>
                 <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
-
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-                    <p>d</p>
-
-
+                    <c:forEach begin="0" end="11">
+                        <div id="chat_student_list">
+                            <div id="chat_st_left">
+                                <p>이미지</p>
+                            </div>
+                            <div id="chat_st_center">
+                                <p>사용자명</p>
+                            </div>
+                            <div id="chat_st_right">
+                                <input type="button" class="btn btn-primary" value="채팅하기">
+                            </div>
+                        </div>
+                    </c:forEach>
                 </div>
-                <div id="chat_bottom">
-                    <textarea cols="40" rows="3">
-                    </textarea>
-                    <input type="submit" class="btn btn-primary" value="작성완료">
-                </div>
+
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->
         </main>

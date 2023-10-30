@@ -71,13 +71,20 @@ public class KjoController {
 
 		return "admin/admin_board";
 	}
-	
+
 	@GetMapping("/chat_room")
 	public String chat_room() {
 		log.info("chat_room");
 		return "admin/chat_room";
 	}
-	
+
+	@GetMapping("/chat_student_list")
+	public String chat_student_list() {
+		log.info("chat_room");
+		return "admin/chat_student_list";
+	}
+
+
 	//	팀장 권한 페이지 GET
 	@GetMapping("/admin_projectmanager")
 	public String captainManage(@RequestParam(defaultValue = "1") int cl_id, Model model) {

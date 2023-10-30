@@ -1,5 +1,14 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%--<script src="admin/js/chatbutton.js"></script>--%>
+<%--<script type="text/javascript">--%>
+<%--	function chat_button(){--%>
+<%--		alert("hi");--%>
+<%--	}--%>
+
+<%--</script>--%>
+
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="/pms.html">PMS</a>
@@ -23,6 +32,10 @@
 					<a class="nav-link px-2 link-light" aria-current="page" href="#">홍길동</a>
 				</li>        
 			</ul>
+			<%--<input style="background-image: url('admin/images/chat.png');  " type="button" class="img-button" onclick="alert('클릭!')">--%>
+			<button id="chat_button" type="button" onclick="chat_button()">채팅</button>
+<%-- 채팅--%>
+			<%-- 채팅--%>
 			<div class="dropdown text-end">
 				<a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 					<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
