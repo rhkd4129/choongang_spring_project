@@ -5,6 +5,8 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="<c:url value='/static/lkh/css/1.css' />">
+
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    	<script type="text/javascript">

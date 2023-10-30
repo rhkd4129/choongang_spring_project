@@ -57,7 +57,15 @@ public class LkhController {
 		return "project/board/viewer_table";
 			
 	}
-	
+
+	@ResponseBody
+	@GetMapping("view_status")
+	public List<Task>  view_status() {return lkhService.task_table();}
+
+
+
+
+
 	//@ResponseBody
 	//@GetMapping("board_view")
 	//public List<Task> board_view() {
