@@ -63,7 +63,7 @@
 
             var con = document.getElementById("chatbox");
             if(con.style.display=='none'){
-                con.style.display = 'block';
+                con.style.display = 'flex';
             }else{
                 con.style.display = 'none';
             }

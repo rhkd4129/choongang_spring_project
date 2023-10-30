@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/views/header.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,12 +70,9 @@
         });
 
         function chat_button() {
-
-            alert("hi");
-
             var con = document.getElementById("chatbox");
             if (con.style.display == 'none') {
-                con.style.display = 'block';
+                con.style.display = 'flex';
             } else {
                 con.style.display = 'none';
             }
