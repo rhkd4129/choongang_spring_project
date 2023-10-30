@@ -77,12 +77,12 @@ public class KjoController {
 		log.info("chat_room");
 		return "admin/chat_room";
 	}
-
-	@GetMapping("/chat_student_list")
-	public String chat_student_list() {
-		log.info("chat_room");
-		return "admin/chat_student_list";
-	}
+//
+//	@GetMapping("/chat_student_list")
+//	public String chat_student_list() {
+//		log.info("chat_room");
+//		return "admin/chat_student_list";
+//	}
 
 
 	//	팀장 권한 페이지 GET
@@ -93,6 +93,7 @@ public class KjoController {
 		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);		// 특정 강의실 학생 조회
 
 		model.addAttribute("CRList",CRList);
+//		model.addAttribute("chatUIList",UIList);
 		model.addAttribute("UIList",UIList);
 
 		return "admin/admin_projectmanager";

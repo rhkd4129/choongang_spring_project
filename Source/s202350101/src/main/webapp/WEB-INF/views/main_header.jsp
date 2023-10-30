@@ -1,13 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%--<script src="admin/js/chatbutton.js"></script>--%>
-<%--<script type="text/javascript">--%>
-<%--	function chat_button(){--%>
-<%--		alert("hi");--%>
-<%--	}--%>
 
-<%--</script>--%>
+
 <style text="text/css">
 
     #chatbox {
@@ -28,9 +23,11 @@
         display: flex;
 
     }
-    #chat_top{
+
+    #chat_top {
         margin: 8px 0px 8px 0px;
     }
+
     #chat_content {
         height: 400px;
         width: 90%;
@@ -44,16 +41,19 @@
         justify-content: space-evenly;
         overflow-x: hidden;
     }
+
     #chat_chat_list {
 
         display: flex;
         justify-content: space-evenly;
         overflow-x: hidden;
     }
-    #center{
+
+    #center {
         position: relative;
     }
-    #chat_ch_center{
+
+    #chat_ch_center {
         font-size: 0.7em;
     }
 </style>
@@ -69,19 +69,29 @@
             chat_users.style.display = 'none';
         }
     }
-    function chat_user_bt(){
+
+    function chat_user_bt() {
         var chat_chats = document.getElementById("chat_chats");
         var chat_users = document.getElementById("chat_users");
         chat_chats.style.display = 'none';
         chat_users.style.display = 'block';
     }
-    function chat_chats_bt(){
+
+    function chat_chats_bt() {
         var chat_chats = document.getElementById("chat_chats");
         var chat_users = document.getElementById("chat_users");
         chat_users.style.display = 'none';
         chat_chats.style.display = 'block';
     }
 
+    function chat_room(){
+        window.open(
+            "chat_room",
+            "Child",
+            "width=400, height=300, top=50, left=50"
+        );
+
+    }
 
 </script>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -141,19 +151,32 @@
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <div id="chat_users" style="display: none">
-            <c:forEach begin="0" end="11">
-                <div id="chat_student_list">
-                    <div id="chat_st_left">
-                        <p>이미지</p>
-                    </div>
-                    <div id="chat_st_center">
-                        <p>사용자명</p>
-                    </div>
-                    <div id="chat_st_right">
-                        <input type="button" class="btn btn-primary" value="채팅하기">
-                    </div>
-                </div>
-            </c:forEach>
+                        <c:forEach items="${chatUIList}" var="chat_user">
+                            <div id="chat_student_list">
+                                <div id="chat_st_left">
+                                    <p>이미지</p>
+                                </div>
+                                <div id="chat_st_center">
+                                    <p>${chat_user.user_name}</p>
+                                </div>
+                                <div id="chat_st_right">
+                                    <input onclick="chat_room()" type="button" class="btn btn-primary" value="채팅하기${chat_user.user_id}">
+                                </div>
+                            </div>
+                        </c:forEach>
+<%--            <c:forEach begin="0" end="11">--%>
+<%--                <div id="chat_student_list">--%>
+<%--                    <div id="chat_st_left">--%>
+<%--                        <p>이미지</p>--%>
+<%--                    </div>--%>
+<%--                    <div id="chat_st_center">--%>
+<%--                        <p>사용자명</p>--%>
+<%--                    </div>--%>
+<%--                    <div id="chat_st_right">--%>
+<%--                        <input type="button" class="btn btn-primary" value="채팅하기">--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </c:forEach>--%>
         </div>
         <div id="chat_chats" style="display: none">
             <c:forEach begin="0" end="11">

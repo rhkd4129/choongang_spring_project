@@ -21,12 +21,34 @@
 	$(function() {
 
 		$.ajax({
-			url : '/main_header',
-			dataType : 'text',
-			success : function(data) {
-				$('#header').html(data);
+			url: '/main_header',
+			dataType: 'text',
+			success: function(data) {
+
+				$('#header').html(data); // 응답 데이터를 #header 요소에 추가
 			}
 		});
+
+		//
+		// $.ajax({
+		// 	url : '/main_header_chat',
+		// 	dataType : 'text',
+		// 	success: function (data) {
+		//
+		// 		var chatData = data;
+		// 		console.log("chatData" + chatData);
+		// 		$.ajax({
+		// 			url: '/main_header',
+		// 			dataType: 'text',
+		// 			success: function (data) {
+		// 				$('#header').html(data);
+		// 				console.log("chatData" + chatData);
+		// 			}
+		// 		});
+		// 	}
+		//
+		// });
+
 
 		$.ajax({
 			url : '/main_menu',
