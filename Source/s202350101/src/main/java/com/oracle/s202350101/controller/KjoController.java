@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.oracle.s202350101.model.*;
+import com.oracle.s202350101.service.kjoSer.PrjInfoService;
 import lombok.Data;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class KjoController {
 	
 	private final ClassRoomService CRser;
 	private final UserInfoService UIser;
+	private final PrjInfoService PIser;
 
 	@GetMapping("/hello")
 	public String test() {
@@ -62,12 +64,22 @@ public class KjoController {
 
 	//	게시판 관리 페이지	GET
 	@GetMapping("/admin_board")
-	public String admin_board(Model model) {
+	public String admin_board(ClassRoom cr, Model model) {
 
 		log.info("admin_board");
 		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+		List<PrjInfo> PIList = null;
+
+		if (cr != null) {
+			PIList = PIser.findbyClassId(cr);
+			log.info(""+cr.toString());
+		} else {
+			PIList = PIser.findAll();
+			log.info(""+cr.toString());
+		}
 
 		model.addAttribute("CRList", CRList);
+		model.addAttribute("PIList", PIList);
 
 		return "admin/admin_board";
 	}
@@ -78,11 +90,11 @@ public class KjoController {
 		return "admin/chat_room";
 	}
 //
-//	@GetMapping("/chat_student_list")
-//	public String chat_student_list() {
-//		log.info("chat_room");
-//		return "admin/chat_student_list";
-//	}
+	@GetMapping("/admin_approval")
+	public String admin_approval() {
+		log.info("admin_approval");
+		return "admin/admin_approval";
+	}
 
 
 	//	팀장 권한 페이지 GET

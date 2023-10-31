@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+
+
+<mapper namespace="com.oracle.s202350101.PrjInfoMapper">
+	<!-- PrjInfo -->
+
+	<select id="findAllPrjInfo" resultType="PrjInfo">
+		select * from Prj_Info
+	</select>
+
+	<select id="findPrjInfoById" parameterType="ClassRoom" resultType="PrjInfo">
+		select * from Prj_Info where  = #{class_id}
+	</select>
+
+	<select id="findbyClassId" parameterType="ClassRoom" resultType="PrjInfo">
+		select p.*, cr.class_id
+		from (select u.project_id, c.class_id
+			  from user_info u
+					   left join class_room c
+								 on c.class_id = u.class_id) cr
+				 left join prj_info p
+						   on cr.project_id = p.project_id
+		where cr.class_id = #{class_id}
+	</select>
+
+
+</mapper>
+	 

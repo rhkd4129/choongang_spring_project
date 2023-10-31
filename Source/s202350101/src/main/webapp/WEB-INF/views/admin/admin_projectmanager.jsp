@@ -116,11 +116,9 @@
                         tr.append(authTd);
 
                         tbody.append(tr); // <tr>을 <tbody>에 추가
-                    });// success 콜백 함수에서 jsonData 객체를 처리
-                    var obj = jsonData.obj; // obj 객체 가져오기
+                    });
+                    var obj = jsonData.obj; // obj : page 객체 가져오기
 
-                    // var startPage = obj.startPage;
-                    // var endPage = obj.endPage;
                     var paginationDiv = $('#c_b'); // 페이지네이션을 표시할 div
                     paginationDiv.empty(); // 페이지네이션을 초기화
 
@@ -134,8 +132,6 @@
                             + ')"><div class="page-link">' + i
                             + '</div></div>';
                     }
-
-
                     if (obj.endPage < obj.totalPages) {
                         jspPagination += `<div onclick="cl_room(${obj.startPage + obj.pageBlock})"><p>[다음]</p></div>`;
                     }
@@ -143,7 +139,6 @@
                     jspPagination += '</div>';
 
                     paginationDiv.html(jspPagination); // JSP 페이지 네비게이션 코드를 추가
-
                 }
             });
         }
@@ -174,7 +169,7 @@
                 <div id="admin_page_list">
                     <div class="btn btn-primary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_board'">게시판 관리</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_project'">프로젝트 생성 승인</div>
+                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 생성 승인</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_add_class'">반 생성</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
                 </div>

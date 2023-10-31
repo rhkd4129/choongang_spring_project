@@ -65,16 +65,22 @@
 					<div id="admin_page_list">
 						<div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
 						<div class="btn btn-primary" onclick="location.href='/admin_board'">게시판 관리</div>
-						<div class="btn btn-secondary" onclick="location.href='/admin_project'">프로젝트 생성 승인</div>
+						<div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 생성 승인</div>
 						<div class="btn btn-secondary" onclick="location.href='/admin_add_class'">반 생성</div>
 						<div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
 					</div>
 					<p></p>
 					<table class="table">
-						<select id="cl_room_List" onchange="cl_room();">
+						<select id="cl_room_List" >
 							<c:forEach items="${CRList}" var="list">
 								<option name="class_room_num" value="${list.class_id}">${list.class_area}
 										${list.class_room_num}</option>
+							</c:forEach>
+						</select>
+						<select id="pr_List" >
+							<c:forEach items="${PIList}" var="list">
+								<option name="pr_num" value="${list.project_id}">${list.project_name}	<%--${list.class_room_num}--%>
+										</option>
 							</c:forEach>
 						</select>
 
