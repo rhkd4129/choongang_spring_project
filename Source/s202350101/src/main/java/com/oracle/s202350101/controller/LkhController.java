@@ -38,7 +38,6 @@ public class LkhController {
 		for(Integer t : taskStatusList) {System.out.println(t);}
 		return taskStatusList; 
 	}
-	
 	@ResponseBody
 	@GetMapping("dashboard_bar")
 	public List<Task> dashboard_bar() {
@@ -58,7 +57,6 @@ public class LkhController {
 		return "project/board/viewer_table";
 			
 	}
-
 	@ResponseBody
 	@GetMapping("view_status")
 	public List<Task>  view_status() {return lkhService.task_table();}
@@ -70,12 +68,11 @@ public class LkhController {
 
 		return "project/board/taskInsertView";
 	}
-
 	@PostMapping("task_create")
 	public String task_create(Model model   ){
-
-
+		// 작업 ID 프로젝트 ID 회원 ID  휴지통 0
 		return "redirect:viewer_table";
+
 
 	}
 
