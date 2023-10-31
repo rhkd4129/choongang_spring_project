@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+	 
+	 
+<mapper namespace="com.oracle.s202350101.PrjBdRepMapper">
+	<!-- user_id에 해당하는 게시물 -->
+	<select id="RepListSelect" parameterType="UserInfo" resultType="PrjBdRep">
+		Select a.app_id, a.app_name, p.subject, p.user_id, 
+			   p.create_date
+		From   prj_bd_rep p, app_info a
+		Where  a.app_id = p.app_id
+		And    user_id = #{user_id}
+	</select>
+	
+	<!-- user_id에 해당하는 count -->
+	<!-- <select id="userIdQnaListCount" resultType="int">
+		select count(*) 
+		from   bd_qna 
+		where  user_id = #{user_id}
+	</select> -->
+	
+	<!-- user_id에 해당하는 count -->
+	<!-- <select id="userIdQnaListCount" resultType="int">
+		SELECT a.bd_qna, b.bd_free, c.bd_rep_comt, d.prj_bd_data
+     	FROM
+           ( select count(*) bd_qna      from bd_qna        where user_id = 'tester1' ) a
+        ,  ( select count(*) bd_free     from bd_free       where user_id = 'tester1' ) b
+        ,  ( select count(*) bd_rep_comt from bd_rep_comt   where user_id = 'tester1' ) c
+        ,  ( select count(*) prj_bd_data from prj_bd_data   where user_id = 'tester1' ) d	
+	</select> -->
+	
+</mapper>
+

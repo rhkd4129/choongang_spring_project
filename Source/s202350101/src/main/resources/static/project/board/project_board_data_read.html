@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="ko" class="h-100" data-bs-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.118.2">
+
+<title>PMS(Project Management System)</title>
+
+<!-- BOOTSTRAP START -->
+<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sticky-footer-navbar/">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/assets/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/sticky-footer-navbar.css"><!-- footer -->
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/dropdowns.css"><!-- 달력 -->
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/sidebars.css"><!-- 메뉴 -->
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/offcanvas-navbar.css"><!-- 타이틀 -->
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/bootstrap.css"><!-- 예제본문 -->
+<script type="text/javascript" src="/bootstrap-5.3.2-examples/assets/js/color-modes.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="/bootstrap-5.3.2-examples/js/offcanvas-navbar.js"></script>
+
+<!-- BOOTSTRAP END -->
+
+<!-- COMMON START -->
+<link rel="stylesheet" type="text/css" href="/common/css/common.css">
+<script type="text/javascript" src="/common/js/common.js"></script>
+<!-- COMMON END -->
+
+<!--CSS START -->
+<!-- CSS END -->
+
+<!-- JS START -->
+<!-- JS END -->
+
+<script type="text/javascript">
+	$(function() {
+	
+		$.ajax({
+			url			: '/header.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#header').html(data);
+			}
+		});
+		
+		$.ajax({
+			url			: '/menu.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#menu').html(data);
+			}
+		});
+
+		$.ajax({
+			url			: '/footer.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#footer').html(data);
+			}
+		});
+	});
+</script>  
+<!-- Custom styles for this template -->
+</head>
+<body class="d-flex flex-column h-100">
+
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+      </symbol>
+    </svg>
+
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+      <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+              id="bd-theme"
+              type="button"
+              aria-expanded="false"
+              data-bs-toggle="dropdown"
+              aria-label="Toggle theme (auto)">
+        <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>
+            Light
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
+            Dark
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>
+            Auto
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+
+<header id="header"></header>
+
+
+<!-- CONTENT -->
+<div class="container-fluid">
+	<div class="row">
+ 		
+ 		<!-- 메뉴 -->
+		<div id="menu" class="sidebar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+		</div>
+		
+		<!-- 본문 -->
+		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+			<!------------------------------ //개발자 소스 입력 START ------------------------------->
+			<div id="center" class="content-list">
+			
+				<!------------------------------------ 삽입 위치 START ------------------------------------>
+				<div class="container-fluid">
+					<p>
+					<h3>공지/자료 목록</h3>
+					<p>
+					<table>
+						<tr>
+							<td><button type="button" class="btn btn-secondary btn-sm" onclick="goto('databoard_write.html')">작성</button></td>
+						</tr>
+					</table>
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<td>번호</td>
+								<td>제목</td>
+								<td>작성자</td>
+								<td>작성일</td>
+								<td>파일</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>10</td>
+								<td>[공지] 공지사항입니다.</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>9</td>
+								<td>[web] 참고용 소스입니다</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>8</td>
+								<td>[html] 유용한 정보 공유합니다.</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>7</td>
+								<td>[Java] 자바소스 공유</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>6</td>
+								<td>[css] 유용한 정보 공유합니다.</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>5</td>
+								<td>[Java] 자바소스 공유</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>4</td>
+								<td>[css] 유용한 정보 공유합니다.</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>3</td>
+								<td>[Java] 자바소스 공유</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>2</td>
+								<td>[javascript] 유용한 정보 공유합니다.</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+							<tr onclick="goto('project_board_data_read.html')">
+								<td>1</td>
+								<td>[ajax] ajax 소스 분석</td>
+								<td>홍길동</td>
+								<td>2023-10-13</td>
+								<td>파일</td>
+							</tr>
+						</tbody>
+					</table>
+					<nav aria-label="Page navigation example">
+					  <ul class="pagination justify-content-center">
+					    <li class="page-item disabled">
+					      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+					    </li>
+					    <li class="page-item"><a class="page-link" href="#">1</a></li>
+					    <li class="page-item"><a class="page-link" href="#">2</a></li>
+					    <li class="page-item"><a class="page-link" href="#">3</a></li>
+					    <li class="page-item">
+					      <a class="page-link" href="#">Next</a>
+					    </li>
+					  </ul>
+					</nav>
+				</div>
+				<!------------------------------------ 삽입 위치 END ------------------------------------>
+			</div>
+			<div id="content-doc" class="content-doc">
+				<!------------------------------------ 삽입 위치 START ------------------------------------>
+				<div class="container-fluid">
+					<form action="" method="post" enctype="multipart/form-data">											<p>
+						<h3>문서 조회</h3>
+						<p>
+						<p>
+						<button type="button" class="btn btn-secondary btn-sm" onclick="">답변작성</button>
+						<button type="button" class="btn btn-secondary btn-sm" onclick="alert('추천완료하였습니다.')">추천</button>
+						<button type="button" class="btn btn-secondary btn-sm" onclick="goto('project_board_data_list.html')">닫기</button>
+						<table class="table" width="100%">
+						<colgroup>
+							<col width="30%">
+							<col width="70%">
+						</colgroup>
+							<tr>
+								<td>작성자</td>
+								<td>홍길동</td>
+							</tr>
+							<tr>
+								<td>작성일</td>
+								<td>2023-10-13</td>
+							</tr>
+							<tr>
+								<td>분류</td>
+								<td>정보</td>
+							</tr>
+							<tr>
+								<td>관련 키워드</td>
+								<td>Java, JavaScript</td>
+							</tr>
+							<tr>
+								<td>파일</td>
+								<td>notice.doc</td>
+							</tr>
+							<tr>
+								<td>조회수</td>
+								<td>35</td>
+							</tr>
+							<tr>
+								<td>추천수</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<td>공지내용</td>
+								<td>공지합니다.</td>
+							</tr>
+						</table>
+						
+						<table>
+							<tr>
+								<td colspan="2">댓글작성</td>
+							</tr>
+							<tr>
+								<td>
+									<textarea rows="4" cols="70"></textarea>									
+								</td>
+								<td width="100" valign="bottom">
+									<button type="button" class="btn btn-secondary btn-sm" onclick="">답변등록</button>
+								</td>
+							</tr>
+						</table>						
+					</form>
+				</div>
+				<!------------------------------------ 삽입 위치 END ------------------------------------>
+
+			</div>	
+  			<!------------------------------ //개발자 소스 입력 END ------------------------------->
+		</main>		
+		
+	</div>
+</div>
+  
+  
+  
+<footer class="footer mt-auto py-2">
+  <div id="footer" class="container">
+  </div>
+</footer>
+
+<script src="/bootstrap-5.3.2-examples/assets/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<link href="/common/css/common.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/common/js/common.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			url			: '/main_header.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#header').html(data);
+			}
+		});
+		
+		$.ajax({
+			url			: '/main_left.html',
+			dataType 	: 'text',
+			success		: function(data) {
+				$('#left').html(data);
+			}
+		});
+
+	});
+</script>
+</head>
+<body>
+	<div id="header">
+	</div>
+ 	<div id="main" class="main">
+ 		<div id="left" class="menu-left">	
+ 		</div>
+		<div id="content">
+			<!-- <div id="center" class="content-body"> -->
+		
+		</div>
+	</div>
+</body>
+</html>
