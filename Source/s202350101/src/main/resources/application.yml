@@ -18,7 +18,7 @@ spring:
   
   # view,css, js  Resolver
   mvc:
-    static-path-pattern: /static/**
+    #static-path-pattern: /static/**
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp

@@ -51,4 +51,9 @@ public class LkhServicveImpl implements LkhService {
 		return taskList;
 	}
 
+	@Override
+	public Task task_detail(int task_id, int project_id) {
+		return   lkhDao.task_detail(task_id,project_id);
+	}
+
 }

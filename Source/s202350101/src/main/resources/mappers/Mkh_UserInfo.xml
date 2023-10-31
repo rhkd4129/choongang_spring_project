@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+	 
+
+<!-- <mapper namespace="com.oracle.s202350101.UserInfoMapper">
+	 <select id="InsertUserInfo" parameterType="UserInfo">
+		insert into user_info VALUES ( #{user_id},    	#{class_id}, 	#{project_id},  #{user_pw}, 
+								 	  #{user_name}, 	#{user_gender}, #{user_number}, #{user_birth},
+								 	  #{user_address}, 	#{user_email},  
+								 	  COALESCE(#{user_auth}, 'student')		
+								 	  #{attach_name, jdbcType=VARCHAR, mode=IN},
+								 	  #{attach_path, jdbcType=VARCHAR, mode=IN}, 	
+								 	  #{del_status, jdbcType=INTEGER},
+								 	  #{chat_room_ses, jdbcType=VARCHAR, mode=IN}
+								 	  )
+	</select>
+</mapper> -->
+
+<mapper namespace="com.oracle.s202350101.UserInfoMapper">
+	<!-- <insert id="InsertUserInfo" parameterType="UserInfo">    #{project_id, jdbcType = VARCHAR}
+		insert into user_info VALUES ( #{user_id},    	#{class_id}, #{project_id, jdbcType = VARCHAR}, #{user_pw}, 
+								 	  #{user_name}, 	#{user_gender, jdbcType = VARCHAR}, 
+								 	  #{user_number}, 	#{user_birth},
+								 	  #{user_address}, 	#{user_email},  'student', 
+								 	  #{attach_name, jdbcType = VARCHAR},	
+								 	  #{attach_path, jdbcType = VARCHAR}, 0,  			
+								 	  #{chat_room_ses, jdbcType = VARCHAR}
+								 	  )
+	</insert> -->
+	
+	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
+		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_number,    user_email,  user_auth) 
+					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_number}, #{user_email}, 'student')
+					   
+	</insert>
+	
+	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">
+		Select *
+		From  user_info 
+		Where user_id = #{user_id}
+		And   user_pw = #{user_pw}
+	</select>
+	
+
+</mapper>

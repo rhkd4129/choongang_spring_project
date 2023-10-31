@@ -1,16 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Task List</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/static/lkh/css/1.css' />">
-
+    <link rel="stylesheet" type="text/css" href="/lkh/css/1.css">
     <script type="text/javascript">
      $(document).ready(function() {
-         var prevSelectedValue = ""; // 이전 선택한 값 저장
+         $.ajax({
+             url			: '/main_header',
+             dataType 	: 'text',
+             success		: function(data) {
+                 console.log("ddd");
+                 $('#header').html(data);
+             }
+         });
+         $.ajax({
+             url			: '/main_menu',
+             dataType 	: 'text',
+             success		: function(data) {
+                 $('#menubar').html(data);
+             }
+         });
+         $.ajax({
+             url			: '/main_footer',
+             dataType 	: 'text',
+             success		: function(data) {
+                 $('#footer').html(data);
+             }
+         });
+
+
+     var prevSelectedValue = ""; // 이전 선택한 값 저장
          $("#order_by").on("change", function() {
              var tableHeader = "<thead><tr><th>작업번호</th><th>작업 담당자</th><th>Project Step</th>" +
                  "<th>작업명</th><th>작업시작일</th><th>작업마감일</th><th>우선순위</th><th>작업상태</th></tr></thead>";
@@ -45,6 +68,7 @@
                             if(data[i].task_status === "0"){
 
                                 var newRow2 = "<tr>" +
+
                                     "<td>"+ data[i].task_id +"</td>" +
                                     "<td>"+ data[i].user_name +"</td>" +
                                     "<td>"+ data[i].project_step_seq +"</td>" +
@@ -127,8 +151,7 @@
                                      "<td>"+ data[i].task_id +"</td>" +
                                      "<td>"+ data[i].user_name +"</td>" +
                                      "<td>"+ data[i].project_step_seq +"</td>" +
-                                     "<td>"+ data[i].task_subject +"</td>" +
-
+                                     "<td><a href='task_detail?task_id=" + data[i].task_id + "&project_id=" + data[i].project_id + "'>data[i].task_subject</a></td>"+
                                      "<td>"+ data[i].task_stat_time +"</td>" +
                                      "<td>"+ data[i].task_end_itme +"</td>" +
                                      "<td>"+ data[i].task_status +"</td>" +
@@ -190,64 +213,86 @@
     </script>
 </head>
 <body>
-    <h1>Task List</h1>
-    <a href="task_create_view">새작업 </a>
 
 
+<div id="header"></div>
 
-    <select id="order_by">
-        <option value="task_status">상태별</option>
-        <option value="task_priority">우선순위별</option>
-        <option value="task_end_itme" selected>작업 마감일별</option>
-        <option value="project_step_seq">단계별 </option>
-    </select>
+<div class="container-fluid">
+    <div class="row">
 
-        <div id="table1">
-            <table id="listTable">
-                <thead>
-                <tr>
-                    <th>작업번호</th>
-                    <th>작업 담당자 </th>
-                    <th>Project Step</th>
-                    <th>작업명</th>
-                    <th>작업시작일</th>
-                    <th>작업마감일</th>
-                    <th>우선순위</th>
-                    <th>작업상태</th>
-                </tr>
-                </thead>
-                <tbody id="tbodys">
-                <c:forEach var="task" items="${taskList}">
-                    <tr>
-                        <td>${task.task_id}</td>
-                        <td>${task.user_name}</td>
-                        <td>${task.project_step_seq}</td>
-                        <td>${task.task_subject}</td>
-                        <td>${task.task_stat_time}</td>
-                        <td>${task.task_end_itme}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${task.task_priority == '0'}"> 낮음 </c:when>
-                                <c:when test="${task.task_priority == '1'}"> 보통   </c:when>
-                                <c:when test="${task.task_priority == '2'}"> 높음 </c:when>
-                            </c:choose>
-                        </td>
-
-                        <td>
-                            <c:choose>
-                                <c:when test="${task.task_status == '0'}">예정</c:when>
-                                <c:when test="${task.task_status == '1'}">진행중</c:when>
-                                <c:when test="${task.task_status == '2'}">완료됨</c:when>
-                            </c:choose>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+        <!-- 메뉴 -->
+        <div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
         </div>
-        <div class ="table2" id="table2"></div>
-        <div class ="table3" id="table3"></div>
-        <div class ="table4" id="table4"></div>
+
+        <!-- 본문 -->
+        <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+            <h1>Task List</h1>
+            <a href="task_create_view">새작업 </a>
+
+            <select id="order_by">
+                <option value="task_status">상태별</option>
+                <option value="task_priority">우선순위별</option>
+                <option value="task_end_itme" selected>작업 마감일별</option>
+                <option value="project_step_seq">단계별 </option>
+            </select>
+
+            <div id="table1">
+                <table id="listTable">
+                    <thead>
+                    <tr>
+                        <th>작업번호</th>
+                        <th>작업 담당자 </th>
+                        <th>Project Step</th>
+                        <th>작업명</th>
+                        <th>작업시작일</th>
+                        <th>작업마감일</th>
+                        <th>우선순위</th>
+                        <th>작업상태</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodys">
+                    <c:forEach var="task" items="${taskList}">
+                        <tr>
+                            <td>${task.task_id}</td>
+                            <td>${task.user_name}</td>
+                            <td>${task.project_step_seq}</td>
+                            <td><a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a></td>
+
+                            <td></td>
+                            <td>${task.task_stat_time}</td>
+                            <td>${task.task_end_itme}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${task.task_priority == '0'}"> 낮음 </c:when>
+                                    <c:when test="${task.task_priority == '1'}"> 보통   </c:when>
+                                    <c:when test="${task.task_priority == '2'}"> 높음 </c:when>
+                                </c:choose>
+                            </td>
+
+                            <td>
+                                <c:choose>
+                                    <c:when test="${task.task_status == '0'}">예정</c:when>
+                                    <c:when test="${task.task_status == '1'}">진행중</c:when>
+                                    <c:when test="${task.task_status == '2'}">완료됨</c:when>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <div class ="table2" id="table2"></div>
+            <div class ="table3" id="table3"></div>
+            <div class ="table4" id="table4"></div>
+        </main>
+
+    </div>
+</div>
+
+<div id="footer"></div>
+
+
 
 
 

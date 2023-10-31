@@ -1,5 +1,6 @@
 package com.oracle.s202350101.dao.lkhDao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +81,26 @@ public class LkhDaoImpl implements LkhDao {
 			log.info("dao :task_board error Message -> {}",e.getMessage());
 		}
 		return result;
+	}
+
+	@Override
+	public Task task_detail(int task_id, int project_id) {
+		Task task = new Task();
+
+		try {
+
+			Map<String, Integer> params = new HashMap<>();
+			params.put("task_id", task_id);
+			params.put("project_id", project_id);
+			task = sqlSession.selectOne("task_detail", params);
+
+		} catch (Exception e) {
+			log.info("dao :task_board error Message -> {}",e.getMessage());
+		}
+		return task;
+
+
+
 	}
 
 

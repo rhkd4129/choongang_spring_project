@@ -1,15 +1,78 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/header.jsp"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>Task List</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <meta  charset="UTF-8">
+        <title>Insert title here</title>
+
+
+        <!--CSS START -->
+        <!-- CSS END -->
+
+        <!-- JS START -->
+        <!-- JS END -->z
+
+        <script type="text/javascript">
+            $(function() {
+
+                $.ajax({
+                    url			: '/main_header',
+                    dataType 	: 'text',
+                    success		: function(data) {
+                        $('#header').html(data);
+                    }
+                });
+
+                $.ajax({
+                    url			: '/main_menu',
+                    dataType 	: 'text',
+                    success		: function(data) {
+                        $('#menubar').html(data);
+                    }
+                });
+
+
+                $.ajax({
+                    url			: '/main_footer',
+                    dataType 	: 'text',
+                    success		: function(data) {
+                        $('#footer').html(data);
+                    }
+                });
+            });
+        </script>
     </head>
     <body>
-    task create form
-    <jsp:include page="taskInsertForm.jsp" />
+
+    <!-- HEADER -->
+    <header id="header"></header>
+
+    <!-- CONTENT -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- 메뉴 -->
+            <div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            </div>
+
+            <!-- 본문 -->
+            <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!------------------------------ //개발자 소스 입력 START ------------------------------->
+                <jsp:include page="taskInsertForm.jsp" />
+                <!------------------------------ //개발자 소스 입력 END ------------------------------->
+            </main>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer py-2">
+        <div id="footer" class="container">
+        </div>
+    </footer>
+
+
 
     </body>
 </html>

@@ -1,1 +1,15 @@
 @charset "UTF-8";
+
+/* 프레임을 좌우 나누고 싶을때 */
+.frame_set {
+	display: flex;
+	flex: 1;
+}
+.frame_left {
+	display: block;
+	width: 50%;
+}
+.frame_right {
+	display: block;
+	width: 50%;
+}

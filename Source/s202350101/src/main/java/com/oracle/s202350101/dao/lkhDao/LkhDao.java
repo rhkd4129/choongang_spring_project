@@ -15,5 +15,6 @@ public interface LkhDao {
 	List<Task>			task_table();
 
 	int 				task_create(Task task);
+	Task				task_detail(int task_id, int project_id);
 	
 }

@@ -62,6 +62,14 @@ public class LkhController {
 	public List<Task>  view_status() {return lkhService.task_table();}
 
 
+	//이건되냐
+	@GetMapping("task_detail")
+	public String task_detail(int task_id, int project_id,Model model){
+		Task task = lkhService.task_detail(task_id,project_id);
+		model.addAttribute("task",task);
+		return "project/board/task_detail";
+	}
+
 
 	@GetMapping("task_create_view")
 	public String task_create_view(){
@@ -71,9 +79,12 @@ public class LkhController {
 	@PostMapping("task_create")
 	public String task_create(Model model   ){
 		// 작업 ID 프로젝트 ID 회원 ID  휴지통 0
+
+
+
+
+
 		return "redirect:viewer_table";
-
-
 	}
 
 

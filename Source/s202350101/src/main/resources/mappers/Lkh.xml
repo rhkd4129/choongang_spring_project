@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--이거 주석되냐?  -->
+<!--이거 주석되냐
+
+
+    <select id="boardTask" resultType="Task">
+  	<![CDATA[   select  project_id , task_status ,task_subject from task order by TASK_STATUS  ]]>
+   </select>
+
+
+
+
+
+?  -->
+
+<!--   -->
 <mapper namespace="com.oracle.s202350101.TaskMapper">
+
+    <select id="taskUserWorkStatus" resultType="Task">
+    <![CDATA[
+
+        SELECT t.user_id, u.user_name,  t.task_status, count(t.task_status) status_count
+        from TASK t , USER_INFO u
+        WHERE  t.project_id=1 and t.USER_ID = u.USER_ID
+        group by u.user_name,t.task_status,t.user_id
+        order by u.user_name, t.task_status
+
+        ]]>
+  </select>
+
+
   <select id="taskStatusList" resultType="int">
     <![CDATA[
 			select  count(*) as task_status_count from task
@@ -18,26 +45,13 @@
 		where t.user_id = u.user_id
 
   	</select>
-  
-  
-    <select id="boardTask" resultType="Task">
-  	<![CDATA[   select  project_id , task_status ,task_subject from task order by TASK_STATUS  ]]>
-   </select>
-  
-  
-  
-    <select id="taskUserWorkStatus" resultType="Task">
-    <![CDATA[
-    	
-			SELECT t.user_id, u.user_name,  t.task_status, count(t.task_status) status_count 
-			from TASK t , USER_INFO u
-			WHERE  t.project_id=1 and t.USER_ID = u.USER_ID
-			group by u.user_name,t.task_status,t.user_id
-			order by u.user_name, t.task_status
 
-    ]]>
-    
-  </select>
+
+    <select id="task_detail" parameterType="int" resultType="Task">
+        SELECT * FROM TASK
+        WHERE project_id = #{project_id} and task_id = #{task_id}
+    </select>
+
 
     <insert id="task_create"     parameterType="Task" >
             insert into task values ( #{task_id},    #{project_id}, #{project_step_seq},  #{user_id},
@@ -45,10 +59,7 @@
                                       #{TASK_PRIORITY} , #{task_status}, ${GARBAGE})
 
     </insert>
-  
 
-  
-  
 
    
 </mapper>
