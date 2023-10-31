@@ -83,7 +83,19 @@ public class UserInfoDaoImpl implements UserInfoDao{
 
 	@Override
 	public List<UserInfo> pageUserInfo(UserInfo userInfo) {
-		return null;
+
+		log.info("pageUserInfo start");
+		List<UserInfo> UIList = null;
+		try {
+			UIList = session.selectList("pageUserInfo", userInfo);
+			System.out.println(UIList.stream().collect(Collectors.toList()));
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return UIList;
+
+
 	}
 
 

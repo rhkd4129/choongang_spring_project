@@ -12,6 +12,7 @@
     <select id="findAllUser" resultType="UserInfo">
         select *
         from user_info
+        where user_auth != 'admin'
     </select>
     <select id="findbyClassUser" parameterType="int" resultType="UserInfo">
         select *
@@ -52,7 +53,7 @@
 
         select u.*, p.project_name
         from (select rownum rn, a.*
-              from (select * from USER_INFO order by USER_ID) a) u
+              from (select * from USER_INFO where user_auth != 'admin' and class_id = #{class_id} order by USER_ID) a) u
                  left join prj_info p
                            on u.project_id = p.project_id
         where rn between #{start} and #{end}
