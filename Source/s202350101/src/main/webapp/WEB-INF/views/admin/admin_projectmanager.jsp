@@ -47,6 +47,7 @@
             });
         });
 
+        //  사용자 권한 수정 함수
         function auth_mod() {
 // hid_us_id 값을 모두 가져오기
             var hidUsIdArray = [];

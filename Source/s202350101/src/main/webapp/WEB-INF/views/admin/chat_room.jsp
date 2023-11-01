@@ -10,7 +10,7 @@
 
         #chatbox {
             float: right;
-            width: 30%;
+            width: 100%;
             height: auto; /* 변경된 높이 값 */
             background-color: rgba(13, 110, 253, 0.25);
             display: flex;
@@ -57,38 +57,12 @@
                 }
             });
         });
-        function chat_button(){
-
-            alert("hi");
-
-            var con = document.getElementById("chatbox");
-            if(con.style.display=='none'){
-                con.style.display = 'flex';
-            }else{
-                con.style.display = 'none';
-            }
-        }
     </script>
 </head>
 
-<body>
 
 <!-- HEADER -->
-<header id="header"></header>
 
-
-<!-- CONTENT -->
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- 메뉴 -->
-        <div id="menubar"
-             class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-        </div>
-
-        <!-- 본문 -->
-        <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!------------------------------ //개발자 소스 입력 START ------------------------------->
 
             <div id="chatbox">
                 <div id="chat_top">
@@ -128,17 +102,5 @@
                 </div>
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->
-        </main>
-
-    </div>
-</div>
-
-<!-- FOOTER -->
-<footer class="footer py-2">
-    <div id="footer" class="container"></div>
-</footer>
-
-
-</body>
 
 </html>
