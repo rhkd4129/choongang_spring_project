@@ -21,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LkhController {
 	private final LkhService lkhService;
-
-
 	@GetMapping("Lee")
 	public String Hello(Model model ) {
 		log.info("say hello");
@@ -51,11 +49,8 @@ public class LkhController {
 
 	@GetMapping("task_timeline_view")
 	public String task_timeline_view(){
-
-
 		return "project/board/task_timeline";
 	}
-
 
 	@ResponseBody
 	@GetMapping("task_timeline")
