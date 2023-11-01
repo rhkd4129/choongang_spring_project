@@ -5,19 +5,28 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.ScriptAssert;
+
+import javax.validation.constraints.NotEmpty;
 
 //@Date 
 @Getter
 @Setter
 @ToString
+//@ScriptAssert(lang="javascripte" script="", message="")
 public class Task {
 		private int		task_id;
 		private int		project_id;
 		private int		project_step_seq;
 		private String	user_id;
+
+		@NotEmpty
 		private String	task_subject;
+		@NotEmpty
 		private String	task_content;
+		@NotEmpty
 		private java.sql.Date task_stat_time;
+		@NotEmpty
 		private java.sql.Date	task_end_itme;
 		private String	task_priority;
 		private String	task_status;

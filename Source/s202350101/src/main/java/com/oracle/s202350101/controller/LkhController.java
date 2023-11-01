@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,6 +18,7 @@ import com.oracle.s202350101.service.lkhSer.LkhService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -90,10 +94,24 @@ public class LkhController {
 		return "project/board/taskInsertView";
 	}
 	@PostMapping("task_create")
-	public String task_create(Model model   ){
-		// 작업 ID 프로젝트 ID 회원 ID  휴지통 0
+	public String task_create(@Validated  @ModelAttribute Task task
+			,BindingResult bindingResult, RedirectAttributes redirectAttributes){
+//
+//		if(task.getGarbage()  != null && task.getProject_s_name() != null){
+//			bindingResult.reject("total",new Object[]{10000, });
+//		}
 
-		return "redirect:viewer_table";
+
+		if(bindingResult.hasErrors()){
+			log.info("errer={}",bindingResult);
+//			model.addAttribute("msg","BindingResult 입력 실패 확인해 보세요");
+			return "project/board/taskInsertView";
+		}
+		redirectAttributes.addAttribute("taskId",task.getTask_id());
+		redirectAttributes.addAttribute("status",true);
+
+
+		return "redirect:task_detail?task_id={taskId}";
 	}
 
 
