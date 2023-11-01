@@ -14,31 +14,52 @@
 </style>
 
 <script type="text/javascript">
-	$(function() {
+	$(function () {
 		$.ajax({
-			url			: '/main_header',
-			dataType 	: 'text',
-			success		: function(data) {
+			url: '/main_header',
+			dataType: 'text',
+			success: function (data) {
 				$('#header').html(data);
 			}
 		});
-		
+
 		$.ajax({
-			url			: '/main_menu',
-			dataType 	: 'text',
-			success		: function(data) {
+			url: '/main_menu',
+			dataType: 'text',
+			success: function (data) {
 				$('#menubar').html(data);
 			}
 		});
-	
+
 		$.ajax({
-			url			: '/main_footer',
-			dataType 	: 'text',
-			success		: function(data) {
+			url: '/main_footer',
+			dataType: 'text',
+			success: function (data) {
 				$('#footer').html(data);
 			}
 		});
 	});
+
+	function cl_room(currentpage) {
+		var cl_room_val = $('#cl_room_List').val();
+		console.log(cl_room_val);
+		// var curpage = 1;
+		var sendurl = '/admin_board/?class_id='+cl_room_val;			// + currentpage;
+		console.log(sendurl);
+
+	}
+	function pr_info(currentpage) {
+		var cl_room_val = $('#cl_room_List').val();
+		var project_id = $('#pr_List').val();
+
+		console.log(cl_room_val);
+		// var curpage = 1;
+		var sendurl = '/admin_board/?class_id='+cl_room_val+"&project_id="+project_id;			// + currentpage;
+		console.log(sendurl);
+
+	}
+
+
 </script>
 </head>
 
@@ -71,13 +92,13 @@
 					</div>
 					<p></p>
 					<table class="table">
-						<select id="cl_room_List" >
+						<select id="cl_room_List" onchange="cl_room(1)">
 							<c:forEach items="${CRList}" var="list">
 								<option name="class_room_num" value="${list.class_id}">${list.class_area}
 										${list.class_room_num}</option>
 							</c:forEach>
 						</select>
-						<select id="pr_List" >
+						<select id="pr_List" onchange="pr_info()">
 							<c:forEach items="${PIList}" var="list">
 								<option name="pr_num" value="${list.project_id}">${list.project_name}	<%--${list.class_room_num}--%>
 										</option>

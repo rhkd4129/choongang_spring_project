@@ -84,7 +84,7 @@
         function cl_room(currentpage) {
             var cl_room_val = $('#cl_room_List').val();
             console.log(cl_room_val);
-            // var curpage = 1;
+
             var sendurl = '/admin_projectmanagerRest/' + cl_room_val + "?currentPage=" + currentpage;
 
             console.log(sendurl);

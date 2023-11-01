@@ -64,18 +64,17 @@ public class KjoController {
 
 	//	게시판 관리 페이지	GET
 	@GetMapping("/admin_board")
-	public String admin_board(ClassRoom cr, Model model) {
+	public String admin_board( ClassRoom cr, Model model) {
 
 		log.info("admin_board");
 		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
 		List<PrjInfo> PIList = null;
-
-		if (cr != null) {
+		if (cr.getClass_id() != 0) {
 			PIList = PIser.findbyClassId(cr);
-			log.info(""+cr.toString());
+			log.info("cr:   "+cr.toString());
 		} else {
 			PIList = PIser.findAll();
-			log.info(""+cr.toString());
+
 		}
 
 		model.addAttribute("CRList", CRList);
@@ -83,6 +82,8 @@ public class KjoController {
 
 		return "admin/admin_board";
 	}
+
+
 //	채팅방 팝업
 	@GetMapping("/chat_room")
 	public String chat_room() {

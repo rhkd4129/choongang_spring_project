@@ -6,9 +6,11 @@
 	 mapper 여러개 쓰셔도 됩니다. -->
 	 
 	 
-<mapper namespace="com.oracle.s202350101.">
-	 
-
-	
+<mapper namespace="com.oracle.s202350101.ClassRoomMapper">
+	<!-- ClassRoom의 class_id, class_room_num, class_area select -->
+	<select id="createdClassSelect" resultType="ClassRoom">
+		select class_id, class_room_num, class_area
+		from   class_room
+	</select>
 
 </mapper>
