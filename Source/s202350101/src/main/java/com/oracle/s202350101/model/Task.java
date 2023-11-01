@@ -26,5 +26,6 @@ public class Task {
 		
 		//읽기 전용 
 		private int status_count;
+		private String project_s_name;
 		private String user_name;
 }

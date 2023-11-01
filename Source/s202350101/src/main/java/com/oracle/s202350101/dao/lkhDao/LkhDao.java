@@ -16,5 +16,7 @@ public interface LkhDao {
 
 	int 				task_create(Task task);
 	Task				task_detail(int task_id, int project_id);
+
+	List<Task>			task_timeline();
 	
 }

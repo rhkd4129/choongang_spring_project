@@ -10,5 +10,7 @@ public interface LkhService {
 	List<Task>			task_table();
 
 	Task				task_detail(int task_id, int project_id);
+
+	List<Task>			task_timeline();
 	
 }

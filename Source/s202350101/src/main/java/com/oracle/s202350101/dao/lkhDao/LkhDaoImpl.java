@@ -103,5 +103,20 @@ public class LkhDaoImpl implements LkhDao {
 
 	}
 
+	@Override
+	public List<Task> task_timeline() {
+		List<Task> timelineTask= null;
+
+		try {
+
+			timelineTask = sqlSession.selectList("task_timeline");
+
+		} catch (Exception e) {
+			log.info("dao :task_timeline error Message -> {}",e.getMessage());
+		}
+		return timelineTask;
+
+	}
+
 
 }

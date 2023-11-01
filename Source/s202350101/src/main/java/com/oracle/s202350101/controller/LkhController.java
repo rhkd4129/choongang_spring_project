@@ -22,13 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 public class LkhController {
 	private final LkhService lkhService;
 
-	
+
 	@GetMapping("Lee")
-	public String Hello(Model model) {
+	public String Hello(Model model ) {
 		log.info("say hello");
 //		taskUserWorkStatusList = lkhService.task_user_workStatus();
 		return "project/board/Hello";
 	}
+
+
 	@ResponseBody
 	@GetMapping("dashboard")
 	public List<Integer> dashboard() {
@@ -46,7 +48,23 @@ public class LkhController {
 		taskUserWorkStatusList =  lkhService.task_user_workStatus();
 		return taskUserWorkStatusList; 
 	}
-	
+
+	@GetMapping("task_timeline_view")
+	public String task_timeline_view(){
+
+
+		return "project/board/task_timeline";
+	}
+
+
+	@ResponseBody
+	@GetMapping("task_timeline")
+	public List<Task> task_timeline(){
+		List<Task> timeLine = lkhService.task_timeline();
+		return timeLine;
+	}
+
+
 
 	@GetMapping("viewer_table")
 	public String  viewer_table(Model model) {
@@ -80,10 +98,6 @@ public class LkhController {
 	public String task_create(Model model   ){
 		// 작업 ID 프로젝트 ID 회원 ID  휴지통 0
 
-
-
-
-
 		return "redirect:viewer_table";
 	}
 
@@ -96,6 +110,15 @@ public class LkhController {
 	//	return boardList;
 	//}
 	
-	
-	
+	@GetMapping("task_garbage_view")
+	public String task_garbage(Model model){
+
+		return "project/board/task_garbage_view";
+	}
+
+	@PostMapping("task_garbage")
+	@GetMapping("task_update")
+	public String task_update(Model model){
+		return "project/board/task_update_view";
+	}
 } 

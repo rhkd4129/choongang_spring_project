@@ -36,7 +36,7 @@
      var prevSelectedValue = ""; // 이전 선택한 값 저장
          $("#order_by").on("change", function() {
              var tableHeader = "<thead><tr><th>작업번호</th><th>작업 담당자</th><th>Project Step</th>" +
-                 "<th>작업명</th><th>작업시작일</th><th>작업마감일</th><th>우선순위</th><th>작업상태</th></tr></thead>";
+                 "<th>작업명</th><th>작업시작일</th><th>작업마감일</th><th>작업상태</th><th>우선순위</th></tr></thead>";
              var s = $(this).val();
              if (s !== prevSelectedValue && s === "task_status" ) {
                  prevSelectedValue = s; // 현재 선택한 값으로 업데이트
@@ -259,7 +259,7 @@
                             <td>${task.project_step_seq}</td>
                             <td><a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a></td>
 
-                            <td></td>
+
                             <td>${task.task_stat_time}</td>
                             <td>${task.task_end_itme}</td>
                             <td>

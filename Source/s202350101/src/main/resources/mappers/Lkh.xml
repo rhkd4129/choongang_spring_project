@@ -2,21 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--이거 주석되냐
-
-
     <select id="boardTask" resultType="Task">
   	<![CDATA[   select  project_id , task_status ,task_subject from task order by TASK_STATUS  ]]>
-   </select>
-
-
-
-
-
-?  -->
-
-<!--   -->
+   </select>-   -->
 <mapper namespace="com.oracle.s202350101.TaskMapper">
 
+    <!---  도넛 그래프 그려주는  -->
     <select id="taskUserWorkStatus" resultType="Task">
     <![CDATA[
 
@@ -25,7 +16,6 @@
         WHERE  t.project_id=1 and t.USER_ID = u.USER_ID
         group by u.user_name,t.task_status,t.user_id
         order by u.user_name, t.task_status
-
         ]]>
   </select>
 
@@ -37,14 +27,26 @@
 			group by task_status
 			order by TASK_STATUS
     ]]>
-    
   </select>
-  
+
+
   	<select id ="boardTable" resultType="Task">
   		select u.user_name ,t.*  from task t , user_info u
 		where t.user_id = u.user_id
 
   	</select>
+
+
+
+    <!---유저이름과  프로젝트 단계이름까지 나오는거 -->
+    <select id="boardTable2" resultType="Task">
+        select u.user_name,p.project_s_name ,t.*
+        from task t,  prj_step p , user_info u
+        where t.user_id = u.user_name and
+            t.project_id  = p.project_id and
+            t.project_step_seq  = p.project_step_seq;
+    </select>
+
 
 
     <select id="task_detail" parameterType="int" resultType="Task">
@@ -53,12 +55,35 @@
     </select>
 
 
+    <select id="task_detail2" parameterType="int" resultType="Task">
+            select u.user_name,p.project_s_name ,t.*
+            from task t,  prj_step p , user_info u
+            where t.user_id = u.user_name and
+            t.project_id  = p.project_id and
+            t.project_step_seq  = p.project_step_seq and
+            t.task_id = #{task_id} and t.project_id =#{project_id}
+    </select>
+
+
+
     <insert id="task_create"     parameterType="Task" >
             insert into task values ( #{task_id},    #{project_id}, #{project_step_seq},  #{user_id},
                                      #{task_subject}, #{task_content},   #{task_stat_time}, #{task_end_item},
                                       #{TASK_PRIORITY} , #{task_status}, ${GARBAGE})
-
     </insert>
+
+
+    <select id="task_timeline" resultType="Task">
+        select t.*,u.user_name   from task t, user_info u
+        where t.user_id = u.user_id
+    </select>
+
+
+
+
+
+
+
 
 
    

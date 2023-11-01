@@ -24,4 +24,7 @@ public class Meeting {
 	private String 	attach_name;
 	private String 	attach_path;
 
+	private Meeting        meetingMember;
+	private String        user_name;
+
 }

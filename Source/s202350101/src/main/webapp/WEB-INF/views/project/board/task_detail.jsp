@@ -52,8 +52,21 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                ${task.task_id}
-                ${task.task_content}
+
+            <div style="border: 1px black solid;">
+                <p>${task.task_id}  </p>
+                <p>${task.task_subject}</p>
+                <p>${task.task_subject}</p>
+                <p>${task.task_stat_time}</p>
+                <p>${task.task_stat_time}</p>
+                <p>${task.task_stat_time}</p>
+                <p>${task.task_end_itme}</p>
+                <p>${task.task_priority}</p>
+                <p>${task.task_status}</p>
+            </div>
+                    <a type="button"   class="btn btn-primary" href="task_garbage_view">task_garbage</a>
+                    <a type="button"   class="btn btn-primary" href="task_update_view">task_update</a>
+
         </main>
 
     </div>

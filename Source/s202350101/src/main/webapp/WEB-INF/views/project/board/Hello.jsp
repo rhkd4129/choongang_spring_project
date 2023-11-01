@@ -122,7 +122,8 @@
                 <canvas id="doughnut_1"></canvas>
             </div>
             <a type="button"   class="btn btn-primary" href="viewer_table">viewer_table</a>
-
+            <a type="button"   class="btn btn-primary" href="task_garbage">task_garbage</a>
+            <a type="button"   class="btn btn-primary" href="task_timeline_view">task_timeline</a>
             <div class="bar_chart">
                 <canvas id="bar_chart"></canvas>
             </div>
