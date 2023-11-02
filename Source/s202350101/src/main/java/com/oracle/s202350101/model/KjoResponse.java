@@ -10,4 +10,5 @@ public class KjoResponse {
 
     private List<?> firList;
     private Object obj;
+    private List<?> secList;
 }

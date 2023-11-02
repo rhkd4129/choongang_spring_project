@@ -1,6 +1,7 @@
 package com.oracle.s202350101.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,32 @@ public class KjoController {
 
 		log.info("admin_board");
 		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+
+
+		List<PrjInfo> PIList = null;
+		if (cr.getClass_id() != 0) {
+			PIList = PIser.findbyClassId(cr);
+			log.info("cr:   "+cr.toString());
+		} else {
+			cr.setClass_id(1);
+			PIList = PIser.findbyClassId(cr);
+
+		}
+
+		model.addAttribute("CRList", CRList);
+		model.addAttribute("PIList", PIList);
+
+		return "admin/admin_board";
+	}
+
+	@ResponseBody
+	@GetMapping("/admin_board_ajax")
+	public KjoResponse admin_board_ajax( ClassRoom cr, Model model) {
+
+		log.info("admin_board");
+		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+
+
 		List<PrjInfo> PIList = null;
 		if (cr.getClass_id() != 0) {
 			PIList = PIser.findbyClassId(cr);
@@ -81,11 +108,11 @@ public class KjoController {
 			PIList = PIser.findAll();
 
 		}
+		KjoResponse res = new KjoResponse();
+		res.setSecList(PIList);
+		res.setFirList(CRList);
 
-		model.addAttribute("CRList", CRList);
-		model.addAttribute("PIList", PIList);
-
-		return "admin/admin_board";
+		return res;
 	}
 
 

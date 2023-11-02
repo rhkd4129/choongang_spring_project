@@ -18,15 +18,19 @@
 	</select>
 
 	<select id="findbyClassId" parameterType="ClassRoom" resultType="PrjInfo">
-		select p.*, cr.class_id
-		from (select u.project_id, c.class_id
-			  from user_info u
-					   left join class_room c
-								 on c.class_id = u.class_id) cr
-				 left join prj_info p
-						   on cr.project_id = p.project_id
-		where cr.class_id = #{class_id}
-	</select>
+        select p.*
+        from (select u.user_id
+              from class_room c
+                       join user_info u
+                            on u.class_id = c.class_id
+              where u.user_auth = 'manager'
+                and c.class_id = #{class_id}) mn --여기서 강의실 조정
+                 join prj_info p
+                      on mn.user_id = p.project_manager_id
+
+    </select>
+
+
 
 
 </mapper>
