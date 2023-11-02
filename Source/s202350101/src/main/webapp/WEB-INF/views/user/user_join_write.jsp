@@ -48,6 +48,14 @@ select {
         
         <form action="writeUserInfo" method="post" name="frm" id="login-form">
         	<table>
+        	<!-- <tr><td>
+        		<input type="hidden" name="attach_name" value="">
+        		<input type="hidden" name="attach_path">
+        		<input type="hidden" name="project_id">
+        		<input type="hidden" name="del_status">
+        		<input type="hidden" name="chat_room_ses">
+        	</td></tr>
+			 -->
 			<tr><th>아이디 : </th><td><input type="text" name="user_id" 
 				required="required" >
 				<input type="button" value="중복확인:미구현" onclick="chk()"> </td></tr>

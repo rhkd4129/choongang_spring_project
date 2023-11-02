@@ -35,4 +35,6 @@ public class UserInfo {
 	private String search;   	private String keyword;
 	private String pageNum;		private int total;
 	private int start; 		 	private int end;
+
+	private String class_area;
 }

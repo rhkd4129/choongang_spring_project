@@ -62,7 +62,7 @@
 <body>
     <div class="login-wrapper">
         <h2>ChoongAng</h2>
-        <form method="post" action="interCeptor" id="login-form">
+        <form method="post" action="user_login_check" id="login-form">
             <input type="text" name="user_id" placeholder="ID">
             <input type="password" name="user_pw" placeholder="Password">
             <label for="remember-check">

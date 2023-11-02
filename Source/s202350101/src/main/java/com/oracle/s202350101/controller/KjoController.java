@@ -198,18 +198,18 @@ public class KjoController {
 //		log.info("admin_projectmanagerRest");
 ////		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);	// 반 학생의 정보 + 참여 프로젝트 명
 //		//	model을 사용하지 않는 이유: return으로 Json에 UIList를 전달하여
-//		//			jsp를 통해 값을 보여준다.
+//		userInfo.setStart(page.getStart());
+////		userInfo.setEnd(page.getEnd());
+////		userInfo.setTotal(totalUi);
+////		List<UserInfo> UIList = UIser.pageUserInfo(userInfo);	// 반 학생의 정보 + 참여 프로젝트 명
+////
+////		ModelAndView mav = new ModelAndView();
+////		mav.addObject("page",page);
+////		mav.addObject("cl_id",cl_id);
+////		//			jsp를 통해 값을 보여준다.
 //		int totalUi = UIser.findbyclassuser(cl_id).size();
 //
 //		Paging page = new Paging(totalUi, currentPage);
-//		userInfo.setStart(page.getStart());
-//		userInfo.setEnd(page.getEnd());
-//		userInfo.setTotal(totalUi);
-//		List<UserInfo> UIList = UIser.pageUserInfo(userInfo);	// 반 학생의 정보 + 참여 프로젝트 명
-//
-//		ModelAndView mav = new ModelAndView();
-//		mav.addObject("page",page);
-//		mav.addObject("cl_id",cl_id);
 //		mav.addObject("UIList",UIList);
 //		mav.addObject("totalUi",totalUi);
 //

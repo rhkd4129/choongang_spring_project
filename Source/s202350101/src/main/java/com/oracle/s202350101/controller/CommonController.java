@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -27,9 +28,12 @@ public class CommonController {
 	private final MkhService mkhService;
 	
 	@RequestMapping(value = "/main")
-	public String mainPage(UserInfo userInfoDTO, Model model) {
+	public String mainPage(HttpServletRequest request,UserInfo userInfoDTO, Model model) {
 		log.info("hi");
 		UserInfo userInfo=null;
+		System.out.println("MkhController mypageMain Start..");
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+
 		if (mkhService.userLoginCheck(userInfoDTO) != null) {
 			model.addAttribute("userInfo", userInfo);
 		}
@@ -53,15 +57,22 @@ public class CommonController {
 //	}
 	@ResponseBody
 	@RequestMapping(value = "/main_header")
-	public ModelAndView mainHeaderPage(Model model) {
-//		UserInfo userInfoDTO = (UserInfo) model.getAttribute("userInfo");
+	public ModelAndView mainHeaderPage(HttpServletRequest request, Model model) {
+
 //		log.info("usinfo: " + userInfoDTO.toString());
 
 //		UserInfo userInfo = mkhService.userLoginCheck(1);
 
 //		model.addAttribute("userInfo", userInfo);
+		System.out.println("Comm mainHeaderPage Start..");
+		log.info("mainHeaderPage start");
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 
-		List<UserInfo> chatUIList = uis.findbyclassuser(1);
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		log.info("userInfo: {}",userInfoDTO);
+		List<UserInfo> chatUIList = uis.findbyclassuser(userInfoDTO.getClass_id());
+
+		model.addAttribute("userInfo", userInfoDTO);
 		model.addAttribute("chatUIList", chatUIList);
 		return new ModelAndView("main_header");
 	}

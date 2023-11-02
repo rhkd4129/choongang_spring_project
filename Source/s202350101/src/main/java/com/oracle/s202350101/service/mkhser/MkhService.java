@@ -11,14 +11,14 @@ import com.oracle.s202350101.model.UserInfo;
 
 public interface MkhService {
 
-    int                insertUserInfo(UserInfo userInfo);
-    List<ClassRoom>    createdClass();
-    //	int                totalQna();
-    UserInfo           userLoginCheck(UserInfo userInfo);
-    List<BdQna>        bdQnaList(UserInfo userInfo);
-    List<BdFree> 	   bdFreeList(UserInfo userInfo);
-    List<PrjBdData>    PrjDataList(UserInfo userInfo);
-    List<PrjBdRep>     PrjRepList(UserInfo userInfo);
+	int                insertUserInfo(UserInfo userInfo);
+	List<ClassRoom>    createdClass();
+	int                totalQna(UserInfo userInfo);
+	UserInfo           userLoginCheck(UserInfo userInfo);
+	List<BdQna>        bdQnaList(UserInfo userInfo);
+	List<BdFree> 	   bdFreeList(UserInfo userInfo);
+	List<PrjBdData>    PrjDataList(UserInfo userInfo);
+	List<PrjBdRep>     PrjRepList(UserInfo userInfo);
 
 
 }

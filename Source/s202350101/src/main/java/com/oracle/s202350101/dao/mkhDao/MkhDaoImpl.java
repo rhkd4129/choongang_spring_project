@@ -2,7 +2,6 @@ package com.oracle.s202350101.dao.mkhDao;
 
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,6 @@ import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MkhDaoImpl implements MkhDao {
@@ -48,27 +46,25 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 
-//	@Override
-//	public int totalQna() {
-//		int totalBdQna = 0;		
-//		System.out.println("MkhDaoImpl totalQna start...");
-//		try {
-//			totalBdQna = session.selectOne("userIdQnaListCount");
-//		} catch (Exception e) {
-//			System.out.println("MkhDaoImpl totalQna Exception->" +e.getMessage());
-//		}
-//
-//		return totalBdQna;
-//	}
+	@Override
+	public int totalQna(UserInfo userInfo) {
+		int totalBdQna = 0;
+		System.out.println("MkhDaoImpl totalQna start...");
+		try {
+			totalBdQna = session.selectOne("userIdQnaListCount", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalQna Exception->" +e.getMessage());
+		}
+
+		return totalBdQna;
+	}
 
 	@Override
 	public UserInfo userLoginCheck(UserInfo userInfo) {
 		UserInfo userConfirm = null;
 		System.out.println("MkhDaoImpl userLoginCheck start...");
 		try {
-			log.info("usinfo : {}",userInfo);
 			userConfirm = session.selectOne("userLoginConfirm", userInfo);
-			log.info("userConfirm : {}",userConfirm);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl userLogin Exception->"+e.getMessage());
 		}

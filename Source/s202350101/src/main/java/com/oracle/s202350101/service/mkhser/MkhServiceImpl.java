@@ -2,7 +2,6 @@ package com.oracle.s202350101.service.mkhser;
 
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.mkhDao.MkhDao;
@@ -15,86 +14,84 @@ import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MkhServiceImpl implements MkhService {
 
-    private final MkhDao	mkhdao;
+	private final MkhDao	mkhdao;
 
-    @Override
-    public int insertUserInfo(UserInfo userInfo) {
-        int result = 0;
-        System.out.println("MkhServiceImpl insert Start...");
-        result = mkhdao.insertUserInfo(userInfo);
-        return result;
-    }
+	@Override
+	public int insertUserInfo(UserInfo userInfo) {
+		int result = 0;
+		System.out.println("MkhServiceImpl insert Start...");
+		result = mkhdao.insertUserInfo(userInfo);
+		return result;
+	}
 
-    @Override
-    public List<ClassRoom> createdClass() {
-        List<ClassRoom> classList = null;
-        System.out.println("MkhServiceImpl createdClass Start...");
-        classList = mkhdao.createdClass();
-        System.out.println("MkhServiceImpl classList.size()->" +classList.size());
+	@Override
+	public List<ClassRoom> createdClass() {
+		List<ClassRoom> classList = null;
+		System.out.println("MkhServiceImpl createdClass Start...");
+		classList = mkhdao.createdClass();
+		System.out.println("MkhServiceImpl classList.size()->" +classList.size());
 
-        return classList;
-    }
+		return classList;
+	}
 
-//	@Override
-//	public int totalQna() {
-//		System.out.println("MkhServiceImpl totalQna Start...");
-//		int totalBdQna = mkhdao.totalQna();
-//
-//		return totalBdQna;
-//	}
+	@Override
+	public int totalQna(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalQna Start...");
+		int totalBdQna = mkhdao.totalQna(userInfo);
 
-    @Override
-    public UserInfo userLoginCheck(UserInfo userInfoDTO) {
-        System.out.println("MkhServiceImpl userLoginCheck Start..");
-        log.info("usinfo : {}",userInfoDTO.toString());
-        UserInfo userInfo = mkhdao.userLoginCheck(userInfoDTO);
+		return totalBdQna;
+	}
 
-        return userInfo;
-    }
+	@Override
+	public UserInfo userLoginCheck(UserInfo userInfoDTO) {
+		System.out.println("MkhServiceImpl userLoginCheck Start..");
+		UserInfo userInfo = mkhdao.userLoginCheck(userInfoDTO);
 
-    @Override
-    public List<BdQna> bdQnaList(UserInfo userInfo) {
-        List<BdQna> qnaList = null;
-        System.out.println("MkhServiceImpl bdQnaList Start...");
-        qnaList = mkhdao.bdQnaList(userInfo);
-        System.out.println("MkhServiceImpl qnaList.size()->" +qnaList.size());
+		return userInfo;
+	}
 
-        return qnaList;
-    }
+	@Override
+	public List<BdQna> bdQnaList(UserInfo userInfo) {
+		List<BdQna> qnaList = null;
+		System.out.println("MkhServiceImpl bdQnaList Start...");
+		qnaList = mkhdao.bdQnaList(userInfo);
+		System.out.println("MkhServiceImpl qnaList.size()->" +qnaList.size());
 
-    @Override
-    public List<BdFree> bdFreeList(UserInfo userInfo) {
-        List<BdFree> freeList = null;
-        System.out.println("MkhServiceImpl bdFreeList Start...");
-        freeList = mkhdao.bdFreeList(userInfo);
-        System.out.println("MkhServiceImpl freeList.size()->" +freeList.size());
+		return qnaList;
+	}
 
-        return freeList;
-    }
+	@Override
+	public List<BdFree> bdFreeList(UserInfo userInfo) {
+		List<BdFree> freeList = null;
+		System.out.println("MkhServiceImpl bdFreeList Start...");
+		freeList = mkhdao.bdFreeList(userInfo);
+		System.out.println("MkhServiceImpl freeList.size()->" +freeList.size());
 
-    @Override
-    public List<PrjBdData> PrjDataList(UserInfo userInfo) {
-        List<PrjBdData> dataPrjList = null;
-        System.out.println("MkhServiceImpl PrjDataList Start...");
-        dataPrjList = mkhdao.PrjDataList(userInfo);
-        System.out.println("MkhServiceImpl dataPrjList.size()->" +dataPrjList.size());
+		return freeList;
+	}
 
-        return dataPrjList;
-    }
+	@Override
+	public List<PrjBdData> PrjDataList(UserInfo userInfo) {
+		List<PrjBdData> dataPrjList = null;
+		System.out.println("MkhServiceImpl PrjDataList Start...");
+		dataPrjList = mkhdao.PrjDataList(userInfo);
+		System.out.println("MkhServiceImpl dataPrjList.size()->" +dataPrjList.size());
 
-    @Override
-    public List<PrjBdRep> PrjRepList(UserInfo userInfo) {
-        List<PrjBdRep> RepPrjList = null;
-        System.out.println("MkhServiceImpl PrjRepList Start...");
-        RepPrjList = mkhdao.PrjRepList(userInfo);
-        System.out.println("MkhServiceImpl RepPrjList.size()->" +RepPrjList.size());
+		return dataPrjList;
+	}
 
-        return RepPrjList;
-    }
+	@Override
+	public List<PrjBdRep> PrjRepList(UserInfo userInfo) {
+		List<PrjBdRep> RepPrjList = null;
+		System.out.println("MkhServiceImpl PrjRepList Start...");
+		RepPrjList = mkhdao.PrjRepList(userInfo);
+		System.out.println("MkhServiceImpl RepPrjList.size()->" +RepPrjList.size());
+
+		return RepPrjList;
+	}
 
 }
