@@ -132,6 +132,8 @@ public class LkhController {
 //			bindingResult.reject("total",new Object[]{10000, });
 //		}
 
+
+
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		String user_id = userInfo.getUser_id();
 

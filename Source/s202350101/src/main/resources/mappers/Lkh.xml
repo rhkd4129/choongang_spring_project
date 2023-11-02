@@ -86,5 +86,10 @@
         where project_id =  #{project_id}
     </select>
 
+    <select id="TaskSub" resultType="TaskSub">
+        select worker_id from task_sub
+        where project_id = #{proejct_id} and task_id = #{task_id}
+    </select>
+
 
 </mapper>
