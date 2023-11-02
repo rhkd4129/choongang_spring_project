@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript">
         $(function() {
-
             $.ajax({
                 url			: '/main_header',
                 dataType 	: 'text',
@@ -39,7 +38,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             // HTML 구조는 준비되었지만, 모든 리소스의 로딩이 완료되지 않았을 때 실행됩니다.
             $.ajax({
-                url:"<%=request.getContextPath()%>/dashboard",
+                url:"<%=request.getContextPath()%>/dashboard_doughnut",
                 //data:data
                 dataType:'json',
                 success:function(response){
@@ -61,44 +60,46 @@
                 url:"<%=request.getContextPath()%>/dashboard_bar",
                 //data:data
                 dataType:'json',
-                success:function(response){
+                success:function(workload){
                     const barCtx = document.getElementById('bar_chart').getContext('2d');
 
-                    console.log(response);
+                    console.log(workload);
+                    var labels = []
+                    var stats_0=[]
+                    var stats_1=[]
+                    var stats_2=[]
+                    for(let i =0; i<workload.length;i++){
+                        labels.push(workload[i].user_name);
+                        stats_0.push(workload[i].status_0_count);
+                        stats_1.push(workload[i].status_1_count);
+                        stats_2.push(workload[i].status_2_count);
+                    }
+
                     const horizontalStackBarData = {
-                        labels: ['이광현', '강준우', '문경훈', '차예지', '이진희', '조미혜', '황인정'],
+                        labels: labels,
                         datasets: [
                             {
                                 label: '진행전',
-                                data: [2, 2, 3, 2, 2, 3, 2],
+                                data: stats_0,
                                 backgroundColor: 'red',
                             },
                             {
                                 label: '진행중',
-                                data: [2, 2, 3, 2, 2, 3, 2],
+                                data: stats_1,
                                 backgroundColor: 'blue',
                             },
                             {
                                 label: '완료',
-                                data: [2, 2, 3, 2, 2, 3, 2],
+                                data: stats_2,
                                 backgroundColor: 'orange',
                             },
                         ]
                     };
-
                     createDrawChart(barCtx, 'bar', horizontalStackBarData, horizontalStackBarOption);
                 }
             });
-
-
-
-
-
         });
-
-
     </script>
-
 </head>
 <body>
 <!-- -
@@ -108,7 +109,6 @@
 - -->
 
 <div id="header"></div>
-
 <div class="container-fluid">
     <div class="row">
 
@@ -121,7 +121,7 @@
             <div class="doughnut_1">
                 <canvas id="doughnut_1"></canvas>
             </div>
-            <a type="button"   class="btn btn-primary" href="viewer_table">viewer_table</a>
+            <a type="button"   class="btn btn-primary" href="task_list">viewer_table</a>
             <a type="button"   class="btn btn-primary" href="task_garbage">task_garbage</a>
             <a type="button"   class="btn btn-primary" href="task_timeline_view">task_timeline</a>
             <div class="bar_chart">

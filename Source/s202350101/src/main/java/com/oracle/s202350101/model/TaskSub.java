@@ -8,6 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+
 public class TaskSub {
 	private int		task_id;
 	private int		project_id;

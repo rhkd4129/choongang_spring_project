@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,7 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.s202350101.model.UserInfo;
 
+import lombok.RequiredArgsConstructor;
+
 public class SampleInterceptor implements HandlerInterceptor {
+	
 	public SampleInterceptor() {
 		
 	}
@@ -24,15 +28,17 @@ public class SampleInterceptor implements HandlerInterceptor {
 						   ModelAndView modelAndView) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("post handle....................................");
-		UserInfo userInfo = (UserInfo) modelAndView.getModel().get("userInfo");
-		if(userInfo == null) {
+		//UserInfo userInfo = (UserInfo) modelAndView.getModel().get("userInfo");
+		System.out.println("postHandle session.userInfo->"+request.getSession().getAttribute("userInfo"));
+
+		String urlGo = (String) modelAndView.getModel().get("urlGo");
+		System.out.println("postHandle urlGo->"+urlGo);
+		// 기존 로그인 세션이 있는 상태면 urlGo로 이동
+		if(request.getSession().getAttribute("userInfo") != null) {
+			response.sendRedirect(urlGo);
+		} else {
 			System.out.println("userInfo Not exists");
 			response.sendRedirect("user_login");
-		} else {
-			System.out.println("userInfo exists");
-			request.getSession().setAttribute("userInfo", userInfo);
-		//	response.sendRedirect(request.getContextPath()+"/main");
-			response.sendRedirect("/main");
 		}
 	}
 	
@@ -43,14 +49,10 @@ public class SampleInterceptor implements HandlerInterceptor {
 							 Object handler) throws Exception {
 		
 		System.out.println("pre handle....................................");
-		// 로그인 세션이 있는지 없는지 먼저 검증?
-
-//		HandlerMethod method = (HandlerMethod) handler;
-//		Method methodObj = method.getMethod();
-//		System.out.println("Bean: " + method.getBean());
-//		System.out.println("Method: " + methodObj);
 		
 		return true;
+
+		
 	}
 
 }

@@ -256,7 +256,7 @@
                         <tr>
                             <td>${task.task_id}</td>
                             <td>${task.user_name}</td>
-                            <td>${task.project_step_seq}</td>
+                            <td>${task.project_s_name}</td>
                             <td><a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a></td>
 
 

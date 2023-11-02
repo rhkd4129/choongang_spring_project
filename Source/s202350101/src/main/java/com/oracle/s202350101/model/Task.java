@@ -24,9 +24,9 @@ public class Task {
 		private String	task_subject;
 		@NotEmpty
 		private String	task_content;
-		@NotEmpty
+
 		private java.sql.Date task_stat_time;
-		@NotEmpty
+
 		private java.sql.Date	task_end_itme;
 		private String	task_priority;
 		private String	task_status;
@@ -34,7 +34,9 @@ public class Task {
 		
 		
 		//읽기 전용 
-		private int status_count;
+		private int status_0_count;
+		private int status_1_count;
+		private int status_2_count;
 		private String project_s_name;
 		private String user_name;
 }

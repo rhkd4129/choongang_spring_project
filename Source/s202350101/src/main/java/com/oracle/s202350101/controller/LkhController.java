@@ -3,6 +3,10 @@ package com.oracle.s202350101.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.oracle.s202350101.model.PrjStep;
+import com.oracle.s202350101.model.TaskSub;
+import com.oracle.s202350101.model.UserInfo;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,34 +24,44 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class LkhController {
 	private final LkhService lkhService;
-	@GetMapping("Lee")
-	public String Hello(Model model ) {
-		log.info("say hello");
-//		taskUserWorkStatusList = lkhService.task_user_workStatus();
-		return "project/board/Hello";
+	@GetMapping("dashboard_home")
+	public String Hello(HttpServletRequest request, Model model ) {
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
+		return "project/board/dashboard_home";
 	}
 
 
 	@ResponseBody
-	@GetMapping("dashboard")
-	public List<Integer> dashboard() {
+	@GetMapping("dashboard_doughnut")
+	public List<Integer> dashboard(HttpServletRequest request) {
+		UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
+		int id = userInfo.getProject_id();
 		log.info("dashboard Controller init");
 		List<Integer> taskStatusList = new ArrayList<>();
-		taskStatusList =  lkhService.task_status_count();
+		taskStatusList =  lkhService.task_status_count(id);
 		for(Integer t : taskStatusList) {System.out.println(t);}
 		return taskStatusList; 
 	}
+
+	//진척률
+
+	// 프로젝트에 속한 인원들과
+	//
 	@ResponseBody
 	@GetMapping("dashboard_bar")
-	public List<Task> dashboard_bar() {
+	public List<Task> dashboard_bar(HttpServletRequest request) {
+		UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
+		int id = userInfo.getProject_id();
 		log.info("dashboard_bar Controller init");
 		List<Task> taskUserWorkStatusList = new ArrayList<>();
-		taskUserWorkStatusList =  lkhService.task_user_workStatus();
+		taskUserWorkStatusList =  lkhService.task_user_workStatus(id);
 		return taskUserWorkStatusList; 
 	}
 
@@ -65,18 +79,26 @@ public class LkhController {
 
 
 
-	@GetMapping("viewer_table")
-	public String  viewer_table(Model model) {
-		List<Task>  taskList =  lkhService.task_table();
+	@GetMapping("task_list")
+	public String  viewer_table(HttpServletRequest request,  Model model) {
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int id = userInfo.getProject_id();
+		List<Task>  taskList =  lkhService.task_list(id);
 		
 		model.addAttribute("taskList", taskList);
 		
-		return "project/board/viewer_table";
+		return "project/board/taskList";
 			
 	}
-	@ResponseBody
-	@GetMapping("view_status")
-	public List<Task>  view_status() {return lkhService.task_table();}
+//	@ResponseBody
+//	@GetMapping("view_status")
+//	public List<Task>  view_status(HttpServletRequest request) {
+//		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+//		int id = userInfo.getProject_id();
+//		return lkhService.task_table(id);
+//
+//
+//	}
 
 
 	//이건되냐
@@ -89,17 +111,29 @@ public class LkhController {
 
 
 	@GetMapping("task_create_view")
-	public String task_create_view(){
+	public String task_create_view(HttpServletRequest request ,Model model){
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int projectId = userInfo.getProject_id();
+		log.info("projectId{}",projectId);
+
+		List<PrjStep>  prjStepList = lkhService.project_step_list(projectId);
+		List<UserInfo>  task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
+
+		model.addAttribute("prjStepList",prjStepList);
+		model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
 
 		return "project/board/taskInsertView";
 	}
 	@PostMapping("task_create")
-	public String task_create(@Validated  @ModelAttribute Task task
-			,BindingResult bindingResult, RedirectAttributes redirectAttributes){
-//
+	public String task_create(@Validated  @ModelAttribute Task task, TaskSub taskSub
+			, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+							  HttpServletRequest request){
 //		if(task.getGarbage()  != null && task.getProject_s_name() != null){
 //			bindingResult.reject("total",new Object[]{10000, });
 //		}
+
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		String user_id = userInfo.getUser_id();
 
 
 		if(bindingResult.hasErrors()){
@@ -107,6 +141,8 @@ public class LkhController {
 //			model.addAttribute("msg","BindingResult 입력 실패 확인해 보세요");
 			return "project/board/taskInsertView";
 		}
+		task.setUser_id(user_id);
+		lkhService.task_create(task);
 		redirectAttributes.addAttribute("taskId",task.getTask_id());
 		redirectAttributes.addAttribute("status",true);
 
@@ -114,14 +150,6 @@ public class LkhController {
 		return "redirect:task_detail?task_id={taskId}";
 	}
 
-
-	//@ResponseBody
-	//@GetMapping("board_view")
-	//public List<Task> board_view() {
-	//	List<Task> boardList = new ArrayList<>();
-	//	boardList = lkhService.task_user_workStatus();//
-	//	return boardList;
-	//}
 	
 	@GetMapping("task_garbage_view")
 	public String task_garbage(Model model){

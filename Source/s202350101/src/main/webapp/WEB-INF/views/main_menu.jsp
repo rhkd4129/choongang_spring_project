@@ -100,7 +100,7 @@
  				<ul>
  					<li class="menu-box"><a href="/project/manager/p1.html">프로젝트 생성</a></li>
  					<li class="menu-box"><a href="/project/manager/p2.html">프로젝트 단계 프로파일</a></li>
- 					<li class="menu-box"><a href="/project/work/project_home.html">프로젝트 홈</a></li>
+ 					<li class="menu-box"><a href="dashboard_home">프로젝트 홈</a></li>
  					<li class="menu-box">프로젝트 캘린더</li>
  					<li class="menu-box"><a href="/project/board/project_board_data_list.html">공지/자료</a></li>
  					<li class="menu-box">회의록</li>
