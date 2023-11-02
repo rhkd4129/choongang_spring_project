@@ -1,6 +1,6 @@
 package com.oracle.s202350101.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +26,5 @@ public class BdFree {
 
 	//조회용
 	private String app_name;
+	private String user_name;
 }

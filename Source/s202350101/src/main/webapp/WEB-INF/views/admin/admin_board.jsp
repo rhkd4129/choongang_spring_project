@@ -59,12 +59,8 @@
                         var authOptionBox = $('<option name="pr_num" value="' + prList.project_id + '"> ' + prList.project_name + '</option>');
                         projectList.append(authOptionBox);
                     });
-
-
                 }
-
             })
-
         }
 
         function pr_info(currentpage) {
@@ -197,18 +193,30 @@
                     <button class="btn btn-primary"
                             onclick="location.href='addpost.html'" type="button">학원전체
                     </button>
-
                     <tr>
                         <th>번호</th>
                         <th>제목</th>
                         <th>작성자</th>
                         <th>작성일</th>
-                        <th>작성일</th>
+                        <th>조회수</th>
                         <th>수정</th>
                         <th>삭제</th>
                     </tr>
                     </thead>
                     <tbody>
+
+                    <c:forEach items="${BFList}" var="BF">
+                        <tr>
+                            <td>${BF.doc_no}</td>
+                            <td>${BF.subject}</td>
+                            <td>${BF.user_name}</td>
+                            <td>${BF.create_date}</td>
+                            <td>${BF.good_count}</td>
+                            <td><a href="#">수정</a></td>
+                            <td><input type="checkbox" name="xxx" value="yyy" checked>
+                        </tr>
+                    </c:forEach>
+
                     <tr>
                         <td>1</td>
                         <td>2</td>
@@ -219,46 +227,7 @@
                         <td><input type="checkbox" name="xxx" value="yyy" checked>
                         </td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td><a href="#">수정</a></td>
-                        <td><input type="checkbox" name="xxx" value="yyy" checked>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td><a href="#">수정</a></td>
-                        <td><input type="checkbox" name="xxx" value="yyy" checked>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td><a href="#">수정</a></td>
-                        <td><input type="checkbox" name="xxx" value="yyy" checked>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td><a href="#">수정</a></td>
-                        <td><input type="checkbox" name="xxx" value="yyy" checked>
-                        </td>
-                    </tr>
+                    
                     </tbody>
                 </table>
             </div>

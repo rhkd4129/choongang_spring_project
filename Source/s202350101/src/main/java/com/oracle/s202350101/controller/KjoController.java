@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.oracle.s202350101.model.*;
-import com.oracle.s202350101.service.kjoSer.PrjInfoService;
+import com.oracle.s202350101.service.kjoSer.*;
 import lombok.Data;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import com.oracle.s202350101.service.kjoSer.ClassRoomService;
-import com.oracle.s202350101.service.kjoSer.UserInfoService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +25,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class KjoController {
 	
-	private final ClassRoomService CRser;
-	private final UserInfoService UIser;
-	private final PrjInfoService PIser;
+	private final ClassRoomService CRser;		//	강의실
+	private final UserInfoService UIser;		//	유저정보
+	private final PrjInfoService PIser;			//	프로젝트 정보
+	private final BdFreeService BFser;			//	공용게시판
 
 	@GetMapping("/hello")
 	public String test() {
@@ -73,21 +71,31 @@ public class KjoController {
 	public String admin_board( ClassRoom cr, Model model) {
 
 		log.info("admin_board");
-		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+		// 모든 강의실 조회
+		List<ClassRoom> CRList = CRser.findAllClassRoom();
 
-
+/*		프로젝트 목록		*/
 		List<PrjInfo> PIList = null;
 		if (cr.getClass_id() != 0) {
+			//	강의실별 프로젝트 목록
 			PIList = PIser.findbyClassId(cr);
 			log.info("cr:   "+cr.toString());
 		} else {
+			// 첫 접근 시 1번 강의실 조회
 			cr.setClass_id(1);
 			PIList = PIser.findbyClassId(cr);
-
 		}
+/*		프로젝트 목록		*/
+/*		이벤트 게시글		*/
+		BdFree bf = new BdFree();
+		bf.setBd_category("이벤트");
+		List<BdFree> BFList = BFser.findBdFreeByCategory(bf);
+/*		이벤트 게시글		*/
+
 
 		model.addAttribute("CRList", CRList);
 		model.addAttribute("PIList", PIList);
+		model.addAttribute("BFList", BFList);
 
 		return "admin/admin_board";
 	}
@@ -99,14 +107,12 @@ public class KjoController {
 		log.info("admin_board");
 		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
 
-
 		List<PrjInfo> PIList = null;
 		if (cr.getClass_id() != 0) {
 			PIList = PIser.findbyClassId(cr);
 			log.info("cr:   "+cr.toString());
 		} else {
 			PIList = PIser.findAll();
-
 		}
 		KjoResponse res = new KjoResponse();
 		res.setSecList(PIList);

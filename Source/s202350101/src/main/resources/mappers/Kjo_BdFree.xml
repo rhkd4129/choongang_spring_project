@@ -9,8 +9,16 @@
 <mapper namespace="com.oracle.s202350101.model.BdFreeMapper">
     <!-- BdFree -->
 
-    
-
+    <select id="findAllBdFree" resultType="BdFree">
+        select * from Bd_Free
+    </select>
+    <select id="findBdFreeByCategory" parameterType="BdFree" resultType="BdFree">
+        select b.*, u.*
+        from BD_free b
+                 left join user_info u
+                           on b.user_id = u.user_id
+        where bd_category = #{bd_category}
+    </select>
 
 </mapper>
 
