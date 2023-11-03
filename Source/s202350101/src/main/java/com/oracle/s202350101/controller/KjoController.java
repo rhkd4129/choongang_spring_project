@@ -113,9 +113,9 @@ public class KjoController {
 	//	게시판 관리 페이지	GET
 	@ResponseBody
 	@GetMapping("/admin_board_ajax_paging")
-	public KjoResponse admin_board_ajax_paging( String currentPage, BdFree bf, Model model) {
+	public ResponseEntity admin_board_ajax_paging( String currentPage, BdFree bf, Model model) {
 		log.info("admin_board_ajax_paging");
-/*		이벤트 게시글		*/
+		/*		이벤트 게시글		*/
 		//	이벤트 카테고리 목록
 		bf.setBd_category("이벤트");
 		//	이벤트 개수
@@ -126,18 +126,48 @@ public class KjoController {
 		bf.setEnd(page.getEnd());
 		List<BdFree> BFList = BFser.pageBdFreeByCategoryAndPage(bf);
 
+//		조회된 게시글 & 페이지 전달
 		KjoResponse res = new KjoResponse();
 		res.setFirList(BFList);
 		res.setObj(page);
 
-		return res;
+		return ResponseEntity.ok(res);
+	}
+
+	//	AJAX_학원전체_이벤트_페이징_검색
+	//	게시판 관리 페이지	GET
+	@ResponseBody
+	@GetMapping("/admin_board_ajax_paging_search")
+	public ResponseEntity admin_board_ajax_paging_search(
+			@RequestParam("keyword") String keyword,
+			@RequestParam("currentPage") String currentPage) {
+		/*		이벤트 게시글		*/
+		//	이벤트 카테고리 목록
+		BdFree bf = new BdFree();
+		bf.setKeyword(keyword);
+		log.info("keyword: {}", bf.getKeyword());
+		bf.setBd_category("이벤트");
+		//	이벤트 개수
+		int BFListCnt = BFser.findByCategorySearch(bf);
+//		페이징	글 개수 : 5
+		Paging page = new Paging(BFListCnt, currentPage, 5);
+		bf.setStart(page.getStart());
+		bf.setEnd(page.getEnd());
+		List<BdFree> BFList = BFser.findByCategorySearchAndPage(bf);
+
+//		조회된 게시글 & 페이지 전달
+		KjoResponse res = new KjoResponse();
+		res.setFirList(BFList);
+		res.setObj(page);
+
+		return ResponseEntity.ok(res);
 	}
 
 	@ResponseBody
 	@GetMapping("/admin_board_ajax")
 	public KjoResponse admin_board_ajax( ClassRoom cr, Model model) {
 
-		log.info("admin_board");
+		log.info("admin_board_ajax");
 		List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
 
 		List<PrjInfo> PIList = null;

@@ -31,5 +31,16 @@ public class BdFreeServiceImpl implements BdFreeService {
         return BFdao.pageBdFreeByCategoryAndPage(bf);
     }
 
+    @Override
+    public List<BdFree> findByCategorySearchAndPage(BdFree bf) {
+
+        return BFdao.findByCategorySearchAndPage(bf);
+    }
+
+    @Override
+    public int findByCategorySearch(BdFree bf) {
+        return BFdao.findByCategorySearch(bf);
+    }
+
 
 }

@@ -10,4 +10,8 @@ public interface BdFreeDao {
     List<BdFree> findBdFreeByCategory(BdFree bf);
 
     List<BdFree> pageBdFreeByCategoryAndPage(BdFree bf);
+
+    List<BdFree> findByCategorySearchAndPage(BdFree bf);
+
+    int findByCategorySearch(BdFree bf);
 }

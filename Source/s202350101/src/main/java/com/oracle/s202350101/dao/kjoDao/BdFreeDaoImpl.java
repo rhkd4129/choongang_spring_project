@@ -37,7 +37,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
         log.info("findBdFreeByCategory start");
         List<BdFree> BFList = null;
         try {
-            log.info("ctat" + bf.getBd_category());
+            log.info("findBdFreeByCategory" + bf.getBd_category());
             BFList = session.selectList("findBdFreeByCategory",bf);
             //	결과	출력
             System.out.println(BFList.stream().collect(Collectors.toList()));
@@ -54,13 +54,47 @@ public class BdFreeDaoImpl implements BdFreeDao {
         log.info("pageBdFreeByCategoryAndPage start");
         List<BdFree> BFList = null;
         try {
-            log.info("ctat" + bf.getBd_category());
+            log.info("pageBdFreeByCategoryAndPage" + bf.getBd_category());
             BFList = session.selectList("pageBdFreeByCategoryAndPage",bf);
             //	결과	출력
             System.out.println("pageBdFreeByCategoryAndPage Result: "+BFList.stream().collect(Collectors.toList()));
 
         }catch (Exception e) {
             System.out.println("pageBdFreeByCategoryAndPage Error -->>" + e.getMessage());
+        }
+
+        return BFList;
+
+    }
+
+    @Override
+    public List<BdFree> findByCategorySearchAndPage(BdFree bf) {
+
+        log.info("findByCategorySearchAndPage start");
+        List<BdFree> BFList = null;
+        try {
+            log.info("findByCategorySearchAndPage" + bf.getBd_category());
+            BFList = session.selectList("findByCategorySearchAndPage",bf);
+            //	결과	출력
+            System.out.println("findByCategorySearchAndPage Result: "+BFList.stream().collect(Collectors.toList()));
+
+        }catch (Exception e) {
+            System.out.println("findByCategorySearchAndPage Error -->>" + e.getMessage());
+        }
+
+        return BFList;
+    }
+
+    @Override
+    public int findByCategorySearch(BdFree bf) {
+
+        log.info("findByCategorySearch start");
+        int BFList = 0;
+        try {
+            log.info("findByCategorySearch" + bf.getBd_category());
+            BFList = session.selectOne("findByCategorySearch",bf);
+        }catch (Exception e) {
+            System.out.println("findByCategorySearch Error -->>" + e.getMessage());
         }
 
         return BFList;

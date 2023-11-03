@@ -93,8 +93,6 @@
                 dataType: 'json',
                 success: function (jsonData) {
                     console.log(jsonData);
-
-
                     var BFList_body = $('#BFList_body');
                     BFList_body.empty();
                     $.each(jsonData.firList, function (index, BFL) {
@@ -130,15 +128,65 @@
                     paginationDiv.html(jspPagination);
                 }
             })
-            var BFList = $('#BFList_body');
-            BFList.empty();
+            // var BFList = $('#BFList_body');
+            // BFList.empty();
         }
 
-        function event_search(){
-            var search = $('#search_text').val();
-            console.log(search);
+        function event_search(currentPage) {
+            var keyword = $('#search_text').val();
+            console.log(keyword);
+            console.log(currentPage);
+            // 데이터를 URL에 직접 추가
+            var sendurl = "/admin_board_ajax_paging_search/?keyword=" + encodeURIComponent(keyword) + "&currentPage=" + currentPage;
 
+            $.ajax({
+                url: sendurl,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (jsonData) {
+                    console.log("hi");
+                    console.log(jsonData);
+
+                    var BFList_body = $('#BFList_body');
+                    BFList_body.empty();
+
+                    $.each(jsonData.firList, function (index, BFL) {
+                        var tr = $('<tr>');
+
+                        tr.append('<td>' + BFL.doc_no + '</td>');
+                        tr.append('<td>' + BFL.subject + '</td>');
+                        tr.append('<td>' + BFL.user_name + '</td>');
+                        tr.append('<td>' + BFL.create_date + '</td>');
+                        tr.append('<td>' + BFL.good_count + '</td>');
+                        tr.append('<td><a href="#">수정</a></td>');
+                        tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
+                        BFList_body.append(tr);
+                    });
+                    var page = jsonData.obj;
+
+                    var paginationDiv = $('#e_p');
+                    paginationDiv.empty();
+                    var jspPagination = '<div id="e_p" class="pagination">';
+                    if (page.startPage > page.pageBlock) {
+                        jpsPagination += '<div onclick="event_search(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
+                    }
+                    for (var i = page.startPage; i <= page.endPage; i++) {
+                        var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : ''; // 현재 페이지와 i가 일치할 때 스타일을 적용
+
+                        jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="event_search(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                    }
+                    if (page.endPage < page.totalPage) {
+                        jpsPagination += '<div onclick="event_search(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
+                    }
+                    jspPagination += '</div>';
+                    paginationDiv.html(jspPagination);
+
+                }
+            })
+            // var BFList = $('#BFList_body');
+            // BFList.empty();
         }
+
 
     </script>
 </head>
@@ -254,7 +302,7 @@
                     <div class="btn btn-success">이벤트</div>
                     <div id="search_bar">
                     <input type="text" id="search_text" class="form-control"/>
-                    <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search()"/>
+                    <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search(1)"/>
                     </div>
                 </div>
 
@@ -287,20 +335,20 @@
                     <div id="e_p" class="pagination">
                         <c:if test="${page.startPage > page.pageBlock}">
                             <%--                            <p onclick="page('/admin_projectmanagerRest/${page.startPage-page.pageBlock}/')">이전</p>--%>
-                            <div onclick="eventList(${page.startPage-page.pageBlock})">
+                            <div onclick="event_search(${page.startPage-page.pageBlock})">
                                 <p>[이전]</p>
                             </div>
                         </c:if>
                         <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
                             <%--                            <a href="/admin_projectmanager/?cl_id=${cl_id}&currentPage=${i}">[${i}]</a>--%>
-                            <div class="page-item" onclick="eventList(${i})">
+                            <div class="page-item" onclick="event_search(${i})">
                                 <div class="page-link">${i}</div>
                             </div>
 
                         </c:forEach>
 
                         <c:if test="${page.endPage > page.pageBlock}">
-                            <div onclick="eventList(${page.startPage+page.pageBlock})">
+                            <div onclick="event_search(${page.startPage+page.pageBlock})">
                                 <p>[다음]</p>
                             </div>
                             <%--                            <a href="/admin_projectmanager/${cl_id}currentPage=${page.startPage+page.pageBlock}">[다음]</a>--%>
