@@ -35,7 +35,7 @@
         select u.user_name,p.project_s_name ,t.*
         from task t,  prj_step p , user_info u
         where  u.project_id = #{project_id} and
-            t.user_id = u.user_name and
+            t.user_id = u.user_id and
             t.project_id  = p.project_id and
             t.project_step_seq  = p.project_step_seq
     </select>
@@ -59,13 +59,6 @@
 
 
 
-    <insert id="task_create"     parameterType="Task" >
-            insert into task values (     #{project_id}, #{project_step_seq},  #{user_id},
-                                     #{task_subject}, #{task_content},   #{task_stat_time}, #{task_end_item},
-                                      #{TASK_PRIORITY} , #{task_status}, ${GARBAGE})
-    </insert>
-
-
     <select id="task_timeline" resultType="Task">
         select t.*,u.user_name   from task t, user_info u
         where t.user_id = u.user_id
@@ -74,8 +67,10 @@
 
 
 
+    <!-- -task create  -->
 
-    <select id="task_create_form" parameterType="int" resultType="PrjStep">
+    <!--- GET  FORM-->
+    <select id="task_create_form_step_list" parameterType="int" resultType="PrjStep">
         select  *  from prj_step
         where project_id = #{project_id}
     </select>
@@ -86,10 +81,34 @@
         where project_id =  #{project_id}
     </select>
 
-    <select id="TaskSub" resultType="TaskSub">
-        select worker_id from task_sub
-        where project_id = #{proejct_id} and task_id = #{task_id}
+    <!--- POST  FORM     TO_DATE('23/11/3', 'DD/MM/YY'), -->
+    <insert id="task_create" parameterType="Task">
+        INSERT INTO task (task_id, project_id, project_step_seq, user_id, task_subject, task_content, task_stat_time, task_end_itme, task_priority, task_status, garbage)
+        SELECT COALESCE(MAX(task_id), 0) + 1, #{project_id}, #{project_step_seq}, #{user_id}, #{task_subject}, #{task_content}, #{task_stat_time} ,  #{task_end_itme},  #{task_priority}, #{task_status}, 0)
+        FROM task
+    </insert>
+
+    <select id="maxTaskid_select" resultType="int">
+        select max(task_id) from task
     </select>
+
+    <insert id="task_worker_create" parameterType="java.util.List" >
+        insert into Task_sub values
+        <foreach collection="list" item="taskSub">
+             (#{taskSub.task_id},#{taskSub.project_id}, #{taskSub.worker_id})
+        </foreach>
+    </insert>
+
+
+
+
+    <!--같이 하는 작업자 목록들  -->
+    <select id="taskWorkerlist"   parameterType="TaskSub" resultType="TaskSub">
+        select w.worker_id,u.user_name
+        from (select * from task_sub t where t.task_id =#{task_id} and t.project_id = #{project_id}) w , user_info u
+        where u.user_id = w.worker_id
+    </select>
+
 
 
 </mapper>

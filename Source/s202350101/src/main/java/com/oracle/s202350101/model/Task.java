@@ -20,9 +20,9 @@ public class Task {
 		private int		project_step_seq;
 		private String	user_id;
 
-		@NotEmpty
+
 		private String	task_subject;
-		@NotEmpty
+
 		private String	task_content;
 
 		private java.sql.Date task_stat_time;

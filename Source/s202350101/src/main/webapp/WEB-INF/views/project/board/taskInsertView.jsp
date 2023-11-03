@@ -87,7 +87,7 @@
                                 <div class="form-group">
                                     <label>좋아하는 사용자 선택:</label><br>
                                     <c:forEach var="user" items="${task_create_form_worker_list}">
-                                        <input type="checkbox" name="selectedUsers" value="${user.user_id}"> ${user.user_name}<br>
+                                        <input type="checkbox" name="worker" value="${user.user_id}"> ${user.user_name}<br>
                                     </c:forEach>
                                 </div>
 
@@ -98,37 +98,37 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="task_end_time">task_end_time</label>
-                                    <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
+                                    <input type="date" class="form-control" id="task_end_time" name="task_end_itme" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Status:</label>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="status" value="0" id="status0">
+                                        <input type="radio" class="form-check-input" name="task_status" value="0" id="status0">
                                         <label class="form-check-label" for="status0">예정된 작업</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="status" value="1" id="status1">
+                                        <input type="radio" class="form-check-input" name="task_status" value="1" id="status1">
                                         <label class="form-check-label" for="status1">진행중인 작업</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="status" value="2" id="status2">
+                                        <input type="radio" class="form-check-input" name="task_status" value="2" id="status2">
                                         <label class="form-check-label" for="status2">완료된 작업</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Priority:</label>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="priority" value="0" id="priority0">
+                                        <input type="radio" class="form-check-input" name="task_priority" value="0" id="priority0">
                                         <label class="form-check-label" for="priority0">낮음</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="priority" value="1" id="priority1">
+                                        <input type="radio" class="form-check-input" name="task_priority" value="1" id="priority1">
                                         <label class="form-check-label" for="priority1">보통</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="priority" value="2" id="priority2">
+                                        <input type="radio" class="form-check-input" name="task_priority" value="2" id="priority2">
                                         <label class="form-check-label" for="priority2">높음</label>
                                     </div>
                                 </div>
@@ -136,7 +136,6 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">새 작업</button>
-
                 </form>
                 <!------------------------------ //개발자 소스 입력 END ------------------------------->
             </main>
