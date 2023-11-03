@@ -9,4 +9,5 @@ public interface BdFreeService {
     List<BdFree> findBdFreeByCategory(BdFree bf);
 
 
+    List<BdFree> pageBdFreeByCategoryAndPage(BdFree bf);
 }

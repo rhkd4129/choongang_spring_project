@@ -59,17 +59,13 @@ public class CommonController {
 	@RequestMapping(value = "/main_header")
 	public ModelAndView mainHeaderPage(HttpServletRequest request, Model model) {
 
-//		log.info("usinfo: " + userInfoDTO.toString());
-
-//		UserInfo userInfo = mkhService.userLoginCheck(1);
-
-//		model.addAttribute("userInfo", userInfo);
 		System.out.println("Comm mainHeaderPage Start..");
 		log.info("mainHeaderPage start");
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		log.info("userInfo: {}",userInfoDTO);
+		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
 		List<UserInfo> chatUIList = uis.findbyclassuser(userInfoDTO.getClass_id());
 
 		model.addAttribute("userInfo", userInfoDTO);

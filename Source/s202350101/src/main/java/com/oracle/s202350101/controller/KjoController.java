@@ -68,13 +68,13 @@ public class KjoController {
 
 	//	게시판 관리 페이지	GET
 	@GetMapping("/admin_board")
-	public String admin_board( ClassRoom cr, Model model) {
+	public String admin_board(@RequestParam(defaultValue = "1")  String currentPage, ClassRoom cr, Model model) {
 
 		log.info("admin_board");
 		// 모든 강의실 조회
 		List<ClassRoom> CRList = CRser.findAllClassRoom();
 
-/*		프로젝트 목록		*/
+		/*		프로젝트 목록		*/
 		List<PrjInfo> PIList = null;
 		if (cr.getClass_id() != 0) {
 			//	강의실별 프로젝트 목록
@@ -85,19 +85,52 @@ public class KjoController {
 			cr.setClass_id(1);
 			PIList = PIser.findbyClassId(cr);
 		}
-/*		프로젝트 목록		*/
-/*		이벤트 게시글		*/
+		/*		프로젝트 목록		*/
+
+		/*		이벤트 게시글		*/
 		BdFree bf = new BdFree();
 		bf.setBd_category("이벤트");
-		List<BdFree> BFList = BFser.findBdFreeByCategory(bf);
-/*		이벤트 게시글		*/
+		int BFListCnt = BFser.findBdFreeByCategory(bf).size();
+
+		Paging page1 = new Paging(BFListCnt, currentPage,5);
+		bf.setStart(page1.getStart());
+		bf.setEnd(page1.getEnd());
 
 
+		List<BdFree> BFList = BFser.pageBdFreeByCategoryAndPage(bf);
+		/*		이벤트 게시글		*/
+
+
+		model.addAttribute("page", page1);
 		model.addAttribute("CRList", CRList);
 		model.addAttribute("PIList", PIList);
 		model.addAttribute("BFList", BFList);
 
 		return "admin/admin_board";
+	}
+
+	//	AJAX_학원전체_이벤트_페이징
+	//	게시판 관리 페이지	GET
+	@ResponseBody
+	@GetMapping("/admin_board_ajax_paging")
+	public KjoResponse admin_board_ajax_paging( String currentPage, BdFree bf, Model model) {
+		log.info("admin_board_ajax_paging");
+/*		이벤트 게시글		*/
+		//	이벤트 카테고리 목록
+		bf.setBd_category("이벤트");
+		//	이벤트 개수
+		int BFListCnt = BFser.findBdFreeByCategory(bf).size();
+//		페이징	글 개수 : 5
+		Paging page = new Paging(BFListCnt, currentPage,5);
+		bf.setStart(page.getStart());
+		bf.setEnd(page.getEnd());
+		List<BdFree> BFList = BFser.pageBdFreeByCategoryAndPage(bf);
+
+		KjoResponse res = new KjoResponse();
+		res.setFirList(BFList);
+		res.setObj(page);
+
+		return res;
 	}
 
 	@ResponseBody
@@ -177,6 +210,7 @@ public class KjoController {
 
 		//	페이징을 하기 위한 START, END,	TOTAL 지정.
 		Paging page = new Paging(totalUi, currentPage);
+		page.setPageBlock(3);
 		userInfo.setStart(page.getStart());
 		userInfo.setEnd(page.getEnd());
 		userInfo.setTotal(totalUi);
@@ -189,69 +223,13 @@ public class KjoController {
 		KjoResponse res = new KjoResponse();
 		res.setFirList(UIList);
 		res.setObj(page);
+		log.info("res: "+res.getFirList().toString());
+		log.info("page: "+page.toString());
 
 		log.info("UIList: {}",UIList);
 
 		return res;
 	}
-
-//	admin_projectManager	cl_room함수
-//	@GetMapping("/admin_projectmanagerRest/{currentPage}/{cl_id}")	//	cl_id = Class_Room(class_id)
-//	@ResponseBody
-//	public  List<UserInfo> admin_projectmanagerRest_v2(UserInfo userInfo, String currentPage, @PathVariable int cl_id, Model model) {
-//		log.info("admin_projectmanagerRest");
-////		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);	// 반 학생의 정보 + 참여 프로젝트 명
-//		//	model을 사용하지 않는 이유: return으로 Json에 UIList를 전달하여
-//		//			jsp를 통해 값을 보여준다.
-//		int totalUi = UIser.findbyclassuser(cl_id).size();
-//		userInfo.setClass_id(cl_id);
-//		log.info("tota l: ",totalUi);
-//
-//		Paging page = new Paging(totalUi, currentPage);
-//		userInfo.setStart(page.getStart());
-//		userInfo.setEnd(page.getEnd());
-//		userInfo.setTotal(totalUi);
-//		log.info("page: {}",page);
-//		log.info("userInfo: {}",userInfo);
-//		List<UserInfo> UIList = UIser.pageUserInfo(userInfo);	// 반 학생의 정보 + 참여 프로젝트 명
-//
-//		log.info("UIList: {}",UIList);
-////		전송할 데이터 : page, UIList
-//
-//		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
-//
-//		return UIList;
-//	}
-//
-//	//	페이징하기
-//	//	팀장 권한 페이지 RestGET
-//	@GetMapping("/admin_projectmanagerRest_v1/{currentPage}/{cl_id}")	//	cl_id = Class_Room(class_id)
-//	@ResponseBody
-//	public ModelAndView admin_projectmanagerRest_v1(UserInfo userInfo, @PathVariable String currentPage, @PathVariable int cl_id, Model model) {
-//		log.info("admin_projectmanagerRest");
-////		List<UserInfo> UIList = UIser.findbyClassUserProject(cl_id);	// 반 학생의 정보 + 참여 프로젝트 명
-//		//	model을 사용하지 않는 이유: return으로 Json에 UIList를 전달하여
-//		userInfo.setStart(page.getStart());
-////		userInfo.setEnd(page.getEnd());
-////		userInfo.setTotal(totalUi);
-////		List<UserInfo> UIList = UIser.pageUserInfo(userInfo);	// 반 학생의 정보 + 참여 프로젝트 명
-////
-////		ModelAndView mav = new ModelAndView();
-////		mav.addObject("page",page);
-////		mav.addObject("cl_id",cl_id);
-////		//			jsp를 통해 값을 보여준다.
-//		int totalUi = UIser.findbyclassuser(cl_id).size();
-//
-//		Paging page = new Paging(totalUi, currentPage);
-//		mav.addObject("UIList",UIList);
-//		mav.addObject("totalUi",totalUi);
-//
-//		mav.setViewName("admin/admin_projectmanager");
-////		전송할 데이터 : page, UIList
-//
-//		System.out.println("UILIST" + UIList.stream().collect(Collectors.toList()));
-//		return mav;
-//	}
 
 	//	팀장 권한 수정	Rest
 	@PostMapping("/auth_mod")

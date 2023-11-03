@@ -18,7 +18,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
     private final SqlSession session;
     @Override
     public List<BdFree> findAllBdFree() {
-        log.info("findAll start");
+        log.info("findAllBdFree start");
         List<BdFree> BFList = null;
         try {
             BFList = session.selectList("findAllBdFree");
@@ -26,7 +26,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
             System.out.println(BFList.stream().collect(Collectors.toList()));
 
         }catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("findAllBdFree Error -->>" + e.getMessage());
         }
 
         return BFList;
@@ -34,7 +34,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
 
     @Override
     public List<BdFree> findBdFreeByCategory(BdFree bf) {
-        log.info("findAll start");
+        log.info("findBdFreeByCategory start");
         List<BdFree> BFList = null;
         try {
             log.info("ctat" + bf.getBd_category());
@@ -43,9 +43,27 @@ public class BdFreeDaoImpl implements BdFreeDao {
             System.out.println(BFList.stream().collect(Collectors.toList()));
 
         }catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("findBdFreeByCategory Error -->>" + e.getMessage());
         }
 
         return BFList;
+    }
+
+    @Override
+    public List<BdFree> pageBdFreeByCategoryAndPage(BdFree bf) {
+        log.info("pageBdFreeByCategoryAndPage start");
+        List<BdFree> BFList = null;
+        try {
+            log.info("ctat" + bf.getBd_category());
+            BFList = session.selectList("pageBdFreeByCategoryAndPage",bf);
+            //	결과	출력
+            System.out.println("pageBdFreeByCategoryAndPage Result: "+BFList.stream().collect(Collectors.toList()));
+
+        }catch (Exception e) {
+            System.out.println("pageBdFreeByCategoryAndPage Error -->>" + e.getMessage());
+        }
+
+        return BFList;
+
     }
 }

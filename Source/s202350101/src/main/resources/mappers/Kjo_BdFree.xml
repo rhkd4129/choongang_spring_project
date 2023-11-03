@@ -20,5 +20,15 @@
         where bd_category = #{bd_category}
     </select>
 
+    <select id="pageBdFreeByCategoryAndPage" parameterType="BdFree" resultType="BdFree">
+
+        select ev.*, u.user_name
+        from (select rownum rn, e.*
+              from (select * from BD_FREE where BD_CATEGORY = #{bd_category} order by Doc_no desc)  e) ev  left join user_info u
+        on ev.user_id = u.user_id
+        where rn between #{start} and #{end}
+        order by Doc_no desc
+    </select>
+
 </mapper>
 

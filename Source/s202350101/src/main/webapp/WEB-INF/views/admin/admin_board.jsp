@@ -11,6 +11,15 @@
             margin-top: 5%;
             margin-bottom: 5%;
         }
+        #event_bar{
+            display: flex;
+        }
+        #search_bar{
+            display: flex;
+            width: 54%;
+        }
+
+
     </style>
 
     <script type="text/javascript">
@@ -39,6 +48,7 @@
                 }
             });
         });
+
 
         function cl_room(currentpage) {
             var cl_room_val = $('#cl_room_List').val();
@@ -74,6 +84,61 @@
 
         }
 
+        function eventList(currentPage) {
+            console.log(currentPage);
+            var sendurl = "/admin_board_ajax_paging/?currentPage=" + currentPage;
+            console.log("sendURL: " + sendurl);
+            $.ajax({
+                url: sendurl,
+                dataType: 'json',
+                success: function (jsonData) {
+                    console.log(jsonData);
+
+
+                    var BFList_body = $('#BFList_body');
+                    BFList_body.empty();
+                    $.each(jsonData.firList, function (index, BFL) {
+                        var tr = $('<tr>');
+
+                        tr.append('<td>' + BFL.doc_no + '</td>');
+                        tr.append('<td>' + BFL.subject + '</td>');
+                        tr.append('<td>' + BFL.user_name + '</td>');
+                        tr.append('<td>' + BFL.create_date + '</td>');
+                        tr.append('<td>' + BFL.good_count + '</td>');
+                        tr.append('<td><a href="#">수정</a></td>');
+                        tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
+                        BFList_body.append(tr);
+                    });
+
+                    var page = jsonData.obj;
+
+                    var paginationDiv = $('#e_p');
+                    paginationDiv.empty();
+                    var jspPagination = '<div id="e_p" class="pagination">';
+                    if (page.startPage > page.pageBlock) {
+                        jpsPagination += '<div onclick="eventList(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
+                    }
+                    for (var i = page.startPage; i <= page.endPage; i++) {
+                        var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : ''; // 현재 페이지와 i가 일치할 때 스타일을 적용
+
+                        jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="eventList(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                    }
+                    if (page.endPage < page.totalPage) {
+                        jpsPagination += '<div onclick="eventList(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
+                    }
+                    jspPagination += '</div>';
+                    paginationDiv.html(jspPagination);
+                }
+            })
+            var BFList = $('#BFList_body');
+            BFList.empty();
+        }
+
+        function event_search(){
+            var search = $('#search_text').val();
+            console.log(search);
+
+        }
 
     </script>
 </head>
@@ -127,7 +192,7 @@
                     </div>
                     <thead>
                     <tr>
-                        <th>번호</th>
+                        <th>글 번호</th>
                         <th>제목</th>
                         <th>내용</th>
                         <th>날짜</th>
@@ -159,7 +224,7 @@
                         <td>2</td>
                         <td>3</td>
                         <td>4</td>
-                        <td><a href="#">수정</td>
+                        <td><a href="#">수정</a></td>
                         <td><input type="checkbox" name="xxx" value="yyy" checked>
                         </td>
                     </tr>
@@ -168,7 +233,7 @@
                         <td>2</td>
                         <td>3</td>
                         <td>4</td>
-                        <td><a href="#">수정</td>
+                        <td><a href="#">수정</a></td>
                         <td><input type="checkbox" name="xxx" value="yyy" checked>
                         </td>
                     </tr>
@@ -177,7 +242,7 @@
                         <td>2</td>
                         <td>3</td>
                         <td>4</td>
-                        <td><a href="#">수정</td>
+                        <td><a href="#">수정</a></td>
                         <td><input type="checkbox" name="xxx" value="yyy" checked>
                         </td>
                     </tr>
@@ -185,14 +250,18 @@
                 </table>
             </div>
             <div id="ev">
-                <div class="btn btn-secondary">이벤트</div>
-                <p></p>
+                <div id="event_bar">
+                    <div class="btn btn-success">이벤트</div>
+                    <div id="search_bar">
+                    <input type="text" id="search_text" class="form-control"/>
+                    <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search()"/>
+                    </div>
+                </div>
+
                 <table class="table">
                     <thead>
 
-                    <button class="btn btn-primary"
-                            onclick="location.href='addpost.html'" type="button">학원전체
-                    </button>
+
                     <tr>
                         <th>번호</th>
                         <th>제목</th>
@@ -203,31 +272,40 @@
                         <th>삭제</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="BFList_body">
+                        <c:forEach items="${BFList}" var="BF">
+                            <tr>
+                                <td>${BF.doc_no}</td>
+                                <td>${BF.subject}</td>
+                                <td>${BF.user_name}</td>
+                                <td>${BF.create_date}</td>
+                                <td>${BF.good_count}</td>
+                                <td><a href="#">수정</a></td>
+                                <td><input type="checkbox" name="xxx" value="yyy" checked>
+                            </tr>
+                        </c:forEach>
+                    <div id="e_p" class="pagination">
+                        <c:if test="${page.startPage > page.pageBlock}">
+                            <%--                            <p onclick="page('/admin_projectmanagerRest/${page.startPage-page.pageBlock}/')">이전</p>--%>
+                            <div onclick="eventList(${page.startPage-page.pageBlock})">
+                                <p>[이전]</p>
+                            </div>
+                        </c:if>
+                        <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+                            <%--                            <a href="/admin_projectmanager/?cl_id=${cl_id}&currentPage=${i}">[${i}]</a>--%>
+                            <div class="page-item" onclick="eventList(${i})">
+                                <div class="page-link">${i}</div>
+                            </div>
 
-                    <c:forEach items="${BFList}" var="BF">
-                        <tr>
-                            <td>${BF.doc_no}</td>
-                            <td>${BF.subject}</td>
-                            <td>${BF.user_name}</td>
-                            <td>${BF.create_date}</td>
-                            <td>${BF.good_count}</td>
-                            <td><a href="#">수정</a></td>
-                            <td><input type="checkbox" name="xxx" value="yyy" checked>
-                        </tr>
-                    </c:forEach>
+                        </c:forEach>
 
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td><a href="#">수정</a></td>
-                        <td><input type="checkbox" name="xxx" value="yyy" checked>
-                        </td>
-                    </tr>
-                    
+                        <c:if test="${page.endPage > page.pageBlock}">
+                            <div onclick="eventList(${page.startPage+page.pageBlock})">
+                                <p>[다음]</p>
+                            </div>
+                            <%--                            <a href="/admin_projectmanager/${cl_id}currentPage=${page.startPage+page.pageBlock}">[다음]</a>--%>
+                        </c:if>
+                    </div>
                     </tbody>
                 </table>
             </div>
