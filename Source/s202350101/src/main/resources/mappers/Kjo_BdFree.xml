@@ -32,9 +32,9 @@
 
     <select id="findByCategorySearchAndPage" parameterType="BdFree" resultType="BdFree">
 
-        select ev.*, u.user_name
+        select ev.*, u.user_name,rn
         from (select rownum rn, e.*
-              from (select * from BD_FREE where BD_CATEGORY = #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
+              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
                  left join user_info u
                            on ev.user_id = u.user_id
         where rn between #{start} and #{end}
@@ -46,7 +46,7 @@
 
         select count(*)
         from (select rownum rn, e.*
-              from (select * from BD_FREE where BD_CATEGORY = #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
+              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
                  left join user_info u
                            on ev.user_id = u.user_id
     </select>

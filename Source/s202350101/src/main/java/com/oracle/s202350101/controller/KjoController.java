@@ -89,7 +89,7 @@ public class KjoController {
 
 		/*		이벤트 게시글		*/
 		BdFree bf = new BdFree();
-		bf.setBd_category("이벤트");
+		bf.setBd_category("공지");
 		int BFListCnt = BFser.findBdFreeByCategory(bf).size();
 
 		Paging page1 = new Paging(BFListCnt, currentPage,5);
@@ -139,14 +139,12 @@ public class KjoController {
 	@ResponseBody
 	@GetMapping("/admin_board_ajax_paging_search")
 	public ResponseEntity admin_board_ajax_paging_search(
-			@RequestParam("keyword") String keyword,
+			BdFree bf,
 			@RequestParam("currentPage") String currentPage) {
 		/*		이벤트 게시글		*/
 		//	이벤트 카테고리 목록
-		BdFree bf = new BdFree();
-		bf.setKeyword(keyword);
 		log.info("keyword: {}", bf.getKeyword());
-		bf.setBd_category("이벤트");
+//		bf.setBd_category("이벤트");
 		//	이벤트 개수
 		int BFListCnt = BFser.findByCategorySearch(bf);
 //		페이징	글 개수 : 5

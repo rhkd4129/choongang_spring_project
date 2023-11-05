@@ -84,65 +84,79 @@
 
         }
 
-        function eventList(currentPage) {
-            console.log(currentPage);
-            var sendurl = "/admin_board_ajax_paging/?currentPage=" + currentPage;
-            console.log("sendURL: " + sendurl);
-            $.ajax({
-                url: sendurl,
-                dataType: 'json',
-                success: function (jsonData) {
-                    console.log(jsonData);
-                    var BFList_body = $('#BFList_body');
-                    BFList_body.empty();
-                    $.each(jsonData.firList, function (index, BFL) {
-                        var tr = $('<tr>');
-
-                        tr.append('<td>' + BFL.doc_no + '</td>');
-                        tr.append('<td>' + BFL.subject + '</td>');
-                        tr.append('<td>' + BFL.user_name + '</td>');
-                        tr.append('<td>' + BFL.create_date + '</td>');
-                        tr.append('<td>' + BFL.good_count + '</td>');
-                        tr.append('<td><a href="#">수정</a></td>');
-                        tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
-                        BFList_body.append(tr);
-                    });
-
-                    var page = jsonData.obj;
-
-                    var paginationDiv = $('#e_p');
-                    paginationDiv.empty();
-                    var jspPagination = '<div id="e_p" class="pagination">';
-                    if (page.startPage > page.pageBlock) {
-                        jpsPagination += '<div onclick="eventList(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
-                    }
-                    for (var i = page.startPage; i <= page.endPage; i++) {
-                        var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : ''; // 현재 페이지와 i가 일치할 때 스타일을 적용
-
-                        jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="eventList(' + i + ')"><div class="page-link">' + i + '</div></div>';
-                    }
-                    if (page.endPage < page.totalPage) {
-                        jpsPagination += '<div onclick="eventList(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
-                    }
-                    jspPagination += '</div>';
-                    paginationDiv.html(jspPagination);
-                }
-            })
-            // var BFList = $('#BFList_body');
-            // BFList.empty();
-        }
+        // function eventList(currentPage) {
+        //     console.log(currentPage);
+        //     var sendurl = "/admin_board_ajax_paging/?currentPage=" + currentPage;
+        //     console.log("sendURL: " + sendurl);
+        //     $.ajax({
+        //         url: sendurl,
+        //         dataType: 'json',
+        //         success: function (jsonData) {
+        //             console.log(jsonData);
+        //             var BFList_body = $('#BFList_body');
+        //             BFList_body.empty();
+        //             $.each(jsonData.firList, function (index, BFL) {
+        //                 var tr = $('<tr>');
+        //
+        //                 tr.append('<td>' + BFL.doc_no + '</td>');
+        //                 tr.append('<td>' + BFL.subject + '</td>');
+        //                 tr.append('<td>' + BFL.user_name + '</td>');
+        //                 tr.append('<td>' + BFL.create_date + '</td>');
+        //                 tr.append('<td>' + BFL.good_count + '</td>');
+        //                 tr.append('<td><a href="#">수정</a></td>');
+        //                 tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
+        //                 BFList_body.append(tr);
+        //             });
+        //
+        //             var page = jsonData.obj;
+        //
+        //             var paginationDiv = $('#e_p');
+        //             paginationDiv.empty();
+        //             var jspPagination = '<div id="e_p" class="pagination">';
+        //             if (page.startPage > page.pageBlock) {
+        //                 jpsPagination += '<div onclick="eventList(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
+        //             }
+        //             for (var i = page.startPage; i <= page.endPage; i++) {
+        //                 var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : ''; // 현재 페이지와 i가 일치할 때 스타일을 적용
+        //
+        //                 jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="eventList(' + i + ')"><div class="page-link">' + i + '</div></div>';
+        //             }
+        //             if (page.endPage < page.totalPage) {
+        //                 jpsPagination += '<div onclick="eventList(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
+        //             }
+        //             jspPagination += '</div>';
+        //             paginationDiv.html(jspPagination);
+        //         }
+        //     })
+        //     // var BFList = $('#BFList_body');
+        //     // BFList.empty();
+        // }
 
         function event_search(currentPage) {
             var keyword = $('#search_text').val();
+            var category = $('#bd_CTG').val();
+            if (category === '전체') {
+                category = '%%';
+            }
             console.log(keyword);
             console.log(currentPage);
-            // 데이터를 URL에 직접 추가
-            var sendurl = "/admin_board_ajax_paging_search/?keyword=" + encodeURIComponent(keyword) + "&currentPage=" + currentPage;
+            console.log(category);
 
+            var sendData = {
+                keyword: keyword,
+                bd_category: category,
+                currentPage: currentPage
+            };
+
+            // 데이터를 URL에 직접 추가
+            // var sendurl = "/admin_board_ajax_paging_search/?keyword=" + encodeURIComponent(keyword) + "&currentPage=" + currentPage;
+            var sendurl = "/admin_board_ajax_paging_search";
+            console.log(sendurl);
             $.ajax({
-                url: sendurl,
-                contentType: 'application/json',
+                url: "/admin_board_ajax_paging_search",
+                contentType: "application/json; charset=UTF-8",
                 dataType: 'json',
+                data: sendData,
                 success: function (jsonData) {
                     console.log("hi");
                     console.log(jsonData);
@@ -153,7 +167,7 @@
                     $.each(jsonData.firList, function (index, BFL) {
                         var tr = $('<tr>');
 
-                        tr.append('<td>' + BFL.doc_no + '</td>');
+                        tr.append('<td>' + BFL.rn + '</td>');
                         tr.append('<td>' + BFL.subject + '</td>');
                         tr.append('<td>' + BFL.user_name + '</td>');
                         tr.append('<td>' + BFL.create_date + '</td>');
@@ -300,6 +314,14 @@
             <div id="ev">
                 <div id="event_bar">
                     <div class="btn btn-success">이벤트</div>
+
+                    <select id="bd_CTG" class="form-select" style="width: 15%">
+                        <option name="bd_ctg_li" value="공지">공지</option>
+                        <option name="bd_ctg_li" value="자유">자유</option>
+                        <option name="bd_ctg_li" value="이벤트">이벤트</option>
+                        <option name="bd_ctg_li" value="전체">전체</option>
+                    </select>
+
                     <div id="search_bar">
                     <input type="text" id="search_text" class="form-control"/>
                     <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search(1)"/>

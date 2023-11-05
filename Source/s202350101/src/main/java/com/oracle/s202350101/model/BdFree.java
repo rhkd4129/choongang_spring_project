@@ -28,9 +28,9 @@ public class BdFree {
 	private String app_name;
 	private String user_name;
 
-
 	// 페이징
 	private String search;   	private String keyword;
 	private String pageNum;		private int total;
 	private int start; 		 	private int end;
+	private int rn;
 }

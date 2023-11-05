@@ -117,6 +117,6 @@
  					<li class="menu-box"><a href="">자유 게시판</a></li>
  				</ul>
  				
- 				<p class="menu-title">관리자 페이지</p>
+ 				<p class="menu-title" onclick="location.href='/admin_projectmanager'">관리자 페이지</p>
  				
  			</div>
