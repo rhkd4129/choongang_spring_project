@@ -32,25 +32,31 @@ public class LkhServicveImpl implements LkhService {
 	@Override
 
 
-	public List<Integer> task_status_count(int project_id) {
+	public List<Integer> doughnut_chart(int project_id) {
 		List<Integer> taskStatusList = null;
-		taskStatusList = lkhDao.task_status_count(project_id);
+		taskStatusList = lkhDao.doughnut_chart(project_id);
 		return taskStatusList;
 	}
 
 
 	@Override
-	public List<Task> task_user_workStatus(int project_id) {
+	public List<Task> Workload_chart(int project_id) {
 		List<Task> taskUserWorkStatusList = null;
-		taskUserWorkStatusList = lkhDao.task_user_workload(project_id);
+		taskUserWorkStatusList = lkhDao.Workload_chart(project_id);
 		return taskUserWorkStatusList;
+	}
+
+	@Override
+	public int task_count(int project_id) {
+		return  lkhDao.task_count(project_id);
+
 	}
 
 
 	@Override
-	public List<Task> task_list(int project_id) {
+	public List<Task> task_list(Task task) {
 		List<Task> taskList = null;
-		taskList = lkhDao.task_list(project_id);
+		taskList = lkhDao.task_list(task);
 		return taskList;
 	}
 
@@ -60,10 +66,12 @@ public class LkhServicveImpl implements LkhService {
 	public Task task_detail(int task_id, int project_id) {
 		return lkhDao.task_detail(task_id, project_id);
 	}
-	
-	//현재 누가 같이 작업하는지 보여줌
-	
-	
+
+
+	@Override
+	public List<TaskSub> taskWorkerlist(TaskSub taskSub){
+		return  lkhDao.taskWorkerlist(taskSub);
+	}
 	
 	//프로젝트 타임라이ㅏㄴ
 	@Override
@@ -88,16 +96,46 @@ public class LkhServicveImpl implements LkhService {
 	// task crate post
 	@Override
 	public int task_create(Task task) {
-
 		return lkhDao.task_create(task);
 	}
 
-	
+	@Override
+	public int createGroupTask(List<String> workerList ,Task task
+	) {
+		int result = 0;
+		List<TaskSub> taskSubList = new ArrayList<>();
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 
-	// 현재 작업 maxid값 가져오기
-	public int	maxTaskid_select(){
-		return lkhDao.maxTaskid_select();
+		try {
+			lkhDao.task_create(task);
+			for (String workId : workerList) {
+				TaskSub taskSub = new TaskSub();
+				taskSub.setProject_id(task.getProject_id());
+				taskSub.setWorker_id(workId);
+				taskSubList.add(taskSub);
+				log.info("작업자 생성");
+			}
+			lkhDao.task_worker_create(taskSubList);
+			transactionManager.commit(txStatus);
+			result = 1;
+		} catch (Exception e) {
+			transactionManager.rollback(txStatus);
+			log.info("service :createGroupTask error Message -> {}", e.getMessage());
+			result = -1;
+		}
+		return result;
 	}
+
+	@Override
+	public int task_garbage(int task_id) {
+		return lkhDao.task_garbage(task_id);
+	}
+
+	@Override
+	public List<Task> garbage_list(Task task) {
+		return lkhDao.garbage_list(task);
+	}
+
 
 
 

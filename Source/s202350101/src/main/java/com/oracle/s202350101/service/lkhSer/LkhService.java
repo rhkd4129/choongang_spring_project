@@ -10,19 +10,37 @@ import com.oracle.s202350101.model.UserInfo;
 public interface LkhService {
 
 	// 작업별 상태 count -> 도넛차트
-	List<Integer> 		task_status_count(int project_id);
-	List<Task>			task_user_workStatus(int project_id);
-	List<Task>			task_list(int project_id);
+	List<Integer> 		doughnut_chart(int project_id);
+	List<Task>			Workload_chart(int project_id);
+
+	// 해당 프로젝트 작업 수
+	 int task_count(int project_id);
+
+	List<Task>			task_list(Task Task);
 	Task				task_detail(int task_id, int project_id);
+
+	List<TaskSub> 		taskWorkerlist(TaskSub taskSub);
+
 	List<Task>			task_timeline();
 
 	List<PrjStep>     project_step_list(int project_id);
 	List<UserInfo>  task_create_form_worker_list(int project_id);
 
 
+	// 작업생성
 	int 			task_create(Task task);
-	int				maxTaskid_select();
-//	int				task_worker_create(List<String> taskSubList);
+
+	// createGroupTask 트랜잭션 처리:task_create,task_worker_create dao 함수가 2개들어가있다
+	int				createGroupTask(List<String> workerList  ,Task task);
+
+	//휴지통으로 이동
+	 int 			task_garbage(int task_id);
+
+	 //휴지통 목록
+	List<Task> 		garbage_list(Task task);
+
+
+
 
 
 }

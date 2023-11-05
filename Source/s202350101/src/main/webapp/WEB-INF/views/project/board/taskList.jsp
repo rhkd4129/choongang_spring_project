@@ -237,12 +237,13 @@
                 <option value="project_step_seq">단계별 </option>
             </select>
 
+            <h3> 총 작업수 : ${taskCount }</h3>
             <c:choose>
                 <c:when test="${not empty param.status}">
                     <h2>저장 완료!</h2>
                 </c:when>
             </c:choose>
-
+            <c:set var="num" value="${page.total-page.start+1 }"></c:set>
             <div id="table1">
                 <table id="listTable">
                     <thead>
@@ -260,7 +261,8 @@
                     <tbody id="tbodys">
                     <c:forEach var="task" items="${taskList}">
                         <tr>
-                            <td>${task.task_id}</td>
+                            <td>${task.rn}</td>
+<%--                            <td>${task.task_id}</td>--%>
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td><a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a></td>
@@ -284,9 +286,20 @@
                                 </c:choose>
                             </td>
                         </tr>
+                        <c:set var="num" value="${num - 1 }"></c:set>
                     </c:forEach>
                     </tbody>
                 </table>
+
+                <c:if test="${page.startPage > page.pageBlock }">
+                    <a href="task_list?currentPage=${page.startPage-page.pageBlock}">[이전]</a>
+                </c:if>
+                <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+                    <a href="task_list?currentPage=${i}">[${i}]</a>
+                </c:forEach>
+                <c:if test="${page.endPage < page.totalPage }">
+                    <a href="task_list?currentPage=${page.startPage+page.pageBlock}">[다음]</a>
+                </c:if>
             </div>
             <div class ="table2" id="table2"></div>
             <div class ="table3" id="table3"></div>

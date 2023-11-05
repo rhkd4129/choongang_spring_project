@@ -9,13 +9,30 @@ import com.oracle.s202350101.model.UserInfo;
 
 public interface LkhDao {
 	
-	
+	//DashBoard Home   도넛 그래프, 진척률 막대그래프
+
+
 	// 작업별 상태 count -> 도넛차트
-	List<Integer> 		task_status_count(int project_id);
+	List<Integer> 		doughnut_chart(int project_id);
 	//회원별 작업 진척도
-	List<Task>			task_user_workload(int project_id);
+	List<Task>			Workload_chart(int project_id);
+
+
+	// 해당 프로젝트의 작업의 총 개수보기
+	int					task_count(int project_id);
+
+
 	// 작업 리스트 보기
-	List<Task>			task_list(int project_id);
+	List<Task>			task_list(Task task);
+
+
+	//작업 상세 내용
+	Task				task_detail(int task_id, int project_id);
+
+
+	//해당 작업의 같이하는 사람들 리스트
+	List<TaskSub> 		taskWorkerlist(TaskSub taskSub);
+
 	// 작업 타임라인보기
 	List<Task>			task_timeline();
 
@@ -29,14 +46,16 @@ public interface LkhDao {
 
 	// 작업 생성  task create post form
 	int 				task_create(Task task);
-	int					maxTaskid_select();
 	int					task_worker_create(List<TaskSub> taskSubList);
 
 
 
+	List<Task> 			garbage_list(Task task);
 
-	//작업 상세 내용
-	Task				task_detail(int task_id, int project_id);
-	List<TaskSub>		taskWorkerlist(int project_id, int task_id);
+	//휴지통으로 이동시키기(임시삭제 )
+	int					task_garbage(int task_id);
+
+
+
 	
 }

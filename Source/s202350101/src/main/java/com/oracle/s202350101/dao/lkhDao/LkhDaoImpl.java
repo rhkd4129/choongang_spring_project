@@ -25,23 +25,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class LkhDaoImpl implements LkhDao {
 	private final SqlSession sqlSession;
 
+
+	// 도넛 그래프
 	@Override
-	public List<Integer> task_status_count(int project_id) {
+	public List<Integer> doughnut_chart(int project_id) {
 		List<Integer> taskStatusList= null;
 		try {
-			taskStatusList = sqlSession.selectList("taskStatus_doughnut",project_id);
+			taskStatusList = sqlSession.selectList("doughnut_chart",project_id);
 		} catch (Exception e) {
 			log.info("dao : task_status_count error Message -> {}",e.getMessage());
 		}
 		return taskStatusList;
 	}
 
-
+	// 진척률 그래프
 	@Override
-	public List<Task> task_user_workload(int project_id) {
+	public List<Task> Workload_chart(int project_id) {
 		List<Task> taskUserWorkload= null;
 		try {
-			taskUserWorkload= sqlSession.selectList("taskUserWorkload",project_id);
+			taskUserWorkload= sqlSession.selectList("Workload_chart",project_id);
 		} catch (Exception e) {
 			log.info("dao : task_user_workload error Message -> {}",e.getMessage());
 		}
@@ -49,9 +51,51 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
+	public int task_count(int project_id) {
+		int taskCount = 0;
+		try {
+			taskCount= sqlSession.selectOne("task_count",project_id);
+		} catch (Exception e) {
+			log.info("dao : task_count error Message -> {}",e.getMessage());
+		}
+		return taskCount;
+	}
+
+
+	//  작업 리스트
+	@Override
+	public List<Task> task_list(Task task) {
+		List<Task> taskList= null;
+		try {
+			taskList = sqlSession.selectList("task_list",task);
+		} catch (Exception e) {
+			log.info("dao :task_list error Message -> {}",e.getMessage());
+		}
+		return taskList;
+	}
+
+
+
+
+
+	@Override
+	public Task task_detail(int task_id, int project_id) {
+		Task task = new Task();
+		try {
+			Map<String, Integer> params = new HashMap<>();
+			params.put("task_id", task_id);
+			params.put("project_id", project_id);
+			task = sqlSession.selectOne("task_detail", params);
+		} catch (Exception e) {
+			log.info("dao :task_detail error Message -> {}",e.getMessage());
+		}
+		return task;
+	}
+
+	//작업별 타임라인
+	@Override
 	public List<Task> task_timeline() {
 		List<Task> timelineTask= null;
-
 		try {
 			timelineTask = sqlSession.selectList("task_timeline");
 
@@ -63,18 +107,6 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 
-	@Override
-	public List<Task> task_list(int proejct_id) {
-		List<Task> taskList= null;
-		try {
-			taskList = sqlSession.selectList("taskList",proejct_id);
-		} catch (Exception e) {
-			log.info("dao :task_list error Message -> {}",e.getMessage());
-		}
-		return taskList;
-	
-	
-	}
 	// task create view에서 보여주기 get
 	@Override
 	public List<PrjStep> project_step_list(int project_id) {
@@ -86,10 +118,9 @@ public class LkhDaoImpl implements LkhDao {
 			log.info("dao :project_step_list error Message -> {}",e.getMessage());
 		}
 		return prj_step_list;
-
-
 	}
 
+	// task create form 에서 같이 할 작업자 리스트 보여주기
 	@Override
 	public List<UserInfo> task_create_form_worker_list(int project_id) {
 		List<UserInfo> task_create_form_worker_list =null;
@@ -102,25 +133,15 @@ public class LkhDaoImpl implements LkhDao {
 		return task_create_form_worker_list;
 	}
 
+
 	// task_create post 실행
 	@Override
 	public int task_create(Task task) {
 		int result = 0;
 		try {
-			int i = sqlSession.insert("task_create",task);
+			result = sqlSession.insert("task_create",task);
 		} catch (Exception e) {
 			log.info("dao :task_create error Message -> {}",e.getMessage());
-		}
-		return result;
-	}
-
-	@Override
-	public int maxTaskid_select() {
-		int result = 0;
-		try {
-			result = sqlSession.selectOne("maxTaskid_select");
-		} catch (Exception e) {
-			log.info("dao :maxTaskid_select error Message -> {}",e.getMessage());
 		}
 		return result;
 	}
@@ -129,7 +150,7 @@ public class LkhDaoImpl implements LkhDao {
 	public int task_worker_create(List<TaskSub> taskSubList) {
 		int result = 0;
 		try {
-			int i = sqlSession.insert("task_worker_create",taskSubList);
+			result = sqlSession.insert("task_worker_create",taskSubList);
 		} catch (Exception e) {
 			log.info("dao :task_worker_create error Message -> {}",e.getMessage());
 		}
@@ -137,37 +158,56 @@ public class LkhDaoImpl implements LkhDao {
 
 	}
 
-
 	@Override
-	public Task task_detail(int task_id, int project_id) {
-		Task task = new Task();
+	public List<Task> garbage_list(Task task) {
+		List<Task> garbageList= null;
 		try {
-			Map<String, Integer> params = new HashMap<>();
-			params.put("task_id", task_id);
-			params.put("project_id", project_id);
-			task = sqlSession.selectOne("task_detail", params);
+			log.info(String.valueOf(task.getProject_id()));
+			log.info(String.valueOf(task.getStart()));
+			garbageList = sqlSession.selectList("garbage_list",task);
 
 		} catch (Exception e) {
-			log.info("dao :task_board error Message -> {}",e.getMessage());
+			log.info("dao :garbage_list error Message -> {}",e.getMessage());
 		}
-		return task;
+		return garbageList;
+
 	}
 
-
 	@Override
-	public List<TaskSub> taskWorkerlist(int project_id, int task_id) {
-
-		List<TaskSub> taskWorkerlist= new ArrayList<>();
+	public int task_garbage(int task_id) {
+		int result = 0;
 		try {
-			Map<String, Integer> params = new HashMap<>();
-			params.put("task_id", task_id);
-			params.put("project_id", project_id);
-			taskWorkerlist = sqlSession.selectList("taskWorkerlist", params);
+			 result = sqlSession.update("task_garbage",task_id);
+		} catch (Exception e) {
+			log.info("dao :task_garbage error Message -> {}",e.getMessage());
+		}
+		return result;
+	}
 
+	public 	List<TaskSub> taskWorkerlist(TaskSub taskSub){
+		List<TaskSub> taskSubList  = null;
+		try {
+			taskSubList = sqlSession.selectList("taskWorkerlist",taskSub);
 		} catch (Exception e) {
 			log.info("dao :taskWorkerlist error Message -> {}",e.getMessage());
 		}
-		return taskWorkerlist;
+		return taskSubList;
+	}
+
+//	@Override
+//	public List<TaskSub> taskWorkerlist(int project_id, int task_id) {
+//
+//		List<TaskSub> taskWorkerlist= new ArrayList<>();
+//		try {
+//			Map<String, Integer> params = new HashMap<>();
+//			params.put("task_id", task_id);
+//			params.put("project_id", project_id);
+//			taskWorkerlist = sqlSession.selectList("taskWorkerlist", params);
+//
+//		} catch (Exception e) {
+//			log.info("dao :taskWorkerlist error Message -> {}",e.getMessage());
+//		}
+//		return taskWorkerlist;
 
 	}
 
@@ -176,4 +216,4 @@ public class LkhDaoImpl implements LkhDao {
 	//project check
 
 
-}
+

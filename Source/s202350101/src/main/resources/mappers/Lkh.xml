@@ -3,111 +3,137 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oracle.s202350101.TaskMapper">
 
+    <!-- 도넛 그래프 그려주는 -->
+    <select id="doughnut_chart" parameterType="int" resultType="int">
+        SELECT COUNT(*) AS TASK_STATUS_COUNT FROM TASK
+        WHERE PROJECT_ID = #{project_id}
+        GROUP BY TASK_STATUS
+        ORDER BY TASK_STATUS
+    </select>
 
-    <!---  도넛 그래프 그려주는  -->
-    <select id="taskStatus_doughnut"  parameterType="int"  resultType="int">
+    <!-- 진척률 그래프 -->
+    <select id="Workload_chart" parameterType="java.lang.Integer" resultType="Task">
     <![CDATA[
-        select  count(*) as task_status_count from task
-        where project_id = #{project_id}
-        group by task_status
-        order by TASK_STATUS
+        SELECT U.USER_NAME,
+               SUM(CASE WHEN T.TASK_STATUS = 0 THEN 1 ELSE 0 END) AS STATUS_0_COUNT,
+               SUM(CASE WHEN T.TASK_STATUS = 1 THEN 1 ELSE 0 END) AS STATUS_1_COUNT,
+               SUM(CASE WHEN T.TASK_STATUS = 2 THEN 1 ELSE 0 END) AS STATUS_2_COUNT
+        FROM TASK T, USER_INFO U
+        WHERE T.PROJECT_ID = #{project_id} AND T.USER_ID = U.USER_ID
+        GROUP BY U.USER_NAME
         ]]>
-  </select>
+</select>
 
-    <!---진척루ㅠㄹ-->
-    <select id="taskUserWorkload" parameterType="int" resultType="Task">
-    <![CDATA[
-
-        SELECT u.user_name,
-               SUM(CASE WHEN t.task_status = 0 THEN 1 ELSE 0 END) AS status_0_count,
-               SUM(CASE WHEN t.task_status = 1 THEN 1 ELSE 0 END) AS status_1_count,
-               SUM(CASE WHEN t.task_status = 2 THEN 1 ELSE 0 END) AS status_2_count
-        FROM TASK t  , USER_INFO u
-        WHERE t.project_id = #{project_id} and t.user_id = u.user_id
-        GROUP BY u.user_name
-        ]]>
-  </select>
+    <select id="task_list"  parameterType="Task" resultType="Task">
 
 
+        SELECT *
+        FROM (
+                 SELECT rownum rn, a.*
+                 From (SELECT t.*, p.project_s_name, u.user_name
+                       FROM task t
+                                INNER JOIN prj_step p ON t.project_id = p.project_id AND t.project_step_seq = p.project_step_seq
+                                INNER JOIN user_info u ON t.user_id = u.user_id
+                       WHERE t.project_id = #{project_id} AND t.garbage = 0) a
+             )
+        where rn between #{start} and #{end}
+    </select>
 
-    <!---유저이름과  프로젝트 단계이름까지 나오는거 -->
-    <select id="taskList"  parameterType="int" resultType="Task">
+
+
+    <!-- 작업의 총 개수 반환 -->
+    <select id="task_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(TASK_ID)
+        FROM TASK
+        WHERE PROJECT_ID = #{project_id}
+    </select>
+
+    <!-- 작업 리스트 유저이름과 프로젝트 단계까지 보여주기 위해서 조인 -->
+    <select id="task_detail" parameterType="java.lang.Integer" resultType="Task">
         select u.user_name,p.project_s_name ,t.*
         from task t,  prj_step p , user_info u
-        where  u.project_id = #{project_id} and
-            t.user_id = u.user_id and
-            t.project_id  = p.project_id and
-            t.project_step_seq  = p.project_step_seq
-    </select>
-
-
-
-    <select id="task_detail" parameterType="int" resultType="Task">
-        SELECT * FROM TASK
-        WHERE project_id = #{project_id} and task_id = #{task_id}
-    </select>
-
-
-    <select id="task_detail2" parameterType="int" resultType="Task">
-            select u.user_name,p.project_s_name ,t.*
-            from task t,  prj_step p , user_info u
-            where t.user_id = u.user_name and
+        where t.user_id = u.user_name and
             t.project_id  = p.project_id and
             t.project_step_seq  = p.project_step_seq and
             t.task_id = #{task_id} and t.project_id =#{project_id}
     </select>
 
-
-
+    <!-- 작업 타임 라인에 이름 보여주기 -->
     <select id="task_timeline" resultType="Task">
-        select t.*,u.user_name   from task t, user_info u
-        where t.user_id = u.user_id
+        SELECT T.*, U.USER_NAME
+        FROM TASK T, USER_INFO U
+        WHERE T.USER_ID = U.USER_ID
     </select>
 
+    <!-- TASK CREATE -->
 
-
-
-    <!-- -task create  -->
-
-    <!--- GET  FORM-->
-    <select id="task_create_form_step_list" parameterType="int" resultType="PrjStep">
-        select  *  from prj_step
-        where project_id = #{project_id}
+    <!-- GET FORM 현재 프로젝트에 있는 프로젝트 단계 -->
+    <select id="task_create_form_step_list" parameterType="java.lang.Integer" resultType="PrjStep">
+        SELECT *
+        FROM PRJ_STEP
+        WHERE PROJECT_ID = #{project_id}
     </select>
 
-
-    <select id="task_create_form_worker_list" parameterType="int" resultType="Userinfo">
-        select user_name, user_id from user_info
-        where project_id =  #{project_id}
+    <!-- GET FORM 현재 프로젝트에 있는 인원들(같이 작업할 사람 선택하는 것) -->
+    <select id="task_create_form_worker_list" parameterType="java.lang.Integer" resultType="Userinfo">
+        SELECT USER_NAME, USER_ID
+        FROM USER_INFO
+        WHERE PROJECT_ID =  #{project_id}
     </select>
 
-    <!--- POST  FORM     TO_DATE('23/11/3', 'DD/MM/YY'), -->
+    <!-- 작업 생성 INSERT 문 -->
     <insert id="task_create" parameterType="Task">
-        INSERT INTO task (task_id, project_id, project_step_seq, user_id, task_subject, task_content, task_stat_time, task_end_itme, task_priority, task_status, garbage)
-        SELECT COALESCE(MAX(task_id), 0) + 1, #{project_id}, #{project_step_seq}, #{user_id}, #{task_subject}, #{task_content}, #{task_stat_time} ,  #{task_end_itme},  #{task_priority}, #{task_status}, 0)
-        FROM task
+        INSERT INTO TASK (TASK_ID, PROJECT_ID, PROJECT_STEP_SEQ, USER_ID, TASK_SUBJECT, TASK_CONTENT, TASK_STAT_TIME, TASK_END_ITME, TASK_PRIORITY, TASK_STATUS, GARBAGE)
+        VALUES ((SELECT NVL(MAX(TASK_ID), 0) +1 FROM TASK), #{project_id}, #{project_step_seq}, #{user_id}, #{task_subject}, #{task_content},
+                TO_DATE(#{task_stat_time}, 'YYYY-MM-DD'), TO_DATE(#{task_end_itme}, 'YYYY-MM-DD'), #{task_priority}, #{task_status}, #{garbage})
     </insert>
 
-    <select id="maxTaskid_select" resultType="int">
-        select max(task_id) from task
-    </select>
 
-    <insert id="task_worker_create" parameterType="java.util.List" >
-        insert into Task_sub values
-        <foreach collection="list" item="taskSub">
-             (#{taskSub.task_id},#{taskSub.project_id}, #{taskSub.worker_id})
+
+
+    <insert id="task_worker_create" parameterType="java.util.List">
+        <selectKey keyProperty="task_id" resultType="int" order="BEFORE">
+            SELECT NVL(MAX(TASK_ID), 0) FROM TASK
+        </selectKey>
+
+        <foreach collection="list" item="taskSub" separator=";">
+            INSERT INTO TASK_SUB (TASK_ID, PROJECT_ID, WORKER_ID)
+            VALUES (#{task_id}, #{taskSub.project_id}, #{taskSub.worker_id})
         </foreach>
     </insert>
 
 
 
-
-    <!--같이 하는 작업자 목록들  -->
-    <select id="taskWorkerlist"   parameterType="TaskSub" resultType="TaskSub">
-        select w.worker_id,u.user_name
-        from (select * from task_sub t where t.task_id =#{task_id} and t.project_id = #{project_id}) w , user_info u
-        where u.user_id = w.worker_id
+    <!-- 같이 하는 작업자 목록들 -->
+    <select id="taskWorkerlist" parameterType="TaskSub" resultType="TaskSub">
+        SELECT *
+            FROM TASK_SUB  t, user_info u
+                WHERE t.task_id = #{task_id} and
+                      t.project_id = #{project_id} and
+                      t.worker_id = u.user_id
     </select>
+
+    <!-- 휴지통으로 삭제시키기 -->
+    <update id="task_garbage" parameterType="java.lang.Integer">
+        UPDATE TASK SET GARBAGE = 1 WHERE TASK_ID = #{task_id}
+    </update>
+
+    <!-- 휴지통 목록 -->
+    <select id="garbage_list" parameterType="Task" resultType="Task">
+        SELECT *
+        FROM (
+                 SELECT ROWNUM rn, a.*
+                 FROM (
+                          SELECT U.USER_NAME, T.*, P.PROJECT_S_NAME
+                          FROM TASK T
+                                   INNER JOIN PRJ_STEP P ON T.PROJECT_ID = P.PROJECT_ID AND T.PROJECT_STEP_SEQ = P.PROJECT_STEP_SEQ
+                                   INNER JOIN USER_INFO U ON T.USER_ID = U.USER_ID
+                          WHERE T.PROJECT_ID = #{project_id} AND T.GARBAGE = 1
+                      ) A
+             )
+        WHERE rn BETWEEN #{start} AND #{end}
+    </select>
+
 
 
 

@@ -60,21 +60,18 @@
             <!-- 본문 -->
             <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!------------------------------ //개발자 소스 입력 START ------------------------------->
-<%--                <jsp:include page="taskInsertForm.jsp" />--%>
-
                 <form action="task_create" method="post" class="border border-dark p-4">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <select id="order_by" name="selectedOrder">
+                                    <select id="order_by" name="project_step_seq">
                                         <c:forEach var="step" items="${prjStepList}">
                                             <option value="${step.project_step_seq}">${step.project_order}: ${step.project_s_name}</option>
                                         </c:forEach>
                                     </select>
-
-
                                 </div>
+
                                 <div class="form-group">
                                     <label for="task_subject">작업명:</label>
                                     <input type="text" class="form-control" name="task_subject" id="task_subject">

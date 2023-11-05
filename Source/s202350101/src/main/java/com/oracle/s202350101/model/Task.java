@@ -39,4 +39,10 @@ public class Task {
 		private int status_2_count;
 		private String project_s_name;
 		private String user_name;
+
+
+		private String search;   	private String keyword;
+		private String pageNum;
+		private int start; 		 	private int end;
+		private int rn;
 }

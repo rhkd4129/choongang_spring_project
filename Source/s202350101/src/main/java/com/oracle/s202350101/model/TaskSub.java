@@ -13,4 +13,8 @@ public class TaskSub {
 	private int		task_id;
 	private int		project_id;
 	private String	worker_id;
+
+
+	//읽기 전용
+	private String user_name;
 }
