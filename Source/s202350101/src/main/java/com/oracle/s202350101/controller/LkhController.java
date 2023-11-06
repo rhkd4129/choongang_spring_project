@@ -2,10 +2,9 @@ package com.oracle.s202350101.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import com.oracle.s202350101.model.PrjStep;
-import com.oracle.s202350101.model.TaskSub;
-import com.oracle.s202350101.model.UserInfo;
+import com.oracle.s202350101.model.*;
 import com.oracle.s202350101.service.Paging;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.oracle.s202350101.dao.lkhDao.LkhDaoImpl;
-import com.oracle.s202350101.model.Task;
 import com.oracle.s202350101.service.lkhSer.LkhService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +33,34 @@ public class LkhController {
 		return "project/board/dashboard_home";
 	}
 
+	@ResponseBody
+	@GetMapping("bar")
+	public PrjInfo bar(HttpServletRequest request ,Model model){
+		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		int projectId = userInfo.getProject_id();
+		return lkhService.project_day(projectId);
+	}
+
+	@GetMapping("task_board")
+	public String board(HttpServletRequest request , Model model, String currentPage){
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int projectId = userInfo.getProject_id();
+		Task task =  new Task();
+		task.setProject_id(projectId);
+
+		int taskCount = lkhService.task_count(projectId);
+		Paging   page = new Paging(taskCount, currentPage);
+
+		task.setStart(page.getStart());
+		task.setEnd(page.getEnd());
+		List<Task>  taskList =  lkhService.task_list(task);
+
+		model.addAttribute("taskList", taskList);
+		model.addAttribute("taskCount",taskCount);
+
+		return "project/board/taskBoard";
+
+	}
 
 	@ResponseBody
 	@GetMapping("dashboard_doughnut")
@@ -62,6 +88,8 @@ public class LkhController {
 		taskUserWorkStatusList =  lkhService.Workload_chart(id);
 		return taskUserWorkStatusList; 
 	}
+
+
 
 	@GetMapping("task_timeline_view")
 	public String task_timeline_view(){
@@ -100,17 +128,64 @@ public class LkhController {
 	}
 
 
+	@GetMapping("task_time_desc")
+	@ResponseBody
+	public  AjaxResponse task_time_desc(HttpServletRequest request,String currentPage){
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		log.info("내림");
+		int projectId = userInfo.getProject_id();
+		Task task =  new Task();
+		task.setProject_id(projectId);
+		int taskCount = lkhService.task_count(projectId);
+		Paging   page = new Paging(taskCount, currentPage);
+		task.setStart(page.getStart());
+		task.setEnd(page.getEnd());
+		List<Task>  taskList =  lkhService.task_time_decs(task);
+		AjaxResponse data = new AjaxResponse();
+		data.setOnelist(taskList);
+		data.setOneObject(page);
+		
+		
+		for(Task a: taskList) {
+			System.out.println(a.getTask_end_itme());
+		}
+		return data;
+	}
+
+	@GetMapping("task_time_acsc")
+	@ResponseBody
+	public  AjaxResponse task_time_aces(HttpServletRequest request,String currentPage){
+		log.info("올림");
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int projectId = userInfo.getProject_id();
+		Task task =  new Task();
+		task.setProject_id(projectId);
+		int taskCount = lkhService.task_count(projectId);
+		Paging   page = new Paging(taskCount, currentPage);
+		task.setStart(page.getStart());
+		task.setEnd(page.getEnd());
+		List<Task>  taskList =  lkhService.task_time_aces(task);
+		for(Task a: taskList) {
+			System.out.println(a.getTask_end_itme());
+		}
+		AjaxResponse data = new AjaxResponse();
+		data.setOnelist(taskList);
+		data.setOneObject(page);
+		return data;
+	}
+
+
+
+
 	@GetMapping("task_detail")
 	public String task_detail(int task_id, int project_id,Model model){
 		Task task = lkhService.task_detail(task_id,project_id);
+		log.info(task.getUser_name());
 		TaskSub taskSub = new TaskSub();
 		taskSub.setProject_id(project_id);
 		taskSub.setTask_id(task_id);
-
 		List<TaskSub> taskSubList =lkhService.taskWorkerlist(taskSub);
-		for (TaskSub a :taskSubList) {
-			log.info(a.getUser_name());
-		}
+
 		model.addAttribute("taskSubList",taskSubList);
 		model.addAttribute("task",task);
 		return "project/board/taskDeatil";

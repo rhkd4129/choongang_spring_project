@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.oracle.s202350101.model.PrjStep;
-import com.oracle.s202350101.model.TaskSub;
-import com.oracle.s202350101.model.UserInfo;
+import com.oracle.s202350101.model.*;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.s202350101.controller.LkhController;
-import com.oracle.s202350101.model.Task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +48,17 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
+	public PrjInfo project_day(int project_id) {
+		PrjInfo prjInfo= null;
+		try {
+			prjInfo= sqlSession.selectOne("project_day",project_id);
+		} catch (Exception e) {
+			log.info("dao : project_day error Message -> {}",e.getMessage());
+		}
+		return prjInfo;
+	}
+
+	@Override
 	public int task_count(int project_id) {
 		int taskCount = 0;
 		try {
@@ -74,8 +82,27 @@ public class LkhDaoImpl implements LkhDao {
 		return taskList;
 	}
 
+	@Override
+	public List<Task> task_time_decs(Task task) {
+		List<Task> taskList = null;
+		try {
+			taskList = sqlSession.selectList("task_time_decs",task);
+		}catch (Exception e){
+			log.info("dao :task_time_decs error Message -> {}",e.getMessage());
+		}
+		return  taskList;
+	}
 
-
+	@Override
+	public List<Task> task_time_aces(Task task) {
+		List<Task> taskList = null;
+		try {
+			taskList = sqlSession.selectList("task_time_aces",task);
+		}catch (Exception e){
+			log.info("dao :task_time_decs error Message -> {}",e.getMessage());
+		}
+		return  taskList;
+	}
 
 
 	@Override

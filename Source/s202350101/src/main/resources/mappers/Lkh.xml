@@ -11,6 +11,12 @@
         ORDER BY TASK_STATUS
     </select>
 
+    <select id="project_day" parameterType="Prjinfo" resultType="PrjInfo">
+        select project_startdate,project_enddate
+        from  prj_info
+        where project_id = #{project_id}
+    </select>
+
     <!-- 진척률 그래프 -->
     <select id="Workload_chart" parameterType="java.lang.Integer" resultType="Task">
     <![CDATA[
@@ -25,8 +31,6 @@
 </select>
 
     <select id="task_list"  parameterType="Task" resultType="Task">
-
-
         SELECT *
         FROM (
                  SELECT rownum rn, a.*
@@ -40,7 +44,6 @@
     </select>
 
 
-
     <!-- 작업의 총 개수 반환 -->
     <select id="task_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(TASK_ID)
@@ -48,11 +51,41 @@
         WHERE PROJECT_ID = #{project_id}
     </select>
 
+
+    <select id="task_time_decs" parameterType="Task" resultType="Task">
+        SELECT *
+        FROM (SELECT rownum rn, a.*
+              From (SELECT t.*, p.project_s_name, u.user_name
+                    FROM task t
+                             INNER JOIN prj_step p ON t.project_id = p.project_id AND t.project_step_seq = p.project_step_seq
+                             INNER JOIN user_info u ON t.user_id = u.user_id
+                    WHERE t.project_id = #{project_id} AND t.garbage = 0
+                    ORDER BY t.task_end_itme desc) a
+             )
+        where rn between #{start} and #{end}
+    </select>
+
+    <select id="task_time_aces" parameterType="Task" resultType="Task">
+        SELECT *
+        FROM (SELECT rownum rn, a.*
+              From (SELECT t.*, p.project_s_name, u.user_name
+                    FROM task t
+                             INNER JOIN prj_step p ON t.project_id = p.project_id AND t.project_step_seq = p.project_step_seq
+                             INNER JOIN user_info u ON t.user_id = u.user_id
+                    WHERE t.project_id = #{project_id} AND t.garbage = 0
+                    ORDER BY t.task_end_itme asc ) a
+             )
+        where rn between #{start} and #{end}
+    </select>
+
+
+
+
     <!-- 작업 리스트 유저이름과 프로젝트 단계까지 보여주기 위해서 조인 -->
     <select id="task_detail" parameterType="java.lang.Integer" resultType="Task">
         select u.user_name,p.project_s_name ,t.*
         from task t,  prj_step p , user_info u
-        where t.user_id = u.user_name and
+        where t.user_id = u.user_id and
             t.project_id  = p.project_id and
             t.project_step_seq  = p.project_step_seq and
             t.task_id = #{task_id} and t.project_id =#{project_id}
@@ -90,18 +123,16 @@
 
 
 
-
     <insert id="task_worker_create" parameterType="java.util.List">
         <selectKey keyProperty="task_id" resultType="int" order="BEFORE">
             SELECT NVL(MAX(TASK_ID), 0) FROM TASK
         </selectKey>
 
-        <foreach collection="list" item="taskSub" separator=";">
+        <foreach collection="list" item="taskSub" separator="">
             INSERT INTO TASK_SUB (TASK_ID, PROJECT_ID, WORKER_ID)
             VALUES (#{task_id}, #{taskSub.project_id}, #{taskSub.worker_id})
         </foreach>
     </insert>
-
 
 
     <!-- 같이 하는 작업자 목록들 -->

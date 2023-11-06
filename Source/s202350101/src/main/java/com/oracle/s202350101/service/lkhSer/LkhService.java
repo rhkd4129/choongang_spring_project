@@ -2,16 +2,17 @@ package com.oracle.s202350101.service.lkhSer;
 
 import java.util.List;
 
-import com.oracle.s202350101.model.PrjStep;
-import com.oracle.s202350101.model.Task;
-import com.oracle.s202350101.model.TaskSub;
-import com.oracle.s202350101.model.UserInfo;
+import com.oracle.s202350101.model.*;
 
 public interface LkhService {
 
 	// 작업별 상태 count -> 도넛차트
 	List<Integer> 		doughnut_chart(int project_id);
 	List<Task>			Workload_chart(int project_id);
+
+	PrjInfo				project_day(int project_id);
+	List<Task>			task_time_decs(Task task);
+	List<Task>			task_time_aces(Task task);
 
 	// 해당 프로젝트 작업 수
 	 int task_count(int project_id);

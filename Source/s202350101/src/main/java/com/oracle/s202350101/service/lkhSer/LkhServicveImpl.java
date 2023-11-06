@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.oracle.s202350101.model.PrjStep;
-import com.oracle.s202350101.model.TaskSub;
-import com.oracle.s202350101.model.UserInfo;
+import com.oracle.s202350101.model.*;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.lkhDao.LkhDao;
 import com.oracle.s202350101.dao.lkhDao.LkhDaoImpl;
-import com.oracle.s202350101.model.Task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +44,13 @@ public class LkhServicveImpl implements LkhService {
 	}
 
 	@Override
+	public PrjInfo project_day(int project_id) {
+		PrjInfo prjInfo = null;
+		prjInfo = lkhDao.project_day(project_id);
+		return prjInfo;
+	}
+
+	@Override
 	public int task_count(int project_id) {
 		return  lkhDao.task_count(project_id);
 
@@ -60,6 +64,19 @@ public class LkhServicveImpl implements LkhService {
 		return taskList;
 	}
 
+	@Override
+	public List<Task> task_time_decs(Task task) {
+		List<Task> taskList = null;
+		taskList = lkhDao.task_time_decs(task);
+		return taskList;
+	}
+
+	@Override
+	public List<Task> task_time_aces(Task task) {
+		List<Task> taskList = null;
+		taskList = lkhDao.task_time_aces(task);
+		return taskList;
+	}
 
 	// 작업 상세 내용
 	@Override
@@ -104,8 +121,8 @@ public class LkhServicveImpl implements LkhService {
 	) {
 		int result = 0;
 		List<TaskSub> taskSubList = new ArrayList<>();
-		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
 			lkhDao.task_create(task);
 			for (String workId : workerList) {

@@ -1,13 +1,5 @@
 
 
-function createDrawChart(ctx, chart_type ,data, options) {
-  return new Chart(ctx, {
-    type: chart_type,
-    data: data,
-    options: options
-  });
-}
-
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -27,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     plugins: {
       title: {
         display: true,
-        text: 'Chart.js Bar Chart - Stacked'
+        text: '작업 현황도 '
       },
 
         legend: {
@@ -74,12 +66,15 @@ const horizontalStackBarData = {
 }
 
 
+
+
+
   
 const horizontalStackBarOption = {
   plugins: {
     title: {
       display: true,
-      text: 'Chart.js Bar Chart - Stacked'
+      text: '멤버별 작업 현황도'
     }
   },
   scales: {
@@ -101,10 +96,41 @@ const horizontalStackBarOption = {
 
 
 
+  const proejctOption = {
+    plugins: {
+      title: {
+        display: true,
+        text: '언제 '
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        stacked: true
+      },
+      y: {
+        stacked: true
+      }
+    },
+    indexAxis: 'y',
+    datalabels: {
+      display: true,
+      color: 'white',
+      font: { weight: 'bold' }
+    }
+  }
+
+  function createDrawChart(ctx, chart_type ,data, options) {
+    return new Chart(ctx, {
+      type: chart_type,
+      data: data,
+      options: options
+    });
+  }
 
 
   createDrawChart(doughunt, 'doughnut',doughnut_data, doughnut_options);
   createDrawChart(bar_chart,'bar', horizontalStackBarData, horizontalStackBarOption);
-
+  createDrawChart(doughunt, 'bar',proejctData, proejctOption);
 
 });

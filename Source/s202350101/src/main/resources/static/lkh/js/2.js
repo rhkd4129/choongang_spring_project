@@ -48,7 +48,30 @@ const doughnut_options = {
     }
   };
 
-  
+const proejctOption = {
+  plugins: {
+    title: {
+      display: true,
+      text: '언제 '
+    }
+  },
+  scales: {
+    x: {
+      beginAtZero: true,
+      stacked: true
+    },
+    y: {
+      stacked: true
+    }
+  },
+  indexAxis: 'y',
+  datalabels: {
+    display: true,
+    color: 'white',
+    font: { weight: 'bold' }
+  }
+}
+
 function createDrawChart(ctx, chart_type, data, options) {
     return new Chart(ctx, {
       type: chart_type,

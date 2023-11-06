@@ -120,8 +120,8 @@
                 <c:choose>
                     <c:when test="${not empty taskSubList}">
                         <label for="worker" class="fw-bold">공동 작업자</label>
-                        <c:forEach items="${taskSubList}" var="taskSub" varStatus="seq" begin="1">
-                            <p id="worker">${seq.index}: ${taskSub.user_name}</p>
+                        <c:forEach items="${taskSubList}" var="taskSub" varStatus="seq">
+                            <p id="worker"> ${taskSub.user_name}</p>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
