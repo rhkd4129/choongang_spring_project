@@ -115,6 +115,10 @@
         };
         ws.onmessage = function (data) {
             var msg = data.data;
+            var memSave = false;            // 필요할까
+            console.log("data: "+data);
+            console.log("msg: " + msg);
+
 
         };
     }

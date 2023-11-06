@@ -59,21 +59,29 @@
             });
         });
 
-
-
+        var ws;
+        $(
+            function wsOpen() {
+                console.log("wsOPEN location.href: " + location.host);
+                var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";
+                ws = new WebSocket(wsUri);
+            }
+        )
         // 전체 Message 전송
         function send() {
             //	사용자id 값을 받아야함.
+
             var option = {
                 type : "message",
-                sessionId : $("#sessionId").val(),
-                userName : $("#userName").val(),
-                yourName : $("#member_sub").val(),
-                msg : $("#sendMsg").val()
+                chat_room_id : $("#chat_room_id").val(),
+                myID : $("#myID").val(),
+                youID : $("#youID").val(),
+                msg : $("#send_message").val()
             }
+            console.log(option);
             // 자바스크립트의 값을 JSON 문자열로 변환
             ws.send(JSON.stringify(option));
-            $('#sendMsg').val("");
+            $('#send_message').val("");
         }
     </script>
 </head>
@@ -87,16 +95,18 @@
         <p>상대방 이름</p>
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
-
+        <input id="chat_room_id" type="hidden" value="${ChatRoom}">
         <c:forEach items="${CMList}" var="msg">
             <c:choose>
                 <c:when test="${userInfo.user_id eq msg.sender_id}">
-                    <p style="text-align: left">${msg.msg_con}</p>
-                    <p style="text-align: left">${msg.send_time}</p>
-                </c:when>
-                <c:otherwise>
+                    <input id="myID" type="hidden" value="${msg.sender_id}">
                     <p style="text-align: right">${msg.msg_con}</p>
                     <p style="text-align: right">${msg.send_time}</p>
+                </c:when>
+                <c:otherwise>
+                    <input id="youID" type="hidden" value="${msg.sender_id}">
+                    <p style="text-align: left">${msg.msg_con}</p>
+                    <p style="text-align: left">${msg.send_time}</p>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
@@ -105,7 +115,7 @@
 
     </div>
     <div id="chat_bottom">
-        <textarea cols="40" rows="3">
+        <textarea cols="40" rows="3" id="send_message">
         </textarea>
         <input type="button" class="btn btn-primary" value="작성완료" onclick="send()">
     </div>
