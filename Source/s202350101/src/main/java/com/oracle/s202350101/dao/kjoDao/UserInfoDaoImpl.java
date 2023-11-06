@@ -21,11 +21,11 @@ public class UserInfoDaoImpl implements UserInfoDao{
 
 	//	특정 강의실 전체 학생 조회
 	@Override
-	public List<UserInfo> findbyclassuser(int cl_id) {
+	public List<UserInfo> findbyclassuser(UserInfo ui) {
 		log.info("findbyclassuser start");
 		List<UserInfo> UIList = null;
 		try {
-			UIList = session.selectList("findbyClassUser", cl_id);
+			UIList = session.selectList("findbyClassUser", ui);
 			//	결과	출력
 			System.out.println(UIList.stream().collect(Collectors.toList()));
 			

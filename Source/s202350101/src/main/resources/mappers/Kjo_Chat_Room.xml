@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+
+
+<mapper namespace="com.oracle.s202350101.ChatRoomMapper">
+	<!-- ChatRoom -->
+
+	<select id="findAll" resultType="ChatRoom">
+
+		select *
+		from chat_room
+	</select>
+	<select id="findByUserId" parameterType="UserInfo" resultType="ChatRoom">
+
+        select chl.*, user_name
+        from (select * from chat_room
+              where sender_id = #{user_id}
+              union
+              select * from chat_room
+              where receiver_id = #{user_id}) chl
+                 left join user_info uil
+                           on chl.receiver_id = uil.user_id
+
+    </select>
+
+	<select id="findByYouAndMe" parameterType="ChatRoom" resultType="ChatRoom">
+		select * from chat_room where
+			receiver_id=#{receiver_id} and sender_id = #{sender_id}
+		union
+		select * from chat_room where
+			receiver_id=#{sender_id} and sender_id = #{receiver_id}
+	</select>
+
+	<select id="findById" resultType="int">
+		select count(class_id)
+		from class_room
+	</select>
+
+
+</mapper>
+	 

@@ -56,8 +56,12 @@
     #chat_ch_center {
         font-size: 0.7em;
     }
+
+
 </style>
 <script type="text/javascript">
+    var ws;
+
     function chat_button() {
         var con = document.getElementById("chatbox");
 
@@ -84,13 +88,35 @@
         chat_chats.style.display = 'block';
     }
 
-    function chat_room(){
+    function chat_room(user_id) {
+        console.log(user_id);
         window.open(
-            "chat_room",
+            "/chat_room?user_id=" + user_id,
             "Child",
-            "width=400, height=300, top=50, left=50"
+            "width=600, height=570, top=50, left=50"
         );
+    }
 
+    $(
+        function wsOpen() {
+            console.log("wsOPEN location.href: " + location.host);
+            var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";
+            ws = new WebSocket(wsUri);
+            wsEvt();
+        }
+    )
+
+
+    function wsEvt() {
+        alert("wsEvt Start");
+
+        ws.onopen = function (data) {
+            console.log("wsEvt 열리면 초기화");
+        };
+        ws.onmessage = function (data) {
+            var msg = data.data;
+
+        };
     }
 
 </script>
@@ -129,7 +155,9 @@
                 </a>
                 <ul class="dropdown-menu text-small" style="">
                     <li><a class="dropdown-item" href="mypage_main">내 정보 설정</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
                     <li><a class="dropdown-item" href="user_logout">로그아웃</a></li>
                 </ul>
             </div>
@@ -148,41 +176,44 @@
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <div id="chat_users" style="display: none">
-                        <c:forEach items="${chatUIList}" var="chat_user">
-                            <div id="chat_student_list">
-                                <div id="chat_st_left">
-                                    <p>이미지</p>
-                                </div>
-                                <div id="chat_st_center">
-                                    <p>${chat_user.user_name}</p>
-                                </div>
-                                <div id="chat_st_right">
-                                    <input onclick="chat_room()" type="button" class="btn btn-primary" value="채팅하기${chat_user.user_id}">
-                                </div>
-                            </div>
-                        </c:forEach>
-<%--            <c:forEach begin="0" end="11">--%>
-<%--                <div id="chat_student_list">--%>
-<%--                    <div id="chat_st_left">--%>
-<%--                        <p>이미지</p>--%>
-<%--                    </div>--%>
-<%--                    <div id="chat_st_center">--%>
-<%--                        <p>사용자명</p>--%>
-<%--                    </div>--%>
-<%--                    <div id="chat_st_right">--%>
-<%--                        <input type="button" class="btn btn-primary" value="채팅하기">--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </c:forEach>--%>
+            <c:forEach items="${chatUIList}" var="chat_user">
+                <div id="chat_student_list">
+                    <div id="chat_st_left">
+                        <p>이미지</p>
+                    </div>
+                    <div id="chat_st_center">
+                        <p>${chat_user.user_name}</p>
+                    </div>
+                    <div id="chat_st_right">
+                        <input onclick="chat_room('${chat_user.user_id}')" type="button" class="btn btn-primary"
+                               value="채팅하기">
+                    </div>
+                </div>
+            </c:forEach>
         </div>
         <div id="chat_chats" style="display: none">
-            <c:forEach begin="0" end="11">
-                <div id="chat_chat_list">
+            <c:forEach items="${chatRooms}" var="chatRoom">
+
+                <c:choose>
+                    <c:when test="${chatRoom.sender_id eq userInfo.user_id}">
+                       <div id="chat_chat_list" onclick="chat_room('${chatRoom.receiver_id}')">
+                    </c:when>
+                <c:otherwise>
+                <div id="chat_chat_list" onclick="chat_room('${chatRoom.sender_id}')">
+                    </c:otherwise>
+                    </c:choose>
                     <div id="chat_ch_left">
                         <p>이미지</p>
                     </div>
                     <div id="chat_ch_center">
-                        <p>사용자명</p>
+                        <c:choose>
+                            <c:when test="${chatRoom.sender_id eq userInfo.user_id}">
+                                <p>${chatRoom.receiver_id}</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>${chatRoom.sender_id}</p>
+                            </c:otherwise>
+                        </c:choose>
                         <p>최근 메시지</p>
                     </div>
                     <div id="chat_ch_right">
@@ -191,9 +222,9 @@
                 </div>
             </c:forEach>
 
+            </div>
+
         </div>
 
     </div>
-
 </div>
-

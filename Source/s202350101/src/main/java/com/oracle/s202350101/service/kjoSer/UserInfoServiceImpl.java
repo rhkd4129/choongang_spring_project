@@ -24,9 +24,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoDao UIdao;
 
     @Override
-    public List<UserInfo> findbyclassuser(int cl_id) {
+    public List<UserInfo> findbyclassuser(UserInfo ui) {
         log.info("findbyclassuser start");
-        List<UserInfo> UIList = UIdao.findbyclassuser(cl_id);
+        List<UserInfo> UIList = UIdao.findbyclassuser(ui);
         return UIList;
     }
 

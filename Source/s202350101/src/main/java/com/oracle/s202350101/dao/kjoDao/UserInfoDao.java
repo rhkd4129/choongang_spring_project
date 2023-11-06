@@ -7,7 +7,7 @@ import com.oracle.s202350101.model.UserInfo;
 
 public interface UserInfoDao {
 
-	List<UserInfo> findbyclassuser(int cl_id);
+	List<UserInfo> findbyclassuser(UserInfo ui);
 	List<UserInfo> findbyClassUserProject(int cl_id);
 	int auth_modify_manager(List<String> userManager);
 

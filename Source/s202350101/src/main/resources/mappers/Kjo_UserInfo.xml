@@ -14,11 +14,12 @@
         from user_info
         where user_auth != 'admin'
     </select>
-    <select id="findbyClassUser" parameterType="int" resultType="UserInfo">
+    <select id="findbyClassUser" parameterType="UserInfo" resultType="UserInfo">
         select *
         from user_info
-        where class_id = #{cl_id}
+        where class_id = #{class_id}
           and user_auth != 'admin'
+          and user_id != #{user_id}
     </select>
 
     <select id="findbyClassUserProject" parameterType="int" resultType="UserInfo">

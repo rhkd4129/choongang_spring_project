@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +31,8 @@ public class KjoController {
 	private final UserInfoService UIser;		//	유저정보
 	private final PrjInfoService PIser;			//	프로젝트 정보
 	private final BdFreeService BFser;			//	공용게시판
+	private final ChatRoomService CHser;		//	채팅방
+	private final ChatMsgService CMser;			//	메시지
 
 	@GetMapping("/hello")
 	public String test() {
@@ -185,9 +189,22 @@ public class KjoController {
 
 //	채팅방 팝업
 	@GetMapping("/chat_room")
-	public String chat_room() {
+	public String chat_room(HttpServletRequest request, UserInfo ui, Model model) {
 		log.info("chat_room");
-		return "admin/chat_room";
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		ChatRoom cr = new ChatRoom();
+		cr.setSender_id(userInfoDTO.getUser_id());
+		cr.setReceiver_id(ui.getUser_id());
+
+		ChatRoom nowChatRoom =  CHser.findByYouAndMe(cr);
+		List<ChatMsg> CMList = CMser.findByRoomId(nowChatRoom);
+
+		log.info("CMList: " + CMList.toString());
+		model.addAttribute("userInfo", userInfoDTO);
+		model.addAttribute("ChatRoom", nowChatRoom);
+		model.addAttribute("CMList", CMList);
+
+		return "chat/chat_room";
 	}
 //
 	@GetMapping("/admin_approval")
@@ -204,7 +221,8 @@ public class KjoController {
 		log.info("captainManage");
 		userInfo.setClass_id(cl_id);
 		List<ClassRoom> CRList =CRser.findAllClassRoom();			// 모든 강의실 조회
-		int total = UIser.findbyclassuser(userInfo.getClass_id()).size();	//	강의실 별 학생 조회.(ADMIN 제외)
+		userInfo.setUser_id("admin");								//	조회하는 사용자는 어드민
+		int total = UIser.findbyclassuser(userInfo).size();	//	강의실 별 학생 조회.(ADMIN 제외)
 
 		//	페이징을 하기 위한 START, END,	TOTAL 지정.
 		Paging page = new Paging(total, currentPage);
@@ -231,7 +249,7 @@ public class KjoController {
 		log.info("admin_projectmanagerRest");
 		
 		//	admin	제외	모든 학생 수
-		int totalUi = UIser.findbyclassuser(cl_id).size();
+		int totalUi = UIser.findbyclassuser(userInfo).size();
 		//	선택한 강의실 id => userInfoDTO에 저장.
 		userInfo.setClass_id(cl_id);
 		log.info("total: ",totalUi);
