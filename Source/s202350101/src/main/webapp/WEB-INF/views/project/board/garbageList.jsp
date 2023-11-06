@@ -122,7 +122,6 @@
                 </c:if>
             </div>
         </main>
-        </main>
 
     </div>
 </div>

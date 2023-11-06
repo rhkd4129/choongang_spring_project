@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+table{
+    margin: 5%;
+}
+table, th, td {
+    border: 1px solid black;
+}
+
+
+/*  task  board view     */
+.board{
+    display: flex;
+    width: 70%;
+}
+
+.task_status_0,.task_status_1,.task_status_2{
+    width: 400px;
+    height: 400px;
+    margin: 5%;
+}
+.task_status_0{
+    background-color: #0a53be;
+}
+.task_status_1{
+    background-color: #0dcaf0;
+}
+.task_status_2{
+    background-color:#75b798;
+}
+

@@ -52,7 +52,7 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public int task_count(int project_id) {
-		return  lkhDao.task_count(project_id);
+		return lkhDao.task_count(project_id);
 
 	}
 
@@ -86,10 +86,10 @@ public class LkhServicveImpl implements LkhService {
 
 
 	@Override
-	public List<TaskSub> taskWorkerlist(TaskSub taskSub){
-		return  lkhDao.taskWorkerlist(taskSub);
+	public List<TaskSub> taskWorkerlist(TaskSub taskSub) {
+		return lkhDao.taskWorkerlist(taskSub);
 	}
-	
+
 	//프로젝트 타임라이ㅏㄴ
 	@Override
 	public List<Task> task_timeline() {
@@ -109,7 +109,6 @@ public class LkhServicveImpl implements LkhService {
 		return lkhDao.task_create_form_worker_list(project_id);
 	}
 
-
 	// task crate post
 	@Override
 	public int task_create(Task task) {
@@ -117,7 +116,7 @@ public class LkhServicveImpl implements LkhService {
 	}
 
 	@Override
-	public int createGroupTask(List<String> workerList ,Task task
+	public int createGroupTask(List<String> workerList, Task task
 	) {
 		int result = 0;
 		List<TaskSub> taskSubList = new ArrayList<>();
@@ -143,6 +142,8 @@ public class LkhServicveImpl implements LkhService {
 		return result;
 	}
 
+
+	//휴지통
 	@Override
 	public int task_garbage(int task_id) {
 		return lkhDao.task_garbage(task_id);
@@ -152,40 +153,5 @@ public class LkhServicveImpl implements LkhService {
 	public List<Task> garbage_list(Task task) {
 		return lkhDao.garbage_list(task);
 	}
-
-
-
-
-
-	// 위 세개 메소드를 합쳐서 트랙잭션 처리
-
-	
-
-	//여러명의 작업자가 함께 하는 경우
-//	@Override
-//	public int task_worker_create(Task task, List<String> selectedWorkers) {
-//		int result = 0;
-//		List<TaskSub> taskSubList = new ArrayList<>();
-//		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
-//		try {
-//			lkhDao.task_create(task);
-//			int taskmaxId = lkhDao.maxTaskid_select();
-//			for (String workId : selectedWorkers) {
-//				TaskSub taskSub = new TaskSub();
-//				taskSub.setTask_id(taskmaxId);
-//				taskSub.setProject_id(task.getProject_id());
-//				taskSub.setWorker_id(workId);
-//				taskSubList.add(taskSub);
-//				log.info("작업자 생성");
-//			}
-//			lkhDao.task_worker_create(taskSubList);
-//			transactionManager.commit(txStatus);
-//			result = 1;
-//		} catch (Exception e) {
-//			transactionManager.rollback(txStatus);
-//			log.info("service :tran_task_create error Message -> {}", e.getMessage());
-//			result = -1;
-//		}
-//		return result;
-//	}
 }
+
