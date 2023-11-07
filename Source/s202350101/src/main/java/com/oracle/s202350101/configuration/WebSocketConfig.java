@@ -26,6 +26,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
 
 //      "/topic" 하위로 들어오는 모든 주소로 메세지를 전송하겠다는 설정입니다.
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/queue");
     }
 }

@@ -219,8 +219,8 @@ public class KjoController {
 
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
-	@MessageMapping("/chat/send")
-	@SendTo("/topic/greetings")
+	@MessageMapping("/chat/send")		// 소켓 메시지를 객체로 변환
+	@SendTo("/queue/greetings")
 	public ChatMsg sendMsg(ChatMsg message) {		//	json을 왜 parse 안했는지.
 
 		ChatMsg cm = new ChatMsg();
@@ -229,7 +229,7 @@ public class KjoController {
 		cm.setMsg_con(message.getMsg_con());
 
 		CMser.cntsaveMsg(cm);
-		simpMessagingTemplate.convertAndSend("/topic/greetings/"+message.getChat_room_id(),message);
+//		simpMessagingTemplate.convertAndSend("/topic/greetings/"+message.getChat_room_id(),message);
 		return message;
 	}
 
