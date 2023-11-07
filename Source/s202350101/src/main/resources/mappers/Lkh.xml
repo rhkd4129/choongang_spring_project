@@ -153,18 +153,17 @@
     <select id="garbage_list" parameterType="Task" resultType="Task">
         SELECT *
         FROM (
-                 SELECT ROWNUM rn, a.*
+                 SELECT rownum rn, a.*
                  FROM (
                           SELECT U.USER_NAME, T.*, P.PROJECT_S_NAME
                           FROM TASK T
                                    INNER JOIN PRJ_STEP P ON T.PROJECT_ID = P.PROJECT_ID AND T.PROJECT_STEP_SEQ = P.PROJECT_STEP_SEQ
                                    INNER JOIN USER_INFO U ON T.USER_ID = U.USER_ID
                           WHERE T.PROJECT_ID = #{project_id} AND T.GARBAGE = 1
-                      ) A
+                      ) a
              )
         WHERE rn BETWEEN #{start} AND #{end}
     </select>
-
 
 
 

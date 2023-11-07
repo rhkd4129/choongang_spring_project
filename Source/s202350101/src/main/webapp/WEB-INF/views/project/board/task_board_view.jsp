@@ -51,15 +51,28 @@
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
                 <h3> 총 작업수 : ${taskCount }</h3>
-<%--                        <c:forEach var="task" items="${taskList}}">>--%>
 
-<%--                                <a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a>--%>
-<%--                        </c:forEach>--%>
-`
+
             <div class="board">
-                <div class="task_status_0"></div>
-                <div class="task_status_1"></div>
-                <div class="task_status_2"></div>
+                <div class="task_status_0">
+                    <c:forEach var="task_0" items="${taskStatus0}">
+                            <a href='task_detail?task_id=${task_0.task_id}&project_id=${task_0.project_id}'>${task_0.task_subject}</a>
+                    </c:forEach>
+                </div>
+
+
+                <div class="task_status_1">
+                    <c:forEach var="task_1" items="${taskStatus1}">
+                            <a href='task_detail?task_id=${task_1.task_id}&project_id=${task_1.project_id}'>${task_1.task_subject}</a>
+                    </c:forEach>
+                </div>
+
+                <div class="task_status_2">
+                    <c:forEach var="task_2" items="${taskStatus2}">
+                            <a href='task_detail?task_id=${task_2.task_id}&project_id=${task_2.project_id}'>${task_2.task_subject}</a>
+
+                    </c:forEach>
+                </div>
             </div>
 
         </main>

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Task List</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/lkh/css/1.css">
+    <link rel="stylesheet" type="text/css" href="/lkh/css/lkh.css">
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -71,17 +71,17 @@
                         var statusText="";
                         var task_priority=""
                         if (data[i].task_status === "0") {
-                            statusText = '낮음'; // task_status가 0일 때 대체 텍스트 설정
-                        } else if (data[i].task_status === "1") {
-                            statusText = '중간'; // task_status가 1일 때 대체 텍스트 설정
-                        } else if (data[i].task_status === "2") {
-                            statusText = '높음'; // task_status가 2일 때 대체 텍스트 설정
-                        }else if (data[i].task_priority === "0") {
-                            task_priority = '예정'; // task_status가 1일 때 대체 텍스트 설정
-                        } else if (data[i].task_priority === "1") {
-                            task_priority = '진행중'; // task_status가 2일 때 대체 텍스트 설정
-                        }else if (data[i].task_priority === "2") {
-                            task_priority = '완료된작업'; // task_status가 1일 때 대체 텍스트 설정
+                            statusText = '낮음';
+                        } else if (data[i].task_status === '1') {
+                            statusText = '중간';
+                        } else if (data[i].task_status === '2') {
+                            statusText = '높음';
+                        }else if (data[i].task_priority === '0') {
+                            task_priority = '예정';
+                        } else if (data[i].task_priority === '1') {
+                            task_priority = '진행중';
+                        }else if (data[i].task_priority === '2') {
+                            task_priority = '완료된작업';
                         }
 
 

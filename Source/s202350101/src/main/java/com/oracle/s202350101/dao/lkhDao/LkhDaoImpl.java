@@ -189,9 +189,8 @@ public class LkhDaoImpl implements LkhDao {
 	public List<Task> garbage_list(Task task) {
 		List<Task> garbageList= null;
 		try {
-			log.info(String.valueOf(task.getProject_id()));
-			log.info(String.valueOf(task.getStart()));
 			garbageList = sqlSession.selectList("garbage_list",task);
+			log.info(garbageList.get(0).getUser_name());
 
 		} catch (Exception e) {
 			log.info("dao :garbage_list error Message -> {}",e.getMessage());

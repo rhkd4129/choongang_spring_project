@@ -28,20 +28,40 @@ public class LkhController {
 
 
 	@GetMapping("task_board_view")
-	public String board(HttpServletRequest request , Model model, String currentPage){
+	public String board_view(HttpServletRequest request , Model model, String currentPage){
+		log.info("board_view ctr start");
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 		Task task =  new Task();
 		task.setProject_id(projectId);
 
 		int taskCount = lkhService.task_count(projectId);
-		Paging   page = new Paging(taskCount, currentPage);
-
-		task.setStart(page.getStart());
-		task.setEnd(page.getEnd());
 		List<Task>  taskList =  lkhService.task_list(task);
+		List<Task> taskStatus0 = new ArrayList<Task>();
+		List<Task> taskStatus1 = new ArrayList<Task>();
+		List<Task> taskStatus2 = new ArrayList<Task>();
 
-		model.addAttribute("taskList", taskList);
+		for (Task t : taskList) {
+            switch (t.getTask_status()) {
+                case "0":
+                    taskStatus0.add(t);
+                    break;
+                case "1":
+                    taskStatus1.add(t);
+                    break;
+                case "2":
+                    taskStatus2.add(t);
+                    break;
+            }
+		}
+		log.info("a");
+		for (Task t :taskList) {
+			System.out.println("s");
+			System.out.println(t.getTask_id());
+		}
+		model.addAttribute("taskStatus0",taskStatus0);
+		model.addAttribute("taskStatus1",taskStatus1);
+		model.addAttribute("taskStatus2",taskStatus2);
 		model.addAttribute("taskCount",taskCount);
 
 		return "project/board/task_board_view";
@@ -154,7 +174,7 @@ public class LkhController {
 		task.setStart(page.getStart());
 		task.setEnd(page.getEnd());
 
-		model.addAttribute("",garbageList);
+		model.addAttribute("garbageList",garbageList);
 		model.addAttribute("taskCount",garbageList.size());
 		model.addAttribute("page",page);
 		return "project/board/garbageList";

@@ -7,25 +7,45 @@ table, th, td {
     border: 1px solid black;
 }
 
+/*  task dashboard home */
+ .chart {
+     display: flex;
+     flex-direction: row; /* 수평으로 배치 */
+ }
+
+.project_chart,
+.doughnut_1,
+.bar_chart {
+    flex: 1; /* 각각 1:1 비율 */
+}
+
+.bar_chart {
+    flex: 1.5; /* 2:1 비율 */
+}
+
+
 
 /*  task  board view     */
 .board{
     display: flex;
-    width: 70%;
+    width: 80%;
+    margin: 5%;
+    background-color: #4d5154;
 }
 
 .task_status_0,.task_status_1,.task_status_2{
-    width: 400px;
-    height: 400px;
+    color:#0a53be;
+    width: 600px;
+    height: 500px;
     margin: 5%;
 }
 .task_status_0{
-    background-color: #0a53be;
+    /*background-color: #0a53be;*/
 }
 .task_status_1{
-    background-color: #0dcaf0;
+    /*background-color: #0a53be;*/
 }
 .task_status_2{
-    background-color:#75b798;
+    /*background-color:#0a53be;*/
 }
 

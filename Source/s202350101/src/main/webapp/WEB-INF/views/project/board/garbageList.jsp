@@ -59,12 +59,6 @@
 
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <h3> 총 작업수 : ${taskCount }</h3>
-            <c:choose>
-                <c:when test="${not empty param.status}">
-                    <h2>저장 완료!</h2>
-                </c:when>
-            </c:choose>
             <c:set var="num" value="${page.total-page.start+1 }"></c:set>
             <div id="table1">
                 <table id="listTable">
@@ -84,7 +78,6 @@
                     <c:forEach var="task" items="${garbageList}">
                         <tr>
                             <td>${task.rn}</td>
-                                <%--                            <td>${task.task_id}</td>--%>
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td>${task.task_subject}</td>

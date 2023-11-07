@@ -46,10 +46,20 @@
                         labels: ['예정', '진행중', '완료됨'],
                         datasets: [{
                             data: response,
-                            backgroundColor: ['orange', 'pink', 'yellow'], // Corrected the color
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.5)', // 빨간색
+                                'rgba(54, 162, 235, 0.5)', // 파란색
+                                'rgba(153, 102, 255, 0.5)', // 보라색
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)', // 빨간색
+                                'rgb(54, 162, 235)', // 파란색
+                                'rgb(153, 102, 255)', // 보라색
+                            ],
                             borderWidth: 1
                         }]
                     };
+
                     createDrawChart(doughnutCtx, 'doughnut', doughnut_data, doughnut_options);
                 }
             });
@@ -76,20 +86,24 @@
                             {
                                 label: '진행전',
                                 data: stats_0,
-                                backgroundColor: 'red',
+                                backgroundColor: 'rgba(255, 99, 132, 0.5)',  // 빨간색 배경
+                                borderColor: 'rgb(255, 99, 132)',  // 빨간색 테두리
                             },
                             {
                                 label: '진행중',
                                 data: stats_1,
-                                backgroundColor: 'blue',
+                                backgroundColor: 'rgba(75, 192, 192, 0.5)',  // 녹색 배경
+                                borderColor: 'rgb(75, 192, 192)',  // 녹색 테두리
                             },
                             {
                                 label: '완료',
                                 data: stats_2,
-                                backgroundColor: 'orange',
+                                backgroundColor: 'rgba(153, 102, 255, 0.5)',  // 보라색 배경
+                                borderColor: 'rgb(153, 102, 255)',  // 보라색 테두리
                             },
                         ]
                     };
+
                     createDrawChart(barCtx, 'bar', horizontalStackBarData, horizontalStackBarOption);
                 }
             });
@@ -115,18 +129,21 @@
                     // remainingDays    현재로부터 프로젝트 종료일까지 남은 기간
                     const barCtx = document.getElementById('project_chart').getContext('2d');
                     const proejctData = {
-                        labels: ['우리의 여정'],
+                        labels: ['프로젝트 기간 '],
                         datasets: [
                             {
-                                label:'일한일수',
+                                label: '일한일수',
                                 data: [daysPassed],
-                                backgroundColor: 'orange',
+                                backgroundColor: 'rgba(255, 99, 132, 0.5)',  // 빨간색 배경
+                                borderColor: 'rgb(255, 99, 132)',  // 빨간색 테두리
                             },
                             {
-                                label:'남은일수 ',
-                                data: [ Math.abs(remainingDays)],
-                                backgroundColor:  'pink',
+                                label: '남은일수',
+                                data: [Math.abs(remainingDays)],
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)',  // 파란색 배경
+                                borderColor: 'rgb(54, 162, 235)',  // 파란색 테두리
                             }
+
                         ]
                     }
                     createDrawChart(barCtx, 'bar', proejctData, proejctOption);
@@ -144,9 +161,16 @@
         </div>
         <!-- 본문 -->
             <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div style="display: flex">
-                    <div id="project_chart1">
+                <div class="chart">
+                    <div class="project_chart">
                         <canvas id="project_chart"></canvas>
+                        <div class="controller">
+                            <a type="button"   class="btn btn-primary" href="task_list">작업 목록</a>
+                            <a type="button"   class="btn btn-primary" href="garbage_list">휴지통</a>
+                            <a type="button"  class="btn btn-primary" href="task_timeline_view">타임 라인</a>
+                            <a type="button"  class="btn btn-primary" href="task_board_view">작업 보드 </a>
+                        </div>
+
                     </div>
 
                     <div class="doughnut_1">
@@ -157,10 +181,8 @@
                         <canvas id="bar_chart"></canvas>
                     </div>
                 </div>
-                <a type="button"   class="btn btn-primary" href="task_list">viewer_table</a>
-                <a type="button"   class="btn btn-primary" href="garbage_list">task_garbage</a>
-                <a type="button"  class="btn btn-primary" href="task_timeline_view">task_timeline</a>
-                <a type="button"  class="btn btn-primary" href="task_board_view">작업 보드 </a>
+
+
             </main>
 
         </div>
