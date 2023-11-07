@@ -39,6 +39,7 @@ public interface LkhService {
 
 	 //휴지통 목록
 	List<Task> 		garbage_list(Task task);
+	int				garbage_count(int project_id);
 
 
 

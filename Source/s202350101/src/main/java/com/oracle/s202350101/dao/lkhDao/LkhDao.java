@@ -52,6 +52,7 @@ public interface LkhDao {
 
 	//휴지통으로 이동시키기(임시삭제 )
 	int					task_garbage(int task_id);
+	int					garbage_count(int project_id);
 
 
 

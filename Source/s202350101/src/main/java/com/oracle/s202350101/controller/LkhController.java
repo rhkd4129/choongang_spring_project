@@ -34,13 +34,15 @@ public class LkhController {
 		int projectId = userInfo.getProject_id();
 		Task task =  new Task();
 		task.setProject_id(projectId);
-
+		task.setStart(1);
+		task.setEnd(999);
 		int taskCount = lkhService.task_count(projectId);
 		List<Task>  taskList =  lkhService.task_list(task);
+
+
 		List<Task> taskStatus0 = new ArrayList<Task>();
 		List<Task> taskStatus1 = new ArrayList<Task>();
 		List<Task> taskStatus2 = new ArrayList<Task>();
-
 		for (Task t : taskList) {
             switch (t.getTask_status()) {
                 case "0":
@@ -54,11 +56,8 @@ public class LkhController {
                     break;
             }
 		}
-		log.info("a");
-		for (Task t :taskList) {
-			System.out.println("s");
-			System.out.println(t.getTask_id());
-		}
+
+		//for (Task t :taskList) {}
 		model.addAttribute("taskStatus0",taskStatus0);
 		model.addAttribute("taskStatus1",taskStatus1);
 		model.addAttribute("taskStatus2",taskStatus2);
@@ -167,15 +166,15 @@ public class LkhController {
 
 		Task task = new Task();
 		task.setProject_id(userInfo.getProject_id());
+		int taskCount   = lkhService.task_count(userInfo.getProject_id());
+		Paging page = new  Paging(taskCount,currentPage);
 
 		List<Task> garbageList = lkhService.garbage_list(task);
 		log.info(String.valueOf(garbageList.size()));
-		Paging   page = new Paging(garbageList.size(), currentPage);
-		task.setStart(page.getStart());
-		task.setEnd(page.getEnd());
+
 
 		model.addAttribute("garbageList",garbageList);
-		model.addAttribute("taskCount",garbageList.size());
+		model.addAttribute("taskCount",taskCount);
 		model.addAttribute("page",page);
 		return "project/board/garbageList";
 	}

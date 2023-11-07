@@ -11,7 +11,7 @@
         ORDER BY TASK_STATUS
     </select>
 
-    <select id="project_day" parameterType="Prjinfo" resultType="PrjInfo">
+    <select id="project_day" parameterType="PrjInfo" resultType="PrjInfo">
         select project_startdate,project_enddate
         from  prj_info
         where project_id = #{project_id}
@@ -165,6 +165,11 @@
         WHERE rn BETWEEN #{start} AND #{end}
     </select>
 
-
+    <!-- 휴지통에 잇는 작업의 개수 -->
+    <select id="garbage_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(TASK_ID)
+        FROM TASK
+        WHERE PROJECT_ID = #{project_id} and garbage = 1
+    </select>
 
 </mapper>

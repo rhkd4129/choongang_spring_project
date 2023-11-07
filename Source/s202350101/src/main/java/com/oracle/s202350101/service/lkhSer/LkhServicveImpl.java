@@ -153,5 +153,10 @@ public class LkhServicveImpl implements LkhService {
 	public List<Task> garbage_list(Task task) {
 		return lkhDao.garbage_list(task);
 	}
+
+	@Override
+	public int garbage_count(int project_id) {
+		return lkhDao.garbage_count(project_id);
+	}
 }
 

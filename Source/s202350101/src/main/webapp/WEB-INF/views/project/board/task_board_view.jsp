@@ -51,26 +51,42 @@
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
                 <h3> 총 작업수 : ${taskCount }</h3>
-
-
             <div class="board">
                 <div class="task_status_0">
-                    <c:forEach var="task_0" items="${taskStatus0}">
-                            <a href='task_detail?task_id=${task_0.task_id}&project_id=${task_0.project_id}'>${task_0.task_subject}</a>
+                    <div class="status-text"></div>
+                    <c:forEach var="task" items="${taskStatus0}">
+                        <div class="task">
+                            <a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a>
+                        </div>
                     </c:forEach>
                 </div>
 
 
                 <div class="task_status_1">
-                    <c:forEach var="task_1" items="${taskStatus1}">
-                            <a href='task_detail?task_id=${task_1.task_id}&project_id=${task_1.project_id}'>${task_1.task_subject}</a>
+                    <div class="status-text"></div>
+                    <c:forEach var="task" items="${taskStatus1}">
+                        <div class="task">
+                            <a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a>
+                        </div>
                     </c:forEach>
                 </div>
 
                 <div class="task_status_2">
-                    <c:forEach var="task_2" items="${taskStatus2}">
-                            <a href='task_detail?task_id=${task_2.task_id}&project_id=${task_2.project_id}'>${task_2.task_subject}</a>
+                    <div class="status-text"></div>
+                    <c:set var="loop_flag" value="false"/>
+                    <c:forEach var="task" items="${taskStatus2}" varStatus="status">
 
+                        <c:if test="${not doneLoop}">
+                            <div class="task">
+                                <a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a>
+                            </div>
+                            <c:if test="${status.count == 5}">
+                                <div class="task">
+                                    .....
+                                </div>
+                                <c:set var="doneLoop" value="true"/>
+                            </c:if>
+                        </c:if>
                     </c:forEach>
                 </div>
             </div>
