@@ -6,6 +6,9 @@ import com.oracle.s202350101.model.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -14,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatMsgServiceImpl implements ChatMsgService {
     private final ChatMsgDao CMdao;
+
+    private final PlatformTransactionManager transactionManager;
     @Override
     public List<ChatMsg> findAll() {
         return CMdao.findAll();
@@ -22,5 +27,31 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     @Override
     public List<ChatMsg> findByRoomId(ChatRoom cr) {
         return CMdao.findByRoomId(cr);
+    }
+
+    @Override
+    public int saveMsg(ChatMsg msg) {
+        return CMdao.saveMsg(msg);
+    }
+
+    @Override
+    public int cntMsg(ChatMsg msg) {
+        return CMdao.cntMsg(msg);
+    }
+
+    @Override
+    public int cntsaveMsg(ChatMsg msg) {
+        int result = 0;
+        TransactionStatus txStatus =
+                transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try{
+            msg.setMsg_id(CMdao.cntMsg(msg) + 1);
+            result = CMdao.saveMsg(msg);
+            transactionManager.commit(txStatus);
+        } catch (Exception e) {
+            transactionManager.rollback(txStatus);
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

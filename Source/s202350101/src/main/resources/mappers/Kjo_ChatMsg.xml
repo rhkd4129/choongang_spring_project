@@ -19,6 +19,15 @@
         select * from chat_msg where chat_room_id = #{chat_room_id}
     </select>
 
+    <insert id="saveMsg" parameterType="ChatMsg">
+        insert into chat_msg values (#{chat_room_id}, (select count(*)+1 from chat_msg where chat_room_id=#{chat_room_id}), #{sender_id}, #{msg_con},sysdate, 'N')
+
+    </insert>
+
+    <select id="cntMsg" resultType="int">
+        select count(*) from chat_msg where chat_room_id=#{chat_room_id}
+    </select>
+
 
 </mapper>
 

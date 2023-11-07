@@ -8,4 +8,8 @@ import java.util.List;
 public interface ChatMsgDao {
     List<ChatMsg> findAll();
     List<ChatMsg> findByRoomId(ChatRoom cr);
+
+    int saveMsg(ChatMsg msg);
+
+    int cntMsg(ChatMsg msg);
 }

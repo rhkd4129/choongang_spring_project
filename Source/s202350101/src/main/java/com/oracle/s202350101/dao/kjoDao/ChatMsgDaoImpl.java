@@ -43,4 +43,33 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
 
         return CMList;
     }
+
+    @Override
+    public int saveMsg(ChatMsg msg) {
+        log.info("saveMsg start");
+        log.info("MSG: "+msg.toString());
+        int result = 0;
+        try {
+            result = session.insert("saveMsg",msg);
+
+        }catch (Exception e) {
+            System.out.println("findByRoomId Error -->>" + e.getMessage());
+        }
+
+        return result;
+    }
+
+    @Override
+    public int cntMsg(ChatMsg msg) {
+        log.info("cntMsg start");
+        int result = 0;
+        try {
+            result = session.selectOne("cntMsg",msg);
+
+        }catch (Exception e) {
+            System.out.println("cntMsg Error -->>" + e.getMessage());
+        }
+
+        return result;
+    }
 }

@@ -8,9 +8,15 @@ import java.util.stream.Collectors;
 import com.oracle.s202350101.model.*;
 import com.oracle.s202350101.service.kjoSer.*;
 import lombok.Data;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.apache.ibatis.session.LocalCacheScope.SESSION;
 
 @Slf4j
 @Controller
@@ -206,6 +214,26 @@ public class KjoController {
 
 		return "chat/chat_room";
 	}
+
+
+
+	private final SimpMessagingTemplate simpMessagingTemplate;
+
+	@MessageMapping("/chat/send")
+	@SendTo("/topic/greetings")
+	public ChatMsg sendMsg(ChatMsg message) {		//	json을 왜 parse 안했는지.
+
+		ChatMsg cm = new ChatMsg();
+		cm.setChat_room_id(message.getChat_room_id());
+		cm.setSender_id(message.getSender_id());
+		cm.setMsg_con(message.getMsg_con());
+
+		CMser.cntsaveMsg(cm);
+		simpMessagingTemplate.convertAndSend("/topic/greetings/"+message.getChat_room_id(),message);
+		return message;
+	}
+
+
 //
 	@GetMapping("/admin_approval")
 	public String admin_approval() {

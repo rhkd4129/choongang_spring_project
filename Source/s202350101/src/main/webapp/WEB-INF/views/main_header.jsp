@@ -90,6 +90,7 @@
 
     function chat_room(user_id) {
         console.log(user_id);
+        alert("user_id: " + user_id);
         window.open(
             "/chat_room?user_id=" + user_id,
             "Child",
@@ -97,14 +98,15 @@
         );
     }
 
-    $(
-        function wsOpen() {
-            console.log("wsOPEN location.href: " + location.host);
-            var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";
-            ws = new WebSocket(wsUri);
-            wsEvt();
-        }
-    )
+    <%--$(--%>
+    <%--    function wsOpen() {--%>
+    <%--        console.log("wsOPEN location.href: " + location.host);--%>
+    <%--        &lt;%&ndash;var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";&ndash;%&gt;--%>
+    <%--        var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chat";--%>
+    <%--        ws = new SockJS(wsUri);--%>
+    <%--        wsEvt();--%>
+    <%--    }--%>
+    <%--)--%>
 
 
     function wsEvt() {

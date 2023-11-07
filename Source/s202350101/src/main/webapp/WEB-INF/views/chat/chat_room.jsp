@@ -60,29 +60,53 @@
         });
 
         var ws;
+        var stompClient;
         $(
             function wsOpen() {
                 console.log("wsOPEN location.href: " + location.host);
-                var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";
-                ws = new WebSocket(wsUri);
-            }
-        )
+                <%--var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";--%>
+                <%--var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chat";--%>
+                var wsUri = "/chat";
+
+                console.log("wsURI: " + wsUri);
+                ws = new SockJS(wsUri);                    //websocket 연결
+                console.log("WS: "+ws);
+
+                stompClient = Stomp.over(ws);               //  찾아봐야함. 설명하기 능력부족
+                console.log("stompClient: "+stompClient);
+
+                stompClient.connect({}, function (frame) {  //  중괄호 왜? 사용해? 왜?
+                    console.log('Connected: ' + frame);
+
+                    // 연결이 설정되면 구독할 주제 등록
+                    stompClient.subscribe("/topic/greetings", function (message) {
+                        // 서버에서 메시지를 받았을 때 실행할 코드
+                        console.log("message :"+message);
+                        var messageBody = JSON.parse(message.body);
+                        console.log("Received message: " + messageBody.msg);
+                        // 여기에서 메시지를 화면에 표시하거나 처리할 수 있음
+                    });
+
+                        // // 연결이 설정되면 서버에 메시지를 보낼 수 있음
+                        // stompClient.send("/app/hello", {}, JSON.stringify({ content: "Hello, server!" }));
+                });
+
+            });
+
         // 전체 Message 전송
         function send() {
             //	사용자id 값을 받아야함.
-
             var option = {
-                type : "message",
-                chat_room_id : $("#chat_room_id").val(),
-                myID : $("#myID").val(),
-                youID : $("#youID").val(),
-                msg : $("#send_message").val()
+                type: "message",
+                chat_room_id: $("#chat_room_id").val(),
+                sender_id: $("#myID").val(),
+                youID: $("#youID").val(),
+                msg_con: $("#send_message").val()
             }
             console.log(option);
-            // 자바스크립트의 값을 JSON 문자열로 변환
-            ws.send(JSON.stringify(option));
-            $('#send_message').val("");
-        }
+            //
+            stompClient.send("/app/chat/send", {}, JSON.stringify(option));     //  여기도 중괄호 왜?
+        };
     </script>
 </head>
 
@@ -95,7 +119,7 @@
         <p>상대방 이름</p>
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
-        <input id="chat_room_id" type="hidden" value="${ChatRoom}">
+        <input id="chat_room_id" type="hidden" value="${ChatRoom.chat_room_id}">
         <c:forEach items="${CMList}" var="msg">
             <c:choose>
                 <c:when test="${userInfo.user_id eq msg.sender_id}">
@@ -110,7 +134,6 @@
                 </c:otherwise>
             </c:choose>
         </c:forEach>
-
 
 
     </div>

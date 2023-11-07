@@ -15,3 +15,8 @@
 <script type="text/javascript" src="/common/js/common.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <!-- COMMON END -->
+<!-- SockJS library -->
+<script src="https://cdn.jsdelivr.net/webjars/sockjs-client/1.5.1/sockjs.min.js"></script>
+
+<!-- STOMP library -->
+<script src="https://cdn.jsdelivr.net/webjars/stomp-websocket/2.3.4/stomp.min.js"></script>
