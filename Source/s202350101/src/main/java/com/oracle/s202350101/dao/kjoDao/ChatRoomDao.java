@@ -15,4 +15,6 @@ public interface ChatRoomDao {
     ChatRoom findById(ChatRoom cr);
 
     ChatRoom findByYouAndMe(ChatRoom cr);
+
+    int addChatRoom(ChatRoom cr);
 }

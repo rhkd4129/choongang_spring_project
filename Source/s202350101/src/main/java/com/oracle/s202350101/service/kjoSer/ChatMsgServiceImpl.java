@@ -55,7 +55,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         return result;
     }
 
-    @Override
+    
+    @Override   //  메세지 insert 후 메세지 반환
     public ChatMsg findsaveMsg(ChatMsg msg) {
         ChatMsg cm = null;
         TransactionStatus txStatus =

@@ -13,4 +13,6 @@ public interface ChatRoomService {
     ChatRoom findById(ChatRoom cr);
 
     ChatRoom findByYouAndMe(ChatRoom cr);
+
+    ChatRoom findByYouAndMeNotEmpty(ChatRoom cr);
 }

@@ -24,7 +24,7 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
         List<ChatRoom> CRList = null;
         try {
             log.info("findAll");
-            CRList = session.selectList("findAll");
+            CRList = session.selectList("findAllchatroom");
             //	결과	출력
 
         } catch (Exception e) {
@@ -67,14 +67,26 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
     @Override
     public ChatRoom findByYouAndMe(ChatRoom cr) {
         log.info("findByYouAndMe start");
-        ChatRoom CRList = null;
         try {
-            CRList = session.selectOne("findByYouAndMe",cr);
+            cr = session.selectOne("findByYouAndMe",cr);
 
         }catch (Exception e) {
             System.out.println("findByYouAndMe Error -->>" + e.getMessage());
         }
 
-        return CRList;
+        return cr;
+    }
+
+    @Override
+    public int addChatRoom(ChatRoom cr) {
+        log.info("addChatRoom start");
+        int result = 0;
+        try {
+            result = session.insert("addChatRoom", cr);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

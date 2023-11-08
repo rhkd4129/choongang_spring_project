@@ -87,6 +87,7 @@
                 stompClient = Stomp.over(ws);               //  찾아봐야함. 설명하기 능력부족 위에 설명.
                 console.log("stompClient: "+stompClient);
 
+
                 //  websocket에 대한 세션의 세부 설정을 하고 싶다면 핸들러 클래스를 만들자.
 
                 // var sockJsOptions = {
@@ -130,12 +131,12 @@
                         var chat_con = $('#chat_content');
                         let con='';
                         console.log("sender: " + senderId + " myID: " + myID);
-                        if (senderId == myID) {
+                        if (senderId == myID) { //  내가 보낸 메세지
                             con += '<div id="right_chat_msg" >';
                             con += '<p>' + msgContent + '</p>';
                             con += '<p>' + send_time + '</p>';
                             con += '</div>';
-                        } else {
+                        } else {                //  상대방이 보낸 메세지
                             con += '<div id="left_chat_msg" >';
                             con += '<p>' + msgContent + '</p>';
                             con += '<p>' + send_time + '</p>';
@@ -172,13 +173,13 @@
 
 <div id="chatbox">
     <div id="chat_top">
-        <p>상대방 이름</p>
+        <p>채팅방</p>
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <input id="chat_room_id" type="hidden" value="${ChatRoom.chat_room_id}">
-        <c:forEach items="${CMList}" var="msg">
+        <c:forEach items="${CMList}" var="msg">             <%--채팅방 내 메세지--%>
             <c:choose>
-                <c:when test="${userInfo.user_id eq msg.sender_id}">
+                <c:when test="${userInfo.user_id eq msg.sender_id}">        <%--내가 보낸 메세지--%>
                     <input id="myID" type="hidden" value="${msg.sender_id}">
                     <div id="right_chat_msg" >
                         <p>${msg.msg_con}</p>
@@ -186,7 +187,7 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <input id="youID" type="hidden" value="${msg.sender_id}">
+                    <input id="youID" type="hidden" value="${msg.sender_id}">   <%--상대가 보낸 메세지--%>
                     <div id="left_chat_msg">
                         <p>${msg.msg_con}</p>
                         <p>${msg.send_time}</p>

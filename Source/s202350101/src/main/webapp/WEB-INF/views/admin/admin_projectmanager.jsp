@@ -130,8 +130,8 @@
                     }
                     for (var i = obj.startPage; i <= obj.endPage; i++) {
                         jspPagination += `<div class="page-item" onclick="cl_room(` + i
-                            + ')"><div class="page-link">' + i
-                            + '</div></div>';
+                                        + ')"><div class="page-link">' + i
+                                        + '</div></div>';
                     }
                     if (obj.endPage < obj.totalPages) {
                         jspPagination += `<div onclick="cl_room(${obj.startPage + obj.pageBlock})"><p>[다음]</p></div>`;

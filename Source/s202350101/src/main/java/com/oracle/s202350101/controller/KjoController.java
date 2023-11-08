@@ -205,16 +205,16 @@ public class KjoController {
 		log.info("chat_room");
 		//	로그인 사용자DTO
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
+//		------------------비즈니스 로직--------------------
 		//	채팅할 대상자와 로그인 사용자의 채팅방 조회
 		ChatRoom cr = new ChatRoom();
 		cr.setSender_id(userInfoDTO.getUser_id());
 		cr.setReceiver_id(ui.getUser_id());
-		ChatRoom nowChatRoom =  CHser.findByYouAndMe(cr);
+		ChatRoom nowChatRoom =  CHser.findByYouAndMeNotEmpty(cr);
 		
 		//	해당 채팅방 내 메세지 조회
 		List<ChatMsg> CMList = CMser.findByRoomId(nowChatRoom);
-
+//		------------------비즈니스 로직--------------------
 		log.info("CMList: " + CMList.toString());
 		//	로그인 사용자DTO
 		model.addAttribute("userInfo", userInfoDTO);
@@ -242,7 +242,7 @@ public class KjoController {
 		cm.setRead_chk("N");
 
 //		Timestamp currentTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
-////		currentTimestamp: 2023-11-08 09:00:07.851
+//		currentTimestamp: 2023-11-08 09:00:07.851
 //		System.out.println("currentTimestamp: "+currentTimestamp);
 //		cm.setSend_time(currentTimestamp);
 
@@ -292,13 +292,15 @@ public class KjoController {
 	//	팀장 권한 페이지 RestGET
 	@GetMapping("/admin_projectmanagerRest/{cl_id}")	//	cl_id = Class_Room(class_id)
 	@ResponseBody
-	public  KjoResponse admin_projectmanagerRest(UserInfo userInfo, String currentPage, @PathVariable int cl_id, Model model) {
+	public  KjoResponse admin_projectmanagerRest(HttpServletRequest request, UserInfo userInfo, String currentPage, @PathVariable int cl_id, Model model) {
 		log.info("admin_projectmanagerRest");
-		
-		//	admin	제외	모든 학생 수
-		int totalUi = UIser.findbyclassuser(userInfo).size();
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+
 		//	선택한 강의실 id => userInfoDTO에 저장.
 		userInfo.setClass_id(cl_id);
+		userInfo.setUser_id(userInfoDTO.getUser_id());
+		//	admin	제외	모든 학생 수
+		int totalUi = UIser.findbyclassuser(userInfo).size();
 		log.info("total: ",totalUi);
 
 		//	페이징을 하기 위한 START, END,	TOTAL 지정.

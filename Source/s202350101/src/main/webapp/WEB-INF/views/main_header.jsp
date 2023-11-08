@@ -90,7 +90,7 @@
 
     function chat_room(user_id) {
         console.log(user_id);
-        alert("user_id: " + user_id);
+        // alert("user_id: " + user_id);
         window.open(
             "/chat_room?user_id=" + user_id,
             "Child",
