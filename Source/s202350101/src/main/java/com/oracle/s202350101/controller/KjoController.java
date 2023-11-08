@@ -62,9 +62,6 @@ public class KjoController {
 	//	반 생성 Post
 	@PostMapping("/admin_add_class")
 	public String admin_add_class(ClassRoom cr, Model model, BindingResult bindingResult) {
-//		if (bindingResult.hasErrors()) {
-//			bindingResult.
-//		}
 		log.info("admin_add_class POST");
 		int result = CRser.saveClassRoom(cr);            // 강의실 생성
 		log.info("반 생성 개수: " + result);
@@ -200,7 +197,7 @@ public class KjoController {
 
 
 //	채팅방 팝업
-	@GetMapping("/chat_room")
+	@GetMapping("/chat_room")						//	상대방
 	public String chat_room(HttpServletRequest request, UserInfo ui, Model model) {
 		log.info("chat_room");
 		//	로그인 사용자DTO
@@ -211,7 +208,9 @@ public class KjoController {
 		cr.setSender_id(userInfoDTO.getUser_id());
 		cr.setReceiver_id(ui.getUser_id());
 		ChatRoom nowChatRoom =  CHser.findByYouAndMeNotEmpty(cr);
-		
+
+		//	상대방 이름 조회
+		UserInfo youUser =  UIser.findbyuserId(ui);
 		//	해당 채팅방 내 메세지 조회
 		List<ChatMsg> CMList = CMser.findByRoomId(nowChatRoom);
 //		------------------비즈니스 로직--------------------
@@ -222,6 +221,8 @@ public class KjoController {
 		model.addAttribute("ChatRoom", nowChatRoom);
 		//	해당 채팅방 내 메세지
 		model.addAttribute("CMList", CMList);
+		//	상대방 사용자 정보
+		model.addAttribute("your", youUser);
 
 		return "chat/chat_room";
 	}
@@ -229,8 +230,8 @@ public class KjoController {
 
 
 	private final SimpMessagingTemplate simpMessagingTemplate;
-
-	@MessageMapping("/chat/send")		// 소켓 메시지를 객체로 변환
+										//	WebSocketConfig에서 prefix "/app"을하여 생략
+	@MessageMapping("/chat/send")		//	소켓 메시지를 객체로 변환
 	@SendTo("/queue/greetings")
 	public ChatMsg sendMsg(ChatMsg message) {		//	json을 왜 parse 안했는지.
 
@@ -238,19 +239,13 @@ public class KjoController {
 		cm.setChat_room_id(message.getChat_room_id());
 		cm.setSender_id(message.getSender_id());
 		cm.setMsg_con(message.getMsg_con());
-//		SimpleDateFormat을 이용해서 연도, 월, 일, 시간, 분 까지 표현.
 		cm.setRead_chk("N");
-
-//		Timestamp currentTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
-//		currentTimestamp: 2023-11-08 09:00:07.851
-//		System.out.println("currentTimestamp: "+currentTimestamp);
-//		cm.setSend_time(currentTimestamp);
-
+//		전송 받은 메시지 저장 후 반환
         ChatMsg findmsg = CMser.findsaveMsg(cm);
-
-//		simpMessagingTemplate.convertAndSend("/topic/greetings/"+message.getChat_room_id(),message);
 		return findmsg;
 	}
+
+
 
 
 //
@@ -266,6 +261,7 @@ public class KjoController {
 	@GetMapping("/admin_projectmanager")								//	url에 값을 입력하지 않기 위함.
 	public String captainManage(UserInfo userInfo, String currentPage, @RequestParam(defaultValue = "1") int cl_id, Model model) {
 		log.info("captainManage");
+		
 		userInfo.setClass_id(cl_id);
 		List<ClassRoom> CRList =CRser.findAllClassRoom();			// 모든 강의실 조회
 		userInfo.setUser_id("admin");								//	조회하는 사용자는 어드민

@@ -61,6 +61,8 @@
 </style>
 <script type="text/javascript">
     var ws;
+    let chat_chats = document.getElementById("chat_chats");
+    let chat_users = document.getElementById("chat_users");
 
     function chat_button() {
         var con = document.getElementById("chatbox");
@@ -75,22 +77,17 @@
     }
 
     function chat_user_bt() {
-        var chat_chats = document.getElementById("chat_chats");
-        var chat_users = document.getElementById("chat_users");
         chat_chats.style.display = 'none';
         chat_users.style.display = 'block';
     }
 
     function chat_chats_bt() {
-        var chat_chats = document.getElementById("chat_chats");
-        var chat_users = document.getElementById("chat_users");
         chat_users.style.display = 'none';
         chat_chats.style.display = 'block';
     }
 
     function chat_room(user_id) {
         console.log(user_id);
-        // alert("user_id: " + user_id);
         window.open(
             "/chat_room?user_id=" + user_id,
             "Child",
@@ -98,32 +95,6 @@
         );
     }
 
-    <%--$(--%>
-    <%--    function wsOpen() {--%>
-    <%--        console.log("wsOPEN location.href: " + location.host);--%>
-    <%--        &lt;%&ndash;var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";&ndash;%&gt;--%>
-    <%--        var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chat";--%>
-    <%--        ws = new SockJS(wsUri);--%>
-    <%--        wsEvt();--%>
-    <%--    }--%>
-    <%--)--%>
-
-
-    function wsEvt() {
-        alert("wsEvt Start");
-
-        ws.onopen = function (data) {
-            console.log("wsEvt 열리면 초기화");
-        };
-        ws.onmessage = function (data) {
-            var msg = data.data;
-            var memSave = false;            // 필요할까
-            console.log("data: "+data);
-            console.log("msg: " + msg);
-
-
-        };
-    }
 
 </script>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">

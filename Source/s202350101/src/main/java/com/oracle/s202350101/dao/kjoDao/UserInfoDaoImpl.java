@@ -19,6 +19,17 @@ public class UserInfoDaoImpl implements UserInfoDao{
 
 	private final SqlSession session;
 
+	@Override
+	public UserInfo findbyuserId(UserInfo ui) {
+		log.info("findbyuserId start ID : " + ui.getUser_id());
+		try {
+			ui = session.selectOne("findbyuserId", ui);
+		} catch (Exception e) {
+			log.info("findbyuserId Error : " + e.getMessage());
+		}
+		return ui;
+	}
+
 	//	특정 강의실 전체 학생 조회
 	@Override
 	public List<UserInfo> findbyclassuser(UserInfo ui) {
@@ -43,7 +54,7 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		List<UserInfo> UIList = null;
 		try {
 			UIList = session.selectList("findbyClassUserProject", cl_id);
-			System.out.println(UIList.stream().collect(Collectors.toList()));
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
 
 		}catch (Exception e) {
 			e.printStackTrace();

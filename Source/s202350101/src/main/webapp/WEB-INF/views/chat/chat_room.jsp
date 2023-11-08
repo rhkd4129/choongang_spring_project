@@ -70,13 +70,13 @@
             });
         });
 
-        var ws;
-        var stompClient;
+        var ws;             //  웹소캣
+        var stompClient;    //  stomp
         $(
             function wsOpen() {
+                myid = $('#userInfo.user_id');
+
                 console.log("wsOPEN location.href: " + location.host);
-                <%--var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chating";--%>
-                <%--var wsUri = "ws://" + location.host + "${pageContext.request.contextPath}/chat";--%>
                 var wsUri = "/chat";
 
                 console.log("wsURI: " + wsUri);
@@ -111,6 +111,10 @@
                     stompClient.subscribe("/queue/greetings", function (message) {
                         // 서버에서 메시지를 받았을 때 실행할 코드
                         console.log("Received message: " + message.body);
+                        //  메시지 수신 성공 시 main_header에 읽지 않은 채팅 수 업데이트.
+                        //  -> send(/app/chat/notify)
+                        //  컨트롤러에서 SendTo /queue/
+                        //  main_header에서
 
                         // 메시지 body를 JSON 형식으로 파싱
                         var rtnmsg = JSON.parse(message.body);
@@ -120,13 +124,8 @@
                         var msgContent = rtnmsg.msg_con;
                         var senderId = rtnmsg.sender_id;
                         var send_time = rtnmsg.send_time;
-
+                        //  로그인 사용자 id
                         var myID = '${userInfo.user_id}';
-                        // 추출한 데이터 사용
-                        console.log("chat_room_id: " + chatRoomId);
-                        console.log("msg_con: " + msgContent);
-                        console.log("sender_id: " + senderId);
-
                         // 여기에서 메시지를 화면에 표시하거나 처리할 수 있음
                         var chat_con = $('#chat_content');
                         let con='';
@@ -173,7 +172,7 @@
 
 <div id="chatbox">
     <div id="chat_top">
-        <p>채팅방</p>
+        <p>${your.user_name}</p>
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <input id="chat_room_id" type="hidden" value="${ChatRoom.chat_room_id}">
@@ -184,6 +183,14 @@
                     <div id="right_chat_msg" >
                         <p>${msg.msg_con}</p>
                         <p>${msg.send_time}</p>
+                        <c:choose>
+                            <c:when test="${msg.read_chk eq 'N'}">
+                                <p>안 읽음</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>읽음</p>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </c:when>
                 <c:otherwise>
@@ -191,6 +198,15 @@
                     <div id="left_chat_msg">
                         <p>${msg.msg_con}</p>
                         <p>${msg.send_time}</p>
+                        <p>${msg.read_chk}</p>
+                        <c:choose>
+                            <c:when test="${msg.read_chk eq 'N'}">
+                                <p>안 읽음</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>읽음</p>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </c:otherwise>
             </c:choose>
