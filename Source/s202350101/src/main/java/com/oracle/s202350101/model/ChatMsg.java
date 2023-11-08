@@ -18,4 +18,6 @@ public class ChatMsg {
 	private Date 	send_time;
 	private String 	read_chk;
 
+
+
 }

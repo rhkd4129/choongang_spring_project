@@ -1,5 +1,8 @@
 package com.oracle.s202350101.controller;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -8,6 +11,7 @@ import java.util.stream.Collectors;
 import com.oracle.s202350101.model.*;
 import com.oracle.s202350101.service.kjoSer.*;
 import lombok.Data;
+import org.json.simple.parser.ParseException;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -199,17 +203,24 @@ public class KjoController {
 	@GetMapping("/chat_room")
 	public String chat_room(HttpServletRequest request, UserInfo ui, Model model) {
 		log.info("chat_room");
+		//	로그인 사용자DTO
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		//	채팅할 대상자와 로그인 사용자의 채팅방 조회
 		ChatRoom cr = new ChatRoom();
 		cr.setSender_id(userInfoDTO.getUser_id());
 		cr.setReceiver_id(ui.getUser_id());
-
 		ChatRoom nowChatRoom =  CHser.findByYouAndMe(cr);
+		
+		//	해당 채팅방 내 메세지 조회
 		List<ChatMsg> CMList = CMser.findByRoomId(nowChatRoom);
 
 		log.info("CMList: " + CMList.toString());
+		//	로그인 사용자DTO
 		model.addAttribute("userInfo", userInfoDTO);
+		//	채팅할 대상자와 로그인 사용자의 채팅방
 		model.addAttribute("ChatRoom", nowChatRoom);
+		//	해당 채팅방 내 메세지
 		model.addAttribute("CMList", CMList);
 
 		return "chat/chat_room";
@@ -227,10 +238,18 @@ public class KjoController {
 		cm.setChat_room_id(message.getChat_room_id());
 		cm.setSender_id(message.getSender_id());
 		cm.setMsg_con(message.getMsg_con());
+//		SimpleDateFormat을 이용해서 연도, 월, 일, 시간, 분 까지 표현.
+		cm.setRead_chk("N");
 
-		CMser.cntsaveMsg(cm);
+//		Timestamp currentTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
+////		currentTimestamp: 2023-11-08 09:00:07.851
+//		System.out.println("currentTimestamp: "+currentTimestamp);
+//		cm.setSend_time(currentTimestamp);
+
+        ChatMsg findmsg = CMser.findsaveMsg(cm);
+
 //		simpMessagingTemplate.convertAndSend("/topic/greetings/"+message.getChat_room_id(),message);
-		return message;
+		return findmsg;
 	}
 
 

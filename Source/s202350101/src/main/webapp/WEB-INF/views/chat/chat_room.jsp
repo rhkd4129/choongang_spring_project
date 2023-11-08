@@ -30,6 +30,16 @@
             background-color: yellow;
             overflow-x: hidden;
         }
+        #left_chat_msg{
+            display: flex;
+            flex-direction: row;
+
+        }
+        #right_chat_msg{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
     </style>
 
     <script type="text/javascript">
@@ -108,19 +118,32 @@
                         var chatRoomId = rtnmsg.chat_room_id;
                         var msgContent = rtnmsg.msg_con;
                         var senderId = rtnmsg.sender_id;
+                        var send_time = rtnmsg.send_time;
 
+                        var myID = '${userInfo.user_id}';
                         // 추출한 데이터 사용
                         console.log("chat_room_id: " + chatRoomId);
                         console.log("msg_con: " + msgContent);
                         console.log("sender_id: " + senderId);
 
-
-
                         // 여기에서 메시지를 화면에 표시하거나 처리할 수 있음
+                        var chat_con = $('#chat_content');
+                        let con='';
+                        console.log("sender: " + senderId + " myID: " + myID);
+                        if (senderId == myID) {
+                            con += '<div id="right_chat_msg" >';
+                            con += '<p>' + msgContent + '</p>';
+                            con += '<p>' + send_time + '</p>';
+                            con += '</div>';
+                        } else {
+                            con += '<div id="left_chat_msg" >';
+                            con += '<p>' + msgContent + '</p>';
+                            con += '<p>' + send_time + '</p>';
+                            con += '</div>';
+                        }
+                        chat_con.append(con);
                     });
-
                 });
-
             });
 
         // 전체 Message 전송
@@ -128,8 +151,8 @@
             //	사용자id 값을 받아야함.
             var option = {
                 type: "message",
-                chat_room_id: $("#chat_room_id").val(),
-                sender_id: $("#myID").val(),
+                chat_room_id: ${ChatRoom.chat_room_id},
+                sender_id: '${userInfo.user_id}',
                 youID: $("#youID").val(),
                 msg_con: $("#send_message").val()
             }
@@ -157,13 +180,17 @@
             <c:choose>
                 <c:when test="${userInfo.user_id eq msg.sender_id}">
                     <input id="myID" type="hidden" value="${msg.sender_id}">
-                    <p style="text-align: right">${msg.msg_con}</p>
-                    <p style="text-align: right">${msg.send_time}</p>
+                    <div id="right_chat_msg" >
+                        <p>${msg.msg_con}</p>
+                        <p>${msg.send_time}</p>
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <input id="youID" type="hidden" value="${msg.sender_id}">
-                    <p style="text-align: left">${msg.msg_con}</p>
-                    <p style="text-align: left">${msg.send_time}</p>
+                    <div id="left_chat_msg">
+                        <p>${msg.msg_con}</p>
+                        <p>${msg.send_time}</p>
+                    </div>
                 </c:otherwise>
             </c:choose>
         </c:forEach>

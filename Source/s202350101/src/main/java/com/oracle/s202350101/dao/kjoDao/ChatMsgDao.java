@@ -12,4 +12,6 @@ public interface ChatMsgDao {
     int saveMsg(ChatMsg msg);
 
     int cntMsg(ChatMsg msg);
+
+    ChatMsg findbyid(ChatMsg msg);
 }

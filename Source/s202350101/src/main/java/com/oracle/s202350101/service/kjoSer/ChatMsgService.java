@@ -15,4 +15,6 @@ public interface ChatMsgService {
     int cntMsg(ChatMsg msg);
 
     int cntsaveMsg(ChatMsg msg);
+
+    ChatMsg findsaveMsg(ChatMsg msg);
 }

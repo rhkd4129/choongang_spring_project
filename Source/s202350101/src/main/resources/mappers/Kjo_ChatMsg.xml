@@ -14,20 +14,29 @@
         select *
         from chat_msg
     </select>
-    
+
     <select id="findByRoomId" parameterType="ChatRoom" resultType="ChatMsg">
-        select * from chat_msg where chat_room_id = #{chat_room_id}
+        select *
+        from chat_msg
+        where chat_room_id = #{chat_room_id}
     </select>
 
-    <insert id="saveMsg" parameterType="ChatMsg">
-        insert into chat_msg values (#{chat_room_id}, (select count(*)+1 from chat_msg where chat_room_id=#{chat_room_id}), #{sender_id}, #{msg_con},sysdate, 'N')
+    <insert id="saveMsg" parameterType="ChatMsg" keyProperty="msg_id">
+        insert into chat_msg
+        values (#{chat_room_id},
+                #{msg_id},
+                #{sender_id}, #{msg_con},
+                sysdate, #{read_chk})
 
     </insert>
 
     <select id="cntMsg" resultType="int">
-        select count(*) from chat_msg where chat_room_id=#{chat_room_id}
+        select count(*)
+        from chat_msg
+        where chat_room_id = #{chat_room_id}
     </select>
-
-
+    <select id="findbyid" parameterType="ChatMsg" resultType="ChatMsg">
+        select * from chat_msg where chat_room_id = #{chat_room_id} and msg_id = #{msg_id}
+    </select>
 </mapper>
 

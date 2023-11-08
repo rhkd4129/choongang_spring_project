@@ -48,6 +48,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
     public int saveMsg(ChatMsg msg) {
         log.info("saveMsg start");
         log.info("MSG: "+msg.toString());
+//        MSG: ChatMsg(chat_room_id=1, msg_id=48, sender_id=tester1, msg_con=ㄹㅇㅁㄴ, send_time=2023-11-08 09:00:07.851, read_chk=null)
         int result = 0;
         try {
             result = session.insert("saveMsg",msg);
@@ -71,5 +72,18 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         }
 
         return result;
+    }
+
+    @Override
+    public ChatMsg findbyid(ChatMsg msg) {
+        log.info("findbyid start");
+        ChatMsg cm = new ChatMsg();
+        try {
+            cm = session.selectOne("findbyid",msg);
+
+        }catch (Exception e) {
+            System.out.println("findbyid Error -->>" + e.getMessage());
+        }
+        return cm;
     }
 }
