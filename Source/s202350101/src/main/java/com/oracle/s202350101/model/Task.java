@@ -2,6 +2,7 @@ package com.oracle.s202350101.model;
 
 import java.util.Date;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,9 +11,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
 import javax.validation.constraints.NotEmpty;
 
 //@Date 
-@Getter
-@Setter
-@ToString
+@Data
 //@ScriptAssert(lang="javascripte" script="", message="")
 public class Task {
 		private int		task_id;
@@ -20,18 +19,14 @@ public class Task {
 		private int		project_step_seq;
 		private String	user_id;
 
-
+		@NotEmpty(message = "필수이빈다")
 		private String	task_subject;
-
 		private String	task_content;
-
 		private java.sql.Date task_stat_time;
-
 		private java.sql.Date	task_end_itme;
 		private String	task_priority;
 		private String	task_status;
 		private int		garbage;
-		
 		
 		//읽기 전용 
 		private int status_0_count;

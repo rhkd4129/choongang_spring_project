@@ -145,8 +145,12 @@
     </select>
 
     <!-- 휴지통으로 삭제시키기 -->
-    <update id="task_garbage" parameterType="java.lang.Integer">
-        UPDATE TASK SET GARBAGE = 1 WHERE TASK_ID = #{task_id}
+    <update id="task_garbage" parameterType="Task">
+        UPDATE TASK SET GARBAGE = 1 WHERE project_id = #{project_id} and TASK_ID = #{task_id}
+    </update>
+
+    <update id="task_restore" parameterType="Task">
+        UPDATE TASK SET GARBAGE = 0 WHERE TASK_ID = #{task_id} and PROJECT_ID = #{project_id}
     </update>
 
     <!-- 휴지통 목록 -->
@@ -172,4 +176,9 @@
         WHERE PROJECT_ID = #{project_id} and garbage = 1
     </select>
 
+    <delete id="task_delete" parameterType="Task">
+        DELETE
+        FROM TASK
+        WHERE project_id = #{project_id} AND TASK_ID = #{task_id}
+    </delete>
 </mapper>

@@ -6,12 +6,15 @@ import com.oracle.s202350101.model.*;
 import com.oracle.s202350101.service.Paging;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.oracle.s202350101.service.lkhSer.LkhService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +28,6 @@ public class LkhController {
 		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
 		return "project/board/dashboard_home";
 	}
-
 
 	@GetMapping("task_board_view")
 	public String board_view(HttpServletRequest request , Model model, String currentPage){
@@ -56,15 +58,11 @@ public class LkhController {
                     break;
             }
 		}
-
-		//for (Task t :taskList) {}
 		model.addAttribute("taskStatus0",taskStatus0);
 		model.addAttribute("taskStatus1",taskStatus1);
 		model.addAttribute("taskStatus2",taskStatus2);
 		model.addAttribute("taskCount",taskCount);
-
 		return "project/board/task_board_view";
-
 	}
 
 	// 작업 시간 그래프
@@ -99,6 +97,7 @@ public class LkhController {
 
 	@GetMapping("task_detail")
 	public String task_detail(int task_id, int project_id,Model model){
+		log.info("task_create_view ctr task_id : {}",task_id);
 		Task task = lkhService.task_detail(task_id,project_id);
 		log.info(task.getUser_name());
 		TaskSub taskSub = new TaskSub();
@@ -112,35 +111,52 @@ public class LkhController {
 	}
 
 
-
 	@GetMapping("task_create_view")
 	public String task_create_view(HttpServletRequest request ,Model model){
+//		MultiValidation multiValidation = new MultiValidation();
+
+		Task task = new Task();
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
-		log.info("projectId : {}",projectId);
+		log.info("task_create_view ctr projectId : {}",projectId);
 		List<PrjStep>  prjStepList = lkhService.project_step_list(projectId);
 		List<UserInfo>  task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
+
 		model.addAttribute("prjStepList",prjStepList);
 		model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
-		return "project/board/taskInsertView";
+		model.addAttribute("task", task);
+		return "project/board/taskInsertForm";
 	}
 
+
+//		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
 	@PostMapping("task_create")
-	public String task_create( @RequestParam(value = "worker" ,required = false) List<String> selectedWorkers, @ModelAttribute Task task
-							  , RedirectAttributes redirectAttributes, HttpServletRequest request){
-		//접속한 유저 id를 가져와서 설정
+	public String task_create(@RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
+							  @Validated @ModelAttribute Task task, BindingResult bindingResult,
+							  RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
+		// 컨트롤러 내용
+
+		log.info("task_create ctr");
+
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int  projectId = userInfo.getProject_id();
+		String  userId = userInfo.getUser_id();
+		log.info("userId = {}  proejctId = {}",userId,projectId);
 
-		task.setUser_id(userInfo.getUser_id());
-		task.setProject_id(userInfo.getProject_id());
+		if(bindingResult.hasErrors()){
+			log.info("errer 있다 : {}",bindingResult);
+			// 유효성 검사 에러가 있을 때 폼에 다시 입력한 값을 유지하기 위해 모델 속성 추가
+			List<PrjStep> prjStepList = lkhService.project_step_list(projectId);
+			List<UserInfo> task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
 
-		//작업 생성후 그 작업 pk를 갖고온다
 
-		log.info("task_id: " + task.getTask_id());
-		log.info("project_id: " + task.getProject_id());
-		log.info("project_step_seq: " + task.getProject_step_seq());
-		log.info("user_id: " + task.getUser_id());
+			model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
+			model.addAttribute("prjStepList",prjStepList);
+			return "project/board/taskInsertForm";
+		}
 
+		task.setUser_id(userId);
+		task.setProject_id(projectId);
 
 		//작업자 목록이 있으면
 		if (selectedWorkers != null) {
@@ -157,6 +173,17 @@ public class LkhController {
 	}
 
 
+	@GetMapping ("task_update_form")
+	public String task_update_form(HttpServletRequest request ,Model model){
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int projectId = userInfo.getProject_id();
+		log.info("task_update_form ctr projectId : {}",projectId);
+
+
+
+		return "project/board/taskUpdateForm";
+	}
+
 
 	// 휴지통 보여주기
 	@GetMapping("garbage_list")
@@ -166,27 +193,20 @@ public class LkhController {
 
 		Task task = new Task();
 		task.setProject_id(userInfo.getProject_id());
-		int taskCount   = lkhService.task_count(userInfo.getProject_id());
+		int taskCount   = lkhService.garbage_count(userInfo.getProject_id());
 		Paging page = new  Paging(taskCount,currentPage);
-
+		task.setStart(page.getStart());
+		task.setEnd(page.getEnd());
 		List<Task> garbageList = lkhService.garbage_list(task);
 		log.info(String.valueOf(garbageList.size()));
 
-
+		model.addAttribute("currentUserId",userInfo.getUser_id());
 		model.addAttribute("garbageList",garbageList);
 		model.addAttribute("taskCount",taskCount);
 		model.addAttribute("page",page);
 		return "project/board/garbageList";
 	}
 
+
 }
 
-//		if(task.getGarbage()  != null && task.getProject_s_name() != null){
-//			bindingResult.reject("total",new Object[]{10000, });
-//		}
-// 에러가 있으면 다시 뒤로
-//		if(bindingResult.hasErrors()){
-//			log.info("errer={}",bindingResult);
-////			model.addAttribute("msg","BindingResult 입력 실패 확인해 보세요");
-//			return "project/board/taskInsertView";
-//		}

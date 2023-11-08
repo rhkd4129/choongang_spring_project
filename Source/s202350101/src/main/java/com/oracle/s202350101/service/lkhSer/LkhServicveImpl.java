@@ -145,8 +145,8 @@ public class LkhServicveImpl implements LkhService {
 
 	//휴지통
 	@Override
-	public int task_garbage(int task_id) {
-		return lkhDao.task_garbage(task_id);
+	public int task_garbage(Task task) {
+		return lkhDao.task_garbage(task);
 	}
 
 	@Override
@@ -157,6 +157,14 @@ public class LkhServicveImpl implements LkhService {
 	@Override
 	public int garbage_count(int project_id) {
 		return lkhDao.garbage_count(project_id);
+	}
+
+	@Override
+	public int task_delete(Task task){ return lkhDao.task_delete(task);}
+
+	@Override
+	public int task_resotre(Task task) {
+		return lkhDao.task_resotre(task);
 	}
 }
 

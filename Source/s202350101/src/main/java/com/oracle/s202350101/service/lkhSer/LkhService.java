@@ -35,14 +35,14 @@ public interface LkhService {
 	int				createGroupTask(List<String> workerList  ,Task task);
 
 	//휴지통으로 이동
-	 int 			task_garbage(int task_id);
+	 int 			task_garbage(Task task);
 
 	 //휴지통 목록
 	List<Task> 		garbage_list(Task task);
 	int				garbage_count(int project_id);
+	int				task_delete(Task task);
 
 
-
-
+	int task_resotre(Task task);
 
 }

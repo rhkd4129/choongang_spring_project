@@ -30,7 +30,7 @@ public class LkhDaoImpl implements LkhDao {
 		try {
 			taskStatusList = sqlSession.selectList("doughnut_chart", project_id);
 		} catch (Exception e) {
-			log.info("dao : task_status_count error Message -> {}", e.getMessage());
+			log.info("dao : doughnut_chart error Message -> {}", e.getMessage());
 		}
 		return taskStatusList;
 	}
@@ -99,7 +99,7 @@ public class LkhDaoImpl implements LkhDao {
 		try {
 			taskList = sqlSession.selectList("task_time_aces", task);
 		} catch (Exception e) {
-			log.info("dao :task_time_decs error Message -> {}", e.getMessage());
+			log.info("dao :task_time_aces error Message -> {}", e.getMessage());
 		}
 		return taskList;
 	}
@@ -200,10 +200,10 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int task_garbage(int task_id) {
+	public int task_garbage(Task task) {
 		int result = 0;
 		try {
-			result = sqlSession.update("task_garbage", task_id);
+			result = sqlSession.update("task_garbage", task);
 		} catch (Exception e) {
 			log.info("dao :task_garbage error Message -> {}", e.getMessage());
 		}
@@ -219,6 +219,28 @@ public class LkhDaoImpl implements LkhDao {
 			log.info("dao :garbage_count error Message -> {}", e.getMessage());
 		}
 		return result;
+	}
+
+	@Override
+	public int task_delete(Task task) {
+		int result = 0;
+		try {
+			result = sqlSession.update("task_delete", task);
+		}catch (Exception e){
+			log.info("dao :task_delete error Message -> {}", e.getMessage());
+		}
+		return  result;
+	}
+
+	@Override
+	public int task_resotre(Task task) {
+		int result = 0;
+		try {
+			result = sqlSession.update("task_restore", task);
+		}catch (Exception e){
+			log.info("dao :task_resotre error Message -> {}", e.getMessage());
+		}
+		return  result;
 	}
 
 	public List<TaskSub> taskWorkerlist(TaskSub taskSub) {

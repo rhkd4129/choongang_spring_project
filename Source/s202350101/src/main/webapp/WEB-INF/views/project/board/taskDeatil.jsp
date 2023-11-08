@@ -8,25 +8,22 @@
 <head>
 
 <script type="text/javascript">
-    function delete_task(user_id,task_id){
+    function delete_task(user_id,task_id,project_id){
         var userInput =  prompt("삭제라혀면 id입력하세요 ");
-        if(userInput == user_id){
+        if(userInput === user_id){
             $.ajax({
-                url         :'task_garbage',
+                url         :'/task_garbage',
                 type        :'post',
-                data        :{"task_id":task_id},
+                data        :{"task_id":task_id,
+                            'project_id':project_id},
                 dataType    :"text",
                 success     :function (data){
-                    if(data == 1){
+                    if(data === '1'){
                         alert("삭제성공");
-                        window.location.href ="/task_list";
+                        window.location.href ="/dashboard_home";
                     } else{// UPDATE를 수행햇지만 결과가 0이나올떄
                         alert("삭제 에러 ");
                     }
-                    return;
-                },
-                error:function (){// 애초에 데이터 조차 못받아왓을 시
-                    alert("서버 에러 !! 다음에 다시,,");
                     return;
                 }
             });
@@ -131,7 +128,7 @@
 
 
             </div>
-            <a type="button" class="btn btn-primary" onclick="delete_task('${task.user_id}',${task.task_id})">삭제하기</a>
+            <a type="button" class="btn btn-primary" onclick="delete_task('${task.user_id}',${task.task_id},${task.project_id})">삭제하기</a>
             <a type="button" class="btn btn-primary" href="task_update_view">수정하기</a>
         </main>
 

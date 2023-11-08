@@ -55,6 +55,7 @@ public class AsynController {
 
     @GetMapping("task_timeline")
     public List<Task> task_timeline(){
+        log.info("task_timeline ctr");
         return  lkhService.task_timeline();
     }
     ///// 대시 보드 홈 /////
@@ -99,15 +100,44 @@ public class AsynController {
         return data;
     }
 
-    //휴지통 삭제 버튼
+    //휴지통으로넣기
     @PostMapping("task_garbage")
-    public int task_update(int task_id){
-        log.info("휴지통 이동하기 비동기 함수 진입점 ");
-        return lkhService.task_garbage(task_id);
+    public int task_garbage(int task_id, int project_id){
+        log.info("task_garbage ctr : task_id :{}  proejct_id :{} ",task_id,project_id);
+
+        Task task = new Task();
+        task.setTask_id(task_id);
+        task.setProject_id(project_id);
+        int result = lkhService.task_garbage(task);
+        log.info("result-> {}",result);
+        return result;
 
     }
 
+    // 휴지통에서 영구삭제시키기
+    @PostMapping("task_delete")
+    public int task_delete(int task_id,  int project_id){
+        log.info("task_delete ctr : task_id :{}  proejct_id :{} ",task_id,project_id);
+        Task task = new Task();
+        task.setProject_id(project_id);
+        task.setTask_id(task_id);
+        int result = lkhService.task_delete(task);
+        log.info("result-> {}",result);
+        return result;
+    }
 
+    //휴지통에서 복구 시키기
+    @PostMapping("task_restore")
+    public int task_restore(int task_id, int project_id){
+        log.info("task_restore  ctr: task_id :{}  proejct_id :{} ",task_id,project_id);
+        Task task = new Task();
+        task.setProject_id(project_id);
+        task.setTask_id(task_id);
+
+        int result = lkhService.task_resotre(task);
+        log.info("result-> {}",result);
+        return  result;
+    }
 
 
 

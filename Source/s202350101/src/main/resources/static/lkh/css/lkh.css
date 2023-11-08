@@ -1,10 +1,15 @@
 @charset "UTF-8";
 
+.error{
+    color: red;
+}
+
 table{
     margin: 5%;
 }
 table, th, td {
     border: 1px solid black;
+    width: 10%; /* 모든 테이블의 셀 넓이를 조절합니다. */
 }
 
 /*  task dashboard home */
@@ -28,7 +33,7 @@ table, th, td {
 /*  task  board view     */
 .board {
     display: flex;
-    width: 75%;
+    width: 80%;
     margin: 5%;
     background-color: #4d5154;
     border: 1px solid black;
@@ -37,7 +42,7 @@ table, th, td {
 
 .task_status_0, .task_status_1, .task_status_2 {
     color: white;
-    width: 600px;
+    width: 500px;
     height: 500px;
     margin: 5%;
     border: 1px solid black;
@@ -63,7 +68,7 @@ table, th, td {
 }
 
 .task {
-    width: 300px;
+    width: 200px;
     height: 40px;
     background-color: #86b7fe;
     border: 1px solid black;
