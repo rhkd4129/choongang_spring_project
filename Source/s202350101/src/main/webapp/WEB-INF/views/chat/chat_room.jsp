@@ -88,13 +88,7 @@
                 console.log("stompClient: "+stompClient);
                 //  websocket에 대한 세션의 세부 설정을 하고 싶다면 핸들러 클래스를 만들자.
 
-                // var sockJsOptions = {
-                //     debug: true,          // 디버그 모드 활성화
-                //     rtt: 10000,           // 연결 시도 간격 (밀리초)
-                //     server: 'https://example.com',  // SockJS 서버 주소
-                //     transport: 'websocket',        // 웹소켓을 사용할 것임
-                //     timeout: 30000,                // 연결 타임아웃 (밀리초)
-                // };
+
 
                 //  웹 소캣 연결을 설정하는 부분.
                 //  {} : 연결 옵션을 설정할 수 있는 곳 (
@@ -105,6 +99,45 @@
                 //      passcode:   사용자 비밀번호 또는 암호 설정에 사용.
                 //  function (frame) : 연결 성공 시 이뤄진 후 호출될 콜백 함수 정의
                 stompClient.connect({}, function (frame) {  //  중괄호 왜? 사용해? 왜?
+                    receive();
+                    stompClient.subscribe("/queue/great", function (messages) {
+                        var res = JSON.parse(messages.body);
+                        var firlist = res.firList;
+                        // console.log(firlist);
+                        var chat_con = $('#chat_content');
+                        
+                        $.each(firlist, function (index, chatmsg) {
+                            console.log(chatmsg);
+                            var myID = '${userInfo.user_id}';
+                            var con = '';
+
+                            let read_chker = chatmsg.read_chk;
+                            if (read_chker == 'N') {
+                                read_chker = '안 읽음';
+                            } else {
+                                read_chker = '읽음';
+                            }
+                            console.log("chatmsg.sender_id"+chatmsg.sender_id);
+                            console.log("myID"+myID);
+
+                            if (chatmsg.sender_id == myID) { //  내가 보낸 메세지
+                                con += '<div id="right_chat_msg" >';
+                                con += '<p>' + chatmsg.msg_con + '</p>';
+                                con += '<p>' + chatmsg.send_time + '</p>';
+                                con += '<p>' + read_chker + '</p>';
+                                con += '</div>';
+                            } else {                //  상대방이 보낸 메세지
+                                con += '<div id="left_chat_msg" >';
+                                con += '<p>' + chatmsg.msg_con + '</p>';
+                                con += '<p>' + chatmsg.send_time + '</p>';
+                                con += '<p>' + read_chker + '</p>';
+                                con += '</div>';
+                            }
+                            chat_con.append(con);
+
+                        });
+
+                    });
                     // 연결이 설정되면 구독할 주제 등록
                     stompClient.subscribe("/queue/greetings", function (message) {
                         // 서버에서 메시지를 받았을 때 실행할 코드
@@ -134,7 +167,7 @@
                         // 여기에서 메시지를 화면에 표시하거나 처리할 수 있음
                         var chat_con = $('#chat_content');
                         let con='';
-                        console.log("sender: " + senderId + " myID: " + myID);
+                        // console.log("sender: " + senderId + " myID: " + myID);
                         if (senderId == myID) { //  내가 보낸 메세지
                             con += '<div id="right_chat_msg" >';
                             con += '<p>' + msgContent + '</p>';
@@ -152,15 +185,29 @@
                     });
                 });
             });
-
-        // 전체 Message 전송
-        function send() {
+        function receive(){
             //	사용자id 값을 받아야함.
             var option = {
                 type: "message",
                 chat_room_id: ${ChatRoom.chat_room_id},
                 sender_id: '${userInfo.user_id}',
-                youID: $("#youID").val(),
+                receiver_id: '${your}'
+            }
+            console.log(option);
+            //  {} : 헤더 정보 설정 시 사용.
+            //  웹 소켓 메시지에 대한 추가 정보 담음
+            //  EX_ 인증 토큰, 메시지 유형, 목적지 주소, 메시지ID(식별자), 시간 정보, 사용자 정보
+            stompClient.send("/app/chat/receive", {}, JSON.stringify(option));     //  여기도 중괄호 왜?
+            $('#send_message').val('');
+
+        }
+
+        // 전체 Message 전송
+        function send() {
+            //	사용자id 값을 받아야함.
+            var option = {
+                chat_room_id: ${ChatRoom.chat_room_id},
+                sender_id: '${userInfo.user_id}',
                 msg_con: $("#send_message").val()
             }
             console.log(option);
@@ -183,40 +230,40 @@
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <input id="chat_room_id" type="hidden" value="${ChatRoom.chat_room_id}">
-        <c:forEach items="${CMList}" var="msg">             <%--채팅방 내 메세지--%>
-            <c:choose>
-                <c:when test="${userInfo.user_id eq msg.sender_id}">        <%--내가 보낸 메세지--%>
-                    <input id="myID" type="hidden" value="${msg.sender_id}">
-                    <div id="right_chat_msg" >
-                        <p>${msg.msg_con}</p>
-                        <p>${msg.send_time}</p>
-                        <c:choose>
-                            <c:when test="${msg.read_chk eq 'N'}">
-                                <p>안 읽음</p>
-                            </c:when>
-                            <c:otherwise>
-                                <p>읽음</p>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <input id="youID" type="hidden" value="${msg.sender_id}">   <%--상대가 보낸 메세지--%>
-                    <div id="left_chat_msg">
-                        <p>${msg.msg_con}</p>
-                        <p>${msg.send_time}</p>
-                        <c:choose>
-                            <c:when test="${msg.read_chk eq 'N'}">
-                                <p>안 읽음</p>
-                            </c:when>
-                            <c:otherwise>
-                                <p>읽음</p>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
+<%--        <c:forEach items="${CMList}" var="msg">             &lt;%&ndash;채팅방 내 메세지&ndash;%&gt;--%>
+<%--            <c:choose>--%>
+<%--                <c:when test="${userInfo.user_id eq msg.sender_id}">        &lt;%&ndash;내가 보낸 메세지&ndash;%&gt;--%>
+<%--                    <input id="myID" type="hidden" value="${msg.sender_id}">--%>
+<%--                    <div id="right_chat_msg" >--%>
+<%--                        <p>${msg.msg_con}</p>--%>
+<%--                        <p>${msg.send_time}</p>--%>
+<%--                        <c:choose>--%>
+<%--                            <c:when test="${msg.read_chk eq 'N'}">--%>
+<%--                                <p>안 읽음</p>--%>
+<%--                            </c:when>--%>
+<%--                            <c:otherwise>--%>
+<%--                                <p>읽음</p>--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
+<%--                    </div>--%>
+<%--                </c:when>--%>
+<%--                <c:otherwise>--%>
+<%--                    <input id="youID" type="hidden" value="${msg.sender_id}">   &lt;%&ndash;상대가 보낸 메세지&ndash;%&gt;--%>
+<%--                    <div id="left_chat_msg">--%>
+<%--                        <p>${msg.msg_con}</p>--%>
+<%--                        <p>${msg.send_time}</p>--%>
+<%--                        <c:choose>--%>
+<%--                            <c:when test="${msg.read_chk eq 'N'}">--%>
+<%--                                <p>안 읽음</p>--%>
+<%--                            </c:when>--%>
+<%--                            <c:otherwise>--%>
+<%--                                <p>읽음</p>--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
+<%--                    </div>--%>
+<%--                </c:otherwise>--%>
+<%--            </c:choose>--%>
+<%--        </c:forEach>--%>
     </div>
     <div id="chat_bottom">
         <textarea cols="40" rows="3" id="send_message">

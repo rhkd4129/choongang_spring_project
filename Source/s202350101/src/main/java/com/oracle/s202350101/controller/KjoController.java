@@ -21,6 +21,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -226,7 +227,7 @@ public class KjoController {
 		//	채팅할 대상자와 로그인 사용자의 채팅방
 		model.addAttribute("ChatRoom", nowChatRoom);
 		//	해당 채팅방 내 메세지
-		model.addAttribute("CMList", CMList);
+//		model.addAttribute("CMList", CMList);
 		//	상대방 사용자 정보
 		model.addAttribute("your", youUser);
 
@@ -250,8 +251,20 @@ public class KjoController {
 		return findmsg;
 	}
 
+//	채팅방 입장 시 메세지들 조회
+	@MessageMapping("/chat/receive")
+	@SendTo("/queue/great")
+	public KjoResponse receiveMsg(ChatRoom room) {
+		List<ChatMsg> CMList = CMser.findByRoomId(room);
+		KjoResponse response = new KjoResponse();
+		response.setFirList(CMList);
+
+		return response;
+	}
+
 	@GetMapping("/admin_approval")
 	public String admin_approval() {
+
 		log.info("admin_approval");
 		return "admin/admin_approval";
 	}
@@ -345,4 +358,6 @@ public class KjoController {
 		int result = BFser.del_bdf(kjorequest);
 		return ResponseEntity.ok(result);
 	}
+
+
 }
