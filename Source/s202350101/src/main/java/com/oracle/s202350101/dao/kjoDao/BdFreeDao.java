@@ -19,4 +19,6 @@ public interface BdFreeDao {
 
 //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
     int findByCategorySearch(BdFree bf);
+
+    int del_bdf(List<String> doc_nos);
 }

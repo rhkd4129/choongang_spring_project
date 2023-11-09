@@ -83,54 +83,6 @@
             console.log(sendurl);
         }
 
-        // function eventList(currentPage) {
-        //     console.log(currentPage);
-        //     var sendurl = "/admin_board_ajax_paging/?currentPage=" + currentPage;
-        //     console.log("sendURL: " + sendurl);
-        //     $.ajax({
-        //         url: sendurl,
-        //         dataType: 'json',
-        //         success: function (jsonData) {
-        //             console.log(jsonData);
-        //             var BFList_body = $('#BFList_body');
-        //             BFList_body.empty();
-        //             $.each(jsonData.firList, function (index, BFL) {
-        //                 var tr = $('<tr>');
-        //
-        //                 tr.append('<td>' + BFL.doc_no + '</td>');
-        //                 tr.append('<td>' + BFL.subject + '</td>');
-        //                 tr.append('<td>' + BFL.user_name + '</td>');
-        //                 tr.append('<td>' + BFL.create_date + '</td>');
-        //                 tr.append('<td>' + BFL.good_count + '</td>');
-        //                 tr.append('<td><a href="#">수정</a></td>');
-        //                 tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
-        //                 BFList_body.append(tr);
-        //             });
-        //
-        //             var page = jsonData.obj;
-        //
-        //             var paginationDiv = $('#e_p');
-        //             paginationDiv.empty();
-        //             var jspPagination = '<div id="e_p" class="pagination">';
-        //             if (page.startPage > page.pageBlock) {
-        //                 jpsPagination += '<div onclick="eventList(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
-        //             }
-        //             for (var i = page.startPage; i <= page.endPage; i++) {
-        //                 var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : ''; // 현재 페이지와 i가 일치할 때 스타일을 적용
-        //
-        //                 jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="eventList(' + i + ')"><div class="page-link">' + i + '</div></div>';
-        //             }
-        //             if (page.endPage < page.totalPage) {
-        //                 jpsPagination += '<div onclick="eventList(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
-        //             }
-        //             jspPagination += '</div>';
-        //             paginationDiv.html(jspPagination);
-        //         }
-        //     })
-        //     // var BFList = $('#BFList_body');
-        //     // BFList.empty();
-        // }
-
         function event_search(currentPage) {
             var keyword = $('#search_text').val();      //  검색 키워드
             var category = $('#bd_CTG').val();          //  선택한 카테고리
@@ -165,13 +117,16 @@
                     $.each(jsonData.firList, function (index, BFL) {        //  반환된 데이터 입력
                         var tr = $('<tr>');
 
+                        tr.append('<input type="hidden" id="bf_doc_no" value="'+ BFL.doc_no + '"/>');
                         tr.append('<td>' + BFL.rn + '</td>');
                         tr.append('<td>' + BFL.subject + '</td>');
                         tr.append('<td>' + BFL.user_name + '</td>');
                         tr.append('<td>' + BFL.create_date + '</td>');
                         tr.append('<td>' + BFL.good_count + '</td>');
                         tr.append('<td><a href="#">수정</a></td>');
-                        tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
+                        tr.append('<td><input type="checkbox" name="del_chkbox" />');
+
+                        // tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
                         BFList_body.append(tr);
                     });
                     var page = jsonData.obj;            //  페이징 객체
@@ -197,7 +152,35 @@
                 }
             })
         }
+        function bdfree_del(){
 
+            var delbox = [];        //  삭제 버튼에 체크된 게시글
+            document.querySelectorAll("input[name=del_chkbox]:checked").forEach(function (checkbox) {
+                //  체크된 게시글 id값들 리스트에 저장.
+                var bf_doc_noInput = checkbox.closest('tr').querySelector("#bf_doc_no");
+                if (bf_doc_noInput) {
+                    var bf_doc_no = bf_doc_noInput.value;
+                    delbox.push(bf_doc_no);
+                }
+            });
+            console.log("Selected bf_doc_no values: " + delbox);
+            console.log(delbox);
+            $.ajax({
+                url: "/admin_board_del",
+                type: "POST",
+                data: JSON.stringify({user_id: delbox}),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+
+                    alert("권한 수정 완료" + response);
+                    event_search(1);
+                },
+            })
+
+
+
+        }
 
     </script>
 </head>
@@ -322,13 +305,12 @@
                     <div id="search_bar">
                     <input type="text" id="search_text" class="form-control"/>
                     <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search(1)"/>
+                    <input type="button" id="del_button" class="btn btn-primary" value="삭제" onclick="bdfree_del()"/>
                     </div>
                 </div>
 
                 <table class="table">
                     <thead>
-
-
                     <tr>
                         <th>번호</th>
                         <th>제목</th>
@@ -342,24 +324,23 @@
                     <tbody id="BFList_body">
                         <c:forEach items="${BFList}" var="BF">
                             <tr>
-                                <td>${BF.doc_no}</td>
+                                <input type="hidden" id="bf_doc_no" value="${BF.doc_no}"/>
+                                <td>${BF.rn}</td>
                                 <td>${BF.subject}</td>
                                 <td>${BF.user_name}</td>
                                 <td>${BF.create_date}</td>
                                 <td>${BF.good_count}</td>
                                 <td><a href="#">수정</a></td>
-                                <td><input type="checkbox" name="xxx" value="yyy" checked>
+                                <td><input type="checkbox" name="del_chkbox" />
                             </tr>
                         </c:forEach>
                     <div id="e_p" class="pagination">
                         <c:if test="${page.startPage > page.pageBlock}">
-                            <%--                            <p onclick="page('/admin_projectmanagerRest/${page.startPage-page.pageBlock}/')">이전</p>--%>
                             <div onclick="event_search(${page.startPage-page.pageBlock})">
                                 <p>[이전]</p>
                             </div>
                         </c:if>
                         <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                            <%--                            <a href="/admin_projectmanager/?cl_id=${cl_id}&currentPage=${i}">[${i}]</a>--%>
                             <div class="page-item" onclick="event_search(${i})">
                                 <div class="page-link">${i}</div>
                             </div>
@@ -370,7 +351,6 @@
                             <div onclick="event_search(${page.startPage+page.pageBlock})">
                                 <p>[다음]</p>
                             </div>
-                            <%--                            <a href="/admin_projectmanager/${cl_id}currentPage=${page.startPage+page.pageBlock}">[다음]</a>--%>
                         </c:if>
                     </div>
                     </tbody>

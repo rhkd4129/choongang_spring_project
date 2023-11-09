@@ -48,6 +48,11 @@
                            on ev.user_id = u.user_id
     </select>
 
+    <delete id="del_bdf" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            delete bd_free where doc_no = #{item}
+        </foreach>
+    </delete>
 
 
 
