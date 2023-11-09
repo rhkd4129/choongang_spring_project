@@ -144,10 +144,12 @@ public class LkhController {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int  projectId = userInfo.getProject_id();
 		String  userId = userInfo.getUser_id();
+
 		log.info("userId = {}  proejctId = {}",userId,projectId);
 
 		if(bindingResult.hasErrors()){
 			log.info("errer 있다 : {}",bindingResult);
+
 			// 유효성 검사 에러가 있을 때 폼에 다시 입력한 값을 유지하기 위해 모델 속성 추가
 			List<PrjStep> prjStepList = lkhService.project_step_list(projectId);
 			List<UserInfo> task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
@@ -182,7 +184,14 @@ public class LkhController {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 		log.info("task_update_form ctr projectId : {}",projectId);
+<<<<<<< HEAD
 		return "project/task/taskUpdateForm";
+=======
+
+
+g
+		return "project/board/taskUpdateForm";
+>>>>>>> 646abf9a858ccc26f15f2b8a283b6bb20ea91403
 	}
 
 
