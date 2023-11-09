@@ -2,6 +2,7 @@ package com.oracle.s202350101.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.oracle.s202350101.service.CommonService;
@@ -15,9 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonController {
 	
 	private final CommonService cs;
-	
+//	@PathVariable String error
 	@RequestMapping(value = "/main")
-	public String mainPage(Model model) {
+	public String mainPage(Model model ) {
+//		if("error".equals(error)){
+//			model.addAttribute("intercepter_error","프로젝트 정보가 없습니다.");
+//		}
 		return "main";
 	}
 

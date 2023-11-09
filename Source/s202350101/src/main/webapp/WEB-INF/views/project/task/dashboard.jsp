@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript">
         $(function() {
+
             $.ajax({
                 url			: '/main_header',
                 dataType 	: 'text',

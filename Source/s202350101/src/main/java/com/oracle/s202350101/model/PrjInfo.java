@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PrjInfo {
-	private int		project_id;
+	private Integer		project_id;
 	private String	project_name;
 	private Date	project_startdate;
 	private Date	project_enddate;

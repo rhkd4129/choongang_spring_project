@@ -13,7 +13,7 @@ import lombok.ToString;
 public class UserInfo {
 	private String 	user_id;
 	private int		class_id;
-	private int		project_id;
+	private Integer		project_id;
 	private String 	user_pw;
 	private String 	user_name;
 	private String 	user_gender;

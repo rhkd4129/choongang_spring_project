@@ -25,8 +25,9 @@ public class LkhController {
 	// 대시보드 홈
 	@GetMapping("dashboard")
 	public String dashboard(HttpServletRequest request, Model model ) {
-		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
 		log.info("board_view ctr start");
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
+
 		return "project/task/dashboard";
 	}
 
@@ -135,8 +136,8 @@ public class LkhController {
 //		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
 	// 작업 생성 Post
 	@PostMapping("task_create")
-	public String task_create(@RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
-							  @Validated @ModelAttribute Task task, BindingResult bindingResult,
+	public String task_create( @RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
+			@Validated @ModelAttribute Task task, BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
 		// 컨트롤러 내용
 		log.info("task_create ctr");

@@ -7,15 +7,10 @@
 <meta  charset="UTF-8">
 <title>Insert title here</title>
 
-<!--CSS START -->
-<!-- CSS END -->
-
-<!-- JS START -->
-<!-- JS END -->
-
 <script type="text/javascript">
+
+
 	$(function() {
-		
 		$.ajax({
 			url			: '/main_header',
 			dataType 	: 'text',

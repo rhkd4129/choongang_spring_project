@@ -56,7 +56,7 @@
             <!-- 본문 -->
             <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!------------------------------ //개발자 소스 입력 START ------------------------------->
-                <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4">
+                <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" enctype="multipart/form-data">
                     <div class="container">
 
                         <div class="row">
@@ -82,10 +82,17 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>좋아하는 사용자 선택:</label><br>
+                                    <label>공동작업자</label><br>
                                     <c:forEach var="user" items="${task_create_form_worker_list}">
                                         <input type="checkbox" name="worker_id" value="${user.user_id}"> ${user.user_name}<br>
                                     </c:forEach>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label for="attach_path">파일첨부</label>
+                                    <input type="file" class="form-control" id="attach_path" name="attach_path" >
                                 </div>
 
 
