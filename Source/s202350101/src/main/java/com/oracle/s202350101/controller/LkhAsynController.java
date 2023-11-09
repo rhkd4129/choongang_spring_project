@@ -17,23 +17,28 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+    /*******************************************
+    **   비동기 만 모아 놓은 컨트롤러             **
+    *******************************************/
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class AsynController {
+public class LkhAsynController {
     private final LkhService lkhService;
 
 
-    @GetMapping("bar")
-    public PrjInfo bar(HttpServletRequest request , Model model){
+    @GetMapping("project_day")
+    public PrjInfo project_day(HttpServletRequest request , Model model){
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
         int projectId = userInfo.getProject_id();
         return lkhService.project_day(projectId);
     }
 
-
-    @GetMapping("dashboard_doughnut")
-    public List<Integer> dashboard(HttpServletRequest request) {
+        // 대시보드 홈에서 진척률 그래프
+    @GetMapping("doughnut_chart")
+    public List<Integer> doughnut_chart(HttpServletRequest request) {
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
         int id = userInfo.getProject_id();
         log.info("dashboard Controller init");
@@ -42,18 +47,18 @@ public class AsynController {
         return taskStatusList;
     }
 
-
-    @GetMapping("dashboard_bar")
-    public List<Task> dashboard_bar(HttpServletRequest request) {
+    // 대시보드 홈에서 진척률 그래프
+    @GetMapping("workload_chart")
+    public List<Task> workload_chart(HttpServletRequest request) {
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
         int id = userInfo.getProject_id();
         log.info("dashboard_bar Controller init");
         List<Task> taskUserWorkStatusList = new ArrayList<>();
-        taskUserWorkStatusList =  lkhService.Workload_chart(id);
+        taskUserWorkStatusList =  lkhService.workload_chart(id);
         return taskUserWorkStatusList;
     }
-
-    @GetMapping("task_timeline")
+        //  작업 타임라인 페이지 들어가자마자 비동기로 뿌리기
+    @GetMapping("task_timeline_asyn")
     public List<Task> task_timeline(){
         log.info("task_timeline ctr");
         return  lkhService.task_timeline();
@@ -133,8 +138,7 @@ public class AsynController {
         Task task = new Task();
         task.setProject_id(project_id);
         task.setTask_id(task_id);
-
-        int result = lkhService.task_resotre(task);
+        int result = lkhService.task_restore(task);
         log.info("result-> {}",result);
         return  result;
     }

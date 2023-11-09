@@ -36,7 +36,7 @@
             });
 
             $.ajax({
-                url: '/task_timeline',
+                url: '/task_timeline_asyn',
                 dataType: 'json',
                 success: function (data) {
                     var rows = {};

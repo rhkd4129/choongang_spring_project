@@ -37,7 +37,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             // HTML 구조는 준비되었지만, 모든 리소스의 로딩이 완료되지 않았을 때 실행됩니다.
             $.ajax({
-                url: "<%=request.getContextPath()%>/dashboard_doughnut",
+                url: "<%=request.getContextPath()%>/doughnut_chart",
                 //data:data
                 dataType: 'json',
                 success: function (response) {
@@ -64,7 +64,7 @@
                 }
             });
             $.ajax({
-                url: "<%=request.getContextPath()%>/dashboard_bar",
+                url: "<%=request.getContextPath()%>/workload_chart",
                 //data:data
                 dataType: 'json',
                 success: function (workload) {
@@ -108,7 +108,7 @@
                 }
             });
             $.ajax({
-                url: "<%=request.getContextPath()%>/bar",
+                url: "<%=request.getContextPath()%>/project_day",
                 dataType: 'json',
                 success: function (prjInfo) {
                     // Oracle에서 가져온 문자열을 JavaScript Date 객체로 변환
@@ -167,8 +167,8 @@
                         <div class="controller">
                             <a type="button"   class="btn btn-primary" href="task_list">작업 목록</a>
                             <a type="button"   class="btn btn-primary" href="garbage_list">휴지통</a>
-                            <a type="button"  class="btn btn-primary" href="task_timeline_view">타임 라인</a>
-                            <a type="button"  class="btn btn-primary" href="task_board_view">작업 보드 </a>
+                            <a type="button"  class="btn btn-primary" href="task_timeline">타임 라인</a>
+                            <a type="button"  class="btn btn-primary" href="task_board">작업 보드 </a>
                         </div>
 
                     </div>

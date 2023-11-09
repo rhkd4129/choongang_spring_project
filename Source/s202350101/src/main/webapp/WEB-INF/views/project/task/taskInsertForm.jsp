@@ -43,7 +43,7 @@
 
     <!-- HEADER -->
     <header id="header"></header>
-
+````````
     <!-- CONTENT -->
     <div class="container-fluid">
         <div class="row">
@@ -72,18 +72,19 @@
                                 <div class="form-group">
                                     <label for="task_subject">작업명:</label>
                                     <input type="text" class="form-control" name="task_subject" id="task_subject">
-<%--                                    <form:textarea path="task.task_subject" name="task.task_subject"/>--%>
-                                    <form:errors path="task_subject" cssClass="errors" />
+
+                                    <form:errors path="task_subject" class="errors"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="task_content">업무 내용:</label>
                                     <input type="text" class="form-control" name="task_content" id="task_content">
+                                    <form:errors path="task_content" class="errors" />
                                 </div>
 
                                 <div class="form-group">
                                     <label>좋아하는 사용자 선택:</label><br>
                                     <c:forEach var="user" items="${task_create_form_worker_list}">
-                                        <input type="checkbox" name="worker" value="${user.user_id}"> ${user.user_name}<br>
+                                        <input type="checkbox" name="worker_id" value="${user.user_id}"> ${user.user_name}<br>
                                     </c:forEach>
                                 </div>
 

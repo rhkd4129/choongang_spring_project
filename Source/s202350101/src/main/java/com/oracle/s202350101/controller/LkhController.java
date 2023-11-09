@@ -23,14 +23,17 @@ public class LkhController {
 	private final LkhService lkhService;
 
 	// 대시보드 홈
-	@GetMapping("dashboard_home")
-	public String Hello(HttpServletRequest request, Model model ) {
+	@GetMapping("dashboard")
+	public String dashboard(HttpServletRequest request, Model model ) {
 		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
-		return "project/board/dashboard_home";
+		log.info("board_view ctr start");
+		return "project/task/dashboard";
 	}
 
-	@GetMapping("task_board_view")
-	public String board_view(HttpServletRequest request , Model model, String currentPage){
+
+	// 프로젝트 상태별로 보여주기
+	@GetMapping("task_board")
+	public String task_board(HttpServletRequest request , Model model, String currentPage){
 		log.info("board_view ctr start");
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
@@ -41,7 +44,7 @@ public class LkhController {
 		int taskCount = lkhService.task_count(projectId);
 		List<Task>  taskList =  lkhService.task_list(task);
 
-
+		// 작업 리스트를 받은 후 작업 상태별로 나누어서 model에 등록 
 		List<Task> taskStatus0 = new ArrayList<Task>();
 		List<Task> taskStatus1 = new ArrayList<Task>();
 		List<Task> taskStatus2 = new ArrayList<Task>();
@@ -62,13 +65,14 @@ public class LkhController {
 		model.addAttribute("taskStatus1",taskStatus1);
 		model.addAttribute("taskStatus2",taskStatus2);
 		model.addAttribute("taskCount",taskCount);
-		return "project/board/task_board_view";
+		return "project/task/taskBoard";
 	}
 
+	
 	// 작업 시간 그래프
-	@GetMapping("task_timeline_view")
-	public String task_timeline_view(){
-		return "project/board/task_timeline";
+	@GetMapping("task_timeline")
+	public String task_timeline(){
+		return "project/task/taskTimeline";
 	}
 
 
@@ -91,10 +95,10 @@ public class LkhController {
 		model.addAttribute("taskList", taskList);
 		model.addAttribute("taskCount",taskCount);
 		model.addAttribute("page",page);
-		return "project/board/taskList";
+		return "project/task/taskList";
 	}
 
-
+	// 작업 상세 화면
 	@GetMapping("task_detail")
 	public String task_detail(int task_id, int project_id,Model model){
 		log.info("task_create_view ctr task_id : {}",task_id);
@@ -107,35 +111,34 @@ public class LkhController {
 
 		model.addAttribute("taskSubList",taskSubList);
 		model.addAttribute("task",task);
-		return "project/board/taskDeatil";
+		return "project/task/taskDeatil";
 	}
 
 
-	@GetMapping("task_create_view")
-	public String task_create_view(HttpServletRequest request ,Model model){
-//		MultiValidation multiValidation = new MultiValidation();
-
-		Task task = new Task();
+	// 작업 생성 폼 페이지
+	@GetMapping("task_create_form")
+	public String task_create_form(HttpServletRequest request ,Model model){
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
+		Task task = new Task();
 		log.info("task_create_view ctr projectId : {}",projectId);
 		List<PrjStep>  prjStepList = lkhService.project_step_list(projectId);
 		List<UserInfo>  task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
-
+		// 현재 프로젝트에 속한 프로젝트 단계 리스트와 프로젝트 인원들도 같이 선택해서 입력해야함
 		model.addAttribute("prjStepList",prjStepList);
 		model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
 		model.addAttribute("task", task);
-		return "project/board/taskInsertForm";
+		return "project/task/taskInsertForm";
 	}
 
 
 //		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
+	// 작업 생성 Post
 	@PostMapping("task_create")
 	public String task_create(@RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
 							  @Validated @ModelAttribute Task task, BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
 		// 컨트롤러 내용
-
 		log.info("task_create ctr");
 
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
@@ -148,11 +151,10 @@ public class LkhController {
 			// 유효성 검사 에러가 있을 때 폼에 다시 입력한 값을 유지하기 위해 모델 속성 추가
 			List<PrjStep> prjStepList = lkhService.project_step_list(projectId);
 			List<UserInfo> task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
-
-
 			model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
 			model.addAttribute("prjStepList",prjStepList);
-			return "project/board/taskInsertForm";
+			// 에러가 잇다면 다시 입력하도록 리턴
+			return "project/task/taskInsertForm";
 		}
 
 		task.setUser_id(userId);
@@ -173,15 +175,14 @@ public class LkhController {
 	}
 
 
+
+	// 작업 수정 폼
 	@GetMapping ("task_update_form")
 	public String task_update_form(HttpServletRequest request ,Model model){
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 		log.info("task_update_form ctr projectId : {}",projectId);
-
-
-
-		return "project/board/taskUpdateForm";
+		return "project/task/taskUpdateForm";
 	}
 
 
@@ -204,7 +205,7 @@ public class LkhController {
 		model.addAttribute("garbageList",garbageList);
 		model.addAttribute("taskCount",taskCount);
 		model.addAttribute("page",page);
-		return "project/board/garbageList";
+		return "project/task/garbageList";
 	}
 
 

@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.ScriptAssert;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 //@Date 
 @Data
@@ -19,12 +20,17 @@ public class Task {
 		private int		project_step_seq;
 		private String	user_id;
 
-		@NotEmpty(message = "필수이빈다")
+		@NotEmpty(message = "이 항목은 필수입니다")
 		private String	task_subject;
+		@NotEmpty(message = "이 항목은 필수입니다")
 		private String	task_content;
+
 		private java.sql.Date task_stat_time;
+
 		private java.sql.Date	task_end_itme;
+		@NotNull(message = "이 항목은 필수입니다")
 		private String	task_priority;
+		@NotNull(message = "이 항목은 필수입니다")
 		private String	task_status;
 		private int		garbage;
 		
@@ -34,7 +40,6 @@ public class Task {
 		private int status_2_count;
 		private String project_s_name;
 		private String user_name;
-
 
 		private String search;   	private String keyword;
 		private String pageNum;

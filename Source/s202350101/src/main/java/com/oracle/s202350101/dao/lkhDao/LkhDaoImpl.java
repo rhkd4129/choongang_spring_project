@@ -37,10 +37,10 @@ public class LkhDaoImpl implements LkhDao {
 
 	// 진척률 그래프
 	@Override
-	public List<Task> Workload_chart(int project_id) {
+	public List<Task> workload_chart(int project_id) {
 		List<Task> taskUserWorkload = null;
 		try {
-			taskUserWorkload = sqlSession.selectList("Workload_chart", project_id);
+			taskUserWorkload = sqlSession.selectList("workload_chart", project_id);
 		} catch (Exception e) {
 			log.info("dao : task_user_workload error Message -> {}", e.getMessage());
 		}
@@ -233,7 +233,7 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int task_resotre(Task task) {
+	public int task_restore(Task task) {
 		int result = 0;
 		try {
 			result = sqlSession.update("task_restore", task);

@@ -12,7 +12,7 @@ public interface LkhDao {
 	// 작업별 상태 count -> 도넛차트
 	List<Integer> 		doughnut_chart(int project_id);
 	//회원별 작업 진척도
-	List<Task>			Workload_chart(int project_id);
+	List<Task>			workload_chart(int project_id);
 
 	PrjInfo				project_day(int project_id);
 	// 해당 프로젝트의 작업의 총 개수보기
@@ -54,7 +54,7 @@ public interface LkhDao {
 	int					task_garbage(Task task);
 	int					garbage_count(int project_id);
 	int					task_delete(Task task);
-	int					task_resotre(Task task);
+	int					task_restore(Task task);
 
 
 	

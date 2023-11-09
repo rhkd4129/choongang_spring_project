@@ -8,7 +8,7 @@ public interface LkhService {
 
 	// 작업별 상태 count -> 도넛차트
 	List<Integer> 		doughnut_chart(int project_id);
-	List<Task>			Workload_chart(int project_id);
+	List<Task>			workload_chart(int project_id);
 
 	PrjInfo				project_day(int project_id);
 	List<Task>			task_time_decs(Task task);
@@ -43,6 +43,6 @@ public interface LkhService {
 	int				task_delete(Task task);
 
 
-	int task_resotre(Task task);
+	int task_restore(Task task);
 
 }

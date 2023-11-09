@@ -1,6 +1,5 @@
 package com.oracle.s202350101.configuration;
 
-import com.oracle.s202350101.service.lkhSer.ProjectInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -25,9 +24,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 				.excludePathPatterns("/user_login");
 //				.addPathPatterns("/mypost_board_list/**")
 
-		registry.addInterceptor(new ProjectInterceptor())
-				.order(2)
-				.addPathPatterns("/Lee");
+
+
 				// 입력 패턴은 interceptor 적용
 				// 입력 패턴은 interceptor 적용하지 않겠다
 	}

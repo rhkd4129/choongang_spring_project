@@ -27,8 +27,6 @@ public class LkhServicveImpl implements LkhService {
 	private final PlatformTransactionManager transactionManager;
 
 	@Override
-
-
 	public List<Integer> doughnut_chart(int project_id) {
 		List<Integer> taskStatusList = null;
 		taskStatusList = lkhDao.doughnut_chart(project_id);
@@ -37,9 +35,9 @@ public class LkhServicveImpl implements LkhService {
 
 
 	@Override
-	public List<Task> Workload_chart(int project_id) {
+	public List<Task> workload_chart(int project_id) {
 		List<Task> taskUserWorkStatusList = null;
-		taskUserWorkStatusList = lkhDao.Workload_chart(project_id);
+		taskUserWorkStatusList = lkhDao.workload_chart(project_id);
 		return taskUserWorkStatusList;
 	}
 
@@ -160,11 +158,13 @@ public class LkhServicveImpl implements LkhService {
 	}
 
 	@Override
-	public int task_delete(Task task){ return lkhDao.task_delete(task);}
+	public int task_delete(Task task){
+		return lkhDao.task_delete(task);
+	}
 
 	@Override
-	public int task_resotre(Task task) {
-		return lkhDao.task_resotre(task);
+	public int task_restore(Task task) {
+		return lkhDao.task_restore(task);
 	}
 }
 

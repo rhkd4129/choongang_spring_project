@@ -124,7 +124,7 @@
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1>Task List</h1>
-            <a class="btn btn-primary" href="task_create_view">새 작업</a>
+            <a class="btn btn-primary" href="task_create_form">새 작업</a>
 
             <select id="order_by" class="form-control">
                 <option value="task_status">상태별</option>
