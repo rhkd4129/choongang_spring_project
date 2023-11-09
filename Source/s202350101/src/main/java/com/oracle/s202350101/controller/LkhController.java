@@ -184,14 +184,9 @@ public class LkhController {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 		log.info("task_update_form ctr projectId : {}",projectId);
-<<<<<<< HEAD
 		return "project/task/taskUpdateForm";
-=======
 
 
-g
-		return "project/board/taskUpdateForm";
->>>>>>> 646abf9a858ccc26f15f2b8a283b6bb20ea91403
 	}
 
 
