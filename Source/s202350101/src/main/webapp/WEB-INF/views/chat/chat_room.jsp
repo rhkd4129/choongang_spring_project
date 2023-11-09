@@ -86,8 +86,6 @@
                 //                  WebSocket을 기반으로 하는 메시징 프로토콜
                 stompClient = Stomp.over(ws);               //  찾아봐야함. 설명하기 능력부족 위에 설명.
                 console.log("stompClient: "+stompClient);
-
-
                 //  websocket에 대한 세션의 세부 설정을 하고 싶다면 핸들러 클래스를 만들자.
 
                 // var sockJsOptions = {
@@ -124,6 +122,13 @@
                         var msgContent = rtnmsg.msg_con;
                         var senderId = rtnmsg.sender_id;
                         var send_time = rtnmsg.send_time;
+                        var read_chk = rtnmsg.read_chk;
+                        if (read_chk == 'N') {
+                            read_chk = '안 읽음';
+                        } else {
+                            read_chk = '읽음';
+                        }
+
                         //  로그인 사용자 id
                         var myID = '${userInfo.user_id}';
                         // 여기에서 메시지를 화면에 표시하거나 처리할 수 있음
@@ -134,11 +139,13 @@
                             con += '<div id="right_chat_msg" >';
                             con += '<p>' + msgContent + '</p>';
                             con += '<p>' + send_time + '</p>';
+                            con += '<p>' + read_chk + '</p>';
                             con += '</div>';
                         } else {                //  상대방이 보낸 메세지
                             con += '<div id="left_chat_msg" >';
                             con += '<p>' + msgContent + '</p>';
                             con += '<p>' + send_time + '</p>';
+                            con += '<p>' + read_chk + '</p>';
                             con += '</div>';
                         }
                         chat_con.append(con);

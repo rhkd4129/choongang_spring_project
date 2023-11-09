@@ -25,8 +25,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {  // b
 //      메시지 전송할 상위 주소
 //      /app으로 시작하는 메시지만 해당 Broker에서 받아서 처리
 //      통합시 "/pub/chat", "/pub/notiry"의 형식으로 하는 것 제시하기.
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.setApplicationDestinationPrefixes("/notify");
+        registry.setApplicationDestinationPrefixes("/app","/notify");
         /*      pub => publish || sub => subscribe    */
 //      "/topic" 하위로 들어오는 모든 주소로 메세지를 전송하겠다는 설정입니다.
 //      해당 주소를 구독하는 클라이언트에게 메시지를 보낸다
