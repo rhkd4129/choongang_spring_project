@@ -15,7 +15,7 @@ package com.oracle.s202350101.handler;
 //
 //@Slf4j
 //@Component
-//public class SocketHandler extends TextWebSocketHandler {
+//public class SocketHandler extends TextWebSocketHandler {     //  강준우
 //
 //    HashMap<String, WebSocketSession> sessionMap = new HashMap<>();
 //    // 웹소켓 세션을 담아둘 맵

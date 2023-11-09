@@ -9,18 +9,18 @@
 <mapper namespace="com.oracle.s202350101.ChatMsgMapper">
     <!-- ChatMsg -->
 
-
+<!--모든 메시지 조회-->
     <select id="findAll" resultType="ChatMsg">
         select *
         from chat_msg
     </select>
-
+<!--특정 채팅방 내 모든 메시지 조회-->
     <select id="findByRoomId" parameterType="ChatRoom" resultType="ChatMsg">
         select *
         from chat_msg
         where chat_room_id = #{chat_room_id}
     </select>
-
+<!--메시지 저장-->
     <insert id="saveMsg" parameterType="ChatMsg" keyProperty="msg_id">
         insert into chat_msg
         values (#{chat_room_id},
@@ -29,13 +29,14 @@
                 sysdate, #{read_chk})
 
     </insert>
-
+<!--채팅방 내 총 메시지 개수-->
     <select id="cntMsg" resultType="int">
         select count(*)
         from chat_msg
         where chat_room_id = #{chat_room_id}
     </select>
-    <select id="findbyid" parameterType="ChatMsg" resultType="ChatMsg">
+<!--채팅방, 메시지 id기준 메시지 조회-->
+    <select id="findbyCMid" parameterType="ChatMsg" resultType="ChatMsg">
         select * from chat_msg where chat_room_id = #{chat_room_id} and msg_id = #{msg_id}
     </select>
 </mapper>

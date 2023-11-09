@@ -8,12 +8,12 @@
 
 <mapper namespace="com.oracle.s202350101.ChatRoomMapper">
 	<!-- ChatRoom -->
-
+<!--모든 채팅방 조회-->
 	<select id="findAllchatroom" resultType="ChatRoom">
 		select * from chat_room
 	</select>
+<!--개인별 채팅방 조회-->
 	<select id="findByUserId" parameterType="UserInfo" resultType="ChatRoom">
-
         select chl.*, user_name
         from (select * from chat_room
               where sender_id = #{user_id}
@@ -22,9 +22,8 @@
               where receiver_id = #{user_id}) chl
                  left join user_info uil
                            on chl.receiver_id = uil.user_id
-
     </select>
-
+<!--상대방과의 채팅방 조회-->
 	<select id="findByYouAndMe" parameterType="ChatRoom" resultType="ChatRoom">
 		select * from chat_room where
 			receiver_id=#{receiver_id} and sender_id = #{sender_id}
@@ -32,15 +31,13 @@
 		select * from chat_room where
 			receiver_id=#{sender_id} and sender_id = #{receiver_id}
 	</select>
-
+<!--강의실 개수 조회-->
 	<select id="findById" resultType="int">
 		select count(class_id)
 		from class_room
 	</select>
 
-<!--	<insert id="addChatRoom" parameterType="ChatRoom" keyProperty="chatroomid">-->
-<!--		insert into chat_room values (#{chat_room_id, jdbcType=INTEGER }, #{sender_id}, #{receiver_id})-->
-<!--	</insert>-->
+<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
 	<insert id="addChatRoom" parameterType="ChatRoom" keyProperty="chat_room_id">
 		<selectKey keyProperty="chat_room_id" resultType="int" order="BEFORE">
 			SELECT NVL(seq_chat_room_id.NEXTVAL, 0) FROM DUAL

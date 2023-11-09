@@ -198,7 +198,6 @@
                     <div id="left_chat_msg">
                         <p>${msg.msg_con}</p>
                         <p>${msg.send_time}</p>
-                        <p>${msg.read_chk}</p>
                         <c:choose>
                             <c:when test="${msg.read_chk eq 'N'}">
                                 <p>안 읽음</p>

@@ -17,14 +17,14 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 
 	private final ClassRoomDaoImpl CRdao;
 	
-	//	모든 ClassRoom 조회
+//	모든 ClassRoom 조회
 	@Override
 	public List<ClassRoom> findAllClassRoom() {
 		List<ClassRoom> CRList = CRdao.findAllClassRoom();
 		return CRList;
 	}
 
-	//	ClassRoom	생성
+//	ClassRoom	생성
 	@Override
 	public int saveClassRoom(ClassRoom cr) {
 		return CRdao.saveClassRoom(cr);

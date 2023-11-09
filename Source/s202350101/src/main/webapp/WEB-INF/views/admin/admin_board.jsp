@@ -49,7 +49,7 @@
             });
         });
 
-
+//  강의실 변경 시
         function cl_room(currentpage) {
             var cl_room_val = $('#cl_room_List').val();
             console.log(cl_room_val);
@@ -81,7 +81,6 @@
             // var curpage = 1;
             var sendurl = '/admin_board/?class_id=' + cl_room_val + "&project_id=" + project_id;			// + currentpage;
             console.log(sendurl);
-
         }
 
         // function eventList(currentPage) {
@@ -133,10 +132,10 @@
         // }
 
         function event_search(currentPage) {
-            var keyword = $('#search_text').val();
-            var category = $('#bd_CTG').val();
-            if (category === '전체') {
-                category = '%%';
+            var keyword = $('#search_text').val();      //  검색 키워드
+            var category = $('#bd_CTG').val();          //  선택한 카테고리
+            if (category === '전체') {                   //  전체 카테고리 선택 시
+                category = '%%';                        //      모든 카테고리 처리
             }
             console.log(keyword);
             console.log(currentPage);
@@ -148,8 +147,8 @@
                 currentPage: currentPage
             };
 
-            // 데이터를 URL에 직접 추가
-            // var sendurl = "/admin_board_ajax_paging_search/?keyword=" + encodeURIComponent(keyword) + "&currentPage=" + currentPage;
+// 데이터를 URL에 직접 추가
+// var sendurl = "/admin_board_ajax_paging_search/?keyword=" + encodeURIComponent(keyword) + "&currentPage=" + currentPage;
             var sendurl = "/admin_board_ajax_paging_search";
             console.log(sendurl);
             $.ajax({
@@ -158,13 +157,12 @@
                 dataType: 'json',
                 data: sendData,
                 success: function (jsonData) {
-                    console.log("hi");
-                    console.log(jsonData);
+                    console.log(jsonData);  //  반환되는 데이터
 
-                    var BFList_body = $('#BFList_body');
-                    BFList_body.empty();
+                    var BFList_body = $('#BFList_body');        //  게시글 목록 지정
+                    BFList_body.empty();                        //  게시글 목록 중복을 막기 위한 내용 삭제
 
-                    $.each(jsonData.firList, function (index, BFL) {
+                    $.each(jsonData.firList, function (index, BFL) {        //  반환된 데이터 입력
                         var tr = $('<tr>');
 
                         tr.append('<td>' + BFL.rn + '</td>');
@@ -176,16 +174,16 @@
                         tr.append('<td><input type="checkbox" name="xxx" value="yyy" checked>');
                         BFList_body.append(tr);
                     });
-                    var page = jsonData.obj;
+                    var page = jsonData.obj;            //  페이징 객체
 
-                    var paginationDiv = $('#e_p');
-                    paginationDiv.empty();
+                    var paginationDiv = $('#e_p');      //  페이징 번호 위치
+                    paginationDiv.empty();              //  페이징 번호 중복을 막기 위한 내용 삭제
                     var jspPagination = '<div id="e_p" class="pagination">';
                     if (page.startPage > page.pageBlock) {
                         jpsPagination += '<div onclick="event_search(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
                     }
                     for (var i = page.startPage; i <= page.endPage; i++) {
-                        var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : ''; // 현재 페이지와 i가 일치할 때 스타일을 적용
+                        var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : '';     // 현재 페이지와 i가 일치할 때 스타일을 적용
 
                         jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="event_search(' + i + ')"><div class="page-link">' + i + '</div></div>';
                     }
@@ -193,12 +191,11 @@
                         jpsPagination += '<div onclick="event_search(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
                     }
                     jspPagination += '</div>';
+                    //  위 html코드들을 입력
                     paginationDiv.html(jspPagination);
 
                 }
             })
-            // var BFList = $('#BFList_body');
-            // BFList.empty();
         }
 
 

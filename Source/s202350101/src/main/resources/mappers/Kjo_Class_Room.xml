@@ -8,24 +8,23 @@
 
 <mapper namespace="com.oracle.s202350101.ClassRoomMapper">
 	<!-- ClassRoom -->
-
+<!--모든 강의실 조회-->
 	<select id="findAllClassRoom" resultType="ClassRoom">
-
 		select *
 		from class_room
 	</select>
+<!--지역별 강의실 조회 ( 이대, 강남 )-->
 	<select id="findAreaClassRoom" parameterType="ClassRoom" resultType="ClassRoom">
-
 		select *
 		from class_room
 		where class_area = #{class_area}
 	</select>
-
+<!--ClassRoom	개수-->
 	<select id="cntClassRoom" resultType="int">
 		select count(class_id)
 		from class_room
 	</select>
-
+<!--ClassRoom	생성-->
 	<insert id="saveClassRoom" parameterType="ClassRoom">
 		insert into class_room
 		values ((SELECT COUNT(class_id) + 1 FROM class_room), #{class_room_num}, #{class_start_date}, #{class_end_date}, #{class_master}, #{class_name}, #{class_area})

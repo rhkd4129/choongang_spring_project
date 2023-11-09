@@ -10,5 +10,6 @@ public interface ClassRoomService {
 	List<ClassRoom> findAllClassRoom();
 
 
+//	ClassRoom	생성
 	int saveClassRoom(ClassRoom cr);
 }

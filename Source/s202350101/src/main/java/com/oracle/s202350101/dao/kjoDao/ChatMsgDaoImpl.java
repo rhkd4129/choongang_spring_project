@@ -17,6 +17,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
     private final SqlSession session;
 
 
+    //<!--모든 메시지 조회-->
     @Override
     public List<ChatMsg> findAll() {
         log.info("findAll start");
@@ -30,6 +31,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return CMList;
     }
 
+    //<!--특정 채팅방 내 모든 메시지 조회-->
     @Override
     public List<ChatMsg> findByRoomId(ChatRoom cr) {
         log.info("findByRoomId start");
@@ -44,6 +46,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return CMList;
     }
 
+    //<!--메시지 저장-->
     @Override
     public int saveMsg(ChatMsg msg) {
         log.info("saveMsg start");
@@ -60,6 +63,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return result;
     }
 
+    //<!--채팅방 내 총 메시지 개수-->
     @Override
     public int cntMsg(ChatMsg msg) {
         log.info("cntMsg start");
@@ -74,15 +78,16 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return result;
     }
 
+//<!--채팅방, 메시지 id기준 메시지 조회-->
     @Override
-    public ChatMsg findbyid(ChatMsg msg) {
-        log.info("findbyid start");
+    public ChatMsg findbyCMid(ChatMsg msg) {
+        log.info("findbyCMid start");
         ChatMsg cm = new ChatMsg();
         try {
-            cm = session.selectOne("findbyid",msg);
+            cm = session.selectOne("findbyCMid",msg);
 
         }catch (Exception e) {
-            System.out.println("findbyid Error -->>" + e.getMessage());
+            System.out.println("findbyCMid Error -->>" + e.getMessage());
         }
         return cm;
     }

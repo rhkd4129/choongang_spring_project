@@ -26,7 +26,6 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		try {
 			CRList = session.selectList("findAllClassRoom");
 			System.out.println(CRList.stream().collect(Collectors.toList()));
-
 			log.info("findAllClassRoom finish");
 		}catch (Exception e) {
 			e.printStackTrace();

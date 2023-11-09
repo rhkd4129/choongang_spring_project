@@ -14,11 +14,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class PrjInfoServiceImpl implements PrjInfoService {
-
     private final PrjInfoDao PIdao;
-
     @Override
     public List<PrjInfo> findAll() {
+//  모든 프로젝트 조회
         log.info("findbyclassuser start");
         List<PrjInfo> PIList = PIdao.findAll();
         return PIList;
@@ -26,14 +25,8 @@ public class PrjInfoServiceImpl implements PrjInfoService {
     }
 
     @Override
-    public List<PrjInfo> findPrjInfoById(ClassRoom cr) {
-        log.info("findbyClassUserProject start");
-        List<PrjInfo> PIList = PIdao.findPrjInfoById(cr);
-        return PIList;
-    }
-
-    @Override
     public List<PrjInfo> findbyClassId(ClassRoom cr) {
+//  강의실 별 프로젝트 조회
         log.info("findbyClassUserProject start");
         List<PrjInfo> PIList = PIdao.findbyClassId(cr);
         return PIList;

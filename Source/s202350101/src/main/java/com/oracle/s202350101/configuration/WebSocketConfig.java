@@ -8,9 +8,9 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@EnableWebSocketMessageBroker   //메세지 브로커가 지원하는 WebSocket 메시지 처리를 활성화 시킵니다.
+@EnableWebSocketMessageBroker   //메세지 브로커가 지원하는 WebSocket 메시지 처리를 활성화 시킵니다. 
 @Slf4j
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {  // by 강준우
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {

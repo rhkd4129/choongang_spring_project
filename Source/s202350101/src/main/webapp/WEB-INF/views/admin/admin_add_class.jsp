@@ -77,7 +77,7 @@
                 }
             });
         }
-
+//  강의실 변경 시 비동기로 강의실 내 학생 조회
         function cl_room() {
             var cl_room_val = $('#cl_room_List').val();
             console.log(cl_room_val);

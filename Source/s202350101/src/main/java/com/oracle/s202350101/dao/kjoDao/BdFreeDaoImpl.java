@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class BdFreeDaoImpl implements BdFreeDao {
 
     private final SqlSession session;
+//<!--모든 BdFree조회-->
     @Override
     public List<BdFree> findAllBdFree() {
         log.info("findAllBdFree start");
@@ -32,6 +33,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
         return BFList;
     }
 
+    //<!--카테고리별 BdFree, 작성자 정보 조회-->
     @Override
     public List<BdFree> findBdFreeByCategory(BdFree bf) {
         log.info("findBdFreeByCategory start");
@@ -49,6 +51,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
         return BFList;
     }
 
+    //<!--카테고리별 BdFree, 작성자 정보 조회 및 페이징-->
     @Override
     public List<BdFree> pageBdFreeByCategoryAndPage(BdFree bf) {
         log.info("pageBdFreeByCategoryAndPage start");
@@ -67,6 +70,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
 
     }
 
+    //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
     @Override
     public List<BdFree> findByCategorySearchAndPage(BdFree bf) {
 
@@ -85,6 +89,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
         return BFList;
     }
 
+    //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
     @Override
     public int findByCategorySearch(BdFree bf) {
 

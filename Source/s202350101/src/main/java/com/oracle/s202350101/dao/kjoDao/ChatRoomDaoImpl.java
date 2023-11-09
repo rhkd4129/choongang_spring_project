@@ -19,6 +19,7 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
     private final SqlSession session;
     @Override
     public List<ChatRoom> findAll() {
+//<!--모든 채팅방 조회-->
 
         log.info("findAll start");
         List<ChatRoom> CRList = null;
@@ -36,6 +37,7 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
     @Override
     public List<ChatRoom> findByUserId(UserInfo ui) {
+//<!--개인별 채팅방 조회-->
         log.info("findByUserId start");
         List<ChatRoom> CRList = null;
         try {
@@ -50,6 +52,7 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
     @Override
     public ChatRoom findById(ChatRoom cr) {
+//<!--강의실 개수 조회-->
         log.info("findById start");
         ChatRoom CRList = null;
         try {
@@ -66,6 +69,7 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
     @Override
     public ChatRoom findByYouAndMe(ChatRoom cr) {
+//<!--상대방과의 채팅방 조회-->
         log.info("findByYouAndMe start");
         try {
             cr = session.selectOne("findByYouAndMe",cr);
@@ -79,6 +83,7 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
     @Override
     public int addChatRoom(ChatRoom cr) {
+//<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
         log.info("addChatRoom start");
         int result = 0;
         try {

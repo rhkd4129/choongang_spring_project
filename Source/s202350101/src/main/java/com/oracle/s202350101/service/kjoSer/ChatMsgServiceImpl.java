@@ -18,27 +18,32 @@ import java.util.List;
 public class ChatMsgServiceImpl implements ChatMsgService {
     private final ChatMsgDao CMdao;
 
+    //<!--모든 메시지 조회-->
     private final PlatformTransactionManager transactionManager;
     @Override
     public List<ChatMsg> findAll() {
         return CMdao.findAll();
     }
 
+    //<!--특정 채팅방 내 모든 메시지 조회-->
     @Override
     public List<ChatMsg> findByRoomId(ChatRoom cr) {
         return CMdao.findByRoomId(cr);
     }
 
+    //<!--메시지 저장-->
     @Override
     public int saveMsg(ChatMsg msg) {
         return CMdao.saveMsg(msg);
     }
 
+    //<!--채팅방 내 총 메시지 개수-->
     @Override
     public int cntMsg(ChatMsg msg) {
         return CMdao.cntMsg(msg);
     }
 
+    //  메시지 insert
     @Override
     public int cntsaveMsg(ChatMsg msg) {
         int result = 0;
@@ -55,8 +60,9 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         return result;
     }
 
-    
-    @Override   //  메세지 insert 후 메세지 반환
+
+    //  메세지 insert 후 메세지 반환
+    @Override
     public ChatMsg findsaveMsg(ChatMsg msg) {
         ChatMsg cm = null;
         TransactionStatus txStatus =
@@ -67,7 +73,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             //  메세지 insert 후 메세지 pk 반환
             CMdao.saveMsg(msg);
             //  해당 pk를 지닌 메세지 select
-            cm = CMdao.findbyid(msg);
+            cm = CMdao.findbyCMid(msg);
             transactionManager.commit(txStatus);
         } catch (Exception e) {
             transactionManager.rollback(txStatus);

@@ -19,27 +19,33 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     private final ChatRoomDao CHdao;
     private final PlatformTransactionManager transactionManager;
+//<!--모든 채팅방 조회-->
 
     @Override
     public List<ChatRoom> findAll() {
         return CHdao.findAll();
     }
 
+//<!--개인별 채팅방 조회-->
     @Override
     public List<ChatRoom> findByUserId(UserInfo ui) {
         return CHdao.findByUserId(ui);
     }
 
+//<!--강의실 개수 조회-->
     @Override
     public ChatRoom findById(ChatRoom cr) {
         return CHdao.findById(cr);
     }
 
+//<!--상대방과의 채팅방 조회-->
     @Override
     public ChatRoom findByYouAndMe(ChatRoom cr) {
         return CHdao.findByYouAndMe(cr);
     }
 
+
+//<!--상대방과의 채팅방 조회 후 없으면 채팅방 생성-->
     @Override
     public ChatRoom findByYouAndMeNotEmpty(ChatRoom cr) {
         int result = 0;
