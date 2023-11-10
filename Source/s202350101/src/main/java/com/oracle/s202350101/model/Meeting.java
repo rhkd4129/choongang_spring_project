@@ -1,13 +1,13 @@
 package com.oracle.s202350101.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 
-//@Date 
+//@Data
 @Getter
 @Setter
 @ToString
@@ -23,8 +23,10 @@ public class Meeting {
 	private int 	meeting_status;
 	private String 	attach_name;
 	private String 	attach_path;
-
-	private Meeting        meetingMember;
-	private String        user_name;
-
+	
+	// 조회용
+	private String 			meetuser_id;
+	private String			user_name;
+	private MeetingMember	meetingMember;
+	
 }

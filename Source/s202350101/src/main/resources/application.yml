@@ -1,13 +1,20 @@
 server:
-  port: 8283
+  port: 8282
   
 # Oracle Connect
 spring:
+  # File Size
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB  
+      
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521/xe
-    username: s202350101_lkh
+    username: s202350101_jmh
     password: tiger
+
 # JPA Setting
   jpa:
     show-sql: true
@@ -16,9 +23,8 @@ spring:
       ddl-auto: update
 
   
-  # view,css, js  Resolver
+  # view Resolver
   mvc:
-    #static-path-pattern: /static/**
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp

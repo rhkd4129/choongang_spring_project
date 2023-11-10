@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+
+<mapper namespace="com.oracle.s202350101.UserInfoMapper">
+    <!-- UserInfo -->
+<!--사용자 ID로 사용자 조회-->
+    <select id="findbyuserId" parameterType="UserInfo" resultType="UserInfo">
+        select * from user_info where user_id = #{user_id}
+    </select>
+<!--어드민 제외 모든 사용자 조회-->
+    <select id="findAllUser" resultType="UserInfo">
+        select *
+        from user_info
+        where user_auth != 'admin'
+    </select>
+<!--특정 강의실 내 어드민 제외 사용자 조회-->
+    <select id="findbyClassUser" parameterType="UserInfo" resultType="UserInfo">
+        select *
+        from user_info
+        where class_id = #{class_id}
+          and user_auth != 'admin'
+          and user_id != #{user_id}
+    </select>
+<!--어드민 제외 특정 강의실 내 프로젝트정보, 사용자정보 조회-->
+    <select id="findbyClassUserProject" parameterType="int" resultType="UserInfo">
+        select *
+        from user_info u
+                 left join prj_info p
+                           on u.project_id = p.project_id
+        where class_id = #{cl_id}
+          and user_auth != 'admin'
+
+    </select>
+<!--사용자 권한 manager로 변경-->
+    <update id="auth_modify_manager" parameterType="java.util.List">
+        UPDATE USER_INFO
+        SET user_auth = 'manager'
+        where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            '${item}'
+        </foreach>
+    </update>
+<!--사용자 권한 student로 변경-->
+    <update id="auth_modify_student" parameterType="java.util.List">
+        UPDATE USER_INFO
+        SET user_auth = 'student'
+        where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            '${item}'
+        </foreach>
+    </update>
+<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
+    <select id="pageUserInfo" parameterType="UserInfo" resultType="UserInfo">
+        select u.*, p.project_name
+        from (select rownum rn, a.*
+              from (select * from USER_INFO where user_auth != 'admin' and class_id = #{class_id} order by USER_ID) a) u
+                 left join prj_info p
+                           on u.project_id = p.project_id
+        where rn between #{start} and #{end}
+    </select>
+
+</mapper>
+

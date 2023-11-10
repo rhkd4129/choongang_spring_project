@@ -18,7 +18,7 @@
 			</div>
 		
 			<!-- PMS소개란 -->
-			<div class="dropdown-menu position-static d-flex flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow mt-4" data-bs-theme="light">
+			<div class="dropdown-menu position-static d-flex flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow mt-3" data-bs-theme="light">
 				<nav class="col-lg-8">
 					<ul class="list-unstyled d-flex flex-column gap-2">
 						<li>
@@ -84,7 +84,7 @@
 				</div>
 			</div>
 			
-			<div class="d-flex flex-column flex-md-row gap-4 py-md-5 align-items-center justify-content-center"> <!-- p-4 -->
+			<div class="d-flex flex-column flex-md-row gap-4 py-md-4 align-items-center justify-content-center"> <!-- p-4 -->
 			
 				<!-- TO-DO LIST -->
 				<div class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-100per" data-bs-theme="light" style="height:354px">

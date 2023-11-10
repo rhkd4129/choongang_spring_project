@@ -21,7 +21,6 @@ public class BdQna {
 	private int 	odc_indent;				private String 	alarm_flag;
 	private String 	parent_doc_user_id; 	private int 	parent_doc_no;
 
-
+	// 조회용
 	private String app_name;
-
 }

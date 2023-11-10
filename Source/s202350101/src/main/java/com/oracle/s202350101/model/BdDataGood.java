@@ -12,5 +12,7 @@ public class BdDataGood {
 	private int 	doc_no;
 	private int 	project_id;
 	private String  user_id;
-
+	
+	//조회용
+	private String  user_name;
 }

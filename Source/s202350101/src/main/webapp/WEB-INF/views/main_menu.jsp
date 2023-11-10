@@ -44,7 +44,7 @@
 	border:0px;
 	background-color: #ffffff;
 	border-radius: 5px;
-	padding: 5px 5px 5px 10px;
+	padding: 3px 3px 3px 10px;
 	margin: 5px;
 	width: 200px;
 	list-style-type: none; /* 불릿 제거 */
@@ -69,25 +69,13 @@
 	}
 </style>
 			<div class="offcanvas-md offcanvas-end bg-body-tertiary" style="max-width:300px;" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
- 				<!-- <div id="menu-my-part">
- 					<div class="photo"></div>
- 					<p class="name">홍길동</p>
- 					<div class="count-info">
- 						<ul>
- 							<li>전체글: 45</li>
- 							<li>쪽지: 5</li>
- 							<li>작업진행률 : 50% (5/10)</li>
- 						</ul>	
- 						</ul>
- 					</div> 								
- 				</div> -->
- 				
+			
 				<p style="height:10px"></p>
- 				<p class="menu-title">내 글 모음</p>
+  				<p class="menu-title">내 글 모음</p>
 				<ul>
-					<li class="menu-box"><a href="/project/manager/p1.html">내가 쓴 게시글</a></li>
-					<li class="menu-box"><a href="/project/manager/p1.html">내가 쓴 댓글</a></li>
-					<li class="menu-box"><a href="/project/manager/p1.html">내가 추천한 게시글</a></li>
+					<li class="menu-box"><a href="mypost_board_list">내가 쓴 게시글</a></li>
+					<li class="menu-box"><a href="mypost_comment_list">내가 쓴 댓글</a></li>
+					<li class="menu-box"><a href="mypost_good_list">내가 추천한 게시글</a></li>
 				</ul>
  				<p class="menu-title">To-Do List</p>
   				<!-- <p class="project-title">
@@ -98,25 +86,25 @@
  				</p> -->
   				<p class="menu-title">프로젝트</p>
  				<ul>
- 					<li class="menu-box"><a href="/project/manager/p1.html">프로젝트 생성</a></li>
- 					<li class="menu-box"><a href="/project/manager/p2.html">프로젝트 단계 프로파일</a></li>
+ 					<li class="menu-box"><a href="prj_mgr_req_create">프로젝트 생성</a></li>
+ 					<li class="menu-box"><a href="prj_mgr_step_list">프로젝트 단계 프로파일</a></li>
  					<li class="menu-box"><a href="dashboard">프로젝트 홈</a></li>
- 					<li class="menu-box">프로젝트 캘린더</li>
- 					<li class="menu-box"><a href="/project/board/project_board_data_list.html">공지/자료</a></li>
- 					<li class="menu-box">회의록</li>
- 					<li class="menu-box"><a href="/project/board/project_board_report_list.html">업무보고</a></li>
+ 					<li class="menu-box"><a href="prj_calendar">프로젝트 캘린더</a></li>
+ 					<li class="menu-box"><a href="prj_board_data_list">공지/자료</a></li>
+ 					<li class="menu-box"><a href="prj_meeting_calendar">회의록</a></li>
+ 					<li class="menu-box"><a href="prj_board_report_list">업무보고</a></li>
  				</ul>
  				
  				<p class="menu-title">완료 프로젝트 목록</p>
 
  				<p class="menu-title">Board</p>
  				<ul>
- 					<li class="menu-box"><a href="">전체 공지사항</a></li>
- 					<li class="menu-box"><a href="">이벤트</a></li>
+ 					<li class="menu-box"><a href="board_notify">전체 공지사항</a></li>
+ 					<li class="menu-box"><a href="event">이벤트</a></li>
  					<li class="menu-box"><a href="">Q&A 게시판</a></li>
- 					<li class="menu-box"><a href="">자유 게시판</a></li>
+ 					<li class="menu-box"><a href="board_free">자유 게시판</a></li>
  				</ul>
  				
- 				<p class="menu-title">관리자 페이지</p>
+ 				<p class="menu-title"><a href="admin_projectmanager">관리자 페이지</a></p>
  				
  			</div>

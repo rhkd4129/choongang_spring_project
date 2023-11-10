@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+	 
+	 
+<mapper namespace="com.oracle.s202350101.PrjBdRepMapper">
+	
+	<select id="jmhPrjBdRepListTotalCount" resultType="int">
+		SELECT Count(*) FROM PRJ_BD_REP
+	</select>
+	
+	<select id="jmhPrjBdRepList" parameterType="PrjBdRep" resultType="PrjBdRep">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT p.*, u.user_name, 
+							(SELECT cate_name 
+							 FROM CODE 
+							 WHERE UPPER(table_name)='PRJ_BD_REP' 
+							 AND UPPER(field_name)='BD_CATEGORY' 
+							 AND cate_code=p.bd_category) bd_category_name
+					  FROM PRJ_BD_REP p, USER_INFO u 
+					  WHERE p.user_id = u.user_id 
+					  ORDER BY doc_no DESC) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="jmhPrjBdRepCodeList" parameterType="Code" resultType="Code">
+		SELECT * 
+		FROM CODE 
+		WHERE table_name=#{table_name} AND field_name=#{field_name}
+	</select>
+	
+	<insert id="jmhPrjBdRepInsertBoard" parameterType="PrjBdRep">
+		<selectKey resultType="int" keyProperty="doc_no" order="BEFORE">
+        	SELECT NVL(MAX(doc_no),0)+1 FROM PRJ_BD_REP WHERE project_id=#{project_id}
+    	</selectKey>
+		INSERT INTO 
+			PRJ_BD_REP(
+				DOC_NO, 
+				PROJECT_ID, APP_ID, USER_ID,
+				CREATE_DATE, 
+				SUBJECT, BD_CATEGORY,
+				DOC_BODY, 
+				ATTACH_NAME, ATTACH_PATH
+			) 				
+			VALUES(
+				#{doc_no}, 
+				#{project_id}, #{app_id}, #{user_id},
+				#{create_date}, 
+				#{subject}, #{bd_category},
+				#{doc_body},
+				#{attach_name}, #{attach_path}				
+			)	
+	</insert>
+		
+	<select id="jmhPrjBdRepSelectBoard" parameterType="PrjBdRep" resultType="PrjBdRep">
+		SELECT 	p.*, u.user_name, (SELECT cate_name FROM CODE WHERE table_name='PRJ_BD_REP' AND field_name='BD_CATEGORY' AND cate_code=p.bd_category) bd_category_name 
+		FROM PRJ_BD_REP p, USER_INFO u
+		WHERE p.user_id = u.user_id 
+		AND p.doc_no=#{doc_no} AND p.project_id=#{project_id}
+	</select>
+	
+	<update id="jmhPrjBdRepUpdateBoard" parameterType="PrjBdRep">
+		UPDATE PRJ_BD_REP 
+		SET 
+			MODIFY_DATE	= sysdate,
+			SUBJECT		= #{subject},
+			BD_CATEGORY	= #{bd_category},
+			DOC_BODY	= #{doc_body},
+			ATTACH_NAME	= #{attach_name}, 
+			ATTACH_PATH	= #{attach_path}
+		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
+	</update>
+	
+	<delete id="jmhPrjBdRepDeleteBoard" parameterType="PrjBdRep">
+		DELETE PRJ_BD_REP 
+		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
+	</delete>
+	
+	<!-- 댓글 등록 -->
+	<insert id="jmhPrjBdRepInsertComment" parameterType="BdRepComt">
+		<selectKey resultType="int" keyProperty="comment_doc_no" order="BEFORE">
+        	SELECT NVL(MAX(comment_doc_no),0)+1 FROM BD_REP_COMT WHERE project_id=#{project_id}
+    	</selectKey>
+		INSERT INTO 
+			BD_REP_COMT(doc_no, project_id, comment_doc_no, user_id, create_date, comment_context, alarm_flag) 
+			VALUES(#{doc_no}, #{project_id}, #{comment_doc_no}, #{user_id}, sysdate, #{comment_context}, #{alarm_flag})
+	</insert>
+
+	<!-- 댓글 목록 조회 -->
+	<select id="jmhPrjBdRepSelectCommentList" parameterType="BdRepComt" resultType="BdRepComt">
+		SELECT c.*, u.user_name user_name 
+		FROM BD_REP_COMT c, USER_INFO u 
+		WHERE c.user_id = u.user_id 
+		AND c.doc_no=#{doc_no} AND c.project_id=#{project_id} 
+		ORDER BY c.create_date DESC
+	</select>
+
+	<!-- 댓글 삭제 -->
+	<delete id="jmhPrjBdRepDeleteComment" parameterType="BdRepComt">
+		DELETE BD_REP_COMT 
+		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id} AND COMMENT_DOC_NO=#{comment_doc_no}
+	</delete>
+</mapper>

@@ -17,21 +17,20 @@
 	</select>
 	
 	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
-		select count(*) 
-		from   bd_qna 
-		where  user_id = #{user_id}
-	</select> -->
+	<select id="totalRepPjCount" parameterType="UserInfo" resultType="int">
+		Select count(*) 
+		From   PRJ_BD_REP
+		Where  user_id = #{user_id}
+	</select>
 	
-	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
-		SELECT a.bd_qna, b.bd_free, c.bd_rep_comt, d.prj_bd_data
-     	FROM
-           ( select count(*) bd_qna      from bd_qna        where user_id = 'tester1' ) a
-        ,  ( select count(*) bd_free     from bd_free       where user_id = 'tester1' ) b
-        ,  ( select count(*) bd_rep_comt from bd_rep_comt   where user_id = 'tester1' ) c
-        ,  ( select count(*) prj_bd_data from prj_bd_data   where user_id = 'tester1' ) d	
-	</select> -->
+	<!-- PrjBdRepComt -->
+	<select id="mkhRepComt" parameterType="UserInfo" resultType="BdRepComt">
+		Select 	info.app_name, rep.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+		From 	app_info info, prj_bd_rep rep, bd_rep_comt comt
+		Where 	info.app_id = rep.app_id
+		And 	rep.doc_no = comt.doc_no
+		And 	comt.user_id = #{user_id}
+	</select>
 	
 </mapper>
 

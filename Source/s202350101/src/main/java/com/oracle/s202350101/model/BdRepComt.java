@@ -20,4 +20,7 @@ public class BdRepComt {
 	private String 	comment_context;
 	private String 	alarm_flag;
 
+	//조회용
+	private String  user_name;
+	private String	app_name;
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다
+	 mapper 여러개 쓰셔도 됩니다. -->
+
+
+<mapper namespace="com.oracle.s202350101.model.BdFreeMapper">
+    <!-- BdFree -->
+<!--모든 BdFree조회-->
+    <select id="findAllBdFree" resultType="BdFree">
+        select * from Bd_Free
+    </select>
+<!--카테고리별 BdFree, 작성자 정보 조회-->
+    <select id="findBdFreeByCategory" parameterType="BdFree" resultType="BdFree">
+        select b.*, u.*
+        from BD_free b
+                 left join user_info u
+                           on b.user_id = u.user_id
+        where bd_category = #{bd_category}
+    </select>
+<!--카테고리별 BdFree, 작성자 정보 조회 및 페이징-->
+    <select id="pageBdFreeByCategoryAndPage" parameterType="BdFree" resultType="BdFree">
+        select ev.*, u.user_name
+        from (select rownum rn, e.*
+              from (select * from BD_FREE where BD_CATEGORY = #{bd_category} order by Doc_no desc)  e) ev  left join user_info u
+        on ev.user_id = u.user_id
+        where rn between #{start} and #{end}
+        order by Doc_no desc
+    </select>
+<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
+    <select id="findByCategorySearchAndPage" parameterType="BdFree" resultType="BdFree">
+        select ev.*, u.user_name,rn
+        from (select rownum rn, e.*
+              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
+                 left join user_info u
+                           on ev.user_id = u.user_id
+        where rn between #{start} and #{end}
+        order by Doc_no desc
+    </select>
+<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
+    <select id="findByCategorySearch" parameterType="BdFree" resultType="int">
+        select count(*)
+        from (select rownum rn, e.*
+              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
+                 left join user_info u
+                           on ev.user_id = u.user_id
+    </select>
+
+
+
+
+</mapper>
+

@@ -5,7 +5,7 @@ import com.oracle.s202350101.model.AjaxResponse;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.Task;
 import com.oracle.s202350101.model.UserInfo;
-import com.oracle.s202350101.service.Paging;
+import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.service.lkhSer.LkhService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -6,10 +6,121 @@
 	 mapper 여러개 쓰셔도 됩니다. -->
 	 
 	 
-<mapper namespace="com.oracle.s202350101.">
-	 
-
+<mapper namespace="com.oracle.s202350101.PrjInfoMapper">
 	
-
+	<select id="ljhPrjInfoSelOne" parameterType="int" resultType="PrjInfo">
+		SELECT	project_name, project_startdate, project_enddate
+	 	FROM	prj_info
+	 	WHERE	project_id = #{project_id}
+	</select>
+	
+	<!-- 전체 회의 목록 (일정만, 회의록만, 일정+회의 모두 포함) -->
+	<select id="ljhMeetingList" parameterType="int" resultType="Meeting">
+		SELECT	*
+		FROM	meeting
+		WHERE	project_id = #{project_id}
+	</select>
+	
+	<!-- 회의 일정만  -->
+	<select id="ljhMeetingDate" parameterType="int" resultType="Meeting">
+		SELECT	*
+		FROM	meeting
+		WHERE	project_id = #{project_id}
+		AND 	meeting_status = 1
+	</select>
+	
+	<!-- 회의록, 일정+회의 목록 -->
+	<select id="ljhMeetingReportList" parameterType="int" resultType="Meeting">
+		SELECT	*
+		FROM	meeting
+		WHERE	project_id = #{project_id}
+		AND     meeting_status IN (2, 3)
+		ORDER BY meeting_id asc
+	</select>
+	
+	<!-- .getMeetingRead(meeting_id) -->
+	<select id="ljhMeetingRead" parameterType="int" resultType="Meeting">
+    	SELECT	m.*, u.user_name,u.user_id as meetuser_id
+	    FROM	meeting m, meeting_member m2, user_info u
+	    WHERE	m.meeting_id = #{meeting_id}
+	    AND		m.meeting_id = m2.meeting_id
+	    AND     m2.meetuser_id = u.user_id
+	</select>
+	
+	<select id="ljhPrjMemList" parameterType="int" resultType="PrjMemList">
+		SELECT  u.user_name, p.user_id
+		FROM    user_info u, prj_mem_list p
+		WHERE   u.user_id = p.user_id
+		AND     p.project_id = #{project_id}
+	</select>
+	
+	<!-- meeting 테이블 수정 -->
+	<update id="ljhMeetingReportUpdate" parameterType="Meeting">
+		UPDATE	meeting
+		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
+		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
+		        attach_name = #{attach_name}, attach_path = #{attach_path},
+		        meeting_content = #{meeting_content}
+		WHERE	meeting_id = #{meeting_id}
+		AND     project_id = #{project_id}
+	</update>		
+	
+	<!-- .deleteMeetingMember / meeting_member 테이블 삭제 -->
+	<delete id="ljhDeleteMeetingMember" parameterType="Meeting">
+		DELETE
+		FROM	meeting_member
+		WHERE	meeting_id = #{meeting_id}
+		AND		project_id = #{project_id}
+	</delete>
+	
+	<!-- 회의록 수정 시 meeting_member 테이블 추가 -->
+	<insert id="ljhInsertMeetingMember" parameterType="Meeting">
+		INSERT INTO meeting_member VALUES (#{meeting_id}, #{project_id}, #{meetuser_id})
+	</insert>
+	
+	<!-- .deleteMeetingReport -->
+	<delete id="ljhDeleteMeetingReport" parameterType="int">
+		DELETE FROM meeting WHERE meeting_id = #{meeting_id}
+	</delete>
+	
+	<!-- 회의일정 등록 (meeting_status = 1) -->
+	<insert id="ljhMeetingInsert" parameterType="Meeting">
+		INSERT INTO meeting
+		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
+				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 1, #{attach_name}, #{attach_path})
+	</insert>
+	
+	<!-- 회의일정 등록 시 참석자 추가 -->
+	<insert id="ljhInsertMember" parameterType="Meeting">
+		INSERT INTO meeting_member
+		VALUES ((SELECT max(meeting_id) FROM meeting), #{project_id}, #{meetuser_id})
+	</insert>
+	
+	<!-- 회의일정 -> 회의록 등록 (meeting_status = 3 변경) -->
+	<update id="ljhReportUpdate" parameterType="Meeting">
+		UPDATE	meeting
+		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
+		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
+		        attach_name = #{attach_name}, attach_path = #{attach_path},
+		        meeting_content = #{meeting_content}, meeting_status = 3
+		WHERE	meeting_id = #{meeting_id}
+		AND     project_id = #{project_id}
+	</update>
+	
+	<!-- 회의록 등록 (meeting_status = 2) -->
+	<insert id="ljhReportInsert" parameterType="Meeting">
+		INSERT INTO meeting
+		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
+				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 2, #{attach_name}, #{attach_path})
+	</insert>
+	
+	<!-- 알림 - 접속한 회원 별 회의일정 select -->
+	<select id="ljhUserMeeting" parameterType="hashmap" resultType="Meeting">
+		SELECT  *
+		FROM    meeting m, meeting_member m2
+		WHERE   m.meeting_id = m2.meeting_id
+		AND     m2.meetuser_id = #{user_id}
+		AND		m.project_id = #{project_id}
+	</select>
+	
 </mapper>
-

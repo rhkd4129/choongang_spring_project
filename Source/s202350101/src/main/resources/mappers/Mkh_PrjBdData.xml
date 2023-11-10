@@ -17,21 +17,30 @@
 	</select>
 	
 	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
-		select count(*) 
-		from   bd_qna 
-		where  user_id = #{user_id}
-	</select> -->
+	<select id="totalDtPjCount" parameterType="UserInfo" resultType="int">
+		Select count(*) 
+		From   PRJ_BD_DATA
+		Where  user_id = #{user_id}
+	</select>
 	
-	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
-		SELECT a.bd_qna, b.bd_free, c.bd_rep_comt, d.prj_bd_data
-     	FROM
-           ( select count(*) bd_qna      from bd_qna        where user_id = 'tester1' ) a
-        ,  ( select count(*) bd_free     from bd_free       where user_id = 'tester1' ) b
-        ,  ( select count(*) bd_rep_comt from bd_rep_comt   where user_id = 'tester1' ) c
-        ,  ( select count(*) prj_bd_data from prj_bd_data   where user_id = 'tester1' ) d	
-	</select> -->
+	<!-- 내가 추천한 게시글 -->
+	<select id="prjDataGoodSelect" parameterType="UserInfo" resultType="PrjBdData">
+		Select s.user_id, a.app_name, m.doc_no, m.app_id, m.subject, m.create_date, m.bd_count, m.good_count
+		From   prj_bd_data m, bd_data_good s, app_info a
+		Where  m.doc_no = s.doc_no
+		And    m.app_id = a.app_id
+		And    s.user_id = #{user_id}
+	</select>
+	
+	<!-- PrjBdDataComt -->
+	<select id="mkhDataComt" parameterType="UserInfo" resultType="BdDataComt">
+		Select 	info.app_name, pdata.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+		From 	app_info info, prj_bd_data pdata, bd_data_comt comt
+		Where 	info.app_id = pdata.app_id
+		And 	pdata.doc_no = comt.doc_no
+		And 	comt.user_id = #{user_id}
+	</select>
+
 	
 </mapper>
 

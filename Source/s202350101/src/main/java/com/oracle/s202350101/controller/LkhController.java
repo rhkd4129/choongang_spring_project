@@ -3,7 +3,7 @@ package com.oracle.s202350101.controller;
 import java.util.ArrayList;
 import java.util.List;
 import com.oracle.s202350101.model.*;
-import com.oracle.s202350101.service.Paging;
+import com.oracle.s202350101.model.Paging;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
