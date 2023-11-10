@@ -131,15 +131,21 @@
         <selectKey keyProperty="task_id" resultType="int" order="BEFORE">
             SELECT NVL(MAX(TASK_ID), 0) FROM TASK
         </selectKey>
-
-        <foreach collection="list" item="taskSub" separator="">
-            INSERT INTO TASK_SUB (TASK_ID, PROJECT_ID, WORKER_ID)
-            VALUES (#{task_id}, #{taskSub.project_id}, #{taskSub.worker_id})
+        insert all
+        <foreach collection="list" item="taskSub" separator=",">
+            into task_sub values(#{task_id}, #{taskSub.project_id}, #{taskSub.worker_id})
         </foreach>
+
+
+
     </insert>
 
 
-    <!-- 같이 하는 작업자 목록들 (상세 페이지에서 보여주기 )-->
+    <!-- 같이 하는 작업자 목록들 (상세 페이지에서 보여주기 )      INSERT INTO TASK_SUB (TASK_ID, PROJECT_ID, WORKER_ID)
+        <foreach collection="list" item="taskSub" separator=",">
+            VALUES (#{task_id}, #{taskSub.project_id}, #{taskSub.worker_id})
+        </foreach>
+-->
     <select id="taskWorkerlist" parameterType="TaskSub" resultType="TaskSub">
         SELECT *
             FROM TASK_SUB  t, user_info u

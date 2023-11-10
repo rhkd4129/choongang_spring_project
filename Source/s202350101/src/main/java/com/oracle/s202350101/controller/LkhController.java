@@ -134,9 +134,9 @@ public class LkhController {
 
 
 //		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
-	// 작업 생성 Post
+	// 작업 생성 Post @RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
 	@PostMapping("task_create")
-	public String task_create( @RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
+	public String task_create(
 			@Validated @ModelAttribute Task task, BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
 		// 컨트롤러 내용
@@ -164,8 +164,8 @@ public class LkhController {
 		task.setProject_id(projectId);
 
 		//작업자 목록이 있으면
-		if (selectedWorkers != null) {
-			lkhService.createGroupTask(selectedWorkers,task);
+		if (task.getWorkerIdList() != null) {
+			lkhService.createGroupTask(task.getWorkerIdList(),task);
 			System.out.println("작업자 목록이 있다");
 		}
 		else {

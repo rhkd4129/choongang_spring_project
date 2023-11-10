@@ -55,8 +55,8 @@
 
             <!-- 본문 -->
             <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!------------------------------ //개발자 소스 입력 START ------------------------------->
-                <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" enctype="multipart/form-data">
+                <!------------------------------ //개발자 소스 입력 START ----- enctype="multipart/form-data"-------------------------->
+                <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" >
                     <div class="container">
 
                         <div class="row">
@@ -84,15 +84,8 @@
                                 <div class="form-group">
                                     <label>공동작업자</label><br>
                                     <c:forEach var="user" items="${task_create_form_worker_list}">
-                                        <input type="checkbox" name="worker_id" value="${user.user_id}"> ${user.user_name}<br>
+                                        <input type="checkbox" name="workerIdList" value="${user.user_id}"> ${user.user_name}<br>
                                     </c:forEach>
-                                </div>
-
-
-
-                                <div class="form-group">
-                                    <label for="attach_path">파일첨부</label>
-                                    <input type="file" class="form-control" id="attach_path" name="attach_path" >
                                 </div>
 
 
@@ -136,10 +129,17 @@
                                         <label class="form-check-label" for="priority2">높음</label>
                                     </div>
                                 </div>
+
+
+<%--                                <div class="form-group">--%>
+<%--                                    <label for="attach_path">파일첨부</label>--%>
+<%--                                    <input type="file" class="form-control" id="attach_path" name="attach_path" >--%>
+<%--                                </div>--%>
+
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">새 작업</button>
+                    <button type="submit" class="btn btn-primary">새 작업 생성</button>
 
                 </form:form>
                 <!------------------------------ //개발자 소스 입력 END ------------------------------->

@@ -19,9 +19,6 @@ public class CommonController {
 //	@PathVariable String error
 	@RequestMapping(value = "/main")
 	public String mainPage(Model model ) {
-//		if("error".equals(error)){
-//			model.addAttribute("intercepter_error","프로젝트 정보가 없습니다.");
-//		}
 		return "main";
 	}
 

@@ -1,9 +1,8 @@
 package com.oracle.s202350101.service.lkhSer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 import com.oracle.s202350101.model.*;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.util.FileCopyUtils;
 
 
 @Service
@@ -166,5 +166,52 @@ public class LkhServicveImpl implements LkhService {
 	public int task_restore(Task task) {
 		return lkhDao.task_restore(task);
 	}
+
+	@Override
+	public String upload_file(String originalName, byte[] fileData, String uploadPath) throws IOException {
+
+		UUID uid = UUID.randomUUID();
+		// requestPath = requestPath + "/resources/image";
+		System.out.println("uploadPath->"+uploadPath);
+		// Directory 생성
+		File fileDirectory = new File(uploadPath);
+		if (!fileDirectory.exists()) {
+			// 신규 폴더(Directory) 생성
+			fileDirectory.mkdirs();
+			System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		}
+
+		String savedName = uid.toString() + "_" + originalName;
+		log.info("savedName: " + savedName);
+		File target = new File(uploadPath, savedName);
+		//	    File target = new File(requestPath, savedName);
+		// File UpLoad   --->  uploadPath / UUID+_+originalName
+		FileCopyUtils.copy(fileData, target);   // org.springframework.util.FileCopyUtils
+		return  savedName;
+	}
+
+	@Override
+	public int upFileDelete(String deleteFileName) throws Exception {
+		int result =0;
+		log.info("upFileDelete result-> " + deleteFileName);
+		File file = new File(deleteFileName);
+		if( file.exists() ){
+			if(file.delete()){
+				System.out.println("파일삭제 성공");
+				result = 1;
+			}
+			else{
+				System.out.println("파일삭제 실패");
+				result = 0;
+			}
+		}
+		else{
+			System.out.println("삭제할 파일이 존재하지 않습니다.");
+			result = -1;
+		}
+		return result;
+	}
+
+
 }
 
