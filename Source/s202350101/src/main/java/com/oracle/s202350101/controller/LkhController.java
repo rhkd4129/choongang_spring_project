@@ -1,5 +1,6 @@
 package com.oracle.s202350101.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.oracle.s202350101.model.*;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import com.oracle.s202350101.service.lkhSer.LkhService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -137,19 +141,21 @@ public class LkhController {
 	@PostMapping("task_create")
 	public String task_create(
 			@Validated @ModelAttribute Task task, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
+			@RequestParam(value = "file1", required = false) List<MultipartFile> file1,
+			RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) throws IOException {
+
 		// 컨트롤러 내용
 		log.info("task_create ctr");
 
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int  projectId = userInfo.getProject_id();
 		String  userId = userInfo.getUser_id();
-
 		log.info("userId = {}  proejctId = {}",userId,projectId);
+
+
 
 		if(bindingResult.hasErrors()){
 			log.info("errer 있다 : {}",bindingResult);
-
 			// 유효성 검사 에러가 있을 때 폼에 다시 입력한 값을 유지하기 위해 모델 속성 추가
 			List<PrjStep> prjStepList = lkhService.project_step_list(projectId);
 			List<UserInfo> task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
@@ -171,7 +177,35 @@ public class LkhController {
 			System.out.println("작업자가 없다 ");
 			int i = lkhService.task_create(task);
 		}
-		//없으면 그냥 작업만 생성해주기
+
+		List<TaskAttach> taskAttachList  = new ArrayList<>();
+		String attach_path = "upload";
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치
+		System.out.println("File Upload Post Start");
+
+		for (MultipartFile file : file1) {
+			log.info("------------ file ------------");
+			log.info("originalName : " + file.getOriginalFilename());		// 원본 파일명
+			log.info("size : " + file.getSize());							// 파일 사이즈
+			log.info("contextType : " + file.getContentType());			// 파일 타입
+			log.info("uploadPath : " + file);							// 파일 저장되는 주소
+
+			TaskAttach taskAttach = new TaskAttach();
+			taskAttach.setTask_id(task.getTask_id());
+			taskAttach.setProject_id(task.getProject_id());
+			String fileName = lkhService.upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
+			taskAttach.setAttach_name(fileName);
+			taskAttach.setAttach_path(attach_path);
+			taskAttachList.add(taskAttach);
+
+		}
+		for (TaskAttach t:taskAttachList) {
+			log.info("파일리스트들");
+			log.info(t.getAttach_name());
+			log.info(t.getAttach_name());
+
+		}
+		lkhService.taskattach_create(taskAttachList);
 		redirectAttributes.addAttribute("status",true);
 		return "redirect:task_list";
 	}

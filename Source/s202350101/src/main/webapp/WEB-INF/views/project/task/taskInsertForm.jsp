@@ -54,9 +54,9 @@
 
 
         <!-- 본문 -->
-        <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!------------------------------ //개발자 소스 입력 START ----- enctype="multipart/form-data"-------------------------->
-            <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" >
+        <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
+            <!------------------------------ //개발자 소스 입력 START ----- "-------------------------->
+            <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" enctype="multipart/form-data" >
                 <div class="container">
 
                     <div class="row">
@@ -130,10 +130,10 @@
                             </div>
 
 
-                                <%--                                <div class="form-group">--%>
-                                <%--                                    <label for="attach_path">파일첨부</label>--%>
-                                <%--                                    <input type="file" class="form-control" id="attach_path" name="attach_path" >--%>
-                                <%--                                </div>--%>
+                            <div class="form-group">
+                                <label for="file1">파일첨부</label>
+                                <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
+                            </div>
 
                         </div>
                     </div>

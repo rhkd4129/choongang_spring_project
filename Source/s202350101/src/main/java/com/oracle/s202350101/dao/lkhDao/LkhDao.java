@@ -45,8 +45,9 @@ public interface LkhDao {
 	// 작업 생성  task create post form
 	int 				task_create(Task task);
 	int					task_worker_create(List<TaskSub> taskSubList);
+	int					taskattach_create(List<TaskAttach> taskAttachList);
 
-
+	int					task_all_create(Task task);
 
 	List<Task> 			garbage_list(Task task);
 

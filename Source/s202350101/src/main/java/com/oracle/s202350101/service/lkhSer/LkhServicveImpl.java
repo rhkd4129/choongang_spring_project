@@ -113,31 +113,17 @@ public class LkhServicveImpl implements LkhService {
 		return lkhDao.task_create(task);
 	}
 
-	@Override
-	public int createGroupTask(List<String> workerList, Task task
-	) {
-		int result = 0;
-		List<TaskSub> taskSubList = new ArrayList<>();
 
-		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
-		try {
-			lkhDao.task_create(task);
-			for (String workId : workerList) {
-				TaskSub taskSub = new TaskSub();
-				taskSub.setProject_id(task.getProject_id());
-				taskSub.setWorker_id(workId);
-				taskSubList.add(taskSub);
-				log.info("작업자 생성");
-			}
-			lkhDao.task_worker_create(taskSubList);
-			transactionManager.commit(txStatus);
-			result = 1;
-		} catch (Exception e) {
-			transactionManager.rollback(txStatus);
-			log.info("service :createGroupTask error Message -> {}", e.getMessage());
-			result = -1;
-		}
+	@Override
+	public int createGroupTask(List<String> workerList, Task task) {
+		int result = 0;
+		result = lkhDao.task_all_create(task);
 		return result;
+	}
+
+	@Override
+	public int taskattach_create(List<TaskAttach> taskAttachList) {
+		return lkhDao.taskattach_create(taskAttachList);
 	}
 
 

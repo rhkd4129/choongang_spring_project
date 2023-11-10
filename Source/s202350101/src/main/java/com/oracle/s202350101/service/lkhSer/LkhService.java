@@ -40,6 +40,8 @@ public interface LkhService {
 	// createGroupTask 트랜잭션 처리:task_create,task_worker_create dao 함수가 2개들어가있다
 	int 						createGroupTask(List<String> workerList, Task task);
 
+	int							taskattach_create(List<TaskAttach>taskAttachList);
+
 	//휴지통으로 이동
 	int 						task_garbage(Task task);
 

@@ -1,27 +1,26 @@
 package com.oracle.s202350101.dao.lkhDao;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.oracle.s202350101.model.*;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-
-import com.oracle.s202350101.controller.LkhController;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.util.FileCopyUtils;
 
 @Repository
 @Slf4j
 @RequiredArgsConstructor
 public class LkhDaoImpl implements LkhDao {
 	private final SqlSession sqlSession;
-
+	private final PlatformTransactionManager transactionManager;
 
 	// 도넛 그래프
 	@Override
@@ -182,7 +181,42 @@ public class LkhDaoImpl implements LkhDao {
 			log.info("dao :task_worker_create error Message -> {}", e.getMessage());
 		}
 		return result;
+	}
 
+	@Override
+	public int taskattach_create(List<TaskAttach> taskAttachList) {
+		int result = 0;
+		try {
+			result = sqlSession.insert("taskAttach_create", taskAttachList);
+		} catch (Exception e) {
+			log.info("dao :taskAttach_create error Message -> {}", e.getMessage());
+		}
+		return result;
+	}
+
+	@Override
+	public int task_all_create(Task task) {
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		List<TaskSub> taskSubList = new ArrayList<>();
+		int result =0;
+		try {
+			task_create(task);
+			for (String workId : 	task.getWorkerIdList()) {
+				TaskSub taskSub = new TaskSub();
+				taskSub.setProject_id(task.getProject_id());
+				taskSub.setWorker_id(workId);
+				taskSubList.add(taskSub);
+				log.info("작업자 생성");
+			}
+			task_worker_create(taskSubList);
+			transactionManager.commit(txStatus);
+			result = 1;
+		} catch (Exception e) {
+			transactionManager.rollback(txStatus);
+			log.info("service :createGroupTask error Message -> {}", e.getMessage());
+			result = -1;
+		}
+		return result;
 	}
 
 	@Override
