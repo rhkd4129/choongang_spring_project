@@ -1,6 +1,7 @@
 package com.oracle.s202350101.model;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.Getter;
@@ -45,4 +46,12 @@ public class Task {
 		private String pageNum;
 		private int start; 		 	private int end;
 		private int rn;
+
+
+	// 다중 테이블 insert
+	private List<String> workerIdList;
+	private int		attach_no;
+	private String	attach_name;
+	private String	attach_path;
+
 }

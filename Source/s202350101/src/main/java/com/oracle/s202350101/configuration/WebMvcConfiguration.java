@@ -1,5 +1,6 @@
 package com.oracle.s202350101.configuration;
 
+import com.oracle.s202350101.service.lkhSer.ProjectCheckIntercepter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,10 +28,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 				.excludePathPatterns("/user_join_write")
 				.excludePathPatterns("/user_join_agree")
 				.excludePathPatterns("/writeUserInfo")
-				.excludePathPatterns("/id_confirm")
-				
-
-				;
+				.excludePathPatterns("/id_confirm");
+		// 입력 패턴은 interceptor 적용하지 않겠다
+		registry.addInterceptor(new ProjectCheckIntercepter())
+				.addPathPatterns("/dashboard")
+				.addPathPatterns("/task_list");
 	}
 
 }

@@ -20,7 +20,7 @@
                 success     :function (data){
                     if(data === '1'){
                         alert("삭제성공");
-                        window.location.href ="/dashboard_home";
+                        window.location.href ="/dashboard";
                     } else{// UPDATE를 수행햇지만 결과가 0이나올떄
                         alert("삭제 에러 ");
                     }

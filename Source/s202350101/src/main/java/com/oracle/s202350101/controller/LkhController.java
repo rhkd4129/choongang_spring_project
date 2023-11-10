@@ -3,7 +3,6 @@ package com.oracle.s202350101.controller;
 import java.util.ArrayList;
 import java.util.List;
 import com.oracle.s202350101.model.*;
-import com.oracle.s202350101.model.Paging;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,8 +24,9 @@ public class LkhController {
 	// 대시보드 홈
 	@GetMapping("dashboard")
 	public String dashboard(HttpServletRequest request, Model model ) {
-		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
 		log.info("board_view ctr start");
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
+
 		return "project/task/dashboard";
 	}
 
@@ -44,22 +44,22 @@ public class LkhController {
 		int taskCount = lkhService.task_count(projectId);
 		List<Task>  taskList =  lkhService.task_list(task);
 
-		// 작업 리스트를 받은 후 작업 상태별로 나누어서 model에 등록 
+		// 작업 리스트를 받은 후 작업 상태별로 나누어서 model에 등록
 		List<Task> taskStatus0 = new ArrayList<Task>();
 		List<Task> taskStatus1 = new ArrayList<Task>();
 		List<Task> taskStatus2 = new ArrayList<Task>();
 		for (Task t : taskList) {
-            switch (t.getTask_status()) {
-                case "0":
-                    taskStatus0.add(t);
-                    break;
-                case "1":
-                    taskStatus1.add(t);
-                    break;
-                case "2":
-                    taskStatus2.add(t);
-                    break;
-            }
+			switch (t.getTask_status()) {
+				case "0":
+					taskStatus0.add(t);
+					break;
+				case "1":
+					taskStatus1.add(t);
+					break;
+				case "2":
+					taskStatus2.add(t);
+					break;
+			}
 		}
 		model.addAttribute("taskStatus0",taskStatus0);
 		model.addAttribute("taskStatus1",taskStatus1);
@@ -68,7 +68,7 @@ public class LkhController {
 		return "project/task/taskBoard";
 	}
 
-	
+
 	// 작업 시간 그래프
 	@GetMapping("task_timeline")
 	public String task_timeline(){
@@ -132,12 +132,12 @@ public class LkhController {
 	}
 
 
-//		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
-	// 작업 생성 Post
+	//		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
+	// 작업 생성 Post @RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
 	@PostMapping("task_create")
-	public String task_create(@RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
-							  @Validated @ModelAttribute Task task, BindingResult bindingResult,
-							  RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
+	public String task_create(
+			@Validated @ModelAttribute Task task, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes, HttpServletRequest request,Model model) {
 		// 컨트롤러 내용
 		log.info("task_create ctr");
 
@@ -163,8 +163,8 @@ public class LkhController {
 		task.setProject_id(projectId);
 
 		//작업자 목록이 있으면
-		if (selectedWorkers != null) {
-			lkhService.createGroupTask(selectedWorkers,task);
+		if (task.getWorkerIdList() != null) {
+			lkhService.createGroupTask(task.getWorkerIdList(),task);
 			System.out.println("작업자 목록이 있다");
 		}
 		else {
@@ -214,4 +214,3 @@ public class LkhController {
 
 
 }
-
