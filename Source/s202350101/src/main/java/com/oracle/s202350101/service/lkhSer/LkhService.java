@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.oracle.s202350101.model.*;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface LkhService {
 
@@ -24,6 +25,7 @@ public interface LkhService {
 	List<Task>				task_list(Task Task);
 
 	Task 					task_detail(int task_id, int project_id);
+	List<TaskAttach>				task_attach_list(int task_id, int project_id);
 
 	List<TaskSub>			taskWorkerlist(TaskSub taskSub);
 
@@ -35,12 +37,11 @@ public interface LkhService {
 
 
 	// 작업생성
-	int 						task_create(Task task);
+	int 						task_create(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 
-	// createGroupTask 트랜잭션 처리:task_create,task_worker_create dao 함수가 2개들어가있다
-	int 						createGroupTask(List<String> workerList, Task task);
+	int							task_attach_create(List<TaskAttach>taskAttachList);
 
-	int							taskattach_create(List<TaskAttach>taskAttachList);
+	int							task_update(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 
 	//휴지통으로 이동
 	int 						task_garbage(Task task);

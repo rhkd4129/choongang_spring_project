@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -82,6 +83,11 @@ public class LkhServicveImpl implements LkhService {
 		return lkhDao.task_detail(task_id, project_id);
 	}
 
+	@Override
+	public List<TaskAttach> task_attach_list(int task_id, int project_id) {
+		return lkhDao.task_attach_list(task_id,project_id);
+	}
+
 
 	@Override
 	public List<TaskSub> taskWorkerlist(TaskSub taskSub) {
@@ -107,23 +113,102 @@ public class LkhServicveImpl implements LkhService {
 		return lkhDao.task_create_form_worker_list(project_id);
 	}
 
-	// task crate post
+
+	// 3개의 dao메서드 포함 => 트랜잭션 처리
 	@Override
-	public int task_create(Task task) {
-		return lkhDao.task_create(task);
+	public int task_create(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		try {
+			int taskResult = lkhDao.task_create(task);
+
+			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
+				List<TaskSub> taskSubList = new ArrayList<>();
+				for (String workId : task.getWorkerIdList()) {
+					TaskSub taskSub = new TaskSub();
+					taskSub.setProject_id(task.getProject_id());
+					taskSub.setWorker_id(workId);
+					taskSubList.add(taskSub);
+				}
+				int taskSubResult = lkhDao.task_worker_create(taskSubList);
+			}
+
+			// 파일 처리 부분
+			if (multipartFileList != null && !multipartFileList.isEmpty()) {
+				List<TaskAttach> taskAttachList = new ArrayList<>();
+				String attach_path = "upload";
+				for (MultipartFile file : multipartFileList) {
+					TaskAttach taskAttach = new TaskAttach();
+					taskAttach.setTask_id(task.getTask_id());
+					taskAttach.setProject_id(task.getProject_id());
+					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
+					taskAttach.setAttach_name(fileName);
+					taskAttach.setAttach_path(attach_path);
+					taskAttachList.add(taskAttach);
+				}
+				lkhDao.task_attach_create(taskAttachList);
+			}
+
+			transactionManager.commit(txStatus);
+		} catch (Exception e) {
+			transactionManager.rollback(txStatus);
+			log.info("service: createGroupTask, transactionManager error Message -> {}", e.getMessage());
+		}
+		return 1;
 	}
 
-
 	@Override
-	public int createGroupTask(List<String> workerList, Task task) {
-		int result = 0;
-		result = lkhDao.task_all_create(task);
-		return result;
+	public int task_attach_create(List<TaskAttach> taskAttachList) {
+		return lkhDao.task_attach_create(taskAttachList);
 	}
 
 	@Override
-	public int taskattach_create(List<TaskAttach> taskAttachList) {
-		return lkhDao.taskattach_create(taskAttachList);
+	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		try {
+			int taskResult = lkhDao.task_update(task);
+			log.info("taskReuslt : {}",taskResult);
+			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
+
+				// 작업자 업데이트
+				List<TaskSub> taskSubList = new ArrayList<>();
+				for (String workId : task.getWorkerIdList()) {
+					TaskSub taskSub = new TaskSub();
+					taskSub.setProject_id(task.getProject_id());
+					taskSub.setWorker_id(workId);
+					taskSubList.add(taskSub);
+				}
+
+				int taskSbResult = lkhDao.task_worker_update(taskSubList);
+				log.info("taskSbResult : {}",taskSbResult);
+			}
+
+			if (multipartFileList != null && !multipartFileList.isEmpty()) {
+				// 파일 업로드
+				List<TaskAttach> taskAttachList = new ArrayList<>();
+				String attach_path = "upload";
+				for (MultipartFile file : multipartFileList) {
+					TaskAttach taskAttach = new TaskAttach();
+					taskAttach.setTask_id(task.getTask_id());
+					taskAttach.setProject_id(task.getProject_id());
+					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
+					taskAttach.setAttach_name(fileName);
+					taskAttach.setAttach_path(attach_path);
+					taskAttachList.add(taskAttach);
+				}
+
+				// 파일 업데이트
+				if (!taskAttachList.isEmpty()) {
+					lkhDao.task_attach_update(taskAttachList);
+				}
+			}
+
+			transactionManager.commit(txStatus);
+		} catch (Exception e) {
+			transactionManager.rollback(txStatus);
+			log.error("service : task_update transactionManager error Message -> {}", e.getMessage());
+			return -1; // 실패했을 경우를 알리기 위해 다른 값을 반환하도록 설정 가능
+		}
+		return 1;
 	}
 
 

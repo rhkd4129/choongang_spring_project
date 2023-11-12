@@ -103,7 +103,7 @@ public class LkhDaoImpl implements LkhDao {
 		return taskList;
 	}
 
-
+	// 작업 상세 화면
 	@Override
 	public Task task_detail(int task_id, int project_id) {
 		Task task = new Task();
@@ -117,6 +117,23 @@ public class LkhDaoImpl implements LkhDao {
 		}
 		return task;
 	}
+	// 작업 상세화면에서 첨부파일 리스트
+	@Override
+	public List<TaskAttach> task_attach_list(int task_id,int project_id) {
+		List<TaskAttach> taskAttachList = null;
+		try {
+			Map<String, Integer> params = new HashMap<>();
+			params.put("task_id", task_id);
+			params.put("project_id", project_id);
+			taskAttachList = sqlSession.selectList("task_attach_list",params);
+
+		} catch (Exception e) {
+			log.info("dao :task_attach_list error Message -> {}", e.getMessage());
+		}
+		return taskAttachList;
+	}
+
+
 
 	//작업별 타임라인
 	@Override
@@ -184,7 +201,7 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int taskattach_create(List<TaskAttach> taskAttachList) {
+	public int task_attach_create(List<TaskAttach> taskAttachList) {
 		int result = 0;
 		try {
 			result = sqlSession.insert("taskAttach_create", taskAttachList);
@@ -195,29 +212,44 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int task_all_create(Task task) {
-		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
-		List<TaskSub> taskSubList = new ArrayList<>();
-		int result =0;
+	public int task_update(Task task) {
+		int reuslt =0;
 		try {
-			task_create(task);
-			for (String workId : 	task.getWorkerIdList()) {
-				TaskSub taskSub = new TaskSub();
-				taskSub.setProject_id(task.getProject_id());
-				taskSub.setWorker_id(workId);
-				taskSubList.add(taskSub);
-				log.info("작업자 생성");
-			}
-			task_worker_create(taskSubList);
-			transactionManager.commit(txStatus);
-			result = 1;
-		} catch (Exception e) {
-			transactionManager.rollback(txStatus);
-			log.info("service :createGroupTask error Message -> {}", e.getMessage());
-			result = -1;
+			reuslt = sqlSession.update("task_update",task);
 		}
-		return result;
+		catch (Exception e) {
+			log.info("dao :task_update error Message -> {}", e.getMessage());
+		}
+		return reuslt;
 	}
+
+	@Override
+	public int task_worker_update(List<TaskSub> taskSubList) {
+		int reuslt =0;
+		try {
+			reuslt = sqlSession.update("task_worker_update",taskSubList);
+		}
+		catch (Exception e) {
+			log.info("dao :task_worker_update error Message -> {}", e.getMessage());
+		}
+		return reuslt;
+
+	}
+
+	@Override
+	public int task_attach_update(List<TaskAttach> taskAttachList) {
+		int reuslt =0;
+		try {
+			reuslt = sqlSession.update("task_attach_update",taskAttachList);
+		}
+		catch (Exception e) {
+			log.info("dao :task_attach_update error Message -> {}", e.getMessage());
+		}
+		return reuslt;
+
+
+	}
+
 
 	@Override
 	public List<Task> garbage_list(Task task) {
