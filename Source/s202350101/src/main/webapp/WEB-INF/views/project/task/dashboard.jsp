@@ -12,7 +12,6 @@
                 url			: '/main_header',
                 dataType 	: 'html',
                 success		: function(data) {
-                    console.log("ddd");
                     $('#header').html(data);
                 }
             });
@@ -153,9 +152,11 @@
                 url: "<%=request.getContextPath()%>/step",
                 dataType: 'json',
                 success: function (data) {
+                    console.log(data);
                     // data는 비동기로 가져온 맵 형태의 데이터일 것입니다. { key: [values] }
                     const aa = $('.aa');
-                    $.each(data, function(key, values) {
+                    $.each(data.mapData, function(key, values) {
+                        console.log(key);
                         // 새로운 div 요소 생성
                         const newDiv = $('<div></div>');
                         newDiv.addClass("project_step");
@@ -163,10 +164,10 @@
                         newDiv.append(newText); // div에 span을 추가
 
                         // // key 값으로 가져온 데이터를 div에 추가
-                        // $.each(values, function(index, value) {
-                        //     var newp =  $('<p></p>').text(value);
-                        //     newDiv.append(newp);
-                        // });
+                        $.each(values, function(index, value) {
+                            var newp =  $('<p></p>').text(value);
+                            newDiv.append(newp);
+                        });
                          aa.append(newDiv);
                         // // 생성한 div를 body 또는 원하는 다른 요소에 추가
                         // // $('body').append($div);
