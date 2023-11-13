@@ -154,19 +154,26 @@
                 dataType: 'json',
                 success: function (data) {
                     // data는 비동기로 가져온 맵 형태의 데이터일 것입니다. { key: [values] }
+                    const aa = $('.aa');
                     $.each(data, function(key, values) {
                         // 새로운 div 요소 생성
-                        var $div = $('<div>');
+                        const newDiv = $('<div></div>');
+                        newDiv.addClass("project_step");
+                        const newText = $('<span>'+key+'</span>'); // 텍스트를 담을 span 요소 생성
+                        newDiv.append(newText); // div에 span을 추가
 
-                        // key 값으로 가져온 데이터를 div에 추가
-                        $.each(values, function(index, value) {
-                            var $p = $('<p>').text(value);
-                            $div.append($p);
-                        });
+                        // // key 값으로 가져온 데이터를 div에 추가
+                        // $.each(values, function(index, value) {
+                        //     var newp =  $('<p></p>').text(value);
+                        //     newDiv.append(newp);
+                        // });
+                         aa.append(newDiv);
+                        // // 생성한 div를 body 또는 원하는 다른 요소에 추가
+                        // // $('body').append($div);
+                        //
 
-                        // 생성한 div를 body 또는 원하는 다른 요소에 추가
-                        $('body').append($div);
                     });
+
                 }
             });
 
