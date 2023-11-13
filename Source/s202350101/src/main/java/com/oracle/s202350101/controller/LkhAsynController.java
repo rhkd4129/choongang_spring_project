@@ -9,6 +9,7 @@ import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.service.lkhSer.LkhService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,7 @@ public class LkhAsynController {
         return lkhService.project_day(projectId);
     }
 
-        // 대시보드 홈에서 진척률 그래프
+        // 대시보드 홈에서 도넛 그래프
     @GetMapping("doughnut_chart")
     public List<Integer> doughnut_chart(HttpServletRequest request) {
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -61,6 +62,20 @@ public class LkhAsynController {
         taskUserWorkStatusList =  lkhService.workload_chart(id);
         return taskUserWorkStatusList;
     }
+
+    //대시보드 홈에서 프로젝트 단계별 그래프
+    @GetMapping("step")
+    public AjaxResponse step_view(HttpServletRequest request){
+
+        UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
+        int id = userInfo.getProject_id();
+        AjaxResponse data  =lkhService.project_step_chart(id);
+        data.getOnelist().forEach(m -> System.out.println(m));
+
+        return data;
+
+    }
+
         //  작업 타임라인 페이지 들어가자마자 비동기로 뿌리기
     @GetMapping("task_timeline_asyn")
     public List<Task> task_timeline(){

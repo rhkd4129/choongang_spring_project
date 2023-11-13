@@ -3,8 +3,10 @@ package com.oracle.s202350101.service.lkhSer;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.oracle.s202350101.model.*;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.lkhDao.LkhDao;
@@ -42,11 +44,63 @@ public class LkhServicveImpl implements LkhService {
 		return taskUserWorkStatusList;
 	}
 
+
+
 	@Override
 	public PrjInfo project_day(int project_id) {
 		PrjInfo prjInfo = null;
 		prjInfo = lkhDao.project_day(project_id);
 		return prjInfo;
+	}
+
+	@Override
+	public AjaxResponse project_step_chart(int project_id) {
+		List<Task> stepTaskList = null;
+		List<PrjStep> stepList = null;
+		stepList = lkhDao.project_step_select(project_id);
+		stepTaskList =  lkhDao.project_step_chart(project_id);
+
+		List<Integer> stepIdList = stepList.stream().map(m->m.getProject_step_seq()).collect(Collectors.toList());
+		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
+
+
+		AjaxResponse data = new AjaxResponse();
+		List<Object> stepTaskObjectList = new ArrayList<>(stepTaskList);
+		data.setOnelist(stepNameList);
+		data.setListObject(stepTaskObjectList);
+
+		Map<String, List<String>> mapData = new HashMap<>();
+
+		// 맵에 값 추가
+		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
+		for (String key : mapData.keySet()) {
+			for (Task t : stepTaskList) {
+				if (t.getProject_s_name().equals(key)) {
+					// 해당하는 키에 맞는 값 목록 가져오기
+					List<String> values = mapData.get(key);
+					if (values != null) {
+						// 값을 List<String>에 추가
+						values.add(t.getTask_subject());
+					}
+				}
+			}
+		}
+		data.setMapData(mapData);
+
+		// 맵 값 출력
+		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
+			String key = entry.getKey();
+			List<String> values = entry.getValue();
+			System.out.print(key + ": ");
+
+			for (String value : values) {
+				System.out.print(value + " ");
+			}
+			System.out.println();
+		}
+
+		return data;
+
 	}
 
 	@Override
@@ -133,7 +187,8 @@ public class LkhServicveImpl implements LkhService {
 			}
 
 			// 파일 처리 부분
-			if (multipartFileList != null && !multipartFileList.isEmpty()) {
+			if ( !multipartFileList.isEmpty()) {
+				log.info("파일이 있다!!!!");
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
 				for (MultipartFile file : multipartFileList) {
@@ -167,17 +222,25 @@ public class LkhServicveImpl implements LkhService {
 		try {
 			int taskResult = lkhDao.task_update(task);
 			log.info("taskReuslt : {}",taskResult);
+			if(taskResult == 1 && task.getWorkerIdList() == null){
+				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
+				log.info("작업자가 없는상태로 되돌리기 taskSbinit :{}",taskSbinit);
+			}
 			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
-
 				// 작업자 업데이트
 				List<TaskSub> taskSubList = new ArrayList<>();
 				for (String workId : task.getWorkerIdList()) {
 					TaskSub taskSub = new TaskSub();
+					taskSub.setTask_id(task.getTask_id());
 					taskSub.setProject_id(task.getProject_id());
 					taskSub.setWorker_id(workId);
 					taskSubList.add(taskSub);
-				}
+					log.info("proejct_id ----- {}   task_id {}: ",task.getProject_id(),task.getTask_id());
+					log.info("workerId ----- {}: ",workId);
 
+				}
+				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
+				log.info("taskSbinit : {}",taskSbinit);
 				int taskSbResult = lkhDao.task_worker_update(taskSubList);
 				log.info("taskSbResult : {}",taskSbResult);
 			}
@@ -195,7 +258,6 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setAttach_path(attach_path);
 					taskAttachList.add(taskAttach);
 				}
-
 				// 파일 업데이트
 				if (!taskAttachList.isEmpty()) {
 					lkhDao.task_attach_update(taskAttachList);
@@ -203,6 +265,7 @@ public class LkhServicveImpl implements LkhService {
 			}
 
 			transactionManager.commit(txStatus);
+			log.info("transactionManager.commit(txStatus) --> 성공!!!!!!!!!");
 		} catch (Exception e) {
 			transactionManager.rollback(txStatus);
 			log.error("service : task_update transactionManager error Message -> {}", e.getMessage());

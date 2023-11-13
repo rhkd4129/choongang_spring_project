@@ -106,3 +106,18 @@ table, th, td {
     background-color: #0a53be;
     border-radius: 0 0 10px 10px;
 }
+
+.aa{
+    display: flex;
+    width: 50%
+;
+}
+.generated-div{
+    display: flex;
+
+    margin: 5%;
+
+    background-color:whitesmoke;
+    border: 2px solid black;
+    border-radius: 10px;
+}

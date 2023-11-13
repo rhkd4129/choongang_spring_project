@@ -12,6 +12,9 @@ public interface LkhDao {
 	//회원별 작업 진척도
 	List<Task>			workload_chart(int project_id);
 
+	List<PrjStep>	    project_step_select(int project_id);
+	List<Task>	   	 	project_step_chart(int project_id);
+
 	PrjInfo				project_day(int project_id);
 	// 해당 프로젝트의 작업의 총 개수보기
 	int					task_count(int project_id);
@@ -50,6 +53,8 @@ public interface LkhDao {
 	//----------------------  작업 수정  task  ----------------------//
 
 	int					task_update(Task task);
+
+	int					task_worker_init(int projectId,int taskId);
 	int					task_worker_update(List<TaskSub> taskSubList);
 	int					task_attach_update(List<TaskAttach> taskAttachList);
 

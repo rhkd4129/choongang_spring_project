@@ -149,6 +149,27 @@
                     createDrawChart(barCtx, 'bar', proejctData, proejctOption);
                 }
             });
+            $.ajax({
+                url: "<%=request.getContextPath()%>/step",
+                dataType: 'json',
+                success: function (data) {
+                    // data는 비동기로 가져온 맵 형태의 데이터일 것입니다. { key: [values] }
+                    $.each(data, function(key, values) {
+                        // 새로운 div 요소 생성
+                        var $div = $('<div>');
+
+                        // key 값으로 가져온 데이터를 div에 추가
+                        $.each(values, function(index, value) {
+                            var $p = $('<p>').text(value);
+                            $div.append($p);
+                        });
+
+                        // 생성한 div를 body 또는 원하는 다른 요소에 추가
+                        $('body').append($div);
+                    });
+                }
+            });
+
         });
     </script>
 </head>
@@ -180,7 +201,14 @@
                     <div class="bar_chart">
                         <canvas id="bar_chart"></canvas>
                     </div>
+
                 </div>
+
+                <div class="aa">
+
+                </div>
+
+
 
 
             </main>

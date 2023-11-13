@@ -47,6 +47,28 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
+	public List<PrjStep> project_step_select(int project_id) {
+		List<PrjStep> stepList = null;
+		try {
+			stepList = sqlSession.selectList("project_step_select", project_id);
+		} catch (Exception e) {
+			log.info("dao : task_user_workload error Message -> {}", e.getMessage());
+		}
+		return stepList;
+	}
+
+	@Override
+	public List<Task> project_step_chart(int project_id) {
+		List<Task> projectStepList = null;
+		try {
+			projectStepList = sqlSession.selectList("project_step_chart", project_id);
+		} catch (Exception e) {
+			log.info("dao : project_step_chart error Message -> {}", e.getMessage());
+		}
+		return projectStepList;
+	}
+
+	@Override
 	public PrjInfo project_day(int project_id) {
 		PrjInfo prjInfo = null;
 		try {
@@ -213,14 +235,28 @@ public class LkhDaoImpl implements LkhDao {
 
 	@Override
 	public int task_update(Task task) {
-		int reuslt =0;
+		int result =0;
 		try {
-			reuslt = sqlSession.update("task_update",task);
+			result = sqlSession.update("task_update",task);
 		}
 		catch (Exception e) {
 			log.info("dao :task_update error Message -> {}", e.getMessage());
 		}
-		return reuslt;
+		return result;
+	}
+
+	@Override
+	public int task_worker_init(int projectId,int taskId) {
+		int result = 0;
+		try{
+			Map<String, Integer> params = new HashMap<>();
+			params.put("task_id", taskId);
+			params.put("project_id", projectId);
+			result = sqlSession.update("task_worker_init",params);
+		}catch (Exception e) {
+			log.info("dao :task_worker_init error Message -> {}", e.getMessage());
+		}
+		return result;
 	}
 
 	@Override

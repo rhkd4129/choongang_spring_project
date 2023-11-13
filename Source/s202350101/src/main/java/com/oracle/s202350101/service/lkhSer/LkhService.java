@@ -15,6 +15,8 @@ public interface LkhService {
 
 	PrjInfo 				project_day(int project_id);
 
+	AjaxResponse				project_step_chart(int project_id);
+
 	List<Task> 				task_time_decs(Task task);
 
 	List<Task> 				task_time_aces(Task task);
@@ -25,7 +27,7 @@ public interface LkhService {
 	List<Task>				task_list(Task Task);
 
 	Task 					task_detail(int task_id, int project_id);
-	List<TaskAttach>				task_attach_list(int task_id, int project_id);
+	List<TaskAttach>		task_attach_list(int task_id, int project_id);
 
 	List<TaskSub>			taskWorkerlist(TaskSub taskSub);
 

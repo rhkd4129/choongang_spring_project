@@ -186,7 +186,8 @@ public class LkhController {
 		// 저장 위치
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 
-		// task_create => 트랜잭션 처리 기본 task, 공동작업자, 파일 3개의 dao메서드가 실행됨
+		// task_create => 트랜잭션 처리 기본 task, 공동작업자, 파일 3개의 dao메서드가 실행됨\
+
 		int result = lkhService.task_create(task,multipartFileList,uploadPath);
 		// 6.트랜잭션처리 까지 완료된 상태
 		log.info("6. taskCreate success");
@@ -265,7 +266,7 @@ public class LkhController {
 		// 저장 위치
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 
-		log.info("task.getWorkerIdList().get(0)  {}",task.getWorkerIdList().get(0));
+
 
 		int result = lkhService.task_update(task,multipartFileList,uploadPath);
 		// 6.트랜잭션처리 까지 완료된 상태
