@@ -1,6 +1,7 @@
 package com.oracle.s202350101.dao.lkhDao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.oracle.s202350101.model.*;
 
@@ -17,11 +18,12 @@ public interface LkhDao {
 
 	PrjInfo				project_day(int project_id);
 	// 해당 프로젝트의 작업의 총 개수보기
-	int					task_count(int project_id);
+	int					task_count(int project_id, Optional<String> search);
 
 
 	// 작업 리스트 보기
 	List<Task>			task_list(Task task);
+	List<Task>			task_search(Task task);
 	List<Task>			task_time_decs(Task task);
 	List<Task>			task_time_aces(Task task);
 

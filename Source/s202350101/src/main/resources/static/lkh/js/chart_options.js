@@ -35,7 +35,11 @@ const horizontalStackBarOption = {
   scales: {
     x: {
       beginAtZero: true,
-      stacked: true
+      stacked: true,
+        ticks: {
+            stepSize: 1, // Set step size to 1 for natural numbers
+            beginAtZero: true, // Start the axis at zero
+        }
     },
     y: {
       stacked: true

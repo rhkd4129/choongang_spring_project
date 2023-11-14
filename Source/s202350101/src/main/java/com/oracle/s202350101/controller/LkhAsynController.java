@@ -21,10 +21,10 @@ import javax.annotation.Resources;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
-
-    /*******************************************
+/*******************************************
     **   비동기 만 모아 놓은 컨트롤러             **
     *******************************************/
 @RestController
@@ -66,12 +66,10 @@ public class LkhAsynController {
     //대시보드 홈에서 프로젝트 단계별 그래프
     @GetMapping("step")
     public AjaxResponse step_view(HttpServletRequest request){
-
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
         int id = userInfo.getProject_id();
         AjaxResponse data  =lkhService.project_step_chart(id);
-        data.getOnelist().forEach(m -> System.out.println(m));
-
+        //serivce에서 다 필터링된 데이터만 받아서 리턴  data형태는 map형태이고 각 프로젝트 단계별 작업들이 잇음
         return data;
 
     }
@@ -92,7 +90,7 @@ public class LkhAsynController {
         int projectId = userInfo.getProject_id();
         Task task =  new Task();
         task.setProject_id(projectId);
-        int taskCount = lkhService.task_count(projectId);
+        int taskCount = lkhService.task_count(projectId,Optional.empty());
         Paging page = new Paging(taskCount, currentPage);
         task.setStart(page.getStart());
         task.setEnd(page.getEnd());
@@ -111,7 +109,7 @@ public class LkhAsynController {
         int projectId = userInfo.getProject_id();
         Task task =  new Task();
         task.setProject_id(projectId);
-        int taskCount = lkhService.task_count(projectId);
+        int taskCount = lkhService.task_count(projectId, Optional.empty());
         Paging   page = new Paging(taskCount, currentPage);
         task.setStart(page.getStart());
         task.setEnd(page.getEnd());

@@ -32,7 +32,6 @@
                 }
             });
         });
-
         document.addEventListener("DOMContentLoaded", function() {
             // HTML 구조는 준비되었지만, 모든 리소스의 로딩이 완료되지 않았을 때 실행됩니다.
             $.ajax({
@@ -68,7 +67,7 @@
                 dataType: 'json',
                 success: function (workload) {
                     const barCtx = document.getElementById('bar_chart').getContext('2d');
-                    console.log(workload);
+
                     var labels = []
                     var stats_0 = []
                     var stats_1 = []
@@ -102,17 +101,20 @@
                             },
                         ]
                     };
-
                     createDrawChart(barCtx, 'bar', horizontalStackBarData, horizontalStackBarOption);
                 }
             });
+
             $.ajax({
                 url: "<%=request.getContextPath()%>/project_day",
                 dataType: 'json',
                 success: function (prjInfo) {
+
                     // Oracle에서 가져온 문자열을 JavaScript Date 객체로 변환
                     const projectStartDate = new Date(prjInfo.project_startdate);
                     const projectEndDate = new Date(prjInfo.project_enddate);
+                    var a = $("#project_time");
+                    a.text(prjInfo.project_startdate+'~'+prjInfo.project_enddate);
 
                     const currentDate = new Date();                                     /// 현재 날짜를 가져오기
                     const timeDiff = projectEndDate - projectStartDate;                 // 두 날짜 사이의 차이 계산
@@ -152,32 +154,31 @@
                 url: "<%=request.getContextPath()%>/step",
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
-                    // data는 비동기로 가져온 맵 형태의 데이터일 것입니다. { key: [values] }
-                    const aa = $('.aa');
+                    const project_step_chart = $('.project_step_chart');
                     $.each(data.mapData, function(key, values) {
-                        console.log(key);
                         // 새로운 div 요소 생성
                         const newDiv = $('<div></div>');
                         newDiv.addClass("project_step");
-                        const newText = $('<span>'+key+'</span>'); // 텍스트를 담을 span 요소 생성
-                        newDiv.append(newText); // div에 span을 추가
-
+                        const newstep = $('<div>'+key+'</div>'); // 텍스트를 담을 span 요소 생성
+                        newDiv.append(newstep); // div에 span을 추가
+                        newstep.addClass("project_step_subject");
                         // // key 값으로 가져온 데이터를 div에 추가
-                        $.each(values, function(index, value) {
-                            var newp =  $('<p></p>').text(value);
-                            newDiv.append(newp);
-                        });
-                         aa.append(newDiv);
-                        // // 생성한 div를 body 또는 원하는 다른 요소에 추가
-                        // // $('body').append($div);
-                        //
-
+                        for(let i=0; i<values.length;i++) {
+                            var newtask = $('<div></div>').text(values[i]);
+                            newtask.addClass("project_step_task_subject")
+                            newDiv.append(newtask);
+                            if(i === 7){
+                                var newtask = $('<div></div>').text(" ... ");
+                                newtask.addClass("project_step_task_subject")
+                                newDiv.append(newtask);
+                                break;
+                            }
+                        }
+                        project_step_chart.append(newDiv);
                     });
 
                 }
             });
-
         });
     </script>
 </head>
@@ -193,11 +194,15 @@
                 <div class="chart">
                     <div class="project_chart">
                         <canvas id="project_chart"></canvas>
+                        <p id="project_time"></p>
                         <div class="controller">
-                            <a type="button"   class="btn btn-primary" href="task_list">작업 목록</a>
-                            <a type="button"   class="btn btn-primary" href="garbage_list">휴지통</a>
-                            <a type="button"  class="btn btn-primary" href="task_timeline">타임 라인</a>
-                            <a type="button"  class="btn btn-primary" href="task_board">작업 보드 </a>
+                                <!-------------- 디자인 수정 예정---------------------->
+                                <a type="button" class="btn btn btn-outline-primary" href="task_list">작업 목록</a>
+                                <a type="button" class="btn btn btn-outline-primary" href="garbage_list">휴지통</a>
+                                <a type="button" class="btn btn-outline-primary" href="task_timeline">타임 라인</a>
+                                <a type="button" class="btn btn-outline-primary" href="task_board">작업 보드 </a>
+                                <a type="button" class="btn btn-outline-primary" href="task_create_form"> 새작업 </a>
+
                         </div>
 
                     </div>
@@ -209,16 +214,21 @@
                     <div class="bar_chart">
                         <canvas id="bar_chart"></canvas>
                     </div>
-
-                </div>
-
-                <div class="aa">
-
                 </div>
 
 
+                <div class="chart">
+                    <div class="project_step_chart">
+                    </div>
+                    <!-------------- 디자인 수정 예정---------------------->
+                    <!-------------- 디자인 수정 예정---------------------->
+                    <!-------------- 디자인 수정 예정---------------------->
+                    <!-------------- 디자인 수정 예정---------------------->
 
+                    <div>
+                    </div>
 
+                </div>
             </main>
 
         </div>

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.ScriptAssert;
 
 import javax.validation.constraints.NotEmpty;
@@ -22,13 +23,14 @@ public class Task {
 		private String	user_id;
 
 		@NotEmpty(message = "이 항목은 필수입니다")
+		@Length(min = 1, max = 15, message = "길이는 1에서 15 사이여야 합니다.")
 		private String	task_subject;
 		@NotEmpty(message = "이 항목은 필수입니다")
 		private String	task_content;
 
 		private java.sql.Date task_stat_time;
-
 		private java.sql.Date	task_end_itme;
+		private java.sql.Date create_time;
 		@NotNull(message = "이 항목은 필수입니다")
 		private String	task_priority;
 		@NotNull(message = "이 항목은 필수입니다")

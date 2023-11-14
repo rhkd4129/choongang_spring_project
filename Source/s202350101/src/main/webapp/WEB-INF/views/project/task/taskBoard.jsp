@@ -6,7 +6,7 @@
 <head>
     <meta  charset="UTF-8">
     <title>Insert title here</title>
-    <link rel="stylesheet" type="text/css" href="/lkh/css/lkh.css">
+    <link rel="stylesheet" type="text/css" href="/lkh/css/board.css">
     <script type="text/javascript">
         $(function() {
             $.ajax({
@@ -49,7 +49,10 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-
+            <!-------------- 디자인 수정 예정---------------------->
+            <!-------------- 디자인 수정 예정---------------------->
+            <!-------------- 디자인 수정 예정---------------------->
+            <!-------------- 디자인 수정 예정---------------------->
                 <h3> 총 작업수 : ${taskCount }</h3>
             <div class="board">
                 <div class="task_status_0">

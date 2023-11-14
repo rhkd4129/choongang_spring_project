@@ -3,6 +3,8 @@ package com.oracle.s202350101.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import com.oracle.s202350101.model.*;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +32,7 @@ import javax.validation.Valid;
 @Slf4j
 public class LkhController {
 	private final LkhService lkhService;
-
+	//git config --global core.autocrlf true
 	// 대시보드 홈
 	@GetMapping("dashboard")
 	public String dashboard(HttpServletRequest request, Model model ) {
@@ -51,7 +53,8 @@ public class LkhController {
 		task.setProject_id(projectId);
 		task.setStart(1);
 		task.setEnd(999);
-		int taskCount = lkhService.task_count(projectId);
+		String search="";
+		int taskCount = lkhService.task_count(projectId, Optional.empty());
 		List<Task>  taskList =  lkhService.task_list(task);
 
 		// 작업 리스트를 받은 후 작업 상태별로 나누어서 model에 등록
@@ -88,25 +91,56 @@ public class LkhController {
 
 	//작업 리스트
 	@GetMapping("task_list")
-	public String  task_list(HttpServletRequest request,  Model model,String currentPage) {
+	public String  task_list(HttpServletRequest request,  Model model,String currentPage
+	,@RequestParam(required = false) String search  ) {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 
 		Task task =  new Task();
 		task.setProject_id(projectId);
+		List<Task> taskList = null;
+		int taskCount = 0;
 
-		int taskCount = lkhService.task_count(projectId);
-		Paging   page = new Paging(taskCount, currentPage);
+		if(search == null){
+			taskCount = lkhService.task_count(projectId,Optional.empty());
+			Paging   page = new Paging(taskCount, currentPage);
+			task.setStart(page.getStart());
+			task.setEnd(page.getEnd());
+			taskList =  lkhService.task_list(task);
+			model.addAttribute("page",page);
+			log.info("검색어가 없습");
+		}
+		else{
+			log.info("search  -> :{}",search);
+			taskCount = lkhService.task_count(projectId, Optional.of(search));
+			Paging   page = new Paging(taskCount, currentPage);
+			task.setSearch(search);
+			task.setStart(page.getStart());
+			task.setEnd(page.getEnd());
+			taskList =  lkhService.task_list(task);
+			model.addAttribute("page",page);
+		}
 
-		task.setStart(page.getStart());
-		task.setEnd(page.getEnd());
-		List<Task>  taskList =  lkhService.task_list(task);
+
 
 		model.addAttribute("taskList", taskList);
 		model.addAttribute("taskCount",taskCount);
-		model.addAttribute("page",page);
 		return "project/task/taskList";
 	}
+	@GetMapping("task_search")
+	public String task_search(HttpServletRequest request,  Model model,String currentPage , @RequestParam(required = false) String search ){
+		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+		int projectId = userInfo.getProject_id();
+
+		Task task =  new Task();
+		task.setProject_id(projectId);
+		task.setSearch(search);
+
+
+
+		return "project/task/taskSearch";
+	}
+
 
 	// 작업 상세 화면
 	@GetMapping("task_detail")
@@ -129,6 +163,7 @@ public class LkhController {
 		model.addAttribute("task",task);
 		return "project/task/taskDeatil";
 	}
+
 
 
 	// 작업 생성 폼 페이지
@@ -182,7 +217,6 @@ public class LkhController {
 		task.setProject_id(projectId);
 		log.info("5. task informaion injection ");
 		// 5  .task 생성시 필요한 작성자와 프로젝트 번호 주입
-
 		// 저장 위치
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 
@@ -261,12 +295,8 @@ public class LkhController {
 			return "project/task/taskUpdateForm";
 
 		}
-
-
 		// 저장 위치
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
-
-
 
 		int result = lkhService.task_update(task,multipartFileList,uploadPath);
 		// 6.트랜잭션처리 까지 완료된 상태

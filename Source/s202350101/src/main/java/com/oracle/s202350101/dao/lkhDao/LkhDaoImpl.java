@@ -1,10 +1,8 @@
 package com.oracle.s202350101.dao.lkhDao;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import com.oracle.s202350101.model.*;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -79,11 +77,21 @@ public class LkhDaoImpl implements LkhDao {
 		return prjInfo;
 	}
 
-	@Override
-	public int task_count(int project_id) {
+	public int task_count(int project_id, Optional<String> search) {
 		int taskCount = 0;
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("project_id", project_id);
 		try {
-			taskCount = sqlSession.selectOne("task_count", project_id);
+			if (search != null && search.isPresent() && search.get() != null && !search.get().isEmpty()) {
+				params.put("search", search.get());
+				taskCount = sqlSession.selectOne("task_count", params);
+			}
+			else{
+				taskCount = sqlSession.selectOne("task_count", params);
+				params.put("search", null);
+			}
+
 		} catch (Exception e) {
 			log.info("dao : task_count error Message -> {}", e.getMessage());
 		}
@@ -91,9 +99,22 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 
+
 	//  작업 리스트
 	@Override
 	public List<Task> task_list(Task task) {
+		List<Task> taskList = null;
+		try {
+			taskList = sqlSession.selectList("task_list", task);
+
+		} catch (Exception e) {
+			log.info("dao :task_list error Message -> {}", e.getMessage());
+		}
+		return taskList;
+	}
+
+	@Override
+	public List<Task> task_search(Task task) {
 		List<Task> taskList = null;
 		try {
 			taskList = sqlSession.selectList("task_list", task);

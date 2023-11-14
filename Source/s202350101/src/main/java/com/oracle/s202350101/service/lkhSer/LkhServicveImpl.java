@@ -54,25 +54,25 @@ public class LkhServicveImpl implements LkhService {
 	}
 
 	@Override
-	public AjaxResponse project_step_chart(int project_id) {
+	public AjaxResponse 	project_step_chart(int project_id) {
 		List<Task> stepTaskList = null;
 		List<PrjStep> stepList = null;
 		stepList = lkhDao.project_step_select(project_id);
+		//프로젝트 단계 리스트
+		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
+		//프로젝트 작업 리스트 
 		stepTaskList =  lkhDao.project_step_chart(project_id);
 
-		List<Integer> stepIdList = stepList.stream().map(m->m.getProject_step_seq()).collect(Collectors.toList());
-		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
-
-
 		AjaxResponse data = new AjaxResponse();
-		List<Object> stepTaskObjectList = new ArrayList<>(stepTaskList);
-		data.setOnelist(stepNameList);
-		data.setListObject(stepTaskObjectList);
-
 		Map<String, List<String>> mapData = new HashMap<>();
 
 		// 맵에 값 추가
+		
+		// 우선 map을 선언후 키로 각 프로젝트 단계이름을 지정 하고 값에는 빈리스트 생성
+		
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
+		
+		// 프로젝트 단게이름을 순회하고 작업들도 순회하면서 서로 단계이름이 같으면 해당 키에 있는 값 리스트에 추가함
 		for (String key : mapData.keySet()) {
 			for (Task t : stepTaskList) {
 				if (t.getProject_s_name().equals(key)) {
@@ -85,28 +85,24 @@ public class LkhServicveImpl implements LkhService {
 				}
 			}
 		}
+		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
 		data.setMapData(mapData);
-
 		// 맵 값 출력
 		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
 			String key = entry.getKey();
 			List<String> values = entry.getValue();
 			System.out.print(key + ": ");
-
 			for (String value : values) {
 				System.out.print(value + " ");
 			}
 			System.out.println();
 		}
-
 		return data;
-
 	}
 
 	@Override
-	public int task_count(int project_id) {
-		return lkhDao.task_count(project_id);
-
+	public int task_count(int project_id,Optional<String>  search){
+		return lkhDao.task_count(project_id, search);
 	}
 
 
@@ -116,6 +112,13 @@ public class LkhServicveImpl implements LkhService {
 		taskList = lkhDao.task_list(task);
 		return taskList;
 	}
+
+	public List<Task> task_search(Task task) {
+		List<Task> taskList = null;
+		taskList = lkhDao.task_list(task);
+		return taskList;
+	}
+
 
 	@Override
 	public List<Task> task_time_decs(Task task) {
@@ -187,7 +190,7 @@ public class LkhServicveImpl implements LkhService {
 			}
 
 			// 파일 처리 부분
-			if ( !multipartFileList.isEmpty()) {
+			if (!multipartFileList.isEmpty()) {
 				log.info("파일이 있다!!!!");
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";

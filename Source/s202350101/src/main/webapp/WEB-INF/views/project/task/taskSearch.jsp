@@ -126,7 +126,7 @@
             <h1>Task List</h1>
             <a class="btn btn-primary" href="task_create_form">새 작업</a>
 
-            <form action="task_list">
+            <form action="task_search">
                 <label for ="search">검색 </label>
                 <input type="text" class="form-control" id="search" name="search">
             </form>

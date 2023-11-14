@@ -2,6 +2,7 @@ package com.oracle.s202350101.service.lkhSer;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.oracle.s202350101.model.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,7 @@ public interface LkhService {
 	List<Task> 				task_time_aces(Task task);
 
 	// 해당 프로젝트 작업 수
-	int 					task_count(int project_id);
+	int 					task_count(int project_id, Optional<String> search);
 
 	List<Task>				task_list(Task Task);
 
