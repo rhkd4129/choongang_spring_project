@@ -14,7 +14,7 @@
 	</select>
 <!--개인별 채팅방 조회-->
 	<select id="findByUserId" parameterType="UserInfo" resultType="ChatRoom">
-        select chl.*, user_name
+        select chl.*, uil.*
         from (select * from chat_room
               where sender_id = #{user_id}
               union

@@ -411,7 +411,11 @@
                                     chatroom_con += '<div id="chat_chat_list" onclick="chat_room('+"'" + ChatRoom.sender_id + "'" + ')">';
                                 }
                                 chatroom_con += '<div id="chat_ch_left">';
-                                chatroom_con += '<p>이미지</p></div>';
+                                // chatroom_con += '<p>이미지</p></div>';
+                                console.log("hihi");
+                                console.log(ChatRoom.attach_path);
+                                console.log(ChatRoom.attach_name);
+                                chatroom_con += '<img className='+'"uploadFile"'+'style='+'"width:30px; height: 30px; border-radius: 70%;"'+' src='+'"'+'${pageContext.request.contextPath}'+ChatRoom.attach_path+'/'+ChatRoom.attach_name+'"></div>';
                                 chatroom_con += '<div id="chat_ch_center">';
                                 if (ChatRoom.sender_id == user) {
                                     chatroom_con += '<p>' + ChatRoom.receiver_id+ '</p>';
@@ -509,7 +513,7 @@
             <%-- 채팅--%>
 			<div class="dropdown text-end">
 				<a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfo.attach_path }/${userInfo.attach_name}"></td>
+                    <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 70%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfo.attach_path }/${userInfo.attach_name}"></td>
 				</a>
 				<ul class="dropdown-menu text-small" style="">
 					<li><a class="dropdown-item" href="mypage_main">내 정보 설정</a></li>
@@ -554,7 +558,7 @@
             <c:forEach items="${chatUIList}" var="chat_user">
                 <div id="chat_student_list">
                     <div id="chat_st_left">
-                        <p>이미지</p>
+                        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 70%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${chat_user.attach_path }/${chat_user.attach_name}"></td>
                     </div>
                     <div id="chat_st_center">
                         <p>${chat_user.user_name}</p>
@@ -578,7 +582,7 @@
                     </c:otherwise>
                     </c:choose>
                     <div id="chat_ch_left">
-                        <p>이미지</p>
+                        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 70%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${chatRoom.attach_path }/${chatRoom.attach_name}"></td>
                     </div>
                     <div id="chat_ch_center">
 

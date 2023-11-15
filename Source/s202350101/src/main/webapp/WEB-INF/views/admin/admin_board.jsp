@@ -309,17 +309,10 @@
                             <td>${board.user_name}</td>
                             <td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
                             <td>${board.bd_category_name}</td>
-                            <td>
-                                <c:set var="attach_name" value="${board.attach_name}"/>
-                                <c:set var="attach_length" value="${fn:length(attach_name)}"/>
-                                <c:set var="extension_name" value="${fn:substring(attach_name, attach_length-3, attach_length)}" />
-                                <c:if test="${extension_name != ''}">
-                                    <img src="/common/images/attach/icon_${extension_name}.png" alt="${board.attach_name}"
-                                         style="cursor:pointer" onclick="popup('/upload/${board.attach_path}',800,600)">
-                                </c:if>
-                            </td>
-                            <td>${board.bd_count}</td>
+                             <td>${board.bd_count}</td>
                             <td>${board.good_count}</td>
+                            <td><a href="#">수정</a></td>
+                            <td><input type="checkbox" name="pbd_del_chkbox" />
                         </tr>
                         <c:set var="num" value="${num-1}"></c:set>
                     </c:forEach>
@@ -347,7 +340,7 @@
             </div>
             <div id="ev">
                 <div id="event_bar">
-                    <div class="btn btn-success">이벤트</div>
+                    <div class="btn btn-success">작성자</div>
 
                     <select id="bd_CTG" class="form-select" style="width: 15%">
                         <option name="bd_ctg_li" value="공지">공지</option>

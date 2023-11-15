@@ -71,7 +71,7 @@ public class CommonController {
 		model.addAttribute("chatRooms", chatRooms);
 
 
-		return new ModelAndView("main_header");
+ 		return new ModelAndView("main_header");
 	}
 
 

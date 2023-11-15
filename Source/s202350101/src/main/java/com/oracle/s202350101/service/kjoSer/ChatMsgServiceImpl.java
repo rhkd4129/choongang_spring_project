@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatMsgServiceImpl implements ChatMsgService {
     private final ChatMsgDao CMdao;
+    private final UserInfoService UIser;
 
     //<!--모든 메시지 조회-->
     private final PlatformTransactionManager transactionManager;
@@ -210,6 +211,12 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         }
         for (ChatRoom chatR : chatRooms) {
             int noreadCnt = findbyChatRoomMsg(findmsg, chatR,user);
+            UserInfo us = new UserInfo();
+            String usID = (Objects.equals(user.getUser_id(), chatR.getReceiver_id()))? chatR.getSender_id() : chatR.getReceiver_id();
+            us.setUser_id(usID);
+
+            chatR.setAttach_name(UIser.findbyuserId(us).getAttach_name());
+            chatR.setAttach_path(UIser.findbyuserId(us).getAttach_path());
             chatR.setRead_cnt(noreadCnt);
         }
         int noreadC = findnoReadMsg(findmsg,cr);
