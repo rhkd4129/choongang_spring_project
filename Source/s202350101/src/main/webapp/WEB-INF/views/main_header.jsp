@@ -18,6 +18,9 @@
 	    background-color: aliceblue;
 	    overflow-y: scroll;
 	}
+    #cntMsg {
+        color: white;
+    }
 </style>
 
 <script type="text/javascript">
@@ -508,6 +511,7 @@
 				</li>
 			</ul>
             <%--<input style="background-image: url('admin/images/chat.png');  " type="button" class="img-button" onclick="alert('클릭!')">--%>
+            <div id="cntMsg"> </div>
             <button id="chat_button" type="button" onclick="chat_button()">채팅</button>
             <%-- 채팅--%>
             <%-- 채팅--%>

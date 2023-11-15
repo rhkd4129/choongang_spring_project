@@ -193,9 +193,9 @@
             //  {} : 헤더 정보 설정 시 사용.
             //  웹 소켓 메시지에 대한 추가 정보 담음
             //  EX_ 인증 토큰, 메시지 유형, 목적지 주소, 메시지ID(식별자), 시간 정보, 사용자 정보
-            chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(mainoption));     //  여기도 중괄호 왜?
-            chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(option));     //  여기도 중괄호 왜?
-            chatstompClient.send("/queue/chat/receive", {}, JSON.stringify(option));     //  여기도 중괄호 왜?
+            chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(mainoption));
+            chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(option));
+            chatstompClient.send("/queue/chat/receive", {}, JSON.stringify(option)); 
             $('#send_message').val('');
         }
 
