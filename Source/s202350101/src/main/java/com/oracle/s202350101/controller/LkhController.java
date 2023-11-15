@@ -268,6 +268,9 @@ public class LkhController {
 	}
 
 
+	//파일 삭제하기
+
+
 	// 휴지통 보여주기
 	@GetMapping("garbage_list")
 	public String task_garbage(HttpServletRequest request ,Model model ,String currentPage ){

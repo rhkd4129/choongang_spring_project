@@ -42,7 +42,7 @@ public interface LkhService {
 	// 작업생성
 	int 						task_create(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 
-	int							task_attach_create(List<TaskAttach>taskAttachList);
+//	int							task_attach_create(List<TaskAttach>taskAttachList,int fileCount);
 
 	int							task_update(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 

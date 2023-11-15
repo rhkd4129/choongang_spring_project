@@ -4,6 +4,7 @@ package com.oracle.s202350101.dao.lkhDao;
 import java.util.*;
 
 import com.oracle.s202350101.model.*;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
@@ -233,7 +234,7 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int task_worker_create(List<TaskSub> taskSubList) {
+	public int task_worker_create(@Param("list") List<TaskSub> taskSubList) {
 		int result = 0;
 		try {
 			result = sqlSession.insert("task_worker_create", taskSubList);
@@ -244,12 +245,23 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int task_attach_create(List<TaskAttach> taskAttachList) {
+	public int task_attach_create(@Param("list") List<TaskAttach> taskAttachList) {
 		int result = 0;
 		try {
 			result = sqlSession.insert("taskAttach_create", taskAttachList);
 		} catch (Exception e) {
 			log.info("dao :taskAttach_create error Message -> {}", e.getMessage());
+		}
+		return result;
+	}
+
+
+	public  int					task_attach_max(){
+		int result = 0;
+		try {
+			result = sqlSession.selectOne("taskAttach_max");
+		} catch (Exception e) {
+			log.info("dao :task_attach_max error Message -> {}", e.getMessage());
 		}
 		return result;
 	}

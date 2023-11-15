@@ -179,20 +179,28 @@ public class LkhServicveImpl implements LkhService {
 				int taskSubResult = lkhDao.task_worker_create(taskSubList);
 			}
 
+
+			int maxId =lkhDao.task_attach_max();
+			log.info("제발좀 되라 앙 {}",maxId);
 			// 파일 처리 부분
 			if (!multipartFileList.isEmpty()) {
 				log.info("파일이 있다!!!!");
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
+				int i  = 1;
 				for (MultipartFile file : multipartFileList) {
 					TaskAttach taskAttach = new TaskAttach();
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
+					taskAttach.setAttach_no(maxId+i);
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
 					taskAttach.setAttach_name(fileName);
 					taskAttach.setAttach_path(attach_path);
 					taskAttachList.add(taskAttach);
+					i+=1;
+					log.info("DFdfdfd{}",taskAttach.getAttach_no());
 				}
+
 				lkhDao.task_attach_create(taskAttachList);
 			}
 
@@ -204,10 +212,14 @@ public class LkhServicveImpl implements LkhService {
 		return 1;
 	}
 
-	@Override
-	public int task_attach_create(List<TaskAttach> taskAttachList) {
-		return lkhDao.task_attach_create(taskAttachList);
-	}
+//	@Override
+//	public int task_attach_create(List<TaskAttach> taskAttachList ,int fileCount) {
+//		List<Integer> attach_seq = null;
+//		for(int i =1; i<=fileCount;i++){attach_seq.add(i);}
+//
+//
+//		return lkhDao.task_attach_create(taskAttachList,attach_seq);
+//	}
 
 	@Override
 	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath) {

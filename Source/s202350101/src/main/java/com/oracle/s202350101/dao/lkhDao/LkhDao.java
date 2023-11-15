@@ -36,6 +36,7 @@ public interface LkhDao {
 	//작업 상세 내역에서 첨부파일 리스트 보여주기
 	List<TaskAttach>	task_attach_list(int task_id, int project_id);
 
+
 	//해당 작업의 같이하는 사람들 리스트
 	List<TaskSub> 		taskWorkerlist(TaskSub taskSub);
 
@@ -51,6 +52,7 @@ public interface LkhDao {
 	//----------------------  작업 생성   ----------------------//
 	int 				task_create(Task task);
 	int					task_worker_create(List<TaskSub> taskSubList);
+	int					task_attach_max();
 	int					task_attach_create(List<TaskAttach> taskAttachList);
 	//----------------------  작업 수정  task  ----------------------//
 
