@@ -146,6 +146,7 @@
 		SELECT *
 		FROM prj_step
 		WHERE project_id=#{project_id}
+		ORDER BY project_order
 	</select>
 	
 	<!-- 프로젝트 진행 상태 -->
@@ -172,6 +173,16 @@
 		(project_id, project_step_seq, project_order, project_s_name, project_s_context)
 		VALUES(#{project_id}, (SELECT NVL (MAX(project_step_seq)+1,1) FROM prj_step), #{project_order}, #{project_s_name}, #{project_s_context})
 	</insert>
+	
+	<!-- 단계 선택 -->
+	<update id="ijPrjOrder" parameterType="java.util.List">
+		<foreach collection="list" item="HijPrjStep" index="index" open="DECLARE BEGIN" separator=";" close="; END;">
+			UPDATE prj_step 
+			SET project_order=#{HijPrjStep.project_order} 
+			WHERE project_id=#{HijPrjStep.project_id} 
+			AND project_step_seq=#{HijPrjStep.project_step_seq}
+		</foreach>
+	</update>
 
 	<!-- 프로젝트 단계 수정 조회 -->
 	<select id="ijDetailStep" parameterType="PrjStep" resultType="PrjStep">
@@ -192,7 +203,21 @@
 	<delete id="ijDeleteStep" parameterType="int">
 		DELETE FROM prj_step WHERE  project_id=#{project_id} AND project_step_seq=#{project_step_seq}
 	</delete>
-
+	
+	<!-- 통합검색 -->
+	<select id="ijSearchList" parameterType="HijSearchRequestDto" resultType="hijSearchResponseDto">
+		SELECT a.*
+		FROM (
+			SELECT t.*, u.user_name user_name, 
+					(SELECT app_name FROM app_info WHERE app_id=t.app_id) app_name 
+			FROM ${tablename} t, USER_INFO u
+			WHERE t.user_id = u.user_id
+		) a
+		WHERE a.subject like '%' || #{keyword} || '%' 
+		OR  a.doc_body like '%' || #{keyword} || '%' 
+		OR  a.user_name like '%' || #{keyword} || '%' 
+	</select>
+	
 	
 </mapper>
 

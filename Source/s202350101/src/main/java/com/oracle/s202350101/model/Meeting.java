@@ -23,6 +23,7 @@ public class Meeting {
 	private int 	meeting_status;
 	private String 	attach_name;
 	private String 	attach_path;
+	private Date 	create_date;
 	
 	// 조회용
 	private String 			meetuser_id;

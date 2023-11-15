@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
+import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,16 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	//Mybatis DB 연동
 	private final SqlSession session;
 
-	
+	//총건수
 	@Override
-	public int totalCount() {
+	public int totalCount(PrjBdRep prjBdRep) {
 		
 		System.out.println("JmhDaoImpl totalCount START...");
 		int totalCnt = 0;				
 		try {
-			//---------------------------------------------------------
-			totalCnt = session.selectOne("jmhPrjBdRepListTotalCount");
-			//---------------------------------------------------------
+			//------------------------------------------------------------------
+			totalCnt = session.selectOne("jmhPrjBdRepListTotalCount", prjBdRep);
+			//------------------------------------------------------------------
 			System.out.println("JmhDaoImpl totalCount totalCnt->"+totalCnt);
 		} catch (Exception e) {
 			System.out.println("JmhDaoImpl totalCount Exception->"+e.getMessage());
@@ -35,7 +36,26 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		System.out.println("JmhDaoImpl totalCount END...");
 		return totalCnt;
 	}
-	
+
+	//검색 문서 건수
+	@Override
+	public int searchCount(PrjBdRep prjBdRep) {
+		
+		System.out.println("JmhDaoImpl searchCount START...");
+		int searchCnt = 0;				
+		try {
+			//----------------------------------------------------------------------
+			searchCnt = session.selectOne("jmhPrjBdRepListSearchCount", prjBdRep);
+			//----------------------------------------------------------------------
+			System.out.println("JmhDaoImpl searchCount searchCnt->"+searchCnt);
+		} catch (Exception e) {
+			System.out.println("JmhDaoImpl searchCount Exception->"+e.getMessage());
+		}
+		System.out.println("JmhDaoImpl searchCount END...");
+		return searchCnt;
+	}
+
+	//목록
 	@Override
 	public List<PrjBdRep> boardList(PrjBdRep prjBdRep) {
 		
@@ -53,6 +73,29 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return prjBdRepList;
 	}
 
+	//검색
+	@Override
+	public List<PrjBdRep> searchList(PrjBdRep prjBdRep) {
+		
+		System.out.println("JmhDaoImpl searchList START...");
+		List<PrjBdRep> prjBdRepList = null;		
+		try {
+			//----------------------------------------------------------------------
+			prjBdRepList = session.selectList("jmhPrjBdRepSearchList", prjBdRep);
+			//----------------------------------------------------------------------
+			if(prjBdRepList != null) {
+				System.out.println("JmhDaoImpl searchList prjBdDataList.get(0).getSubject()->"+((PrjBdRep) prjBdRepList.get(0)).getSubject());
+			}else {
+				System.out.println("SQL오류");
+			}
+		} catch (Exception e) {
+			System.out.println("JmhDaoImpl searchList Exception->"+e.getMessage());
+		}
+		System.out.println("JmhDaoImpl searchList END...");
+		return prjBdRepList;
+	}
+
+	//분류
 	@Override
 	public List<Code> codeList(Code code) {
 		
@@ -78,6 +121,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return reCodeList;
 	}
 
+	//등록
 	@Override
 	public int insertBoard(PrjBdRep prjBdRep) {
 		
@@ -101,6 +145,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return resultCount;
 	}
 
+	//조회
 	@Override
 	public PrjBdRep selectBoard(PrjBdRep prjBdRep) {
 		
@@ -124,6 +169,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return selectPrjBdRep;
 	}
 
+	//수정
 	@Override
 	public int updateBoard(PrjBdRep prjBdRep) {
 		
@@ -147,6 +193,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return resultCount;
 	}
 
+	//삭제
 	@Override
 	public int deleteBoard(PrjBdRep prjBdRep) {
 
@@ -170,6 +217,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return resultCount;
 	}
 
+	//댓글 등록
 	@Override
 	public int insertComment(BdRepComt bdRepComt) {
 		
@@ -192,6 +240,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return resultCount;
 	}
 
+	//댓글 조회
 	@Override
 	public List<BdRepComt> selectCommentList(BdRepComt bdRepComt) {
 		
@@ -209,6 +258,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		return resultBdRepCommentList;
 	}
 
+	//댓글 삭제
 	@Override
 	public int deleteComment(BdRepComt bdRepComt) {
 		
@@ -228,6 +278,30 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 			System.out.println("JmhDaoImpl deleteComment Exception->"+e.getMessage());
 		}
 		System.out.println("JmhDaoImpl deleteComment END...");
+		return resultCount;
+	}
+	
+
+	//댓글들 알림 플래그 일괄 업데이트(N개)
+	@Override
+	public int updateCommentAlarmFlag(PrjBdRep prjBdRep) {
+		
+		System.out.println("JmhDaoImpl updateCommentAlarmFlag START...");
+		int resultCount = 0;	
+		try {
+			//----------------------------------------------------------------------------
+			resultCount = session.insert("jmhPrjBdRepUpdateCommentAlarmFlag", prjBdRep);
+			//----------------------------------------------------------------------------
+			System.out.println("resultCount->"+resultCount);
+			if(resultCount > 0) {
+				//성공
+			}else {
+				System.out.println("SQL오류");
+			}
+		} catch (Exception e) {
+			System.out.println("JmhDaoImpl updateCommentAlarmFlag Exception->"+e.getMessage());
+		}
+		System.out.println("JmhDaoImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
 }

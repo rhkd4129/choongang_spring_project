@@ -1,0 +1,119 @@
+@charset "UTF-8";
+#project_time{
+    text-align: center;
+    font-weight: bold;
+}
+
+.controller {
+    padding: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border: 1px solid #0b5ed7;
+    border-radius: 10px;
+}
+
+
+
+/*  task dashboard home */
+.chart_1,.chart_2 {
+    margin: 1%;
+    display: flex;
+    flex-direction: row; /* 수평으로 배치 */
+    border: 1px solid #0b5ed7;
+    border-radius: 10px;
+}
+.chart_1 > div ,.chart_2 > div{
+    margin:10px; /* 원하는 간격(여기서는 좌우로 10px) */
+}
+
+.chart_2{
+    justify-content: space-around;
+}
+
+.project_chart,
+.doughnut_1,
+.bar_chart {
+    flex: 1; /* 각각 1:1 비율 */
+}
+
+.bar_chart {
+    flex: 1.5; /* 2:1 비율 */
+}
+
+
+
+
+/* 프로젝트 단계 차트  */
+.project_step_chart{
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    border: 2px solid black;
+    border-radius: 10px;
+    flex-grow: 1; /* 내부 요소에 따라 유동적으로 크기 조절 */
+}
+
+.project_step{
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 3%;
+    color: white;
+
+}
+
+.project_step_subject {
+
+    background-color: #0dcaf0;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    margin: 5%;
+    width: 150px;
+    color: white;
+}
+
+.project_step_task_subject{
+    color: white;
+    background-color: #0a58ca;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    margin: 2%;
+    width: 170px;
+}
+
+.current_task{
+    padding: 1%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 10px;
+
+}
+.cur_task{
+    background-color: #0a58ca;
+    border: 2px solid black;
+    margin: 4%;
+    padding: 2%;
+    width: 170px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.current_name{
+    border: 2px solid black;
+    display: block;
+    text-align: center;
+    padding: 5px;
+    color: white;
+    background-color: #0dcaf0;
+    border-radius: 0 0 10px 10px;
+}
+a {
+    color: wheat;
+    text-decoration: none;
+    font-weight: bold;
+}

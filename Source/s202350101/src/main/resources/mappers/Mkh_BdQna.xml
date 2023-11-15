@@ -9,7 +9,7 @@
 <mapper namespace="com.oracle.s202350101.BdQnaMapper">
 	<!-- user_id에 해당하는 내가 쓴 게시물 -->
 	<select id="QnaListSelect" parameterType="UserInfo" resultType="BdQna">
-		Select a.app_id, a.app_name, b.subject, b.user_id, 
+		Select a.app_id, a.app_name, b.subject, b.user_id, b.doc_no,
 			   b.create_date, b.bd_count, b.good_count
 		From   bd_qna b, app_info a
 		Where  a.app_id = b.app_id
@@ -41,6 +41,7 @@
 		And    m.app_id = a.app_id
 		And    s.user_id = #{user_id}
 	</select>
+
 	
 </mapper>
 

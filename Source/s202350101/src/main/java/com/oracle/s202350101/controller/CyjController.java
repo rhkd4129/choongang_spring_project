@@ -1,31 +1,42 @@
 package com.oracle.s202350101.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdFreeComt;
+import com.oracle.s202350101.model.BdFreeGood;
+import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.service.cyjSer.CyjService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Controller
 @RequiredArgsConstructor
-// @Slf4j
 public class CyjController {
 	
 	private final CyjService cs;
@@ -68,17 +79,43 @@ public class CyjController {
 	
 	// 새 글 입력하기 위한 페이지 이동 
 	@RequestMapping(value = "board_write_insert_form")
-	public String board_write_insert_form() {
+	public String board_write_insert_form(Model model) {
 		System.out.println("CyjController board_write_insert_form GET Start--------------------------");
-			
+		
+		BdFree bdFree = new BdFree();
+		model.addAttribute("bdFree", bdFree);
+		
 		return "board/board_notify/board_notify_write_form";	
 	}
 	
 	// 새 글 입력 
 	@PostMapping(value =  "board_write_insert")														
-//	public String boardWrite(HttpServletRequest request, @RequestParam("subject"),  @RequestParam("doc_body"), @RequestParam("file") Model model) {
-//	public String boardWrite(HttpServletRequest request, @ModelAttribute("BdFree")  bdFree Model model) {
-	public String boardWrite(HttpServletRequest request, BdFree bdFree, Model model) {
+	public String boardWrite(@Valid @ModelAttribute BdFree bdFree, BindingResult bindingResult
+						   , @RequestParam(value = "file1", required = false) MultipartFile file1
+						   , HttpServletRequest request, Model model) throws IOException {
+		
+		System.out.println("CyjController board_write_insert POST Start--------------------------");
+		
+		// validation
+		if (bindingResult.hasErrors()) {
+			System.out.println("CyjController board_write_insert hasErrors");
+			return "board/board_notify/board_notify_write_form";
+		}
+		
+		// file Upload
+		String attach_path = "upload"; // 실제 파일이 저장되는 폴더명, uploadPath의 이름과 동일하게 해야 오류 X
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/"); // 저장 위치 지정 
+		
+		System.out.println("CyjController File Upload Post Start");
+		
+		log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
+		log.info("size : "         + file1.getSize());					// 파일 사이즈
+		log.info("contextType : "  + file1.getContentType());			// 파일 타입
+		log.info("uploadPath : "   + uploadPath);						// 파일 저장되는 주소
+		
+		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);  // 저장되는 파일명 
+		log.info("saveName: " + saveName);
+		
 		
 		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo"); 
@@ -88,17 +125,43 @@ public class CyjController {
 		System.out.println(request.getSession().getAttribute("loginId"));  // loginId을 session에 저장 
 		bdFree.setUser_id(loginId);										   // xml의 parameterType="BdFree" 에 담기 위해 
 		
-		System.out.println("CyjController board_write_insert POST Start--------------------------");
+		if(!file1.isEmpty()) {
+			log.info("파일이 존재합니다  ");
+			bdFree.setAttach_path(attach_path);
+			bdFree.setAttach_name(saveName);
+		}
 		
 		int insertResult = cs.insertBdFree(bdFree);
 		System.out.println("CyjController board_notify insertResult-> " + insertResult);
 		
 		model.addAttribute("insertResult", insertResult);
 
-		return "redirect:/board_notify";
+		return "redirect:/board_notify"; 
 	}
 	
-// -----------------------------------------------------------------------	
+	// file upload method
+	private String uploadFile(String originalName, byte[] bytes, String uploadPath) throws IOException {
+		// universally unique identifier (UUID)
+		UUID uid = UUID.randomUUID();
+		System.out.println("uploadPath-> " + uploadPath);
+		
+		// 신규 폴더(Directory) 생성
+		File fileDirectory = new File(uploadPath);
+		if(!fileDirectory.exists()) {
+			fileDirectory.mkdirs();
+			System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		}
+		
+		String savedName = uid.toString() + "_" + originalName;
+		System.out.println("savedName: " + savedName);
+		File target = new File(uploadPath, savedName);
+		FileCopyUtils.copy(bytes, target);  
+		
+		return savedName;
+	}
+
+	// -----------------------------------------------------------------------	
+
 	
 	// 전체 공지사항 상세 페이지  
 	@GetMapping(value = "board_content")
@@ -144,10 +207,9 @@ public class CyjController {
 	@GetMapping(value = "board_update")
 	public String boardUpdate(int doc_no, Model model) {
 		System.out.println("CyjController board_update Start--------------------------");
-	
+		
 		BdFree free = cs.bdFreeContent(doc_no); 
 		System.out.println("CyjController board_content free-> " + free);
-		
 		model.addAttribute("free", free);
 		
 		return "board/board_notify/board_notify_update";
@@ -160,7 +222,6 @@ public class CyjController {
 		
 		int bdBoardUpdate = cs.bdFreeUpdate2(bdFree);
 		System.out.println("CyjController bdBoardUpdate-> " + bdBoardUpdate);
-		
 		model.addAttribute("bdBoardUpdate", bdBoardUpdate);
 		
 		redirectAttributes.addAttribute("doc_no", bdFree.getDoc_no());
@@ -183,43 +244,60 @@ public class CyjController {
 	}
 	
 // ------------------------------------------------------------------------	
-//  1. 추천 버튼 누르면 추천(0), 다시 누르면 추천 취소(1)  --> 0이면 버튼의 색상이 변함 
-//  2. 회원마다 게시글별 1개씩 추천 가능 (중복 X)
-// 	3. 추천하면 해당 게시들을 올린 회원의 추천수가 +1, 취소시 -1
-
-	// 추천
+	
+	// 전체 공지사항_추천
 	@ResponseBody
 	@RequestMapping(value = "ajaxGoodCount")
-	public int goodCount(int doc_no, Model model) {
+	public String goodCount(HttpServletRequest request, int doc_no) {
 		System.out.println("CyjController goodCount Start--------------------------");
 		
-		// 1. 추천자목록에 현재 로그인사용자가 있는지 확인   selectGood(bdFreeGoodDTO) select * from bd_free_good where don_no=#~ and user_id=#~
-		//    1-1 이미 추가된 경우  return변수 = "duplicated"
-		// 2. 1수행후 추천기록이 없으면 추가 insertGood(bdFreeGoodDTO)   insert into bd_free_good() values( , )
-		// 3. 추천자목록에 해당글(doc_no)의 추천갯수를 현재문서의 추천수 업데이트 updateCount(int doc_no) update bd_free set good_count=(select count(*) from bd_free_good) where doc_no=# ) where doc_no=#
-		//     return변수 = "success"
-		// return변수 = "error"
-		// inertCount 현재 열려 있는 글 doc_no , 로그인 유저  
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");    
 		
-		// 추천수 +1 올리기 
-		int goodCount = cs.goodCount(doc_no);
-		System.out.println("doc_no-> "    + doc_no);
-		System.out.println("goodCount-> " + goodCount);
+		// loginId : 추천에서 접속자 
+		String loginId = userInfoDTO.getUser_id();
 		
-		// 올린 추천수 갖고 오기 
-		int goodCountView = cs.goodCountView(doc_no);
-		System.out.println("goodCountView-> " + goodCountView);
+		BdFreeGood bdFreeGood = new BdFreeGood();
+		bdFreeGood.setDoc_no(doc_no);
+		bdFreeGood.setUser_id(loginId);
+		System.out.println(bdFreeGood.getDoc_no());
+		System.out.println(bdFreeGood.getUser_id()); 
+	
+		// 1. 추천자 목록에 있는지 중복 체크
+		int goodConfirm = cs.goodConfirm(bdFreeGood);
+		System.out.println("CyjController goodConfirm-> " + goodConfirm);  
 		
-		model.addAttribute("goodCountView", goodCountView);   
+		String result = "";
+		BdFree bdFree = new BdFree();
+		bdFree.setDoc_no(doc_no);
 		
-		return goodCountView;
+		if (goodConfirm == 1) { 		// 중복 0
+			result = "duplication";		           
+		} else {                        // 중복 X 
+			// 2. 추천 insert
+			int notifyGoodInsert = cs.notifyGoodInsert(bdFreeGood);  
+			System.out.println("CyjController notifyGoodInsert-> " + notifyGoodInsert);
+		
+			if(notifyGoodInsert == 1) {
+				// 3. 추천 update
+				int notifyGoodUpdate = cs.notifyGoodUpdate(bdFreeGood);
+				System.out.println("CyjController notifyGoodUpdate-> " + notifyGoodUpdate);
+				// 4. 추천 select
+				int notifyGoodSelect = cs.notifyGoodSelect(bdFree);
+				System.out.println("CyjController notifyGoodSelect-> " + notifyGoodSelect);
+				result = String.valueOf(notifyGoodSelect);
+			} else {
+				result= "error";  	  // error
+			}
+		}
+		return result;
 	}
 	
 // ------------------------------------------------------------------------	
 // ------------------------- 이벤트 게시판 ------------------------------------
 
 	// 이벤트_전체 리스트
-	@RequestMapping(value = "event")
+	@RequestMapping(value = "board_event")
 	public String eventList(HttpServletRequest request, BdFree bdFree, String currentPage, Model model) {
 		System.out.println("CyjController event Start--------------------------");
 		 
@@ -315,38 +393,91 @@ public class CyjController {
 	// 이벤트_추천
 	@ResponseBody
 	@RequestMapping(value = "ajaxEventGoodCount")
-	public int eventGoodCount(int doc_no, Model model) {
+	public String eventGoodCount(HttpServletRequest request, int doc_no) {
 		System.out.println("CyjController eventGoodCount Start--------------------------");
 		
-		// 추천수 +1 올리기
-		int eventCountUp = cs.goodCount(doc_no);
-		System.out.println("추천 doc_no-> "    + doc_no);
-		System.out.println("eventCountUp-> " + eventCountUp);
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
-		// 올린 추천수 갖고 오기 
-		int eventCountView = cs.goodCountView(doc_no);
-		System.out.println("올린 추천수 eventCountView-> " + eventCountView);
+		// loginId : 추천에서 접속자
+		String loginId = userInfoDTO.getUser_id();
 		
-		model.addAttribute("eventCountView", eventCountView);
+		BdFreeGood bdFreeGood = new BdFreeGood();
+		bdFreeGood.setDoc_no(doc_no);
+		bdFreeGood.setUser_id(loginId);
+		System.out.println(bdFreeGood.getDoc_no());
+		System.out.println(bdFreeGood.getUser_id());
 		
-		return eventCountView;
+		// 1. 추천자 목록에 있는지 중복 체크 
+		int eventGoodConfirm = cs.goodConfirm(bdFreeGood);
+		System.out.println("CyjController eventGoodConfirm-> " + eventGoodConfirm);
+		
+		String result = "";
+		BdFree bdFree = new BdFree();
+		bdFree.setDoc_no(doc_no);
+		
+		if (eventGoodConfirm == 1) {   // 중복 O
+			result = "duplication";
+		} else {					   // 중복 X
+			// 2. 추천 insert
+			int eventGoodInsert = cs.notifyGoodInsert(bdFreeGood);
+			System.out.println("CyjController eventGoodInsert-> " + eventGoodInsert);
+			
+			if (eventGoodInsert == 1) {
+				// 3. 추천 update
+				int eventGoodUpdate = cs.notifyGoodUpdate(bdFreeGood);
+				System.out.println("CyjController eventGoodUpdate-> " + eventGoodUpdate);
+				// 4. 추천 select
+				int eventGoodSelect = cs.notifyGoodSelect(bdFree);
+				System.out.println("CyjController eventGoodSelect-> " + eventGoodSelect);
+				result = String.valueOf(eventGoodSelect);
+			} else {
+				result = "error";       // error
+			}
+		}
+		return result;  
 	}
 	
 // ------------------------------------------------------------------------	
 
 	// 이벤트_새 글 입력하기 위한 페이지 이동 
 	@RequestMapping(value = "event_insert_form")
-	public String eventInsertForm() {
+	public String eventInsertForm(Model model) {
 		System.out.println("CyjController eventInsertForm Start--------------------------");
+		
+		BdFree bdFree = new BdFree();
+		model.addAttribute("bdFree", bdFree);
 		
 		return "board/board_event/board_event_insert";
 	}
 	
 	// 새 글 입력
 	@PostMapping(value = "event_insert")
-	public String eventInsert(HttpServletRequest request, BdFree bdFree, Model model) {
+	public String eventInsert(@Valid @ModelAttribute BdFree bdFree, BindingResult bindingResult
+							 ,@RequestParam(value = "file1", required = false) MultipartFile file1
+							 ,HttpServletRequest request, Model model) throws IOException {
 		
 		System.out.println("CyjController eventInsert Start--------------------------");
+		
+		if (bindingResult.hasErrors()) {
+			System.out.println("CyjController event_insert hasErrors");
+			return "board/board_event/board_event_insert";
+		}
+		
+		// file Upload
+		String attach_path = "upload"; // 실제 파일이 저장되는 폴더명, uploadPath의 이름과 동일하게 해야 오류 X
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/"); // 저장 위치 지정 
+		
+		System.out.println("CyjController File Upload Post Start");
+		
+		log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
+		log.info("size : "         + file1.getSize());					// 파일 사이즈
+		log.info("contextType : "  + file1.getContentType());			// 파일 타입
+		log.info("uploadPath : "   + uploadPath);						// 파일 저장되는 주소
+		
+		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);  // 저장되는 파일명 
+		log.info("saveName: " + saveName);
+
 		
 		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -356,12 +487,18 @@ public class CyjController {
 		System.out.println(request.getSession().getAttribute("loginId"));
 		bdFree.setUser_id(loginId);
 		
+		if(!file1.isEmpty()) {
+			log.info("파일이 존재합니다  ");
+			bdFree.setAttach_path(attach_path);
+			bdFree.setAttach_name(saveName);
+		}
+		
 		int eventInsert = cs.eventInsert(bdFree);
 		System.out.println("event 새 글 입력-> " + eventInsert);
 		
 		model.addAttribute("eventInsert", eventInsert);
 		
-		return "redirect:/event";
+		return "redirect:/board_event";
 	}
 	
 // ------------------------------------------------------------------------	

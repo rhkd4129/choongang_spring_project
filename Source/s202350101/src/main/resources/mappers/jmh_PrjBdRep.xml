@@ -8,10 +8,47 @@
 	 
 <mapper namespace="com.oracle.s202350101.PrjBdRepMapper">
 	
-	<select id="jmhPrjBdRepListTotalCount" resultType="int">
-		SELECT Count(*) FROM PRJ_BD_REP
+	<!-- 총 문서수 -->
+	<select id="jmhPrjBdRepListTotalCount" parameterType="PrjBdRep" resultType="int">
+		SELECT Count(*) 
+		FROM PRJ_BD_REP 
+		WHERE  project_id = #{project_id}
+	</select>
+
+	<!-- 검색 문서수 -->
+	<select id="jmhPrjBdRepListSearchCount" parameterType="PrjBdRep" resultType="int">
+		SELECT Count(*)
+		FROM (
+			SELECT p.*, u.user_name, 
+					(SELECT cate_name 
+					 FROM CODE 
+					 WHERE UPPER(table_name)='PRJ_BD_REP' 
+					 AND UPPER(field_name)='BD_CATEGORY' 
+					 AND cate_code=p.bd_category) bd_category_name, 
+					(SELECT Count(*) FROM BD_REP_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
+			FROM PRJ_BD_REP p, USER_INFO u 
+			WHERE p.user_id = u.user_id			
+			ORDER BY doc_no DESC
+		)
+		WHERE project_id = #{project_id} 
+		AND 
+		<choose>
+			<when test="search == 's_subject'">
+				 subject like '%' || #{keyword} || '%'
+			</when>
+			<when test="search == 's_user_name'">
+				 user_name like '%' || #{keyword} || '%'
+			</when>
+			<when test="search == 's_category'">
+				 bd_category_name like '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				 doc_body like '%' || #{keyword} || '%'
+			</otherwise>
+		</choose>
 	</select>
 	
+	<!-- 문서 목록 -->
 	<select id="jmhPrjBdRepList" parameterType="PrjBdRep" resultType="PrjBdRep">
 		SELECT *
 		FROM
@@ -23,20 +60,63 @@
 							 FROM CODE 
 							 WHERE UPPER(table_name)='PRJ_BD_REP' 
 							 AND UPPER(field_name)='BD_CATEGORY' 
-							 AND cate_code=p.bd_category) bd_category_name
+							 AND cate_code=p.bd_category) bd_category_name, 
+							(SELECT Count(*) FROM BD_REP_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 					  FROM PRJ_BD_REP p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
+					  AND p.project_id = #{project_id} 
 					  ORDER BY doc_no DESC) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
 	
+	<!-- 검색 목록 -->
+	<select id="jmhPrjBdRepSearchList" parameterType="PrjBdRep" resultType="PrjBdRep">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT p.*, u.user_name, 
+							(SELECT cate_name 
+							 FROM CODE 
+							 WHERE UPPER(table_name)='PRJ_BD_REP' 
+							 AND UPPER(field_name)='BD_CATEGORY' 
+							 AND cate_code=p.bd_category) bd_category_name, 
+							(SELECT Count(*) FROM BD_REP_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
+					  FROM PRJ_BD_REP p, USER_INFO u 
+					  WHERE p.user_id = u.user_id 
+					  ORDER BY doc_no DESC) a
+			WHERE
+			a.project_id = #{project_id} 
+			AND 
+			<choose>
+				<when test="search == 's_subject'">
+					 a.subject like '%' || #{keyword} || '%'
+				</when>
+				<when test="search == 's_user_name'">
+					 a.user_name like '%' || #{keyword} || '%'
+				</when>
+				<when test="search == 's_category'">
+					 a.bd_category_name like '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					 a.doc_body like '%' || #{keyword} || '%'
+				</otherwise>
+			</choose>
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+		
+	</select>
+	
+	<!-- 분류 -->
 	<select id="jmhPrjBdRepCodeList" parameterType="Code" resultType="Code">
 		SELECT * 
 		FROM CODE 
 		WHERE table_name=#{table_name} AND field_name=#{field_name}
 	</select>
 	
+	<!-- 문서 등록 -->
 	<insert id="jmhPrjBdRepInsertBoard" parameterType="PrjBdRep">
 		<selectKey resultType="int" keyProperty="doc_no" order="BEFORE">
         	SELECT NVL(MAX(doc_no),0)+1 FROM PRJ_BD_REP WHERE project_id=#{project_id}
@@ -59,7 +139,8 @@
 				#{attach_name}, #{attach_path}				
 			)	
 	</insert>
-		
+	
+	<!-- 문서 조회 -->
 	<select id="jmhPrjBdRepSelectBoard" parameterType="PrjBdRep" resultType="PrjBdRep">
 		SELECT 	p.*, u.user_name, (SELECT cate_name FROM CODE WHERE table_name='PRJ_BD_REP' AND field_name='BD_CATEGORY' AND cate_code=p.bd_category) bd_category_name 
 		FROM PRJ_BD_REP p, USER_INFO u
@@ -67,6 +148,7 @@
 		AND p.doc_no=#{doc_no} AND p.project_id=#{project_id}
 	</select>
 	
+	<!-- 문서 수정 -->
 	<update id="jmhPrjBdRepUpdateBoard" parameterType="PrjBdRep">
 		UPDATE PRJ_BD_REP 
 		SET 
@@ -79,6 +161,7 @@
 		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
 	</update>
 	
+	<!-- 문서 삭제 -->
 	<delete id="jmhPrjBdRepDeleteBoard" parameterType="PrjBdRep">
 		DELETE PRJ_BD_REP 
 		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
@@ -108,4 +191,12 @@
 		DELETE BD_REP_COMT 
 		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id} AND COMMENT_DOC_NO=#{comment_doc_no}
 	</delete>
+	
+	<!-- 댓글 알림플래그 Y처리 -->
+	<update id="jmhPrjBdRepUpdateCommentAlarmFlag" parameterType="PrjBdRep">
+		UPDATE BD_REP_COMT 
+		SET ALARM_FLAG='Y' 
+		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
+	</update>
+
 </mapper>

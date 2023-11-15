@@ -8,7 +8,7 @@ import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
 
 public interface JmhServicePrjBdData {
-	int 			totalCount();
+	int 			totalCount(PrjBdData prjBdData);
 	List<PrjBdData> boardList(PrjBdData prjBdData);
 	List<Code> 		codeList(Code code);
 	int 			insertBoard(PrjBdData prjBdData);
@@ -24,4 +24,6 @@ public interface JmhServicePrjBdData {
 	int 			insertComment(BdDataComt bdDataComt);
 	List<BdDataComt> selectCommentList(BdDataComt bdDataComt);
 	int 			deleteComment(BdDataComt bdDataComt);
+	int 			updateReplyAlarmFlag(PrjBdData prjBdData);
+	int 			updateCommentAlarmFlag(PrjBdData prjBdData);
 }

@@ -58,12 +58,13 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-<%-- 		<c:if test="${userInfoDTO.user_auth != 'manager' }">
+ 		<c:if test="${userInfoDTO.user_auth != 'manager' }">
 			<script type="text/javascript">
 				alert("팀장 권한이 없습니다. 관리자에게 문의하세요");
 				location.href = "/main";
 			</script>
-		</c:if>  --%>
+		</c:if>
+		  
 			<form action="req_create" method="post">
 				<input type="hidden" name="project_id" value="${prjInfo.project_id }">
 				<input type="hidden" name="project_approve" value="1">

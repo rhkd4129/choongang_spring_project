@@ -36,14 +36,12 @@ public class LkhServicveImpl implements LkhService {
 		return taskStatusList;
 	}
 
-
 	@Override
 	public List<Task> workload_chart(int project_id) {
 		List<Task> taskUserWorkStatusList = null;
 		taskUserWorkStatusList = lkhDao.workload_chart(project_id);
 		return taskUserWorkStatusList;
 	}
-
 
 
 	@Override
@@ -63,15 +61,15 @@ public class LkhServicveImpl implements LkhService {
 		//프로젝트 작업 리스트 
 		stepTaskList =  lkhDao.project_step_chart(project_id);
 
-		AjaxResponse data = new AjaxResponse();
-		Map<String, List<String>> mapData = new HashMap<>();
+
+
+		// 현재 진행중인 작업 리스트들
+		List<Task> currentTaskList = stepTaskList.stream().filter(t->t.getTask_status().equals("1")).collect(Collectors.toList());
 
 		// 맵에 값 추가
-		
+		Map<String, List<String>> mapData = new HashMap<>();
 		// 우선 map을 선언후 키로 각 프로젝트 단계이름을 지정 하고 값에는 빈리스트 생성
-		
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
-		
 		// 프로젝트 단게이름을 순회하고 작업들도 순회하면서 서로 단계이름이 같으면 해당 키에 있는 값 리스트에 추가함
 		for (String key : mapData.keySet()) {
 			for (Task t : stepTaskList) {
@@ -86,17 +84,9 @@ public class LkhServicveImpl implements LkhService {
 			}
 		}
 		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
+		AjaxResponse data = new AjaxResponse();
 		data.setMapData(mapData);
-		// 맵 값 출력
-		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
-			String key = entry.getKey();
-			List<String> values = entry.getValue();
-			System.out.print(key + ": ");
-			for (String value : values) {
-				System.out.print(value + " ");
-			}
-			System.out.println();
-		}
+		data.setOnelist(currentTaskList);
 		return data;
 	}
 
@@ -351,3 +341,13 @@ public class LkhServicveImpl implements LkhService {
 
 
 }
+
+//		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
+//			String key = entry.getKey();
+//			List<String> values = entry.getValue();
+//			System.out.print(key + ": ");
+//			for (String value : values) {
+//				System.out.print(value + " ");
+//			}
+//			System.out.println();
+//		}

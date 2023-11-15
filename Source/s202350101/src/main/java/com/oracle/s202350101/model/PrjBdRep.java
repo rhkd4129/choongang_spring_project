@@ -31,4 +31,7 @@ public class PrjBdRep {
 	private String	bd_category_name; 	//분류명
 	private String  attach_delete_flag; //편집저장시 기존첨부 삭제여부(D)	
 	private String  app_name;			//어플리케이션 이름
+	private int		comment_count;		//댓글 수
+	private String	search;				//검색대상 필드
+	private String	keyword;			//검색어 키워드
 }

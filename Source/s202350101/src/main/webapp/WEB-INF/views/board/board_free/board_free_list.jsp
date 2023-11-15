@@ -86,10 +86,9 @@
 			<h3>자유 게시판</h3><p>
 			<input type="button" value="새 글 작성" onclick="location.href='free_insert_from'">
 			
-			<h5>All Count : ${freeTotal} </h5>
-			
 			
 			<!-- 추천수 가장 높은 row 3개 -->
+			<h5>추천수 가장 높은 게시글</h5>
 	 		<table border="1">
 	 			<tr>
 	 				<th>번호</th>      <th>이름</th>       <th>작성일시</th> 
@@ -98,8 +97,8 @@
 	 			</tr>
 	 			
 	 			<c:forEach var="free" items="${freeRow}" varStatus="status"> 
-	 				<tr id="freeRow${status.count }">
-	 					<td>${status.count }</td>
+	 				<tr id="freeRow${free.rn }">
+	 					<td>${free.rn }</td>
 	 					<td>${free.user_name }</td>
 	 					<td>${free.create_date }</td>
 	 					<td>${free.modify_date }</td>
@@ -113,6 +112,7 @@
 			
 			
 			<!-- 전체 리스트 -->
+			<h5>All Count : ${freeTotal} </h5>
 			<table border="1"> 
 				<tr>
 					<th>번호</th>      <th>이름</th>       <th>작성일시</th> 

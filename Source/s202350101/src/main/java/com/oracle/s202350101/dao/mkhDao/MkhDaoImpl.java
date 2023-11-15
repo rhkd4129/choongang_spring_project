@@ -77,6 +77,28 @@ public class MkhDaoImpl implements MkhDao {
 		return userConfirm;
 	}
 	
+	// board 전체 select
+	@Override
+	public List<PrjBdData> bdSelectAll(PrjBdData prjBdData) {
+		List<PrjBdData> selectAll = null;
+		System.out.println("MkhDaoImpl bdSelectAll start...");
+		
+//		String user_id = prjBdData.getUser_id();
+//		int start = prjBdData.getStart();
+//		int end = prjBdData.getEnd();
+//		
+//		System.out.println(user_id);
+//		System.out.println(start);
+//		System.out.println(end);
+		
+		try {
+			selectAll = session.selectList("mkh_bdSelectAll", prjBdData);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl bdSelectAll Exception->" +e.getMessage());
+		}
+		return selectAll;
+	}
+	
 	@Override
 	public List<BdQna> bdQnaList(UserInfo userInfo) {
 		List<BdQna> qnaList = null;
@@ -325,6 +347,19 @@ public class MkhDaoImpl implements MkhDao {
 			System.out.println("MkhDaoImpl repComt Exception->" +e.getMessage());
 		}
 		return repComt;
+	}
+
+	@Override
+	public int updateEnv(UserEnv userEnv) {
+		int result = 0;
+		System.out.println("MkhDaoImpl updateEnv start...");
+		try {
+			result = session.update("mkh_updateEnv", userEnv);
+			
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl updateEnv Exception->" +e.getMessage());
+		}
+		return result;
 	}
 
 }

@@ -64,17 +64,21 @@
 			<p>
 			<h2>프로젝트 생성 정보</h2>
 			<hr>
-	    		프로젝트명      	${prjInfo.project_name}
+	    		프로젝트명 :  ${prjInfo.project_name}
 	    		<p>
-				프로젝트 기간  	
+				프로젝트 기간 :	
 				<fmt:formatDate pattern="yyyy-MM-dd" value="${prjInfo.project_startdate}"/> ~
 				<fmt:formatDate pattern="yyyy-MM-dd" value="${prjInfo.project_enddate}"/> <p>
-	  			프로젝트 팀장  	${prjInfo.project_manager_id}<p>
-				프로젝트 팀원  
-						<c:forEach var = "prjInfo" items="${listMember}" >
-						${prjInfo.user_name }
+	  			프로젝트 팀장 : 	${prjInfo.project_manager_name}<p>
+				프로젝트 팀원 :  		
+						<c:forEach var = "member" items="${listMember}" >
+							<c:if test="${userInfoDTO.user_id != member.user_id}">
+								${member.user_name }
+							</c:if>
 			      		</c:forEach> <p>
-				프로젝트 소개	${prjInfo.project_intro}<p>
+	
+				프로젝트 소개 <p>
+					${prjInfo.project_intro}<p>
 				
 				<br>
 			<hr>

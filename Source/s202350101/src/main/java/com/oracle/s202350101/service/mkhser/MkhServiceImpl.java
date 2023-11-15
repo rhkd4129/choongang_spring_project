@@ -238,6 +238,24 @@ public class MkhServiceImpl implements MkhService {
 		
 		return repComt;
 	}
+	
+	@Override
+	public int updateEnv(UserEnv userEnv) {
+		System.out.println("MkhServiceImpl updateEnv Start...");
+		int result = mkhdao.updateEnv(userEnv);
+
+		return result;
+	}
+
+	@Override
+	public List<PrjBdData> bdSelectAll(PrjBdData prjBdData) {
+		List<PrjBdData> selectAll = null;
+		System.out.println("MkhServiceImpl bdSelectAll Start...");
+		selectAll = mkhdao.bdSelectAll(prjBdData);
+		System.out.println("MkhServiceImpl bdSelectAll.size()->" +selectAll.size());
+		
+		return selectAll;
+	}
 
 
 }

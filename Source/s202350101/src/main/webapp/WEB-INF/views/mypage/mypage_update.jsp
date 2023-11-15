@@ -11,18 +11,28 @@
 <!-- CSS END -->
 
 <!-- JS START -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	
 	function editAction() {
 		alert("클릭했음");
-		var userInfo = $('#userInfo').serialize();
-		alert("userInfo->"+userInfo);
+	   	var formData = new FormData();
+
+	    var file = $('#file1')[0].files[0]; // 파일을 가져옵니다.
+	    formData.append('file1', file); // FormData에 파일을 추가합니다.
+	
+	    var userInfo = $('#userInfo').serialize(); // 다른 사용자 정보도 FormData에 추가할 수 있습니다.
+	    formData.append('userInfo', userInfo);
 		
 		$.ajax({
 			 url:'mypage_update_result',
+			 method: 'GET',
+			 
 		     dataType : 'text',
+		     data : formData, userInfo
 			 data : userInfo,
+			 contentType : false,
+			 processData : false,
 			 success : function(data) {
 				if(data == 1){
 					alert("수정완료");
@@ -35,7 +45,7 @@
 		});
 	}
 
-</script>
+</script> -->
 
 <!-- JS END -->
 <script type="text/javascript">
@@ -86,11 +96,18 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 		    
-		    <h2>개인 정보 수정(ajax)</h2>
-			<form id="userInfo" method="post">
+		    <h2>개인 정보 수정</h2>
+			<form action="mypage_update_result" id="userInfo" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="user_id" value="${userInfoDTO.user_id }">
 				<input type="hidden" name="project_id" value="${userInfoDTO.project_id }">
 				<table>
+					<tr>
+						<th>프로필 사진</th>
+						<td><img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDTO.attach_path }/${userInfoDTO.attach_name}"><br>
+						<input type="file" class="form-control" name="file1" id="file1">
+						</td>
+						
+					</tr>
 					<tr><th>아이디</th><td>${userInfoDTO.user_id}</td></tr>
 					<tr><th>새 비밀번호</th><td>
 						<input type="password" id="user_pw1" name="user_pw" placeholder="Password"></td></tr>
@@ -115,14 +132,15 @@
 					</td></tr>			    
 				    <tr><th>이메일 : </th><td>
 				    	<input type="email" name="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com">
-           			  	<input type="button" value="이메일 인증(이메일 저장  + 메일전송 (미구현))" onclick="send_save_mail()"></td></tr>
+           			  	<input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()"></td></tr>
 					<tr><th>주소</th>
 						<td>
 						<input type="text" name="user_address" value="${userInfoDTO.user_address }">
 						</td>
 					</tr>
 					<tr><td colspan="2">
-						<button type="button" onclick="editAction()">수정</button>
+						<input type="submit" value="수정">
+						<!-- <button type="button" onclick="editAction()">수정</button> -->
 						</td>
 					</tr>
 				</table>

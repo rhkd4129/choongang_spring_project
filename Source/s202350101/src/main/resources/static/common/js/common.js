@@ -21,8 +21,38 @@ function goto(url) {
 	location.href = url;
 }
 
-//전: 2023-11-09T01:44:25.000+00:00
-//후: 2023-11-09 01:44:25
+//게시판 페이지 이동
+function gotoPage(currentPage) {
+	//currentPage 경우의 수
+	//1.list_mapping_name
+	//2.list_mapping_name?currentPage=1
+	//3.list_mapping_name?search=s_doc_body&keyword=test
+	//4.list_mapping_name?search=s_doc_body&keyword=test&currentPage=1
+	//5.list_mapping_name?doc_group=27&doc_group_lsit=y
+	//6.list_mapping_name?doc_group=27&doc_group_lsit=y&currentPage=1
+	
+	var loc = location.href;
+	
+	if(loc.indexOf("?currentPage=") != -1) { //2
+		loc = loc.substring(0, loc.indexOf("?currentPage=")+13);
+		loc = loc + currentPage;
+	}else if(loc.indexOf("&currentPage=") != -1) { //4, 6
+		loc = loc.substring(0, loc.indexOf("&currentPage=")+13);
+		loc = loc + currentPage;
+	}else{
+		if(loc.indexOf("?") != -1){ //3 5  맨뒤에 추가 
+			loc = loc + "&currentPage=" + currentPage;
+		}else{ //1 파라미터 없으면 첫번째 추가
+			loc = loc + "?currentPage=" + currentPage;
+		}
+	}
+	location.href = loc;
+}
+
+
+//d값
+//변경전: 2023-11-09T01:44:25.000+00:00
+//변경후: 2023-11-09 01:44:25
 function formatDateTime(d) {
 	d = d.substring(0, d.indexOf('.'));
 	d = d.replace('T', ' ');

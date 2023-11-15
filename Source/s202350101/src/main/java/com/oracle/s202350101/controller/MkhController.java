@@ -1,9 +1,12 @@
 package com.oracle.s202350101.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +18,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdFree;
@@ -28,6 +34,7 @@ import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.ClassRoom;
+import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 import com.oracle.s202350101.model.UserEnv;
@@ -35,9 +42,11 @@ import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.mkhser.MkhService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MkhController {
 	
 	private final MkhService mkhService;
@@ -56,20 +65,46 @@ public class MkhController {
 	
 	// 로그인 인터셉터 체크
 	// 2번째 실행
+	// validation 적용하는거
+//	@PostMapping(value = "user_login_check")
+//	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
+//							 , BindingResult bindingResult     , HttpSession session
+//							 , Model model
+//							  ) {
+//		System.out.println("MkhController userLoginCheck Start..");
+//		System.out.println("MkhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
+//		System.out.println("MkhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
+//		
+//		// Validation 오류시 결과
+//		if(bindingResult.hasErrors()) {
+//			System.out.println("MkhController user_login_check hasErrors...");
+//			// 오류 메세지를 띄어주기 위해 forward
+//			return "forward:user_login";
+//		} else {
+//			// 오류가 아니면 user_id 유지
+//			model.addAttribute("userInfo", userInfo.getUser_id());
+//		}
+//		
+//		// Login 검증
+//		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
+//		
+//		if(userInfoDTO != null) {	// userInfo가 있으면 main으로 가라
+//			System.out.println("user_login_check userInfo exists");
+//			// 검증된 userInfo를 세션에 담음
+//			session.setAttribute("userInfo", userInfoDTO);
+//			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
+//			return "redirect:/main";
+//		} else {
+//			System.out.println("user_login_check userInfois not exist");
+//			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
+//		}
+//	}
+	
 	@PostMapping(value = "user_login_check")
-	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
-							 , BindingResult result     , HttpSession session
-							  ) {
+	public String interCeptor(UserInfo userInfo, HttpSession session, Model model) {
 		System.out.println("MkhController userLoginCheck Start..");
 		System.out.println("MkhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
 		System.out.println("MkhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
-		
-		// Validation 오류시 결과
-		if(result.hasErrors()) {
-			System.out.println("MkhController user_login_check hasErrors...");
-			// 오류 메세지를 띄어주기 위해 forward
-			return "forward:user_login";
-		}
 		
 		// Login 검증
 		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
@@ -85,6 +120,7 @@ public class MkhController {
 			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
 		}
 	}
+	
 	// 로그아웃
 	@RequestMapping(value = "user_logout")
 	public String userLogout(HttpSession session) {
@@ -113,31 +149,66 @@ public class MkhController {
 		return "user/user_join_write";
 	}
 	
-	// 중복확인 (PK를 주고 모든 정보 SELECT)
+	// 회원가입 페이지 ajax
+//	@ResponseBody
+//	@RequestMapping(value = "validation_ajax")
+//	public String validationAjax(@ModelAttribute("userInfo") @Valid UserInfo userInfo
+//			  					, BindingResult bindingResult, Model model) {
+//		System.out.println("MkhController writeUserIvalidationAjaxnfo Start...");
+//		if(bindingResult.hasErrors()) {
+//			System.out.println("MkhController user_login_check hasErrors...");
+//			// 오류 메세지를 띄어주기 위해 forward
+//			return "forward:user_join_write";
+//		} else {
+//			model.addAttribute("userInfo", userInfo.getUser_id());
+//		}
+//	}
+	
+	// 중복확인 (PK를 주고 모든 정보 SELECT) .Ver 1
+	@ResponseBody
 	@GetMapping(value = "id_confirm")
 	public String confirm(String user_id, Model model) {
 		// ID을 주면 dto를 돌려주는 메소드
 		System.out.println("userId->"+user_id);
 		UserInfo userInfo = mkhService.confirm(user_id);
 		// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
-		model.addAttribute("userInfo", userInfo);
 		if (userInfo != null) {
 			System.out.println("중복된 ID..");
-			model.addAttribute("msg", "중복된 ID 입니다");
-			return "forward:user_join_write";
+			return "1";
 		} else {
 			System.out.println("MkhController confirm 사용 가능한 사번..");
-			model.addAttribute("msg", "사용 가능한 ID 입니다");
-			return "forward:user_join_write";
+			model.addAttribute("user_id", user_id);
+			return "2";
 		}
 	}
 	
-	// 회원가입 정보 insert
-	@PostMapping(value = "writeUserInfo")
-	public String writeUserInfo(UserInfo userInfo) {
-		System.out.println("MkhController writeUserInfo Start...");
 	
+	// 회원가입 정보 insert (ver.1)
+	@PostMapping(value = "write_user_info")
+	public String writeUserInfo(HttpServletRequest request
+							  , @RequestParam(value = "file1", required = false)MultipartFile file1
+							  , @ModelAttribute("userInfo") @Valid UserInfo userInfo
+							  , BindingResult bindingResult, Model model)
+									  throws IOException {
+		System.out.println("MkhController writeUserInfo Start...");
+		// Validation 오류시 결과
+		if(bindingResult.hasErrors()) {
+			System.out.println("MkhController user_login_check hasErrors...");
+			// 오류 메세지를 띄어주기 위해 forward
+			return "forward:user_join_write";
+		} else {
+			model.addAttribute("userInfo", userInfo.getUser_id());
+		}
+		
+		// 이미지파일 업로드
+		String attach_path = "upload";	// 파일경로
+		
+		// userInfo에 디폴트 이미지와 파일경로 세팅
+		userInfo.setAttach_name("user_default.png");
+		userInfo.setAttach_path(attach_path);
+		
 		int result = mkhService.insertUserInfo(userInfo);
+		
 		if(result > 0) {
 			System.out.println("가입완료");
 			return "user/user_login";
@@ -167,7 +238,6 @@ public class MkhController {
 		// user_id 소속
 		ClassRoom classRoom = mkhService.selectClass(userInfo.getUser_id());
 		model.addAttribute("classRoom", classRoom);
-		
 		
 		return "mypage/mypage_main";
 	}
@@ -217,37 +287,101 @@ public class MkhController {
 		
 	}
 	
-	// 수정페이지 업데이트 액션
-	@ResponseBody
+	// 수정페이지 이미지첨부 + update
 	@RequestMapping(value = "mypage_update_result")
-	public String mypageUpdateResult (UserInfo userInfo) {
+	public String mypageUpdateResult (UserInfo userInfo
+									, HttpServletRequest request
+									, @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
 		System.out.println("MkhController mypageUpdateResult Start..");
 
-		System.out.println("userInfo.getUser_id()"+userInfo.getUser_id());
-		System.out.println("userInfo.getUser_pw()"+userInfo.getUser_pw());
-		System.out.println("userInfo.getUser_birth()"+userInfo.getUser_birth());
-
+		System.out.println("mypageUpdateResult userInfo.getUser_id()->"+userInfo.getUser_id());
+		String attach_path = "upload";	// 파일경로
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치 주소 지정 (webapp 아래 폴더)
+		
+		System.out.println("File Upload Post Start");
+		
+		log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
+		log.info("size : " + file1.getSize());							// 파일 사이즈
+		log.info("contextType : " + file1.getContentType());			// 파일 타입
+		log.info("uploadPath : " + uploadPath);							// 파일 저장되는 주소
+		
+		String savedName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);	// 저장되는 파일명
+		log.info("Return savedName : " + savedName);
+		
+		// userInfo에 파일명과 파일경로 세팅
+		userInfo.setAttach_name(savedName);
+		userInfo.setAttach_path(attach_path);
+		
+		System.out.println("userInfo->"+userInfo);
+		
 		int result = mkhService.updateUser(userInfo);
 
 		System.out.println("result->"+result);
 		if(result == 1) {
 			System.out.println("수정성공");
-			return "1";
+			return "redirect:/mypage_main";
 		} else {
 			System.out.println("수정실패");
-			return "0";
+			return "redirect:/mypage_update";
 		}
 	}
 	
-	/* MYPOST - 내가 글 모음*/
+	// 파일 업로드 메소드
+	private String uploadFile(String originalFilename, byte[] bytes, String uploadPath) throws IOException {
+		// Universally Unique Identity (UUID)
+		UUID uid = UUID.randomUUID();
+		System.out.println("uploadPath : " + uploadPath);			// 파일 저장되는 주소
+		// Directory 생성
+		File fileDirectory = new File(uploadPath);
+		if (!fileDirectory.exists()) {
+			// 신규 폴더(Directory) 생성
+			fileDirectory.mkdirs();
+			System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		}
+		
+		String savedName = uid.toString() + "_" + originalFilename;	// 저장되는 파일명
+		log.info("savedName : " + savedName);
+		File target = new File(uploadPath, savedName);
+		
+		// 파일을 복사함.
+		// bytes : 컨텐츠, target : 저장경로와 저장이름이 담겨있는 객체
+		FileCopyUtils.copy(bytes, target);	// org.springframework.util.FileCopyUtils
+		
+		return savedName;
+	}
+	
+	/* 환경설정 */
+	@ResponseBody
+	@RequestMapping(value = "user_env")
+	public String userEnvUpdate(UserEnv userEnv, HttpServletRequest request) {
+		System.out.println("MkhController userEnvUpdate Start..");
+		
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		userEnv.setUser_id(userInfoDTO.getUser_id());
+		
+		System.out.println("userEnv.userEnv.getUser_id->"+userEnv.getUser_id());
+		System.out.println("userEnv.getEnv_alarm_comm()->"+userEnv.getEnv_alarm_comm());
+		System.out.println("userEnv.userEnv.getEnv_alarm_meeting()->"+userEnv.getEnv_alarm_meeting());
+		
+		int result = mkhService.updateEnv(userEnv);
+		
+		if(result > 0) {
+			System.out.println("수정완료");
+			return "1";
+		}
+		System.out.println("수정실패");
+		return "0";
+	}
+	
+	/* MYPOST - 내 글 모음*/
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(HttpServletRequest request, Model model) {
+	public String mypostBoardList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") String currentPage) {
 		System.out.println("MkhController mypostBoardList Start..");
 	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 	    // userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    System.out.println("userinfo.getUser_id()->"+userInfoDTO.getUser_id());
-
+	    
 		/* 내가 쓴 게시글  Count */
 	    
 		// 전체 게시판 Count
@@ -276,29 +410,43 @@ public class MkhController {
 		model.addAttribute("totalRepPrj", totalRepPrj);
 		
 		/* 내가 쓴 게시글 List */
+ 		
+ 		// Select ALL
+ 		PrjBdData prjBdData = new PrjBdData();
+ 		prjBdData.setUser_id(userInfoDTO.getUser_id());
+ 		
+ 		// paging 작업
+ 		Paging page = new Paging(totalBDCount, currentPage);
+ 		prjBdData.setStart(page.getStart());
+ 		prjBdData.setEnd(page.getEnd());
+ 		model.addAttribute("page", page);
+ 		
+ 		List<PrjBdData> selectAll = mkhService.bdSelectAll(prjBdData);
+		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
+		model.addAttribute("selectAll", selectAll);
+		
+		System.out.println("app_id : " + selectAll.get(0).getApp_id());
+		System.out.println("app_name : " + selectAll.get(0).getApp_name());
+		System.out.println("Subject : " + selectAll.get(0).getSubject());
 		
 		// Q&A 게시판
-		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
-		model.addAttribute("qnaList", qnaList);
-		// 공용 게시판
-		List<BdFree> freeList = mkhService.bdFreeList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
-		model.addAttribute("freeList", freeList);
-		// 프로젝트 & 공지자료 게시판
-		List<PrjBdData> dataPrjList = mkhService.prjDataList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
-		model.addAttribute("dataPrjList", dataPrjList);
-		// 업무보고 게시판
-		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
-		model.addAttribute("RepPrjList", RepPrjList);
+//		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
+//		model.addAttribute("qnaList", qnaList);
+//		// 공용 게시판
+//		List<BdFree> freeList = mkhService.bdFreeList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
+//		model.addAttribute("freeList", freeList);
+//		// 프로젝트 & 공지자료 게시판
+//		List<PrjBdData> dataPrjList = mkhService.prjDataList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
+//		model.addAttribute("dataPrjList", dataPrjList);
+//		// 업무보고 게시판
+//		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
+//		model.addAttribute("RepPrjList", RepPrjList);
 		
-		
-		/* 내가 쓴 댓글 출력 */
-
-		
-		return "mypost/mypost_board_list";
+		return "/mypost/mypost_board_list";
 	}
 	
 	// 내가 쓴 댓글
@@ -343,6 +491,8 @@ public class MkhController {
 	    
 		return "mypost/mypost_good_list";
 	}
+	
+	/* 로그인 페이지 */
 	
 	// 아이디 찾기
 	@RequestMapping(value = "user_find_id")

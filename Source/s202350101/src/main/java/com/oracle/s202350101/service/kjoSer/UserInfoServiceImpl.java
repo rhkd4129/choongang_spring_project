@@ -8,6 +8,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.oracle.s202350101.model.KjoRequestDto;
+import com.oracle.s202350101.model.KjoResponse;
+import com.oracle.s202350101.model.Paging;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.kjoDao.UserInfoDao;
@@ -36,6 +38,20 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<UserInfo> UIList = UIdao.findbyclassuser(ui);
         return UIList;
     }
+
+    //<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회  ++  페이징 추가-->
+    public KjoResponse pageUserInfov2(UserInfo userInfo, String currentPage ) {
+        KjoResponse kjo = new KjoResponse();
+        //	페이징을 하기 위한 START, END,	TOTAL 지정.
+        Paging page = new Paging(userInfo.getTotal(), currentPage);
+        userInfo.setStart(page.getStart());
+        userInfo.setEnd(page.getEnd());
+        kjo.setFirList(UIdao.pageUserInfo(userInfo));
+        kjo.setObj(page);
+
+        return kjo;
+    }
+
 
     @Override
     public List<UserInfo> findbyClassUserProject(int cl_Id) {

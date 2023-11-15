@@ -9,7 +9,7 @@
 <mapper namespace="com.oracle.s202350101.PrjBdRepMapper">
 	<!-- user_id에 해당하는 게시물 -->
 	<select id="RepListSelect" parameterType="UserInfo" resultType="PrjBdRep">
-		Select a.app_id, a.app_name, p.subject, p.user_id, 
+		Select a.app_id, a.app_name, p.subject, p.user_id, p.doc_no,
 			   p.create_date
 		From   prj_bd_rep p, app_info a
 		Where  a.app_id = p.app_id

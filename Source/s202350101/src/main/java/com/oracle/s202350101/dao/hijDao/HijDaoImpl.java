@@ -6,8 +6,11 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.oracle.s202350101.model.HijPrjStep;
 import com.oracle.s202350101.model.HijRequestDto;
 import com.oracle.s202350101.model.HijRequestPrjDto;
+import com.oracle.s202350101.model.HijSearchRequestDto;
+import com.oracle.s202350101.model.HijSearchResponseDto;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
 import com.oracle.s202350101.model.PrjStep;
@@ -301,6 +304,19 @@ public class HijDaoImpl implements HijDao {
 		return stepInsert;
 	}
 	
+//------------------------------------------------------------------------------------------------------------------	
+	// 단계 선택
+	@Override
+	public int prjOrder(List<HijPrjStep> hijPrjStepList) {
+		int result =0;
+		System.out.println("HijDaoImpl prjOrder START");
+		try {
+			result = session.update("ijPrjOrder", hijPrjStepList);
+		} catch (Exception e) {
+			System.out.println("HijDaoImpl prjOrder Exception e : " + e.getMessage());
+		}
+		return result;
+	}
 //--------------------------------------------------------------------------------------	
 	// 프로젝트 단계 수정 조회
 	@Override
@@ -355,6 +371,21 @@ public class HijDaoImpl implements HijDao {
 			System.out.println("HijDaoImpl deleteStep Exception e : " + e.getMessage());
 		}
 		return result;
+	}
+
+//--------------------------------------------------------------------------------------
+	// 통합검색
+	@Override
+	public List<HijSearchResponseDto> searchAll(HijSearchRequestDto hijSearchRequestDto) {
+		System.out.println("HijDaoImpl searchAll START");
+		List<HijSearchResponseDto> hijSearchResponseDtoList = null;
+		try {
+			hijSearchResponseDtoList = session.selectList("ijSearchList", hijSearchRequestDto);
+			System.out.println("HijDaoImpl searchAll hijSearchResponseDtoList.size : " + hijSearchResponseDtoList.size());
+		} catch (Exception e) {
+			System.out.println("HijDaoImpl searchAll Exception e : " + e.getMessage());
+		}
+		return hijSearchResponseDtoList;
 	}
 
 }

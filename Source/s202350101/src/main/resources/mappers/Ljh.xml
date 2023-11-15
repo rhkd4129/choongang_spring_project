@@ -59,7 +59,7 @@
 		UPDATE	meeting
 		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
 		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
-		        attach_name = #{attach_name}, attach_path = #{attach_path},
+		        attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
 		        meeting_content = #{meeting_content}
 		WHERE	meeting_id = #{meeting_id}
 		AND     project_id = #{project_id}
@@ -87,7 +87,8 @@
 	<insert id="ljhMeetingInsert" parameterType="Meeting">
 		INSERT INTO meeting
 		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
-				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 1, #{attach_name}, #{attach_path})
+				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 1, #{attach_name, jdbcType=VARCHAR}, 
+				#{attach_path, jdbcType=VARCHAR}, SYSDATE)
 	</insert>
 	
 	<!-- 회의일정 등록 시 참석자 추가 -->
@@ -101,7 +102,7 @@
 		UPDATE	meeting
 		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
 		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
-		        attach_name = #{attach_name}, attach_path = #{attach_path},
+		        attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
 		        meeting_content = #{meeting_content}, meeting_status = 3
 		WHERE	meeting_id = #{meeting_id}
 		AND     project_id = #{project_id}
@@ -111,8 +112,21 @@
 	<insert id="ljhReportInsert" parameterType="Meeting">
 		INSERT INTO meeting
 		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
-				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 2, #{attach_name}, #{attach_path})
+				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 2, #{attach_name, jdbcType=VARCHAR}, 
+				#{attach_path, jdbcType=VARCHAR}, SYSDATE)
 	</insert>
+	
+	<!-- 프로젝트 생성 승인 알림 (팀장) -->
+	<select id="ljhPrjApprove" parameterType="hashmap" resultType="PrjInfo">
+		SELECT  p.*
+		FROM    prj_info p, user_env u
+		WHERE   p.project_manager_id = u.user_id
+		AND     u.env_alarm_mine = 'Y'
+		AND     project_approve = 1
+		AND     alarm_flag = 'N'
+		AND     del_status = 0
+		AND     u.user_id = #{user_id}
+	</select>
 	
 	<!-- 알림 - 접속한 회원 별 회의일정 select -->
 	<select id="ljhUserMeeting" parameterType="hashmap" resultType="Meeting">
@@ -122,5 +136,87 @@
 		AND     m2.meetuser_id = #{user_id}
 		AND		m.project_id = #{project_id}
 	</select>
+	
+	<!-- 알림 - 접속한 회원 별 게시판 답글 select -->
+	<select id="ljhBoardRep" parameterType="hashmap" resultType="PrjBdData">
+		SELECT  p.app_id, p.doc_no, p.subject, p.doc_group, p.alarm_flag, p.parent_doc_user_id, p.parent_doc_no, p.project_id,
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = p.app_id) app_name
+		FROM    prj_bd_data p, app_info a, user_env u
+		WHERE   p.app_id = a.app_id
+		AND     u.user_id = p.user_id
+		AND     (
+		        (p.doc_no = p.doc_group AND p.user_id = #{user_id}) 
+		        OR
+		        (p.parent_doc_user_id = #{user_id} AND alarm_flag = 'N')
+		)
+		AND     u.env_alarm_reply = 'Y'
+		UNION
+		SELECT  q.app_id, q.doc_no, q.subject, q.doc_group, q.alarm_flag, q.parent_doc_user_id, q.parent_doc_no, null project_id,
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = q.app_id) app_name
+		FROM    bd_qna q, app_info a, user_env u
+		WHERE   q.app_id = a.app_id
+		AND     u.user_id = q.user_id
+		AND     (
+		        (q.doc_group = q.doc_no AND q.user_id = #{user_id}) 
+		        OR
+		        (q.parent_doc_user_id = #{user_id} AND alarm_flag = 'N')
+		)
+		AND     u.env_alarm_reply = 'Y'
+	</select>
+	
+	<!-- 알림 - 접속한 회원 별 게시판 원글 및 댓글 select -->
+	<select id="ljhBoardComt" parameterType="hashmap" resultType="PrjBdData">	
+		SELECT  f.doc_no, f.user_id, f.subject, f.bd_category, fc.comment_context, f.app_id, null project_id,
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = f.app_id) app_name,
+		        (SELECT count(*)
+		         FROM   bd_free_comt
+		         WHERE  doc_no = f.doc_no) comment_count
+		FROM    bd_free f, bd_free_comt fc, app_info a, user_env u
+		WHERE   f.app_id = a.app_id
+		AND     f.doc_no = fc.doc_no
+		AND     u.user_id = f.user_id
+		AND     (f.user_id = #{user_id} AND fc.alarm_flag = 'N')
+		AND     u.env_alarm_comm = 'Y'
+		
+		UNION
+		
+		SELECT  pr.doc_no, pr.user_id, pr.subject, pr.bd_category, prc.comment_context, pr.app_id, pr.project_id,
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = pr.app_id) app_name,
+		        (SELECT count(*)
+		         FROM   bd_rep_comt
+		         WHERE  doc_no = pr.doc_no) comment_count
+		FROM    prj_bd_rep pr, bd_rep_comt prc, app_info a, user_env u
+		WHERE   pr.app_id = a.app_id
+		AND     pr.doc_no = prc.doc_no
+		AND     u.user_id = pr.user_id
+		AND     (pr.user_id = #{user_id} AND prc.alarm_flag = 'N')
+		AND     u.env_alarm_comm = 'Y'
+		
+		UNION
+
+		SELECT  pd.doc_no, pd.user_id, pd.subject, pd.bd_category, pdc.comment_context, pd.app_id, pd.project_id,
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = pd.app_id) app_name,
+		        (SELECT count(*)
+		         FROM   bd_data_comt
+		         WHERE  doc_no = pd.doc_no) comment_count
+		FROM    prj_bd_data pd, bd_data_comt pdc, app_info a, user_env u
+		WHERE   pd.app_id = a.app_id
+		AND     pd.doc_no = pdc.doc_no
+		AND     u.user_id = pd.user_id
+		AND     (pd.user_id = #{user_id} AND pdc.alarm_flag = 'N')
+		AND     u.env_alarm_comm = 'Y'
+	</select>
+	
+
 	
 </mapper>

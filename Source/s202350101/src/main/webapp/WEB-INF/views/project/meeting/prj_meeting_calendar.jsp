@@ -36,17 +36,16 @@
 	#title {
 		width: 80%;
 		text-align: center;
-		font-size: 25pt;
 	}
 	
 	.list_date {
 		padding-top: 20px;
-		font-size: 18pt;
+		font-size: 14pt;
 		border-bottom: solid gray 1px;
 	}
 	
 	.list_title {
-		font-size: 19pt;
+		font-size: 15pt;
 	}
 	
 	.list_title a {
@@ -202,9 +201,18 @@
 			    var eventId = meetingDateEvents.event.id;
 			    
 			    /* alert("backgroundColor"+backgroundColor); */
-			    // console.log("클릭한 곳의 배경색: " + backgroundColor);
+			    console.log("클릭한 곳의 배경색: " + backgroundColor);
 				console.log("클릭한 곳의 id: " + eventId);
 			    
+				// 보라색 회의일정 클릭 시 해당 회의록 페이지로 이동
+				if (backgroundColor == "rgb(181, 178, 255)") {
+					var project_id = ${project_id};
+					var openurl = "/prj_meeting_report_read?meeting_id=" + eventId + "&project_id=" + project_id;
+					
+					window.open(openurl, "_self");
+				};
+				
+				// 노란색 회의일정 클릭 시 회의록 등록 모달창 표출
 			    if (backgroundColor == "rgb(242, 203, 97)") {
 			    	
 			    	var project_id = ${project_id};
@@ -427,8 +435,8 @@
 								<div class="modal-body">
 									<div class="form-group">
 										<input type="hidden" name="project_id" value="${project_id }">
-										<input type="radio" name="meeting_status" value="1"> 회의 일정 
-										<input type="radio" class="radio" name="meeting_status" value="2"> 회의록<br>
+										<p><input type="radio" name="meeting_status" value="1"> 회의 일정 
+										   <input type="radio" class="radio" name="meeting_status" value="2"> 회의록</p>
 										<label for="taskId" class="col-form-label">회의 제목</label>
 										<input type="text" class="form-control" id="meeting_title" name="meeting_title">
 										<label for="taskId"	class="col-form-label">회의 일정</label>
@@ -520,7 +528,7 @@
 				<div id="right_side" style="width: 30%">
 					<div>
 						<div id="meetingList" style="display:none;">
-							<h1 id="title">회의록</h1>
+							<h3 id="title">회의록</h3>
 							<div id="meeting">
 
 							</div>

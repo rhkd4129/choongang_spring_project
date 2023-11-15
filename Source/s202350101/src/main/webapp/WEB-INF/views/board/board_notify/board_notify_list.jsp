@@ -78,12 +78,11 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 			<h3>전체 게시판</h3><p>
-			<a href="board_write_insert_form">새 글 입력</a><p>
-			
-			<h5>All Count : ${totalBdFree} </h5>
+			<input type="button" value="글 작성" onclick="location.href='board_write_insert_form'">
 	 		
 	 		
 	 		<!-- 추천수 가장 높은 row 3개 -->
+	 		<h5>추천수 가장 높은 게시글</h5>
 	 		<table border="1">
 	 				<tr>
 	 					<th>번호</th>      <th>이름</th>      <th>작성일시</th> 
@@ -107,6 +106,7 @@
 
 	 		
 	 		<!-- 전체 리스트 -->
+	 		<h5>All Count : ${totalBdFree}</h5>
 			<table border="1">  
 				<tr>
 					<th>번호</th>      <th>이름</th>      <th>작성일시</th> 

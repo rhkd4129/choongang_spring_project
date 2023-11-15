@@ -3,7 +3,9 @@ package com.oracle.s202350101.service.ljhSer;
 import java.util.HashMap;
 import java.util.List;
 
+import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.Meeting;
+import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
 
@@ -25,6 +27,9 @@ public interface LjhService {
 	int 				insertMeetingReport(Meeting meeting);
 	int 				insertReport(Meeting meeting);
 	List<Meeting> 		getUserMeeting(HashMap<String, String> map);
+	List<PrjBdData> 	getBoardRep(HashMap<String, String> map);
+	List<PrjBdData> 	getBoardComt(HashMap<String, String> map);
+	List<PrjInfo> 		getPrjApprove(HashMap<String, String> map);
 
 
 }

@@ -60,7 +60,7 @@
 									<select class="form-select" name="bd_category" id="bd_category">
 									<c:forEach var="code" items="${bd_category_codelist}">
 										<option  
-										<c:if test="${board.bd_category == code.cate_code}">selected</c:if> 
+										<c:if test="${board.bd_category eq code.cate_code}">selected</c:if> 
 										value="${code.cate_code}">${code.cate_name}</option>								
 									</c:forEach>
 									</select>
@@ -76,13 +76,13 @@
 												<input type="hidden" name="attach_path" value="${board.attach_path}">
 												<input type="hidden" name="attach_delete_flag" id="idAttachDeleteFlag" value="">
 												<div id="idAttachFile">
-													<c:if test="${board.attach_path != null}">
+													<c:if test="${board.attach_path ne null}">
 														<a href="/upload/${board.attach_path}" target="_blank">${board.attach_name}</a>
 														&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
 														<%-- <img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${board.attach_path}" width="100"> --%>
 													</c:if>													
 												</div>																						
-												<div id="idAttachInput" <c:if test="${board.attach_path != null}">style="display:none;"</c:if> >
+												<div id="idAttachInput" <c:if test="${board.attach_path ne null}">style="display:none;"</c:if> >
 													<input type="file" class="form-control form-control-sm" name="file1">
 												</div>
 											</td>

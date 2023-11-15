@@ -20,14 +20,22 @@
 
 	// 추천
 	function eventGood(doc_no) {
-//		alert("이벤트 추천 doc_no-> " + doc_no);
-		$.ajax({
+		alert("이벤트 추천 doc_no-> " + doc_no);
+		
+ 		$.ajax({
 			url       : 'ajaxEventGoodCount'
-		   ,dataType  : 'JSON'
+		   ,dataType  : 'text'
 		   ,data      : {'doc_no' : doc_no}
-		   ,success   : function(data) {
-			   $('#event_btn').html("추천수 " + data);
-		   }
+	 	   ,success	  : function(data) {	
+				if (data == "duplication") {
+					alert("중복 추천입니다");
+				} else if (data == "error") {
+					alert("error");
+				} else {
+					alert("추천되었습니다");
+					$('#event_btn').text("추천수 " + data);
+				} 
+			}
 		});
 	}
 
@@ -36,7 +44,7 @@
 		alert("글 번호 : " + doc_no);
 		alert("아이디 : "  + user_id);
 		
-		var result = 0;
+//		var result = 0;
 		var inputUserId = prompt('회원 아이디를 입력하세요');
 		if (inputUserId != user_id) {
 			alert('회원 ID가 올바르지 않습니다');
@@ -52,7 +60,7 @@
 		   ,success  : function(data) {
 			   if (data == 1) {
 				   alert('삭제되었습니다');
-				   var a = "event";
+				   var a = "board_event";
 				   window.location.href = a;
 			   } else {
 				   alert('삭제에 실패했습니다');
@@ -137,12 +145,12 @@
 				<tr> <th>본문</th>        <td>${eventContent.doc_body}</td> </tr>
 				<tr> <th>조회수</th>       <td>${eventContent.bd_count}</td> </tr>
 				<tr> <th>추천</th>        <td>${eventContent.good_count}</td> </tr>
-				<tr> <th>첨부파일명</th>    <td>${eventContent.attach_name}</td> </tr>	
-				<tr> <th>첨부파일경로</th>   <td>${eventContent.attach_path}</td> </tr>
+				<tr> <th>첨부파일명</th>     <td>${eventContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${eventContent.attach_path}/${eventContent.attach_name}"></td> </tr>	
+						
 				
 				<tr>
 					<td colspan="2">
-						<input type="button" value="목록" onclick="location.href='event'">
+						<input type="button" value="목록" onclick="location.href='board_event'">
 						
 						<c:if test="${result == 1}">
 							<input type="button" value="수정" onclick="location.href='event_update?doc_no=${eventContent.doc_no}'">
@@ -157,7 +165,7 @@
 			
 			
 			<!-- 추천 -->
-			<button type="button" id="event_btn" onclick="eventGood(${eventContent.doc_no})">추천  ${eventContent.good_count}</button>
+			<button type="button" id="event_btn" onclick="eventGood(${eventContent.doc_no})">추천수  ${eventContent.good_count}</button>
 			
 
 			<!-- 댓글 -->

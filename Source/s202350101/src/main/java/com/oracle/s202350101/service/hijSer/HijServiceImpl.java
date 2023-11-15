@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -13,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.oracle.s202350101.dao.hijDao.HijDao;
+import com.oracle.s202350101.model.HijPrjStep;
 import com.oracle.s202350101.model.HijRequestDto;
 import com.oracle.s202350101.model.HijRequestPrjDto;
+import com.oracle.s202350101.model.HijSearchRequestDto;
+import com.oracle.s202350101.model.HijSearchResponseDto;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
 import com.oracle.s202350101.model.PrjStep;
@@ -353,7 +357,19 @@ public class HijServiceImpl implements HijService {
 		stepInsert = hd.insertStep(prjStep);
 		//-----------------------------------------------------
 		return stepInsert;
-	}	
+	}
+//------------------------------------------------------------------------------------------------------------------	
+	// 단계 선택 **************************************
+	@Override
+	public int prjOrder( List<HijPrjStep> hijPrjStepList) {
+		int resultCount = 0;
+		System.out.println("HijServiceImple prjOrder START");
+		//-------------------------------------------------
+		resultCount = hd.prjOrder(hijPrjStepList);
+		//-------------------------------------------------
+		return resultCount;
+	}
+
 //------------------------------------------------------------------------------------------------------------------		
 	// 프로젝트 단계 수정 조회
 	@Override
@@ -386,6 +402,27 @@ public class HijServiceImpl implements HijService {
 		result = hd.deleteStep(project_id, project_step_seq);
 		//-----------------------------------------------------
 		return result;
+	}
+//------------------------------------------------------------------------------------------------------------------
+	@Override
+	public List<HijSearchResponseDto> searchAll(HijSearchRequestDto hijSearchRequestDto) {
+		List<HijSearchResponseDto> 	hijSearchResponseDtoList = null;  // 1개 table 검색해온 결과 List
+		List<HijSearchResponseDto> 	hijSearchResponsMerge = new ArrayList<HijSearchResponseDto>(); // 취합 list(bd_free + bd_QNA)
+		System.out.println("HijServiceImple searchAll START");
+		
+		// 대상 table 추가 하려면 여기다 넣음
+		List<String> tableList = new ArrayList<String>();
+		tableList.add("BD_FREE");
+		tableList.add("BD_QNA");
+		
+		// table 하나씩 검색
+		for(String table : tableList) {
+			hijSearchRequestDto.setTablename(table);
+			hijSearchResponseDtoList = hd.searchAll(hijSearchRequestDto);
+			hijSearchResponsMerge.addAll(hijSearchResponseDtoList);
+		}
+		
+		return hijSearchResponsMerge;
 	}
 
 

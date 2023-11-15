@@ -64,10 +64,10 @@
     <div class="login-wrapper">
         <h2>ChoongAng</h2>
         <form:form action="user_login_check" id="login-form" method="post" modelAttribute="userInfo">
-            <input type="text" 	   name="user_id" placeholder="ID">
-            <small style="color: red"><form:errors path="user_id"/></small>
+            <input type="text" 	   name="user_id" placeholder="ID" value="${userInfo.user_id }">
+            	<small style="color: red"><form:errors path="user_id"/></small>
             <input type="password" name="user_pw" placeholder="Password">
-            <small style="color: red"><form:errors path="user_pw"/></small>
+            	<small style="color: red"><form:errors path="user_pw"/></small>
             <label for="remember-check">
                 <input type="checkbox" id="remember-check">아이디 저장하기
             </label>

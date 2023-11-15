@@ -13,5 +13,17 @@
 		From   user_env
 		Where  user_id = #{user_id}
 	</select>
+	
+	<!-- 알림 환경설정 수정 -->
+	<update id="mkh_updateEnv" parameterType="userEnv">
+		Update 	user_env
+		Set	   	env_alarm_comm      = #{env_alarm_comm},
+				env_alarm_reply     = #{env_alarm_reply},
+				env_alarm_mine      = #{env_alarm_mine},
+				env_alarm_meeting   = #{env_alarm_meeting},
+				env_chat            = #{env_chat}
+		Where   user_id 			= #{user_id}
+	
+	</update>
 </mapper>
 

@@ -9,8 +9,10 @@
 	
 	<!-- 회원가입 insert -->
 	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
-		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_gender,    user_number,    user_birth,    user_address,    user_email,  user_auth) 
-					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_gender}, #{user_number}, #{user_birth}, #{user_address}, #{user_email}, 'student')  
+		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_gender,    
+							   user_number,    user_birth,    						user_address,    user_email,  user_auth, attach_name, attach_path) 
+					   VALUES (#{user_id},  #{class_id}, #{user_pw}, #{user_name}, #{user_gender, jdbcType = VARCHAR}, 
+					   		   #{user_number}, #{user_birth, jdbcType = VARCHAR}, #{user_address}, #{user_email}, 'student', #{attach_name}, #{attach_path})  
 	</insert>
 	
 	<!-- 로그인 check -->
@@ -56,7 +58,9 @@
 	        	user_birth  = #{user_birth},
 	        </if>
 	        user_address = #{user_address},
-	        user_email   = #{user_email}
+	        user_email   = #{user_email},
+	        attach_name  = #{attach_name}, 
+	        attach_path  = #{attach_path}
 	    WHERE user_id   = #{user_id}
 	</update>
 	

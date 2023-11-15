@@ -2,6 +2,7 @@ package com.oracle.s202350101.service.kjoSer;
 
 import com.oracle.s202350101.dao.kjoDao.BdFreeDao;
 import com.oracle.s202350101.model.BdFree;
+import com.oracle.s202350101.model.KjoRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,14 @@ public class BdFreeServiceImpl implements BdFreeService {
     @Override
     public int findByCategorySearch(BdFree bf) {
         return BFdao.findByCategorySearch(bf);
+    }
+
+//<!--게시글 id로 삭제-->
+    @Override
+    public int del_bdf(KjoRequestDto kjorequest) {
+        List<String> doc_nos = kjorequest.getUser_id();
+        int del_cnt = BFdao.del_bdf(doc_nos);
+        return del_cnt;
     }
 
 

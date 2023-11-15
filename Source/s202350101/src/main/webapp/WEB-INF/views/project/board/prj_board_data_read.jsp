@@ -135,7 +135,10 @@ function drawCommentList(comments){
 	$("#divCommentList").empty();
 	if(comments.length==0){
 		//alert("댓글 정보가 없습니다.");
+		$("#divCommentList").html("");
 		$("#divCommentList").hide();
+		$("#divCommentCount").html("");
+		$("#divCommentCount").hide();
 	}
 	else{
 		$(comments).each(function(index, comment){
@@ -149,10 +152,12 @@ function drawCommentList(comments){
 			if(comment.user_id == "${userInfoDTO.user_id}") { //로그인사용자가 작성한 댓글만 삭제버튼 표시
 				list 	+= '<span style="cursor:pointer;position:absolute;top:5px;right:8px;" onclick="deleteComment(\''+comment.comment_doc_no+'\')">X</span>';
 			}
-			list 	+= '</label>';			
+			list 	+= '</label>';
 			$("#divCommentList").append(list);
 			$("#divCommentList").show();
 		});	
+		$("#divCommentCount").html("댓글 : " + comments.length.toString());
+		$("#divCommentCount").show();
 	}
 }
 
@@ -220,7 +225,7 @@ $(function(){
 								<td>작성일</td>
 								<td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/></td>
 							</tr>
-							<c:if test="${board.parent_doc_no != ''}">
+							<c:if test="${board.parent_doc_no ne ''}">
 							<tr>
 								<td>원글제목</td>											 
 								<td><a href="javascript:callAction('read','prj_board_data_read?doc_no=${board.parent_doc_no}&project_id=${board.project_id}')">${board.parent_doc_subject}</a></td>
@@ -230,7 +235,7 @@ $(function(){
 								<td>제목</td>
 								<td>${board.subject}</td>
 							</tr>
-							<c:if test="${board.notify_flag == 'Y'}">
+							<c:if test="${board.notify_flag eq 'Y'}">
 								<tr>
 									<td>공지여부</td>
 									<td>공지</td>
@@ -240,7 +245,7 @@ $(function(){
 								<td>분류</td>
 								<td>${board.bd_category_name}</td>
 							</tr>
-							<c:if test="${board.attach_path != null}">
+							<c:if test="${board.attach_path ne null}">
 								<tr>
 									<td>파일첨부</td>
 									<td><a href="javascript:popup('/upload/${board.attach_path}',800,600)">${board.attach_name}</a></td>
@@ -284,6 +289,7 @@ $(function(){
 							</tr>
 						</table>
 						<!-- 댓글 조회 -->
+						<div id="divCommentCount" style="margin-left:16px"></div>
 						<div id="divCommentList" class="list-group p-3 px-md-3"></div>
 			</div>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.oracle.s202350101.controller.KjoController;
 import com.oracle.s202350101.model.KjoRequestDto;
+import com.oracle.s202350101.model.KjoResponse;
 import com.oracle.s202350101.model.UserInfo;
 
 public interface UserInfoService {
@@ -18,4 +19,7 @@ public interface UserInfoService {
     int auth_modify(KjoRequestDto kjorequest);
 //<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
 	List<UserInfo> pageUserInfo(UserInfo userInfo);
+
+//<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
+	KjoResponse pageUserInfov2(UserInfo userInfo, String currentPage);
 }

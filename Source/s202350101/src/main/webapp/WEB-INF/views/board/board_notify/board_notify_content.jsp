@@ -17,39 +17,23 @@
 <!-- JS END -->
 
 <script type="text/javascript">
-/* 	document.addEventListener("DOMContentLoaded", function () {
-	    const colorButton = document.getElementById("colorButton");
-	    let isYellow = false; // 초기 버튼 배경색이 파랑인지 확인하기 위한 변수
-	
-	    colorButton.addEventListener("click", function () {
-	        if (isYellow) {
-	            colorButton.style.backgroundColor = "blue";
-	        } else {
-	            colorButton.style.backgroundColor = "yellow";
-	        }
-	
-	        isYellow = !isYellow; // 버튼 배경색을 토글
-	    });
-	}); */
 
 	// 추천
 	function goodCount(doc_no) {
-//		alert("goodCount doc_no" + doc_no );
-		
-		/* const btnYellow = document.getElementById("button-yellow");
-		const btnGreen  = $("#button-green");
-		
-		btnYellow.addEventListener("click", (e) => ) {
-			
-		} */
-		
+		alert("공지 추천 doc_no: "  + doc_no);
 		$.ajax({
 			url      : 'ajaxGoodCount',
-			dataType : 'JSON',                     // 받아올 데이터의 자료형 지정 
-			data     : {'doc_no' : doc_no} ,       // 요청할 때 보낼 데이터 지정 
-			success	 : function(data) {
-	//			$('#count_btn').html("추천수 " + data);
-				$('#count_btn').text("추천수 " + data);
+			dataType : 'text',                     // 받아올 데이터의 자료형 지정 
+			data     : {'doc_no' : doc_no} ,       // 보낼 데이터 지정 
+			success	 : function(data) {	
+				if (data == "duplication") {
+					alert("중복 추천입니다");
+				} else if (data == "error") {
+					alert("error");
+				} else {
+					alert("추천되었습니다");
+					$('#count_btn').text("추천수 " + data);
+				} 
 			}
 		});
 	}
@@ -60,7 +44,6 @@
  		alert("글 번호 : " + doc_no);
 		alert("회원ID : " + user_id);  */
 	
-		var result = 0;  	// 아무 값이나 넣어도 무방하지만 보통 0 사용
 		var inputUserId = prompt('회원 아이디를 입력하세요');
 		if (inputUserId != user_id) {
 			alert("회원ID가 올바르지 않습니다");
@@ -143,8 +126,8 @@
 				<tr> <th>본문</th>         <td>${content.doc_body}</td> </tr>
 				<tr> <th>조회수</th>        <td>${content.bd_count}</td> </tr>
 				<tr> <th>추천</th>         <td>${content.good_count}</td> </tr>
-				<tr> <th>첨부파일명</th>     <td>${content.attach_name}</td> </tr>	
-				<tr> <th>첨부파일경로</th>    <td>${content.attach_path}</td> </tr>
+				<tr> <th>첨부파일명</th>     <td>${content.attach_name}<img alt="" src="${pageContext.request.contextPath}/${content.attach_path}/${content.attach_name}"></td> </tr>	
+				
 				
 				<tr>
 					<td colspan="2">
@@ -162,9 +145,7 @@
 			</table>
 			
 			<!-- 추천 -->
-			<button type="button" id="count_btn" onclick="goodCount('${content.doc_no}')">추천  ${content.good_count}</button>
-	<!-- 	<button id="colorButton" style="background-color: blue;">배경색 변경</button> -->
-			
+			<button type="button" id="count_btn" onclick="goodCount(${content.doc_no})">추천수  ${content.good_count}</button>
 			
 			
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

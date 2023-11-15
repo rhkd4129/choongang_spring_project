@@ -2,6 +2,9 @@ package com.oracle.s202350101.model;
 
 import java.sql.Date;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,8 +20,12 @@ public class BdFree {
 	private Date 	create_date;
 	private Date 	modify_date;
 	private String 	bd_category;
+	
+	@NotBlank(message = "필수 입력란입니다")
 	private String 	subject;
-	private String 	doc_body;
+	@NotEmpty(message = "필수 입력란입니다")
+	private String 	doc_body;	
+	
 	private int 	bd_count;
 	private int 	good_count;
 	private String 	attach_name;

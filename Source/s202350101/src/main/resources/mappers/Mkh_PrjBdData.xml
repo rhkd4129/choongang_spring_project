@@ -9,7 +9,7 @@
 <mapper namespace="com.oracle.s202350101.PrjBdDataMapper">
 	<!-- user_id에 해당하는 게시물 -->
 	<select id="DataListSelect" parameterType="UserInfo" resultType="PrjBdData">
-		Select a.app_id, a.app_name, p.subject, p.user_id, 
+		Select a.app_id, a.app_name, p.subject, p.user_id, p.doc_no,
 			   p.create_date, p.bd_count, p.good_count
 		From   prj_bd_data p, app_info a
 		Where  a.app_id = p.app_id
@@ -39,6 +39,88 @@
 		Where 	info.app_id = pdata.app_id
 		And 	pdata.doc_no = comt.doc_no
 		And 	comt.user_id = #{user_id}
+	</select>
+	
+	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
+		SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL project_id, NULL bd_category
+		FROM bd_qna bdq, app_info ai
+		WHERE bdq.app_id = ai.app_id
+		AND bdq.user_id = #{user_id}
+		
+		UNION ALL
+		
+		SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, NULL project_id, bdf.bd_category
+		FROM bd_free bdf, app_info ai
+		WHERE bdf.app_id = ai.app_id
+		AND bdf.user_id = #{user_id}
+		
+		UNION ALL
+		
+		SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, NULL bd_category
+		FROM prj_bd_data pbd, app_info ai
+		WHERE pbd.app_id = ai.app_id
+		AND pbd.user_id = #{user_id}
+		
+		UNION ALL
+		
+		SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.project_id, NULL bd_category
+		FROM prj_bd_rep pbr, app_info ai
+		WHERE pbr.app_id = ai.app_id
+		AND pbr.user_id = #{user_id}
+	</select> -->
+	
+	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
+		<![CDATA[
+			select * 
+			FROM 
+			(		
+					SELECT rownum rn , a.*
+					FROM
+							  (select * from emp order by empno) a		
+			)
+			WHERE  rn >= #{start} 
+			and    rn <= #{end}
+		   ]]>
+	</select> -->
+	
+	<select id="mkh_bdSelectAll" parameterType="PrjBdData" resultType="PrjBdData">
+		<![CDATA[
+			SELECT * 
+			FROM 
+			(
+			    SELECT rownum rn, a.* 
+			    FROM 
+			    	(
+			        SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, NULL AS bd_category
+			        FROM bd_qna bdq, app_info ai
+			        WHERE bdq.app_id = ai.app_id
+			        AND bdq.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category
+			        FROM bd_free bdf, app_info ai
+			        WHERE bdf.app_id = ai.app_id
+			        AND bdf.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, NULL AS bd_category
+			        FROM prj_bd_data pbd, app_info ai
+			        WHERE pbd.app_id = ai.app_id
+			        AND pbd.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.project_id, NULL AS bd_category
+			        FROM prj_bd_rep pbr, app_info ai
+			        WHERE pbr.app_id = ai.app_id
+			        AND pbr.user_id = #{user_id}
+			        ORDER BY create_date DESC
+			    ) a
+			) WHERE rn >= #{start} 
+			  AND   rn <= #{end}
+		   ]]>
 	</select>
 
 	

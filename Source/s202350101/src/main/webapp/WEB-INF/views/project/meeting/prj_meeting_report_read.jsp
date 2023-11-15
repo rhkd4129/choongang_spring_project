@@ -146,7 +146,7 @@
 						</tr>
 						<tr>
 							<th>첨부파일</th>
-							<td><img class="uploadFile" alt="UpLoad File" src="${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}"> ${meeting.attach_name}</td>
+							<td><c:if test="${meeting.attach_name != null}"><img class="uploadFile" src="${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}"> ${meeting.attach_name}</c:if></td>
 						</tr>
 						<tr>
 							<th>회의내용</th><td>${meeting.meeting_content}</td>

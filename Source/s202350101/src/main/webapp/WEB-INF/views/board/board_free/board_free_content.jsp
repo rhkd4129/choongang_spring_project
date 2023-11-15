@@ -26,18 +26,20 @@
 		   ,dataType  : 'text'
 		   ,data      : {'doc_no' : doc_no}
 		   ,success   : function(data) {
-			   if(data == "duplicated") {
-				   alert("이미 추천하셨습니다");
-			   }else if(data == "success"){
-			
-			   }else if(data == "error"){
-			   }else{
-				   
+			   if (data == "duplication") {
+				   alert("중복 추천입니다");
+			   } else if(data == "error"){
+				   alert("error");
+			   } else {
+				   alert("추천되었습니다");
+				   $('#free_btn').html("추천수 " + data);
 			   }
-			   $('#free_btn').html("추천수 " + data)
 		   }
 		});
 	}
+	
+	
+	
 	
 	// 삭제
 	function freeDelete(doc_no, user_id) {
@@ -147,7 +149,8 @@
 				<tr> <th>조회수</th>       <td>${freeContent.bd_count}</td> </tr>
 				<tr> <th>추천</th>        <td>${freeContent.good_count}</td> </tr>
 				<tr> <th>첨부파일명</th>    <td>${freeContent.attach_name}</td> </tr>	
-				<tr> <th>첨부파일경로</th>   <td>${freeContent.attach_path}</td> </tr>
+				<tr> <th>첨부파일명</th>     <td>${freeContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${freeContent.attach_path}/${freeContent.attach_name}"></td> </tr>	
+				
 				
 				<tr>
 					<td colspan="2">

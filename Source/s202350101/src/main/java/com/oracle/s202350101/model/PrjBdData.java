@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-//@Date
+//@Data
 @Getter
 @Setter
 @ToString
@@ -32,4 +32,9 @@ public class PrjBdData {
 	private String  attach_delete_flag; //편집저장시 기존첨부 삭제여부(D)
 	private String  parent_doc_subject; //원글제목	
 	private String  app_name;			//어플리케이션 이름
+	private String	comment_context;	//댓글 내용
+	private int		comment_count;		//댓글 수
+	private String	search;				//검색대상 필드
+	private String	keyword;			//검색어 키워드
+	private String  doc_group_list;		//알림용 목록 표시 (Y/y)
 }

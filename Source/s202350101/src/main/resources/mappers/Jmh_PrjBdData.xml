@@ -9,8 +9,51 @@
 <mapper namespace="com.oracle.s202350101.PrjBdDataMapper">
 	
 	<!-- 총 문서수 -->
-	<select id="jmhPrjBdDataListTotalCount" resultType="int">
-		SELECT Count(*) FROM PRJ_BD_DATA
+	<select id="jmhPrjBdDataListTotalCount" parameterType="PrjBdData" resultType="int">
+		SELECT Count(*) 
+		FROM PRJ_BD_DATA 
+		WHERE  project_id = #{project_id}
+	</select>
+
+	<!-- 알림 문서수 -->
+	<select id="jmhPrjBdDataListAlarmCount" parameterType="PrjBdData" resultType="int">
+		SELECT Count(*) 
+		FROM   PRJ_BD_DATA 
+		WHERE  project_id = #{project_id} 
+		AND    doc_group = #{doc_group}
+	</select>
+
+	<!-- 검색 문서수 -->
+	<select id="jmhPrjBdDataListSearchCount" parameterType="PrjBdData" resultType="int">
+		SELECT Count(*)
+		FROM (
+			SELECT p.*, u.user_name, 
+					(SELECT cate_name 
+					 FROM CODE 
+					 WHERE UPPER(table_name)='PRJ_BD_DATA' 
+					 AND UPPER(field_name)='BD_CATEGORY' 
+					 AND cate_code=p.bd_category) bd_category_name, 
+					(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
+			FROM PRJ_BD_DATA p, USER_INFO u 
+			WHERE p.user_id = u.user_id			
+			ORDER BY doc_group DESC, doc_step
+		)
+		WHERE project_id = #{project_id} 
+		AND 
+		<choose>
+			<when test="search == 's_subject'">
+				 subject like '%' || #{keyword} || '%'
+			</when>
+			<when test="search == 's_user_name'">
+				 user_name like '%' || #{keyword} || '%'
+			</when>
+			<when test="search == 's_category'">
+				 bd_category_name like '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				 doc_body like '%' || #{keyword} || '%'
+			</otherwise>
+		</choose>
 	</select>
 	
 	<!-- 문서 목록 -->
@@ -25,12 +68,76 @@
 							 FROM CODE 
 							 WHERE UPPER(table_name)='PRJ_BD_DATA' 
 							 AND UPPER(field_name)='BD_CATEGORY' 
-							 AND cate_code=p.bd_category) bd_category_name
+							 AND cate_code=p.bd_category) bd_category_name,
+							(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 					  FROM PRJ_BD_DATA p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
+					  AND p.project_id = #{project_id} 
 					  ORDER BY doc_group DESC, doc_step) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 알림 문서 목록 -->
+	<select id="jmhPrjBdDataAlarmList" parameterType="PrjBdData" resultType="PrjBdData">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT p.*, u.user_name, 
+							(SELECT cate_name 
+							 FROM CODE 
+							 WHERE UPPER(table_name)='PRJ_BD_DATA' 
+							 AND UPPER(field_name)='BD_CATEGORY' 
+							 AND cate_code=p.bd_category) bd_category_name, 
+							(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
+					  FROM PRJ_BD_DATA p, USER_INFO u 
+					  WHERE p.user_id = u.user_id 
+					  AND p.project_id = #{project_id} 
+					  AND p.doc_group = #{doc_group}
+					  ORDER BY doc_group DESC, doc_step) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
+	<!-- 검색 목록 -->
+	<select id="jmhPrjBdDataSearchList" parameterType="PrjBdData" resultType="PrjBdData">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT p.*, u.user_name, 
+							(SELECT cate_name 
+							 FROM CODE 
+							 WHERE UPPER(table_name)='PRJ_BD_DATA' 
+							 AND UPPER(field_name)='BD_CATEGORY' 
+							 AND cate_code=p.bd_category) bd_category_name, 
+							(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
+					  FROM PRJ_BD_DATA p, USER_INFO u 
+					  WHERE p.user_id = u.user_id 
+					  ORDER BY doc_group DESC, doc_step) a
+			WHERE
+			a.project_id = #{project_id} 
+			AND 
+			<choose>
+				<when test="search == 's_subject'">
+					 a.subject like '%' || #{keyword} || '%'
+				</when>
+				<when test="search == 's_user_name'">
+					 a.user_name like '%' || #{keyword} || '%'
+				</when>
+				<when test="search == 's_category'">
+					 a.bd_category_name like '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					 a.doc_body like '%' || #{keyword} || '%'
+				</otherwise>
+			</choose>
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+		
 	</select>
 	
 	<!-- 분류 -->
@@ -178,5 +285,19 @@
 		DELETE BD_DATA_COMT 
 		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id} AND COMMENT_DOC_NO=#{comment_doc_no}
 	</delete>
+	
+	<!-- 답글 알림플래그 Y처리 -->
+	<update id="jmhPrjBdDataUpdateReplyAlarmFlag" parameterType="PrjBdData">
+		UPDATE PRJ_BD_DATA 
+		SET ALARM_FLAG='Y' 
+		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
+	</update>
+
+	<!-- 댓글 알림플래그 Y처리 -->
+	<update id="jmhPrjBdDataUpdateCommentAlarmFlag" parameterType="PrjBdData">
+		UPDATE BD_DATA_COMT 
+		SET ALARM_FLAG='Y' 
+		WHERE DOC_NO=#{doc_no} AND PROJECT_ID=#{project_id}
+	</update>
 
 </mapper>

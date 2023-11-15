@@ -73,7 +73,10 @@ function drawCommentList(comments){
 	$("#divCommentList").empty();
 	if(comments.length==0){
 		//alert("댓글 정보가 없습니다.");
+		$("#divCommentList").html("");
 		$("#divCommentList").hide();
+		$("#divCommentCount").html("");
+		$("#divCommentCount").hide();
 	}
 	else{
 		$(comments).each(function(index, comment){
@@ -90,7 +93,9 @@ function drawCommentList(comments){
 			list 	+= '</label>';			
 			$("#divCommentList").append(list);
 			$("#divCommentList").show();
-		});	
+		});
+		$("#divCommentCount").html("댓글 : " + comments.length.toString());
+		$("#divCommentCount").show();
 	}
 }
 
@@ -165,7 +170,7 @@ $(function(){
 								<td>분류</td>
 								<td>${board.bd_category_name}</td>
 							</tr>
-							<c:if test="${board.attach_path != null}">
+							<c:if test="${board.attach_path ne null}">
 								<tr>
 									<td>파일첨부</td>
 									<td><a href="javascript:popup('/upload/${board.attach_path}',800,600)">${board.attach_name}</a></td>
@@ -191,6 +196,7 @@ $(function(){
 							</tr>
 						</table>
 						<!-- 댓글 조회 -->
+						<div id="divCommentCount" style="margin-left:16px"></div>
 						<div id="divCommentList" class="list-group p-3 px-md-3"></div>
 					</form>
 			</div>

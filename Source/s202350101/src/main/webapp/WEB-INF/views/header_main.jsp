@@ -9,6 +9,8 @@
 <script type="text/javascript" src="/bootstrap-5.3.2-examples/assets/js/color-modes.js"></script><!-- 화면색모드 -->
 <link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/offcanvas-navbar.css"><!-- 타이틀 -->
 <link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/dropdowns.css"><!-- 달력 -->
+<link rel="stylesheet" href="/bootstrap-5.3.2-examples/css/sidebars.css"><!-- 좌측메뉴 -->
+<script type="text/javascript" src="/bootstrap-5.3.2-examples/js/sidebars.js"></script><!-- 좌측메뉴 -->
 <script type="text/javascript" src="/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
 <!-- BOOTSTRAP END -->
 

@@ -78,12 +78,12 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 			<h3>이벤트</h3><p>
-			<a href="event_insert_form">새 글 입력</a><p>
 			
-			<h5>All Count : ${eventCount} </h5>
-	 	
+			<input type="button" value="글 작성" onclick="location.href='event_insert_form'">
+
 	 	
 	 		<!-- 추천수 가장 높은 row 3개 -->
+	 		<h5>추천수 가장 높은 게시글</h5>
 	 		<table border="1">
 	 			<tr>
 	 				<th>번호</th>      <th>이름</th>       <th>작성일시</th> 
@@ -92,8 +92,8 @@
 	 			</tr>
 	 			
 	 			<c:forEach var="good" items="${eventGood }" varStatus="status">
-	 				<tr id="good${status.count }">
-	 					<td>${status.count }</td>
+	 				<tr id="good${good.rn }">
+	 					<td>${good.rn }</td>
 	 					<td>${good.user_name }</td>
 	 					<td>${good.create_date }</td>
 	 					<td>${good.modify_date }</td>
@@ -104,9 +104,10 @@
 	 				</tr>
 	 			</c:forEach>
 	 		</table>
-	 		
 	 	
+	 		
 	 		<!-- 전체 리스트 -->
+	 		<h5>All Count : ${eventCount} </h5>	 	
 			<table border="1"> 
 				<tr>
 					<th>번호</th>      <th>이름</th>       <th>작성일시</th> 

@@ -105,4 +105,17 @@ public class BdFreeDaoImpl implements BdFreeDao {
         return BFList;
 
     }
+
+//<!--게시글 id로 삭제-->
+    @Override
+    public int del_bdf(List<String> doc_nos) {
+        log.info("del_bdf start");
+        int result = 0;
+        try {
+            result= session.delete("del_bdf", doc_nos);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

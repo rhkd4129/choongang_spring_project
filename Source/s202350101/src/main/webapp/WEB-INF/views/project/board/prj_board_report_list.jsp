@@ -85,17 +85,17 @@
 						<tr>
 							<td><h3>업무보고</h3></td>
 							<td align="right">
-								<form action="listSearch3">
+								<form action="prj_board_report_list">
 									<table>
 										<tr>
 											<td>
 												<select class="form-select" name="search" style="font-size:0.8rem">
-													<option value="s_subject">제목</option>
-													<option value="s_user_name">작성자</option>
-													<option value="s_user_name">본문</option>
+													<c:forEach var="code" items="${search_codelist}">
+														<option value="${code.cate_code}">${code.cate_name}</option>
+													</c:forEach>
 												</select>
 											</td>
-											<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요"></td>
+											<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
 											<td><button type="submit" class="btn btn-primary btn-sm">검색</button></td>
 										</tr>
 									</table>
@@ -114,16 +114,25 @@
 									<label class="form-check-label" for="flexSwitchCheckChecked">새 창 열기</label>
 								</div>
 							</td>
-							<td width="*" style="text-align:right">총건수 : ${totalCount}</td>
+							<td width="*" style="text-align:right">
+								<c:if test="${not empty keyword}">								
+									<a href="prj_board_report_list"><img src="/common/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
+									검색어( <c:forEach var="code" items="${search_codelist}"><c:if test="${code.cate_code == search}">${code.cate_name}</c:if></c:forEach> = ${keyword} ) 
+									<img src="/common/images/icon_search.png" width="14" height="14" style="vertical-align:bottom"> 검색 건수
+								</c:if>
+								<c:if test="${keyword eq null}">총 건수</c:if>
+								 : ${totalCount}
+							</td>
 						</tr>
 					</table>
 					<table class="table table-hover">
 						<colgroup>
 							<col width="5%"></col>
 							<col width="40%"></col>
-							<col width="20%"></col>
-							<col width="15%"></col>
 							<col width="10%"></col>
+							<col width="12%"></col>
+							<col width="8%"></col>
+							<col width="15%"></col>
 							<col width="10%"></col>
 						</colgroup>
 						<thead>
@@ -134,6 +143,7 @@
 								<th>작성일</th>
 								<th>분류</th>
 								<th><img src="/common/images/attach/icon_document.png"></th>
+								<th>댓글</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -152,12 +162,12 @@
 								<td>
 									<c:set var="attach_name" value="${board.attach_name}"/>
 								    <c:set var="attach_length" value="${fn:length(attach_name)}"/>
-								    <c:set var="extension_name" value="${fn:substring(attach_name, attach_length-3, attach_length)}" />
-									<c:if test="${extension_name != ''}">
-										<img src="/common/images/attach/icon_${extension_name}.png" alt="${board.attach_name}" 
-								    	style="cursor:pointer" onclick="popup('/upload/${board.attach_path}',800,600)">
+								    <c:set var="extension_name" value="${fn:substringAfter(attach_name, '.')}" />
+									<c:if test="${extension_name ne ''}">
+										<a href="javascript:popup('/upload/${board.attach_path}',800,600)"><img src="/common/images/attach/icon_${extension_name}.png" alt="${board.attach_name}"> ${board.attach_name}</a>
 									</c:if>		
 								</td>
+								<td>${board.comment_count}</td>
 							</tr>
 							<c:set var="num" value="${num-1}"></c:set>
 						</c:forEach>
@@ -167,17 +177,17 @@
 					  <ul class="pagination justify-content-center">
 					    
 						<c:if test="${page.startPage > page.pageBlock}">
-						   	<li class="page-item disabled"><a class="page-link" href="prj_board_report_list?currentPage=${page.startPage-page.pageBlock}" tabindex="-1" aria-disabled="true">Previous</a></li>
+						   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
 						</c:if>
 					    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 							<c:choose>
 								<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
 								<c:otherwise><li class="page-item"></c:otherwise>
 							</c:choose>
-							<a class="page-link" href="prj_board_report_list?currentPage=${i}">${i}</a></li>
+							<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
 						</c:forEach>						
 					    <c:if test="${page.endPage > page.totalPage}">
-					    	<li class="page-item"><a class="page-link" href="prj_board_report_list?currentPage=${page.startPage+page.pageBlock}">Next</a></li>
+					    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
 					    </c:if>
 					    
 					  </ul>

@@ -44,21 +44,33 @@ public class JmhController {
 	
 	private final JmhServicePrjBdDataImpl jmhDataSer;
 	private final JmhServicePrjBdRepImpl jmhRepSer;
+	
+	//완료 프로젝트 목록
+	@RequestMapping(value = "prj_complete_list")
+	public String prjCompleteList(HttpServletRequest request, Model model) {
+		
+		return "/project/prj_complete_list";
+	}
+	
 
 	//#######################################################################
 	//############  프로젝트 프로젝트 공지/자료 게시판 prj_board_data_OOO  ############
 	//#######################################################################
 
-	
 	//프로젝트 공지/자료 게시판 목록
 	@RequestMapping(value = "prj_board_data_list")
-	public String prjBoardDataList(PrjBdData prjBdData, String currentPage, Model model) {
+	public String prjBoardDataList(PrjBdData prjBdData, String currentPage, HttpServletRequest request, Model model) {
 		System.out.println("-----프로젝트 공지/자료 게시판 목록(prj_board_data_list) START-----");
 		
-		// prj_board_data 전체 Count
-		//---------------------------------------
-		int totalCount = jmhDataSer.totalCount();
-		//---------------------------------------
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		prjBdData.setProject_id(userInfoDTO.getProject_id());
+		
+		// prj_board_data 목록에 표시되는 문서 건수 Count
+		//-------------------------------------------------
+		int totalCount = jmhDataSer.totalCount(prjBdData);
+		//-------------------------------------------------
 		
 		//Page 작업
 		Paging 	page = new Paging(totalCount, currentPage);
@@ -70,10 +82,21 @@ public class JmhController {
 		//--------------------------------------------------------------
 		List<PrjBdData> prjBdDataList = jmhDataSer.boardList(prjBdData);
 		//--------------------------------------------------------------
-		
+
+		//검색 분류코드 가져오기
+		Code code = new Code();
+		code.setTable_name("SEARCH");
+		code.setField_name("SEARCH_CATEGORY");
+		//-----------------------------------------------------
+		List<Code> search_codelist = jmhDataSer.codeList(code);
+		//-----------------------------------------------------
+
 		model.addAttribute("boardList", prjBdDataList); 
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("page", page);
+		model.addAttribute("search", prjBdData.getSearch()); //검색필드
+		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
+		model.addAttribute("search_codelist", search_codelist); //검색 분류
 		
 		System.out.println("-----프로젝트 공지/자료 게시판 목록(prj_board_data_list) END-----");
 		
@@ -129,6 +152,7 @@ public class JmhController {
 			model.addAttribute("parent_doc_no", parent_doc_no);
 			model.addAttribute("parent_doc_user_id", selectPrjBdData.getUser_id());
 			model.addAttribute("parent_doc_subject", selectPrjBdData.getSubject());
+			model.addAttribute("alarm_flag", "N");
 		}else {
 			model.addAttribute("doc_group", "0");
 			model.addAttribute("doc_step", "0");
@@ -137,6 +161,7 @@ public class JmhController {
 			model.addAttribute("parent_doc_no", "0");
 			model.addAttribute("parent_doc_user_id", "");
 			model.addAttribute("parent_doc_subject", "");
+			model.addAttribute("alarm_flag", "");
 		}
 		model.addAttribute("project_id", project_id);
 		model.addAttribute("todayDate", todayDate); //작성일
@@ -170,7 +195,7 @@ public class JmhController {
 			//---------------------------------------------------------------------------------------
 			
 			// Service --> DB CRUD
-			prjBdData.setAttach_name(file1.getOriginalFilename());
+			prjBdData.setAttach_name(file1.getOriginalFilename()); 
 			prjBdData.setAttach_path(savedName);			
 		}
 		
@@ -194,7 +219,7 @@ public class JmhController {
 		model.addAttribute("status", "success"); //상태(성공)
 		model.addAttribute("prjBdData", prjBdData);
 		model.addAttribute("redirect", "prj_board_data_list"); //목록으로 이동
-
+ 
 		System.out.println("-----프로젝트 공지/자료 게시판 등록(prj_board_data_insert) END-----");
 		
 		return "forward:/submit_control";
@@ -284,22 +309,38 @@ public class JmhController {
 	@RequestMapping(value = "prj_board_data_read")
 	public String prjBoardDataRead(PrjBdData prjBdData, HttpServletRequest request, Model model) {
 		System.out.println("-----프로젝트 공지/자료 게시판 조회(prj_board_data_read) START-----");
-		
+
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+
 		System.out.println("doc_no->"+prjBdData.getDoc_no());
 		System.out.println("project_id->"+prjBdData.getProject_id());
 
 		//-----------------------------------------------------------
 		int resultCount = jmhDataSer.readCount(prjBdData); //조회수 증가
 		//-----------------------------------------------------------
-		
+				
 		//------------------------------------------------------------
 		PrjBdData selectPrjBdData = jmhDataSer.selectBoard(prjBdData);
 		//------------------------------------------------------------
-		System.out.println("subject->"+selectPrjBdData.getSubject());
+		System.out.println("subject->"+selectPrjBdData.getSubject());		
+				
+		if(userInfoDTO.getUser_id().equals(selectPrjBdData.getParent_doc_user_id())) {
+			//현재 로그인 사용자가 답글의 부모글 작성자인 경우 답글 조회시 alarm_flag='Y'로 변경처리
+			System.out.println("부모글작성자가 답글조회시 alarm_flag='Y'로 변경처리");
+			//---------------------------------------------------------------------------
+			int updateReplyAlarmCount = jmhDataSer.updateReplyAlarmFlag(selectPrjBdData);
+			//---------------------------------------------------------------------------
+		}
 		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
+		if(userInfoDTO.getUser_id().equals(selectPrjBdData.getUser_id())) {
+			//현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			//-------------------------------------------------------------------------------
+			int updateCommentAlarmCount = jmhDataSer.updateCommentAlarmFlag(selectPrjBdData);
+			//-------------------------------------------------------------------------------
+		}
+				
 		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
 		model.addAttribute("board", selectPrjBdData);
 		
@@ -410,6 +451,7 @@ public class JmhController {
 		return "forward:/submit_control";
 	}
 	
+	//Submit후 VIEW 조건부 제어
 	@RequestMapping(value = "/submit_control")
 	public String mainPage(Model model) {
 		return "submit_control";
@@ -486,16 +528,6 @@ public class JmhController {
 		}				
 		
 		return "success"; //추천완료
-		
-/*		//------------------------------------------------------------
-		PrjBdData selectPrjBdData = jmhDataSer.selectBoard(prjBdData);
-		//------------------------------------------------------------
-		System.out.println("subject->"+selectPrjBdData.getSubject());
-		
-		model.addAttribute("board", selectPrjBdData);
-		
-		System.out.println("-----프로젝트 공지/자료 게시판 추천(prj_board_data_good) END-----");		
-		return "/project/board/prj_board_data_read";*/
 	}
 
 	//추천자목록 조회
@@ -611,13 +643,18 @@ public class JmhController {
 	
 	//프로젝트 업무보고 게시판 목록
 	@RequestMapping(value = "prj_board_report_list")
-	public String prjBoardRepList(PrjBdRep prjBdRep, String currentPage, Model model) {
+	public String prjBoardRepList(PrjBdRep prjBdRep, String currentPage, HttpServletRequest request, Model model) {
 		System.out.println("-----프로젝트 업무보고 게시판 목록(prj_board_report_list) START-----");
 		
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		prjBdRep.setProject_id(userInfoDTO.getProject_id());
+
 		// prj_board_report 전체 Count
-		//--------------------------------------
-		int totalCount = jmhRepSer.totalCount();
-		//--------------------------------------
+		//-----------------------------------------------
+		int totalCount = jmhRepSer.totalCount(prjBdRep);
+		//-----------------------------------------------
 		
 		//Page 작업
 		Paging 	page = new Paging(totalCount, currentPage);
@@ -630,9 +667,20 @@ public class JmhController {
 		List<PrjBdRep> prjBdRepList = jmhRepSer.boardList(prjBdRep);
 		//-----------------------------------------------------------
 		
+		//검색 분류코드 가져오기
+		Code code = new Code();
+		code.setTable_name("SEARCH");
+		code.setField_name("SEARCH_CATEGORY");
+		//-----------------------------------------------------
+		List<Code> search_codelist = jmhDataSer.codeList(code);
+		//-----------------------------------------------------
+		
 		model.addAttribute("boardList", prjBdRepList); 
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("page", page);
+		model.addAttribute("search", prjBdRep.getSearch()); //검색필드
+		model.addAttribute("keyword", prjBdRep.getKeyword()); //검색어
+		model.addAttribute("search_codelist", search_codelist); //검색 분류
 		
 		System.out.println("-----프로젝트 업무보고 게시판 목록(prj_board_report_list) END-----");
 		

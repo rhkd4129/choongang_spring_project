@@ -6,7 +6,7 @@ function callAction(action, mapping_name) {
 	//작성, 조회 : 새창 or 프레임
 	//수정 : 현재창 or 프레임
 	//삭제 : 창닫기 or 프레임
-	var checked = false;
+	var checked = true;
 	if($('#idNewWinFlag')) { //목록창에만 새 창 열기 체크박스 존재
 		checked = $("#idNewWinFlag").is(':checked');
 	}
@@ -80,4 +80,3 @@ function deleteFlagAttach() {
 	$('#idAttachFile').hide();
 	$('#idAttachInput').show();
 }
-	

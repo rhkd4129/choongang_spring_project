@@ -41,7 +41,6 @@ select {
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	function sendNumber() {
-	    $("#mail_number").css("display", "block");
 	    $.ajax({
 	        url: 'user_find_pw_auth',
 	        dataType: 'text',
@@ -51,9 +50,11 @@ select {
 	        },
 	        success: function (data) {
 	            if (data == 1) {
+	            	$("#mail_number").css("display", "block");	// 입력박스
+	            	alert("인증번호 전송중입니다. 잠시만 기다려주세요");
 	                $.ajax({
 	                    url: 'send_save_mail',
-	                    dataType: 'json',
+	                    dataType: 'text',
 	                    type: 'post',
 	                    data: {
 	                    	'user_id': $('#user_id').val(),
@@ -86,13 +87,22 @@ select {
 		
 		// 문제 1. authNumber가 넘어 오기전에 곧바로 확인 누르면 number1과 number2가 빈칸이라서 같음 처리됨
 		// 문제 2. 인증후에 user_id를 바꿔서 확인 누르면 바뀐 아이디의 비밀번호가 바뀜
-		if(number1 == number2){
+		/* if(number1 == number2){
 			alert("인증 되었습니다.");
 			location.href=sendurl;
 		} else if(number1 == "") {
 			alert("인증 번호를 입력해주세요.");
 		} else {
 			alert("인증 번호가 다릅니다.")
+		} */
+		
+		if(number1 == "") {
+			alert("인증 번호를 입력해주세요.");
+		} else if(number1 != number2) {
+			alert("인증 번호가 다릅니다.");
+		} else {
+			alert("인증 되었습니다.")
+			location.href=sendurl;
 		}
 		
 	}

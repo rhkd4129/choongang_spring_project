@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="/lkh/css/lkh.css">
+    <link rel="stylesheet" type="text/css" href="/lkh/css/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript">
         $(function() {
@@ -154,6 +154,29 @@
                 url: "<%=request.getContextPath()%>/step",
                 dataType: 'json',
                 success: function (data) {
+                    ////////////////////// 현재 진행중인 프로젝트 보기 /////////////////////////////
+                    const onelist = data.onelist;
+                    const current_task = $('.current_task');
+                    if(onelist.length > 0) {
+                        for (let i = 0; i < onelist.length; i++) {
+                            var cur_task = $('<div></div>');
+                            cur_task.addClass("cur_task");
+                            if (i > 6) {
+                                cur_task.text('......');
+                                current_task.add(cur_task)
+                                break;
+                            }
+                            cur_task.html("<a href='task_detail?task_id=" + onelist[i].task_id + '&project_id=' + onelist[i].project_id + "'>" + onelist[i].task_subject + "</a>");
+                            current_task.append(cur_task);
+                        }
+                    }
+                    else{
+                        var cur_task = $('<div></div>');
+                        cur_task.addClass("cur_task");
+                        cur_task.text('진행중인 작업이 아직 없습니다.');
+                        current_task.add(cur_task)
+                    }
+                    ////////////////////// 프로젝트 단계별 보기 /////////////////////////////
                     const project_step_chart = $('.project_step_chart');
                     $.each(data.mapData, function(key, values) {
                         // 새로운 div 요소 생성
@@ -177,6 +200,7 @@
                         project_step_chart.append(newDiv);
                     });
 
+
                 }
             });
         });
@@ -191,7 +215,7 @@
         </div>
         <!-- 본문 -->
             <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="chart">
+                <div class="chart_1">
                     <div class="project_chart">
                         <canvas id="project_chart"></canvas>
                         <p id="project_time"></p>
@@ -200,7 +224,6 @@
                                 <a type="button" class="btn btn btn-outline-primary" href="task_list">작업 목록</a>
                                 <a type="button" class="btn btn btn-outline-primary" href="garbage_list">휴지통</a>
                                 <a type="button" class="btn btn-outline-primary" href="task_timeline">타임 라인</a>
-                                <a type="button" class="btn btn-outline-primary" href="task_board">작업 보드 </a>
                                 <a type="button" class="btn btn-outline-primary" href="task_create_form"> 새작업 </a>
 
                         </div>
@@ -217,16 +240,16 @@
                 </div>
 
 
-                <div class="chart">
+                <div class="chart_2" >
                     <div class="project_step_chart">
                     </div>
-                    <!-------------- 디자인 수정 예정---------------------->
-                    <!-------------- 디자인 수정 예정---------------------->
-                    <!-------------- 디자인 수정 예정---------------------->
-                    <!-------------- 디자인 수정 예정---------------------->
 
-                    <div>
+                    <div class ="current_task">
+
+
+                        <div class="current_name">현재 작업중인 작업</div>
                     </div>
+
 
                 </div>
             </main>
@@ -234,8 +257,6 @@
         </div>
     </div>
 
-
-    <div id="footer"></div>
 <script src="/lkh/js/chart_options.js"></script>
 </body>
 </html>

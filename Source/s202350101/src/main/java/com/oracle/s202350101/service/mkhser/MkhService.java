@@ -40,5 +40,7 @@ public interface MkhService {
 	List<BdFreeComt>   freeComt(UserInfo userInfoDTO);
 	List<BdDataComt>   dataComt(UserInfo userInfoDTO);
 	List<BdRepComt>    repComt(UserInfo userInfoDTO);
-
+	int                updateEnv(UserEnv userEnv);
+	List<PrjBdData>    bdSelectAll(PrjBdData prjBdData);
+	
 }

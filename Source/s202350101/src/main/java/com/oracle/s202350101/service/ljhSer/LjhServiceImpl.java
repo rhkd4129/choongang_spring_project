@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.oracle.s202350101.dao.ljhDao.LjhDao;
 import com.oracle.s202350101.model.Meeting;
+import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
 
@@ -328,11 +328,45 @@ public class LjhServiceImpl implements LjhService {
 	// 알림 - 접속한 회원 별 회의일정 select 
 	@Override
 	public List<Meeting> getUserMeeting(HashMap<String, String> map) {
+		System.out.println("LjhServiceImpl getUserMeeting Start");
 		List<Meeting> meetingList = null;
 		
 		meetingList = ljhd.getUserMeeting(map);
 		
 		return meetingList;
+	}
+
+	// 알림 - 접속한 회원 별 게시판 원글 및 답글 select
+	@Override
+	public List<PrjBdData> getBoardRep(HashMap<String, String> map) {
+		System.out.println("LjhServiceImpl getBoardRep Start");
+		List<PrjBdData> boardRep = null;
+		
+		boardRep = ljhd.getBoardRep(map);
+		
+		return boardRep;
+	}
+
+	// 알림 - 접속한 회원 별 게시판 원글 및 댓글 select
+	@Override
+	public List<PrjBdData> getBoardComt(HashMap<String, String> map) {
+		System.out.println("LjhServiceImpl getBoardComt Start");
+		List<PrjBdData> boardComt = null;
+		
+		boardComt = ljhd.getBoardComt(map);
+		
+		return boardComt;
+	}
+	
+	// 프로젝트 생성 승인 알림 (팀장)
+	@Override
+	public List<PrjInfo> getPrjApprove(HashMap<String, String> map) {
+		System.out.println("LjhServiceImpl getPrjApprove Start");
+		List<PrjInfo> prjApprove = null;
+		
+		prjApprove = ljhd.getPrjApprove(map);
+		
+		return prjApprove;
 	}
 	
 }

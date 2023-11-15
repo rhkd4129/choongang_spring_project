@@ -119,15 +119,20 @@
                         tbody.append(tr); // <tr>을 <tbody>에 추가
                     });
                     var obj = jsonData.obj; // obj : page 객체 가져오기
+                    console.log("obj");
+                    console.log(obj);
+                    console.log(obj.startPage);
+                    console.log(obj.endPage);
 
                     var paginationDiv = $('#c_b'); // 페이지네이션을 표시할 div
                     paginationDiv.empty(); // 페이지네이션을 초기화
-
-                    var jspPagination = '<div id="c_b" class="pagination">';
+                    // <div id="c_b" className="pagination">
+                    var jspPagination = '';
 
                     if (obj.startPage > obj.pageBlock) {
-                        jspPagination += `<div onclick="cl_room(${obj.startPage - obj.pageBlock})"><p>[이전]</p></div>`;
+                        jspPagination += `<div onclick="cl_room('+ (obj.startPage - obj.pageBlock) ' + )"><p>[이전]</p></div>`;
                     }
+
                     for (var i = obj.startPage; i <= obj.endPage; i++) {
                         jspPagination += `<div class="page-item" onclick="cl_room(` + i
                                         + ')"><div class="page-link">' + i

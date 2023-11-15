@@ -1,7 +1,10 @@
 package com.oracle.s202350101.service.kjoSer;
 
+import com.oracle.s202350101.dao.kjoDao.ChatMsgDao;
 import com.oracle.s202350101.dao.kjoDao.ChatRoomDao;
+import com.oracle.s202350101.model.ChatMsg;
 import com.oracle.s202350101.model.ChatRoom;
+import com.oracle.s202350101.model.KjoResponse;
 import com.oracle.s202350101.model.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +13,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -18,6 +23,7 @@ import java.util.List;
 public class ChatRoomServiceImpl implements ChatRoomService{
 
     private final ChatRoomDao CHdao;
+    private final ChatMsgDao CMdao;
     private final PlatformTransactionManager transactionManager;
 //<!--모든 채팅방 조회-->
 
@@ -29,7 +35,9 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 //<!--개인별 채팅방 조회-->
     @Override
     public List<ChatRoom> findByUserId(UserInfo ui) {
-        return CHdao.findByUserId(ui);
+
+        List<ChatRoom> crList = CHdao.findByUserId(ui);
+        return crList;
     }
 
 //<!--강의실 개수 조회-->
@@ -71,6 +79,29 @@ public class ChatRoomServiceImpl implements ChatRoomService{
         return findChatRoom;
     }
 
+//  사용자 별 메세지가 있는 채팅방
+    @Override
+    public Map<?, ?> findByUserIdV2(List<ChatMsg> findmsg, ChatRoom cr) {
+        KjoResponse res = new KjoResponse();
+        Map<Integer, ChatRoom> map = new HashMap<>();
+
+        for (ChatMsg cm : findmsg) {
+            int cri = cm.getChat_room_id();
+            if (map.get(cri) == null) {
+                String senderID = cm.getSender_id();
+                String recID = cm.getReceiver_id();
+                ChatRoom chr = new ChatRoom();
+                chr.setChat_room_id(cri);
+                chr.setSender_id(senderID);
+                chr.setReceiver_id(recID);
+
+                map.put(cri, chr);
+            }
+        }
+        return map;
+    }
+
+//  채팅방 별 읽지 않은 메시지
 
 
 }

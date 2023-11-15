@@ -11,6 +11,31 @@
 <!-- CSS END -->
 
 <!-- JS START -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+	
+	function user_env_click() {
+		var userEnv = $('#userEnv').serialize();
+//		alert("클릭->"+userEnv);
+		
+		$.ajax({
+			url		  : 'user_env',
+			dataType  : 'text',
+			data	  : userEnv,
+			success : function(data) {
+				if(data == 1) {
+					alert("수정 되었습니다.");
+					location.href='mypage_main';
+				} else {
+					alert("수정실패");
+				}
+			}
+		});
+
+	}
+
+</script>
+
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -60,9 +85,11 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div id="contents">
 		    	<div class="col-lg-4">
-		    		
-			        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-			        
+			        <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg> -->
+			        	<tr>
+						<td>
+							<img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDto.attach_path }/${userInfoDto.attach_name}"></td>
+						</tr>
 				        <h2 class="fw-normal">${userInfoDto.user_name }</h2>
 				        <h3 class="fw-normal">ID : ${userInfoDto.user_id }</h3>
 				        <p>핸드폰 번호 : ${userInfoDto.user_number }
@@ -74,8 +101,8 @@
 			        <p><a class="btn btn-secondary" href="/mypage_check_pw">개인정보수정 »</a></p>
 		      	</div>
 		  		
-		    	<h1>환경설정(ajax)(미구현)</h1><p>
-		    	
+		    	<h1>환경설정</h1><p>
+		    	<form id="userEnv">
 			    	댓글알림  : YES<input type="radio" name="env_alarm_comm" value="Y"  ${userEnv.env_alarm_comm == 'Y' ? 'checked' : ''}>  		 
 			    			NO <input type="radio" name="env_alarm_comm" value="N"  ${userEnv.env_alarm_comm == 'N' ? 'checked' : ''} ><p>
 			    	답글알림  : YES<input type="radio" name="env_alarm_reply" value="Y" ${userEnv.env_alarm_reply == 'Y' ? 'checked' : ''}>    	 
@@ -87,8 +114,8 @@
 			    	채팅이용  : YES<input type="radio" name="env_chat" value="Y" ${userEnv.env_chat == 'Y' ? 'checked' : ''}>    			 
 			    			NO <input type="radio" name="env_chat" value="N" ${userEnv.env_chat == 'N' ? 'checked' : ''}><p>
 		    	
-		    		<p><a class="btn btn-secondary" href="#">확인 »</a></p>
-		    	
+		    		<p><button type="button" class="btn btn-secondary" onclick="user_env_click()">확인 »</button></p>
+		    	</form>
 		    </div>
 	  		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

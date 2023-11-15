@@ -84,7 +84,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="task_content">업무 내용:</label>
-                                <input type="text" class="form-control" name="task_content" id="task_content" value="${task.task_content}">
+                                <textarea  rows="5" class="form-control" name="task_content" id="task_content" value="${task.task_content}"></textarea>
+
                                 <form:errors path="task_content" class="errors" />
                             </div>
 
@@ -133,6 +134,7 @@
                                     <c:if test="${task.task_status == 2}">checked</c:if>>
                                     <label class="form-check-label" for="status2">완료된 작업</label>
                                 </div>
+                                <form:errors path="task_status" class="errors" />
                             </div>
                             <div class="form-group">
                                 <label>Priority:</label>
@@ -151,6 +153,7 @@
                                            <c:if test="${task.task_priority == 2}">checked</c:if>>
                                     <label class="form-check-label" for="priority2">높음</label>
                                 </div>
+                                <form:errors path="task_priority" class="errors" />
                             </div>
 
 

@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header_main.jsp" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +11,9 @@
 <title>Insert title here</title>
 
 <!--CSS START -->
+<style type="text/css">
+		.error {color: red}
+</style>
 <!-- CSS END -->
 
 <!-- JS START -->
@@ -69,23 +73,53 @@
 			%>
 			
 			<h3>새 글 작성</h3><p>
-		
-				<form action="event_insert" method="post">
 				
-					<table border="1">
-						<tr> <th>작성일</th> <td><%=strDate %></td> </tr>
-							
-						<tr> <th>게시종류</th> <td>이벤트</td> </tr> 
-							 
-						<tr> <th>제목</th> <td><input type="text" name="subject" required="required"></td> </tr> 
-							
-						<tr> <th>본문</th> <td><input type="text" name="doc_body" required="required"></td> </tr>
-							
-						<tr> <th>첨부파일명</th> <td><input id="file" type="file"/></td> </tr>
-						
-						<tr> <td colspan="2"><input type="submit" value="등록"></td> </tr>
-					</table>  
-				</form>
+				<form:form action="event_insert" method="post" modelAttribute="bdFree" class="mt-3" enctype="multipart/form-data">
+				<table class="table table-bordered">
+			        <tr>
+			            <th>작성일</th>
+			            <td><%=strDate %></td>
+			        </tr>
+			
+			        <tr>
+			            <th>게시종류</th>
+			            <td>공지</td>
+			        </tr>
+			
+			        <tr>
+			            <th>제목</th>
+			            <td>
+			                <input type="text" name="subject" class="form-control">
+			                <form:errors path="subject" class="error"/>
+			            </td>
+			        </tr>
+			
+			        <tr>
+			            <th>본문</th>
+			            <td>
+			                <input type="text" name="doc_body" class="form-control">
+			                <form:errors path="doc_body" class="error"/>
+			            </td>
+			        </tr>
+			
+			        <tr>
+			            <th>첨부파일명</th>
+			            <td>
+			                <div class="custom-file">
+			                    <input type="file" class="custom-file-input" id="file" name="file1">
+			                    <label class="custom-file-label" for="file"></label>
+			                </div>
+			            </td>
+			        </tr>
+			
+			        <tr>
+			            <td colspan="2">
+			                <input type="submit" value="등록" class="btn btn-primary">
+			            </td>
+			        </tr>
+			    </table>
+				</form:form>
+	
 	
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

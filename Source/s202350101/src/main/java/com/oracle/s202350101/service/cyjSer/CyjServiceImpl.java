@@ -1,14 +1,23 @@
 package com.oracle.s202350101.service.cyjSer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.s202350101.dao.cyjDao.CyjDao;
 import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdFreeComt;
+import com.oracle.s202350101.model.BdFreeGood;
+import com.oracle.s202350101.model.BdQna;
+import com.oracle.s202350101.model.BdQnaGood;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class CyjServiceImpl implements CyjService {
 
 	private final CyjDao cd;
+
 
 	// 총 갯수
 	@Override
@@ -108,24 +118,44 @@ public class CyjServiceImpl implements CyjService {
 
 // -------------------------------------------------------------
 
-	// 추천수 +1
+	// 1. 추천자 목록에 있는지 확인 --> 중복 확인
 	@Override
-	public int goodCount(int doc_no) {
-		System.out.println("CyjServiceImpl goodCount start");
-		int gc = cd.goodCount(doc_no);
-		System.out.println("CyjServiceImpl gc-> " + gc);
+	public int goodConfirm(BdFreeGood bdFreeGood) {
+		System.out.println("CyjServiceImpl goodComfim start");
+		int goodConfirm = cd.goodConfirm(bdFreeGood);
+		System.out.println("CyjServiceImpl goodConfirm-> " + goodConfirm);
 		
-		return gc;
+		return goodConfirm;
 	}
-
-	// 추천수 갖고 오기 
+	
+	// 2. 수행 후 추천기록이 없으면 BdFreeGood 테이블에 추천 추가
 	@Override
-	public int goodCountView(int doc_no) {
-		System.out.println("CyjServiceImpl goodCountView start");
-		int gcv = cd.goodCountView(doc_no);
-		System.out.println("CyjServiceImpl gcv-> " + gcv);
+	public int notifyGoodInsert(BdFreeGood bdFreeGood) {
+		System.out.println("CyjServiceImpl notifyGoodInsert start");
+		int notifyGoodInsert = cd.notifyGoodInsert(bdFreeGood);
+		System.out.println("CyjServiceImpl notifyGoodInsert-> " + notifyGoodInsert);
 		
-		return gcv;
+		return notifyGoodInsert;
+	}
+	
+	// 3. bd_free 테이블에 good_count를 업데이트
+	@Override
+	public int notifyGoodUpdate(BdFreeGood bdFreeGood) {
+		System.out.println("CyjServiceImpl notifyGoodUpdate start");
+		int notifyGoodUpdate = cd.notifyGoodUpdate(bdFreeGood);
+		System.out.println("CyjServiceImpl notifyGoodUpdate-> " + notifyGoodUpdate);
+		
+		return notifyGoodUpdate;
+	}
+	
+	// 4. 추천 select
+	@Override
+	public int notifyGoodSelect(BdFree bdFree) {
+		System.out.println("CyjServiceImpl notifyGoodSelect start");
+		int notifyGoodSelect = cd.notifyGoodSelect(bdFree);
+		System.out.println("CyjServiceImpl notifyGoodSelect-> " + notifyGoodSelect);
+		
+		return notifyGoodSelect;
 	}
 	
 // ------------------------------------------------------------------------	
@@ -334,26 +364,6 @@ public class CyjServiceImpl implements CyjService {
 		return freeSelect;
 	}
 	
-	// 자유_추천수 +1 올리기
-	@Override
-	public int freeGoodCount(int doc_no) {
-		System.out.println("CyjServiceImpl freeGoodCount start");
-		int freeCount = cd.freeCountUp(doc_no);
-		System.out.println("CyjServiceImpl freeCount-> " + freeCount);
-		
-		return freeCount;
-	}
-
-	// 자유_올린 추천수 갖고 오기 
-	@Override
-	public int freeGoodGet(int doc_no) {
-		System.out.println("CyjServiceImpl freeGoodGet start");
-		int countGet = cd.countGet(doc_no);
-		System.out.println("CyjServiceImpl countGet-> " + countGet);
-		
-		return countGet;
-	}
-	
 // ------------------------------------------------------------------------	
 	
 	// 자유_새 글 입력 
@@ -390,34 +400,139 @@ public class CyjServiceImpl implements CyjService {
 		return delete;
 	}
 
+// ------------------------------------------------------------------------	
+// ------------------------- qna 게시판 ------------------------------------
+
+	// qna_총 갯수
+	@Override
+	public int qnaTotalCount() {
+		System.out.println("CyjServiceImpl qnaTotalCount start");
+		int qnaTotalCount = cd.qnaTotalCount();
+		System.out.println("CyjServiceImpl qnaTotalCount-> " + qnaTotalCount);
+		
+		return qnaTotalCount;
+	}
+
+	// qna_추천수 가장 높은 row 3개
+	@Override
+	public List<BdQna> qnaRow() {
+		System.out.println("CyjServiceImpl qnaRow start");
+		List<BdQna> qnaList = cd.qnaList();
+		System.out.println("CyjServiceImpl qnaList-> " + qnaList);
+		
+		return qnaList;
+	}
+
+	// qna_전제 리스트 
+	@Override
+	public List<BdQna> qnaList(BdQna bdQna) {
+		System.out.println("CyjServiceImpl qnaList start");
+		List<BdQna> qnaTotalList = cd.qnaTotalList(bdQna);
+		System.out.println("CyjServiceImpl qnaTotalList-> " + qnaTotalList);
+		
+		return qnaTotalList;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_새 글 입력 
+	@Override
+	public int qnaInsert(@Valid BdQna bdQna) {
+		System.out.println("CyjServiceImpl qnaInsert start");
+		int qnaInsert = cd.qnaInsert(bdQna);
+		System.out.println("CyjServiceImpl qnaInsert-> " + qnaInsert);
+		
+		return qnaInsert;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_상세
+	@Override
+	public BdQna qnaContent(int doc_no) {
+		System.out.println("CyjServiceImpl qnaContent start");
+		BdQna qnaContent = cd.qnaContent(doc_no);
+		System.out.println("CyjServiceImpl qnaContent-> " + qnaContent);
+		
+		return qnaContent;
+	}
+
+	// qna_조회수	
+	@Override
+	public int qnaCount(int doc_no) {
+		System.out.println("CyjServiceImpl qnaCount start");
+		int qnaCount = cd.qnaCount(doc_no);
+		System.out.println("CyjServiceImpl qnaCount-> " + qnaCount);
+		
+		return qnaCount;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_수정
+	@Override
+	public int qnaUpdate(BdQna bdQna) {
+		System.out.println("CyjServiceImpl qnaUpdate start");
+		int qnaUpdate = cd.qnaUpdate(bdQna);
+		System.out.println("CyjServiceImpl qnaUpdate-> " + qnaUpdate);
+		
+		return qnaUpdate;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_추천 1.중복체크
+	@Override
+	public int qnaConfirm(BdQnaGood bdQnaGood) {
+		System.out.println("CyjServiceImpl qnaConfirm start");
+		int qnaConfrim = cd.qnaConfrim(bdQnaGood);
+		System.out.println("CyjServiceImpl qnaConfrim-> " + qnaConfrim);
+		
+		return qnaConfrim;
+	}
+
+	// qna_추천 2. insert 
+	@Override
+	public int qnaGoodInsert(BdQnaGood bdQnaGood) {
+		System.out.println("CyjServiceImpl qnaGoodInsert start");
+		int qnaGoodInsert = cd.qnaGoodInsert(bdQnaGood);
+		System.out.println("CyjServiceImpl qnaGoodInsert-> " + qnaGoodInsert);
+		
+		return qnaGoodInsert;
+	}
+
+	// qna_추천 3. update
+	@Override
+	public int qnaGoodUpdate(BdQnaGood bdQnaGood) {
+		System.out.println("CyjServiceImpl qnaGoodUpdate start");
+		int qnaGoodUpdate = cd.qnaGoodUpdate(bdQnaGood);
+		System.out.println("CyjServiceImpl qnaGoodUpdate-> " + qnaGoodUpdate);
+		
+		return qnaGoodUpdate;
+	}
+
+	// qna_추천 4. select
+	@Override
+	public int qnaGoodSelect(BdQna bdQna) {
+		System.out.println("CyjServiceImpl qnaGoodSelect start");
+		int qnaGoodSelect = cd.qnaGoodSelect(bdQna);
+		System.out.println("CyjServiceImpl qnaGoodSelect-> " + qnaGoodSelect);
+		
+		return qnaGoodSelect;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
-	
-	
-	
 
-	
-	
-
-	
-	
-
-
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 

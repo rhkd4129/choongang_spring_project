@@ -45,6 +45,7 @@
 		status_check();
 	});
 	
+	// 프로젝트 진행상태 버튼(시작, 종료)
 	function status_check(){
 		if(${prjInfo.project_status} == '0'){
 			$("#startBtn").show();
@@ -54,7 +55,8 @@
 		}else{
 		}
 	}
-
+	
+	// 프로젝트 정보 수정
 	function list_up(){
 		$.ajax({
 			url			: '/prj_mgr_req_edit',
@@ -64,36 +66,43 @@
 			}
 		});
 	}
+
 	
-
+	// 프로젝트 시작 버튼
 	function prj_start(){
-		var params = {};
-		params.project_id = ${prjInfo.project_id};
-		params.project_status = 1;
-		$.ajax({
-			url			: "/prj_status_bnt",
-			type      	: "POST",
-		    contentType : "application/json; charset=utf-8",
-		    data       	: JSON.stringify(params),
-		    dataType    : "text",
-		    success		: function(data) {
-				if(data == "success") {
-					$('#idPrjStauts').html("진행중");
-					$("#startBtn").hide();
-					$("#endBtn").show();
-				} else if(data == "fail"){
-					alert("프로젝트 진행상태가 변경되지 않았습니다. 관리자에 문의하세요");
-				}
-
-/* 			},
-		    error: function(xhr, status, error){
-		    	alert("에러");
-		    	console.log("상태값 : " + xhr.status + "\tHttp 에러메시지 : " + xhr.responseText); */
-		    }
-
-		});	
+		
+		if (${prjInfo.project_approve} === 2){
+			var params = {};
+			params.project_id = ${prjInfo.project_id};
+			params.project_status = 1;
+			$.ajax({
+				url			: "/prj_status_bnt",
+				type      	: "POST",
+			    contentType : "application/json; charset=utf-8",
+			    data       	: JSON.stringify(params),
+			    dataType    : "text",
+			    success		: function(data) {
+					if(data == "success") {
+						$('#idPrjStauts').html("진행중");
+						$("#startBtn").hide();
+						$("#endBtn").show();
+					} else if(data == "fail"){
+						alert("프로젝트 진행상태가 변경되지 않았습니다. 관리자에 문의하세요");
+					}
+				},
+			    error: function(xhr, status, error){
+			    	alert("에러");
+			    	console.log("상태값 : " + xhr.status + "\tHttp 에러메시지 : " + xhr.responseText); 
+			    }
+			});	
+		}else if(${prjInfo.project_approve} === 1){
+			alert("프로젝트 승인 전 입니다. 관리자에게 문의하세요");
+			location.href="/prj_mgr_step_list";
+		}
 	}
-
+		
+	
+	// 프로젝트 종료 버튼
 	function prj_end(){
 		var params = {};
 		params.project_id = ${prjInfo.project_id};
@@ -112,14 +121,73 @@
 				}else if(data == "fail"){
 					alert("프로젝트 진행상태가 변경되지 않았습니다. 관리자에 문의하세요");
 				}
-			/* },
+			},
 		    error: function(xhr, status, error){
 		    	alert("에러");
-		    	console.log("상태값 : " + xhr.status + "\tHttp 에러메시지 : " + xhr.responseText); */
+		    	console.log("상태값 : " + xhr.status + "\tHttp 에러메시지 : " + xhr.responseText); 
 		    }
 		});			
 	}
-	
+	// 프로젝트 단계 설정
+    function prj_order() {
+    	
+    	if(checkDuplication("id","project_order")){
+    		alert("단계가 중복됩니다. 다시 설정하십시오.");
+    		return false;
+    	}
+		
+        var prjStepArray = [];
+		var stepLenth = "${titleListCount}";
+
+		
+		for(var i=1; i<=parseInt(stepLenth); i++){
+			var prjStep = {};
+			prjStep.project_id 			= "${prjInfo.project_id}";
+			prjStep.project_step_seq 	= $("#Step_"+i.toString()).text();
+			prjStep.project_order		= $("select[name=project_order_"+i.toString()+"] option:selected").val();
+			prjStepArray.push(prjStep);
+		}
+				
+		// 컨트롤러에 전송할 주소
+ 
+         $.ajax({
+             url		: "/prj_order_update",
+             type		: "POST",
+             data		: JSON.stringify(prjStepArray),
+             contentType: "application/json",		//서버로 JSON 데이터를 전송
+          	 dataType	: "json",					//	서버로부터	json 데이터 받음
+             success	: function (response) {
+		                 // 서버에서 받은 JSON 응답을 처리
+		                 alert("단계설정 완료" + response);
+		                 location.href="/prj_mgr_step_list";
+             }
+         });
+		
+     }
+
+	// 단계선택 비교
+	 function checkDuplication(type, objName){
+		var temp = [];
+		var obj = $('select['+type+'='+objName+']');
+		var result = false;
+		
+		$(obj).each(function(i){
+			temp[i]=$(this).val();
+		});
+		
+		$(temp).each(function(i){
+			var x=0;
+			$(obj).each(function(){
+				if(temp[i] == $(this).val()){
+					x++;
+				}
+			});
+			if(x>1){
+				result=true;
+			}
+		});
+		return result;		
+	}
 	
 </script>
 </head>
@@ -140,18 +208,21 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 
-<%--  	<c:if test="${userInfoDTO.user_auth != 'manager' }">
+  	<c:if test="${userInfoDTO.user_auth != 'manager' }">
 			<script type="text/javascript">
 				alert("팀장 권한이 없습니다. 관리자에게 문의하세요");
 				location.href = "/main";
 			</script>
 	</c:if>
+	
 	<c:if test="${ProjectNotFound == 'TRUE'}">
 			<script type="text/javascript">
 				alert("프로젝트가 존재하지 않습니다");
 				location.href = "/main";
 			</script>
-	</c:if>  --%> 
+	</c:if>
+	
+	
 		<div id="divPrjInfo">
 			<h2>프로젝트 정보</h2>
 			<hr>
@@ -203,12 +274,13 @@
 				</tr>					
 			</table>
 			
+
 				<div align="right">
-				 	<button type="button" id="startBtn" style="display:none;" class="btn btn-secondary" onclick="prj_start()">프로젝트 시작</button>
-				 	<button type="button" id="endBtn" style="display:none;" class="btn btn-secondary" onclick="prj_end()">프로젝트 종료</button>
-					<button type="button" class="btn btn-secondary" onclick="list_up()">수정</button>
+						 	<button type="button" id="startBtn" style="display:none;" class="btn btn-secondary" onclick="prj_start()">프로젝트 시작</button>
+						 	<button type="button" id="endBtn" style="display:none;" class="btn btn-secondary" onclick="prj_end()">프로젝트 종료</button>
+							<button type="button" class="btn btn-secondary" onclick="list_up()">수정</button>
+						</div>
 				</div>
-		</div>
 			<br>
 			<hr>
 			
@@ -217,14 +289,24 @@
 			<hr>
 
 			<div align="right">
+				<button type="button" class="btn btn-secondary" onclick="prj_order()">단계설정</button>
 			 	<button type="button" class="btn btn-secondary" onclick="location.href='prj_mgr_step_insert?project_id=${prjInfo.project_id}'">추가</button><p>
 			</div>
 			
 			<c:forEach var="Step" items="${titleList }" varStatus="status">
-				<div class="input-group mb-3" id="PrjStep${status.count }">
-		 			 <span class="input-group-text">단계  ${status.count }</span>
-					 <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="prjStep${status.count }" value="${Step.project_s_name }">
-					 	<div class="d-grid gap-2 d-md-block">
+				<span style="display: none;" id="Step_${status.count}">${Step.project_step_seq}</span>
+				<div class="input-group mb-3" id="PrjStep">
+		 			 <span class="input-group-text">
+		 			 	<select id="project_order" name="project_order_${status.count}" class="form-select">
+		 			 		<c:forEach var="order" begin="1" end="${titleListCount}">
+		 			 			<option  value="${order}" 
+		 			 				<c:if test="${order == Step.project_order}">selected</c:if>
+		 			 			>단계${order}</option>
+		 			 		</c:forEach>	
+		 			 	</select>
+		 			 </span>
+					 <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="prjStep" value="${Step.project_s_name }">
+					 	<div class="d-grid gap-2 d-md-block" id="buttons">
 	  						<button class="btn btn-outline-secondary" type="button" onclick="location.href='prj_mgr_step_edit?project_id=${Step.project_id}&project_step_seq=${Step.project_step_seq}'">수정</button>
 	  						<button class="btn btn-outline-secondary" type="button" onclick="location.href='deleteStep?project_id=${Step.project_id}&project_step_seq=${Step.project_step_seq}'">삭제</button>
 						</div>
@@ -235,7 +317,6 @@
 					 <button type="button" class="btn btn-secondary" onclick="location.href='prj_mgr_step_read?project_id=${prjInfo.project_id}'">포트폴리오 생성</button><p>
 				</div>
 		</c:if>		
-
 
 
 

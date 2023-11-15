@@ -9,7 +9,7 @@
 <mapper namespace="com.oracle.s202350101.BdFreeMapper">
 	<!-- user_id에 해당하는 게시물 -->
 	<select id="FreeListSelect" parameterType="UserInfo" resultType="BdFree">
-		Select a.app_id, a.app_name, b.subject, b.user_id, 
+		Select a.app_id, a.app_name, b.subject, b.user_id, b.doc_no, b.bd_category,
 			   b.create_date, b.bd_count, b.good_count
 		From   bd_free b, app_info a
 		Where  a.app_id = b.app_id

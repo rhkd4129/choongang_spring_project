@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjBdRepImpl;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
+import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,27 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 
 	//총건수
 	@Override
-	public int totalCount() {
-		System.out.println("JmhServiceImpl totalCount START...");		
-		//---------------------------------
-		int totalCnt = jmhRepDao.totalCount();
-		//---------------------------------		
+	public int totalCount(PrjBdRep prjBdRep) {
+		System.out.println("JmhServiceImpl totalCount START...");
+
+		int totalCnt = 0;
+		
+		if(prjBdRep.getKeyword() != null) {
+			System.out.println("★검색 Search---->"+prjBdRep.getSearch());
+			if(!prjBdRep.getKeyword().equals("")) {
+				System.out.println("★검색 SearchKeyword---->"+prjBdRep.getKeyword());
+				//검색 건수 가져오기
+				//------------------------------------------
+				totalCnt = jmhRepDao.searchCount(prjBdRep);
+				//------------------------------------------
+				System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
+				System.out.println("JmhServiceImpl totalCount END...");
+				return totalCnt;
+			}
+		}
+		//-----------------------------------------
+		totalCnt = jmhRepDao.totalCount(prjBdRep);
+		//-----------------------------------------
 		System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
 		System.out.println("JmhServiceImpl totalCount END...");
 		return totalCnt;
@@ -36,7 +53,18 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 	@Override
 	public List<PrjBdRep> boardList(PrjBdRep prjBdRep) {
 		System.out.println("JmhServiceImpl boardList START...");
+		
 		List<PrjBdRep> prjBdRepList = null;
+		
+		if(prjBdRep.getKeyword() != null) {
+			if(!prjBdRep.getKeyword().equals("")) {
+				//-----------------------------------------------
+				prjBdRepList = jmhRepDao.searchList(prjBdRep);
+				//-----------------------------------------------
+				System.out.println("JmhServiceImpl boardList > searchList END...");
+				return prjBdRepList;
+			}
+		}		
 		//------------------------------------------
 		prjBdRepList = jmhRepDao.boardList(prjBdRep);
 		//------------------------------------------		
@@ -143,6 +171,20 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 		//---------------------------------------------------
 		System.out.println("JmhServiceImpl deleteComment resultCount->"+resultCount);
 		System.out.println("JmhServiceImpl deleteComment END...");
+		return resultCount;
+	}
+
+
+	//댓글들 알림 플래그 일괄 업데이트(N개)
+	@Override
+	public int updateCommentAlarmFlag(PrjBdRep prjBdRep) {
+		System.out.println("JmhServiceImpl updateCommentAlarmFlag START...");
+		int resultCount = 0;				
+		//---------------------------------------------------------
+		resultCount = jmhRepDao.updateCommentAlarmFlag(prjBdRep);
+		//---------------------------------------------------------
+		System.out.println("JmhServiceImpl updateCommentAlarmFlag resultCount->"+resultCount);
+		System.out.println("JmhServiceImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
 

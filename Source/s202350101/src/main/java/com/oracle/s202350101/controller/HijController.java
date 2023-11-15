@@ -1,10 +1,12 @@
 package com.oracle.s202350101.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+import com.oracle.s202350101.model.HijPrjStep;
 import com.oracle.s202350101.model.HijRequestDto;
+import com.oracle.s202350101.model.HijSearchRequestDto;
+import com.oracle.s202350101.model.HijSearchResponseDto;
 import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
@@ -143,6 +149,7 @@ public class HijController {
 			System.out.println("HijController titleList.size() : " + titleList.size());
 			System.out.println("listStep 프로젝트 아이디 : " + prjInfo.getProject_id());
 			model.addAttribute("listMember", listMember);
+			model.addAttribute("titleListCount",titleList.size());
 			model.addAttribute("prjInfo", prjInfo);
 			model.addAttribute("titleList", titleList);
 			model.addAttribute("ProjectNotFound", "FALSE");
@@ -229,7 +236,19 @@ public class HijController {
 		if(insertResult > 0) return "redirect:prj_mgr_step_list";
 		return "forword:prj_mgr_step_insert";
 	}	
-//--------------------------------------------------------------------------------------				
+//--------------------------------------------------------------------------------------
+	// 단계 선택 
+	@PostMapping(value = "/prj_order_update")
+	@ResponseBody
+	public ResponseEntity<?> prjOrderUpdate(@RequestBody List<HijPrjStep> hijPrjStepList) {
+		System.out.println("HijController prjOrderUpdate Start");
+		//-------------------------------------------------
+		int result = hs.prjOrder(hijPrjStepList);
+		//-------------------------------------------------
+		System.out.println("result : " + result);
+		return ResponseEntity.ok(result);
+	}
+//--------------------------------------------------------------------------------------
 	// 프로젝트 단계 수정 조회
 	@GetMapping(value = "prj_mgr_step_edit")
 	public String stepEdit(int project_id, int project_step_seq, Model model) {
@@ -266,7 +285,10 @@ public class HijController {
 //--------------------------------------------------------------------------------------		
 // 포트폴리오 생성
 	@GetMapping(value = "prj_mgr_step_read")
-	public String stepRead(int project_id, Model model) {
+	public String stepRead(int project_id, Model model, HttpServletRequest request) {
+
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
 		System.out.println("HijController prj_mgr_step_read Start");
 		//-------------------------------------------------
 		List<PrjMemList> listMember = hs.listMember(project_id);
@@ -279,9 +301,27 @@ public class HijController {
 		model.addAttribute("listMember", listMember);
 		model.addAttribute("titleList", titleList);
 		model.addAttribute("prjInfo", prjInfo);
+		model.addAttribute("userInfoDTO", userInfoDTO);
 
 		return "/project/manager/prj_mgr_step_read";
 	}
-	
+
+//--------------------------------------------------------------------------------------
+	@PostMapping(value = "search_all")
+	@ResponseBody
+	public List<HijSearchResponseDto> searchAll(@RequestBody HijSearchRequestDto hijSearchRequestDto, Model model){
+		System.out.println("HijController searchAll Start");
+		
+		//HijSearchRequestDto hijSearchRequestDto = new HijSearchRequestDto();
+		//hijSearchRequestDto.setKeyword(keyword);
+		System.out.println("keyword : " + hijSearchRequestDto.getKeyword());
+		
+		// 검색한 결과를 hijSearchResponseDto List로 넣어줌
+		List<HijSearchResponseDto> hijSearchResponseDto = hs.searchAll(hijSearchRequestDto);
+		System.out.println("검색 결과 수 : " +hijSearchResponseDto.size() );
+		System.out.println("HijController searchAll END");
+		return hijSearchResponseDto;
+		
+	}
 		
 }

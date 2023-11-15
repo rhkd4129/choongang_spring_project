@@ -64,7 +64,7 @@ $(function() {
 								<td>작성일</td>
 								<td><input type="text" class="form-control" name="create_date_str" value="${board.create_date}" readonly></td>
 							</tr>
-							<c:if test="${board.parent_doc_no != ''}">
+							<c:if test="${board.parent_doc_no ne ''}">
 							<tr>
 								<td>원글제목</td>											 
 								<td><a href="javascript:callDocAjax('prj_board_data_read?doc_no=${board.parent_doc_no}&project_id=${board.project_id}')">${board.parent_doc_subject}</a></td>
@@ -74,12 +74,12 @@ $(function() {
 								<td>제목</td>
 								<td><input type="text" class="form-control" name="subject" required="required" value="${board.subject}"></td>
 							</tr>
-							<c:if test="${board.parent_doc_no == ''}">
+							<c:if test="${board.parent_doc_no eq ''}">
 							<tr>
 								<td>공지여부</td>
 								<td>
 									<input type="checkbox" class="form-check-label" name="notify_flag_chkbox" id="notify_flag_chkbox" 
-									<c:if test="${board.notify_flag == 'Y'}">checked</c:if> 
+									<c:if test="${board.notify_flag eq 'Y'}">checked</c:if> 
 									 value="${board.notify_flag}">
 									<label class="form-check-label" for="notify_flag_chkbox">공지여부</label>
 								</td>
@@ -92,7 +92,7 @@ $(function() {
 									<select class="form-select" name="bd_category" id="bd_category">
 									<c:forEach var="code" items="${bd_category_codelist}">
 										<option  
-										<c:if test="${board.bd_category == code.cate_code}">selected</c:if> 
+										<c:if test="${board.bd_category eq code.cate_code}">selected</c:if> 
 										value="${code.cate_code}">${code.cate_name}</option>								
 									</c:forEach>
 									</select>
@@ -108,13 +108,13 @@ $(function() {
 												<input type="hidden" name="attach_path" value="${board.attach_path}">
 												<input type="hidden" name="attach_delete_flag" id="idAttachDeleteFlag" value="">
 												<div id="idAttachFile">
-													<c:if test="${board.attach_path != null}">
+													<c:if test="${board.attach_path ne null}">
 														<a href="/upload/${board.attach_path}" target="_blank">${board.attach_name}</a>
 														&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
 														<%-- <img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${board.attach_path}" width="100"> --%>
 													</c:if>													
 												</div>																						
-												<div id="idAttachInput" <c:if test="${board.attach_path != null}">style="display:none;"</c:if> >
+												<div id="idAttachInput" <c:if test="${board.attach_path ne null}">style="display:none;"</c:if> >
 													<input type="file" class="form-control form-control-sm" name="file1">
 												</div>
 											</td>

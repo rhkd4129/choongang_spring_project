@@ -3,11 +3,16 @@ package com.oracle.s202350101.dao.cyjDao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdFreeComt;
+import com.oracle.s202350101.model.BdFreeGood;
+import com.oracle.s202350101.model.BdQna;
+import com.oracle.s202350101.model.BdQnaGood;
 
 import lombok.RequiredArgsConstructor;
 
@@ -153,34 +158,64 @@ public class CyjDaoImpl implements CyjDao {
 	
 // ----------------------------------------------------------------
 
-	// 추천 +1
+	// 1. 추천자 목록에 있는지 중복 체크
 	@Override
-	public int goodCount(int doc_no) {
-		System.out.println("CyjDaoImpl goodCount Start");
+	public int goodConfirm(BdFreeGood bdFreeGood) {
+		System.out.println("CyjDaoImpl goodConfirmb Start");
 		
-		int gc = 0;
+		int goodConfirm = 0;
 		try {
-			gc = session.update("cyGoodCount", doc_no);
-			System.out.println("CyjDaoImpl gc-> " + gc);
+			goodConfirm = session.selectOne("cyboardGoodConfirm", bdFreeGood);
+			System.out.println("CyjDaoImpl goodConfirm-> " + goodConfirm);
 		} catch (Exception e) {
-			System.out.println("CyjDaoImpl goodCount Exception-> " + e.getMessage());
+			System.out.println("CyjDaoImpl goodConfirm Exception-> " + e.getMessage());
 		}
-		return gc;
+		return goodConfirm;
 	}
-
-	// 추천수 갖고 오기 
+	
+	// 2. 수행 후 추천기록이 없으면 BdFreeGood 테이블에 추천 추가
 	@Override
-	public int goodCountView(int doc_no) {
-		System.out.println("CyjDaoImpl goodCountView Start");
+	public int notifyGoodInsert(BdFreeGood bdFreeGood) {
+		System.out.println("CyjDaoImpl notifyGoodInsert Start");
 		
-		int gcv = 0;
+		int notifyGoodInsert = 0;
 		try {
-			gcv = session.selectOne("cyGoodCountView", doc_no);
-			System.out.println("CyjDaoImpl gcv-> " + gcv);
+			notifyGoodInsert = session.insert("notifyGoodInsert", bdFreeGood);
+			System.out.println("CyjDaoImpl notifyGoodInsert-> " + notifyGoodInsert);
 		} catch (Exception e) {
-			System.out.println("CyjDaoImpl goodCountView Exception-> " + e.getMessage());
+			System.out.println("CyjDaoImpl notifyGoodInsert Exception-> " + e.getMessage());
 		}
-		return gcv;
+		return notifyGoodInsert;
+	}
+	
+	// 3. bd_free 테이블에 good_count를 업데이트
+	@Override
+	public int notifyGoodUpdate(BdFreeGood bdFreeGood) {
+		System.out.println("CyjDaoImpl notifyGoodUpdate Start");
+		
+		int notifyGoodUpdate = 0;
+		try {
+			notifyGoodUpdate = session.update("cynotifyGoodUpdate", bdFreeGood);
+			System.out.println("CyjDaoImpl notifyGoodUpdate-> " + notifyGoodUpdate);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl notifyGoodUpdate Exception-> " + e.getMessage());
+		}
+		return notifyGoodUpdate;
+	}
+	
+	// 4. 추천 select
+	@Override
+	public int notifyGoodSelect(BdFree bdFree) {
+		System.out.println("CyjDaoImpl notifyGoodSelect Start");
+		
+		int notifyGoodSelect = 0;
+		try {
+			notifyGoodSelect = session.selectOne("cynotifyGoodSelect", bdFree);
+			System.out.println("CyjDaoImpl notifyGoodSelect-> " + notifyGoodSelect);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl notifyGoodSelect Exception-> " + e.getMessage());
+		}
+		return notifyGoodSelect;
 	}
 
 // ------------------------------------------------------------------------	
@@ -487,36 +522,6 @@ public class CyjDaoImpl implements CyjDao {
 		}
 		return freeComtSelect;
 	}
-	
-	// 자유_추천수 +1 올리기
-	@Override
-	public int freeCountUp(int doc_no) {
-		System.out.println("CyjDaoImpl freeCountUp Start");
-		
-		int freeCount = 0;
-		try {
-			freeCount = session.update("cyFreeCountUp", doc_no);
-			System.out.println("CyjDaoImpl freeCount-> " + freeCount);
-		} catch (Exception e) {
-			System.out.println("CyjDaoImpl freeCountUp Exception-> " + e.getMessage());
-		}
-		return freeCount;
-	}
-
-	// 자유_올린 추천수 갖고 오기 
-	@Override
-	public int countGet(int doc_no) {
-		System.out.println("CyjDaoImpl countGet Start");
-		
-		int count = 0;
-		try {
-			count = session.selectOne("cyFreeCountGet", doc_no);
-			System.out.println("CyjDaoImpl count-> " + count);
-		} catch (Exception e) {
-			System.out.println("CyjDaoImpl countGet Exception-> " + e.getMessage());
-		}
-		return count;
-	}
 
 // ------------------------------------------------------------------------	
 
@@ -570,6 +575,193 @@ public class CyjDaoImpl implements CyjDao {
 		}
 		return freeDelete;
 	}
+
+// ------------------------------------------------------------------------	
+// ------------------------- qna 게시판 ------------------------------------
+
+	// qna_총 갯수
+	@Override
+	public int qnaTotalCount() {
+		System.out.println("CyjDaoImpl qnaTotalCount Start");
+		
+		int qnaTotalCount = 0;
+		try {
+			qnaTotalCount = session.selectOne("cyQnaTotalCount");
+			System.out.println("CyjDaoImpl qnaTotalCount-> " + qnaTotalCount);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaTotalCount Exception-> " + e.getMessage());
+		}
+		return qnaTotalCount;
+	}
+
+	// qna_추천수 가장 높은 row 3개
+	@Override
+	public List<BdQna> qnaList() {
+		System.out.println("CyjDaoImpl qnaList Start");
+		
+		List<BdQna> qnaList = null;
+		try {
+			qnaList = session.selectList("cyQnaList");
+			System.out.println("CyjDaoImpl qnaList-> " + qnaList);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaList Exception-> " + e.getMessage());
+		}
+		return qnaList;
+	}
+
+	// qna_전제 리스트
+	@Override
+	public List<BdQna> qnaTotalList(BdQna bdQna) {
+		System.out.println("CyjDaoImpl qnaTotalList Start");
+		
+		List<BdQna> qnaTotalList = null;
+		try {
+			qnaTotalList = session.selectList("cyQnaTotalList", bdQna);
+			System.out.println("CyjDaoImpl qnaTotalList-> " + qnaTotalList);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaTotalList Exception-> " + e.getMessage());
+		}
+		return qnaTotalList;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_새 글 입력 
+	@Override
+	public int qnaInsert(@Valid BdQna bdQna) {
+		System.out.println("CyjDaoImpl qnaInsert Start");
+		
+		if (bdQna.getAttach_name() == null) bdQna.setAttach_name("");
+		if (bdQna.getAttach_path() == null) bdQna.setAttach_path("");		
+		
+		int qnaInsert = 0;
+		try {
+			qnaInsert = session.insert("cyQnaInsert", bdQna);
+			System.out.println("CyjDaoImpl qnaInsert-> " + qnaInsert);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaInsert Exception-> " + e.getMessage());
+		}
+		return qnaInsert;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_상세
+	@Override
+	public BdQna qnaContent(int doc_no) {
+		System.out.println("CyjDaoImpl qnaContent Start");
+		
+		BdQna qnaContent = null;
+		try {
+			qnaContent = session.selectOne("cyQnaContent", doc_no);
+			System.out.println("CyjDaoImpl qnaContent-> " + qnaContent);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaContent Exception-> " + e.getMessage());
+		}
+		return qnaContent;
+	}
+
+	// qna_조회수	
+	@Override
+	public int qnaCount(int doc_no) {
+		System.out.println("CyjDaoImpl qnaCount Start");
+		
+		int qnaCount = 0;
+		try {
+			qnaCount = session.update("cyQnaCount", doc_no);
+			System.out.println("CyjDaoImpl qnaCount-> " + qnaCount);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaCount Exception-> " + e.getMessage());
+		}
+		return qnaCount;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_수정
+	@Override
+	public int qnaUpdate(BdQna bdQna) {
+		System.out.println("CyjDaoImpl qnaUpdate Start");
+		
+		int qnaUpdate = 0;
+		try {
+			qnaUpdate = session.update("cyQnaUpdate", bdQna);
+			System.out.println("CyjDaoImpl qnaUpdate-> " + qnaUpdate);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaUpdate Exception-> " + e.getMessage());
+		}
+		return qnaUpdate;
+	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_추천 1.중복체크
+	@Override
+	public int qnaConfrim(BdQnaGood bdQnaGood) {
+		System.out.println("CyjDaoImpl qnaConfrim Start");
+		
+		int qnaConfirm = 0;
+		try {
+			qnaConfirm = session.selectOne("cyQnaConfrim", bdQnaGood);
+			System.out.println("CyjDaoImpl qnaConfirm-> " + qnaConfirm);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaConfirm Exception-> " + e.getMessage());
+		}
+		return qnaConfirm;
+	}
+
+	// qna_추천 2. insert 
+	@Override
+	public int qnaGoodInsert(BdQnaGood bdQnaGood) {
+		System.out.println("CyjDaoImpl qnaGoodInsert Start");
+		
+		int qnaGoodInsert = 0;
+		try {
+			qnaGoodInsert = session.insert("cyQnaGoodInsert", bdQnaGood);
+			System.out.println("CyjDaoImpl qnaGoodInsert-> " + qnaGoodInsert);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaGoodInsert Exception-> " + e.getMessage());
+		}
+		return qnaGoodInsert;
+	}
+
+	// qna_추천 3. update
+	@Override
+	public int qnaGoodUpdate(BdQnaGood bdQnaGood) {
+		System.out.println("CyjDaoImpl qnaGoodUpdate Start");
+		
+		int qnaGoodUpdate = 0;
+		try {
+			qnaGoodUpdate = session.update("cyQnaGoodUpdate", bdQnaGood);
+			System.out.println("CyjDaoImpl qnaGoodUpdate-> " + qnaGoodUpdate);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaGoodUpdate Exception-> " + e.getMessage());
+		}
+		return qnaGoodUpdate;
+	}
+
+	// qna_추천 4. select
+	@Override
+	public int qnaGoodSelect(BdQna bdQna) {
+		System.out.println("CyjDaoImpl qnaGoodSelect Start");
+		
+		int qnaGoodSelect = 0;
+		try {
+			qnaGoodSelect = session.selectOne("cyQnaGoodSelect", bdQna);
+			System.out.println("CyjDaoImpl qnaGoodSelect-> " + qnaGoodSelect);
+		} catch (Exception e) {
+			System.out.println("CyjDaoImpl qnaGoodSelect Exception-> " + e.getMessage());
+		}
+		return qnaGoodSelect;
+	}
+	
+
+	 
+
+
+
+
+
 
 
 

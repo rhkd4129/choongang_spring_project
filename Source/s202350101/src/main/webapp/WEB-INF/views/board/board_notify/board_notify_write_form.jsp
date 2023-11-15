@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header_main.jsp" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +11,9 @@
 <title>Insert title here</title>
 
 <!--CSS START -->
+<style type="text/css">
+		.error {color: red}
+</style>
 <!-- CSS END -->
 
 <!-- JS START -->
@@ -68,23 +72,53 @@
 				String strDate = simpleDateFormat.format(date);
 			%>
 			
-			<h3>새 글 작성</h3><p>
-		
-				<form action="board_write_insert" method="post">
-					<table border="1">
-						<tr> <th>작성일</th> <td><%=strDate %></td> </tr>
-							
-						<tr> <th>게시종류</th> <td>공지</td> </tr> 
-							 
-						<tr> <th>제목</th> <td><input type="text" name="subject" required="required"></td> </tr> 
-							
-						<tr> <th>본문</th> <td><input type="text" name="doc_body" required="required"></td> </tr>
-							
-						<tr> <th>첨부파일명</th> <td><input id="file" type="file"/></td> </tr>
-						
-						<tr> <td colspan="2"><input type="submit" value="등록"></td> </tr>
-					</table> 
-				</form>
+			<h3>새 글 작성</h3>
+
+				<form:form action="board_write_insert" method="post" modelAttribute="bdFree" class="mt-3" enctype="multipart/form-data">
+				<table class="table table-bordered">
+			        <tr>
+			            <th>작성일</th>
+			            <td><%=strDate %></td>
+			        </tr>
+			
+			        <tr>
+			            <th>게시종류</th>
+			            <td>공지</td>
+			        </tr>
+			
+			        <tr>
+			            <th>제목</th>
+			            <td>
+			                <input type="text" name="subject" class="form-control">
+			                <form:errors path="subject" class="error"/>
+			            </td>
+			        </tr>
+			
+			        <tr>
+			            <th>본문</th>
+			            <td>
+			                <input type="text" name="doc_body" class="form-control">
+			                <form:errors path="doc_body" class="error"/>
+			            </td>
+			        </tr>
+			
+			        <tr>
+			            <th>첨부파일</th>
+			            <td>
+			                <div class="custom-file">
+			                    <input type="file" class="custom-file-input" id="file" name="file1">
+			                    <label class="custom-file-label" for="file"></label>
+			                </div>
+			            </td>
+			        </tr>
+			
+			        <tr>
+			            <td colspan="2">
+			                <input type="submit" value="등록" class="btn btn-primary">
+			            </td>
+			        </tr>
+			    </table>
+				</form:form>
 	
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
@@ -99,7 +133,7 @@
 </footer>
 
 <!-- color-modes -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+<!--     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
       </symbol>
@@ -114,7 +148,7 @@
         <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
       </symbol>
     </svg>
-
+ -->
     <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
       <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
               id="bd-theme"
