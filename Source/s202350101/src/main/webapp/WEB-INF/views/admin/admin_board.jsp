@@ -6,6 +6,7 @@
 <html>
 <head>
     <script type="text/javascript" src="/project/board/js/prj_board.js"></script>
+
     <meta charset="UTF-8">
 
     <style text="text/css">
@@ -98,7 +99,9 @@
                     $.each(jsonData.firList, function (index, board) {
                         var tr = $('<tr>');
                         tr.append('<td>' + board.rn + '</td>');
-                        tr.append('<td><a href="javascript:callAction(\'read\',\'prj_board_data_read?doc_no=' + board.doc_no + '&project_id=' + board.project_id + '\')" onclick="console.log(\'click\')">' + board.subject + '</a></td>');
+
+                        tr.append('<td onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_read'" + ')">'+ board.subject+'</td>');
+                        // tr.append('<td><a href="javascript:callAction(\'read\',\'prj_board_data_read?doc_no=' + board.doc_no + '&project_id=' + board.project_id + '\')" onclick="console.log(\'click\')">' + board.subject + '</a></td>');
                         tr.append('<td>' + board.user_name + '</td>');
                         tr.append('<td>' + formatDate(new Date(board.create_date)) + '</td>'); // 날짜 포맷 변경
                         tr.append('<td>' + board.bd_category_name + '</td>');
@@ -114,7 +117,7 @@
                         // }
                         tr.append('<td>' + board.bd_count + '</td>');
                         tr.append('<td>' + board.good_count + '</td>');
-                        tr.append('<td><a href="#">수정</a></td>');
+                        tr.append('<td onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_edit'" + ')">수정</td>');
                         tr.append('<td><input type="checkbox" name="pbd_del_chkbox" />');
                         PBDList_body.append(tr);
                     });
@@ -237,8 +240,28 @@
             })
         }
 
+        function callAction(action, mapping_name) {
+            console.log("callAction");
+            console.log(action, mapping_name);
+            var checked = true;
+            if (document.getElementById("idNewWinFlag") != null) {
+                console.log("not null");
+                checked = $("#idNewWinFlag").is(':checked');
+            }
+        }
+
+        function locatPrj(cdoc_no, cproject_id, lloc){
+            console.log("locat!");
+            console.log(cdoc_no);
+            window.open(
+                "/" + lloc + "?doc_no=" + cdoc_no + "&project_id=" + cproject_id,
+                "Child",
+                "width=600, height=570, top=50, left=50"
+            );
+        }
 
     </script>
+
 </head>
 
 <body>
@@ -305,13 +328,14 @@
                     <c:forEach items="${PBDList}" var="board">
                         <tr>
                             <td>${board.rn}</td>
-                            <td><a href="javascript:callAction('read','prj_board_data_read?doc_no=${board.doc_no}&project_id=${board.project_id}')" onclick="console.log('click')">${board.subject}</a></td>
+
+                            <td onclick="locatPrj(${board.doc_no},${board.project_id},'prj_board_data_read')"> ${board.subject}</td>
                             <td>${board.user_name}</td>
                             <td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
                             <td>${board.bd_category_name}</td>
                              <td>${board.bd_count}</td>
                             <td>${board.good_count}</td>
-                            <td><a href="#">수정</a></td>
+                            <td onclick="locatPrj(${board.doc_no},${board.project_id},'prj_board_data_edit')">수정</td>
                             <td><input type="checkbox" name="pbd_del_chkbox" />
                         </tr>
                         <c:set var="num" value="${num-1}"></c:set>

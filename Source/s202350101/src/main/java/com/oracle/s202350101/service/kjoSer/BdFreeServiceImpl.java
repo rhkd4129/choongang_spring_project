@@ -57,11 +57,9 @@ public class BdFreeServiceImpl implements BdFreeService {
         TransactionStatus txStatus =
                 transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
-
             del_cnt += BFdao.del_bdfg(doc_nos);
             del_cnt += BFdao.del_bdfc(doc_nos);
             del_cnt += BFdao.del_bdf(doc_nos);
-
             transactionManager.commit(txStatus);
         } catch (Exception e) {
             log.info("del_bdf Error :{}",e.getMessage());

@@ -4,6 +4,7 @@
  
 
 function callAction(action, mapping_name) {
+	console.log("callREC");
 	//작성, 조회, 답변작성 : 새창 or 프레임
 	//수정 : 현재창 or 프레임
 	//추천 : ajax현재창 or 프레임
