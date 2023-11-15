@@ -98,6 +98,8 @@ public class KjoController {
 		PrjBdData prjBdData = new PrjBdData();
 		prjBdData.setStart(page2.getStart());		//	시작1
 		prjBdData.setEnd(page2.getEnd());			//	시작10
+		prjBdData.setClass_id(1);
+		prjBdData.setProject_id(1);
 
 		List<PrjBdData> prjBdDataList = PBDser.boardList(prjBdData);
 	/*		프로젝트 목록		*/
@@ -124,6 +126,25 @@ public class KjoController {
 		model.addAttribute("BFList", BFList);
 
 		return "admin/admin_board";
+	}
+
+//	PrjBdData ajax처리
+	@ResponseBody
+	@GetMapping("/admin_board_pbd_ajax")
+	public KjoResponse admin_board_pbd_ajax(PrjBdData prjBdData, String currentpage) {
+		PrjBdData pbd = new PrjBdData();
+		pbd.setProject_id(prjBdData.getProject_id());
+		pbd.setClass_id(prjBdData.getClass_id());
+		KjoResponse res = new KjoResponse();
+		int totcnt = PBDser.findByClassProjectId(pbd).size();
+//		페이징	글 개수 : 5		이벤트 수	현재 페이지	목록 노출 수
+		Paging page = new Paging(totcnt, currentpage, 5);
+		prjBdData.setStart(page.getStart());
+		prjBdData.setEnd(page.getEnd());
+		List<PrjBdData> prjBdDataList = PBDser.boardList(prjBdData);
+		res.setFirList(prjBdDataList);
+		res.setObj(page);
+		return res;
 	}
 
 

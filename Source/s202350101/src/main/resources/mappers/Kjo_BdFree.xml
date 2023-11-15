@@ -47,12 +47,32 @@
                  left join user_info u
                            on ev.user_id = u.user_id
     </select>
-<!--게시글 id로 삭제-->
+    <!--게시글 id로 삭제-->
     <delete id="del_bdf" parameterType="java.util.List">
-        <foreach collection="list" item="item" separator=";">
-            delete bd_free where doc_no = #{item}
+        delete bd_free
+        where doc_no IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
         </foreach>
     </delete>
+    <!--게시글 id로 삭제-->
+    <delete id="del_bdfg" parameterType="java.util.List">
+        delete bd_free_good
+        where doc_no IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+    <!--게시글 id로 삭제-->
+    <delete id="del_bdfc" parameterType="java.util.List">
+        delete bd_free_comt
+        where comment_doc_no IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+
 
 
 

@@ -5,6 +5,7 @@ import com.oracle.s202350101.model.PrjBdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.List;
 
@@ -13,7 +14,6 @@ import java.util.List;
 @Slf4j
 public class PrjBdDataServiceImpl implements PrjBdDataService {
     private final PrjBdDataDao PBDdao;
-
     @Override
     public int totalCount() {
         log.info("totalCount start");
@@ -27,6 +27,14 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
         log.info("boardList start");
         List<PrjBdData> prjBdDataList = PBDdao.boardList(prjBdData);
         log.info("boardList END");
+        return prjBdDataList;
+    }
+
+    @Override
+    public List<PrjBdData> findByClassProjectId(PrjBdData prjBdData) {
+        log.info("findByClassProjectId start");
+        List<PrjBdData> prjBdDataList = PBDdao.findByClassProjectId(prjBdData);
+        log.info("findByClassProjectId END");
         return prjBdDataList;
     }
 }

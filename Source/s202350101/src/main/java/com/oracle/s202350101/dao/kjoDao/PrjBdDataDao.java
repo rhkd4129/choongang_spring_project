@@ -8,4 +8,6 @@ public interface PrjBdDataDao {
     int totalCount();
 
     List<PrjBdData> boardList(PrjBdData prjBdData);
+
+    List<PrjBdData> findByClassProjectId(PrjBdData prjBdData);
 }

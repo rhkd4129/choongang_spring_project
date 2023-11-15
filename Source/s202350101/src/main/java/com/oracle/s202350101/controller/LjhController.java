@@ -191,7 +191,7 @@ public class LjhController {
 		model.addAttribute("meeting_id", meeting_id);
 //		model.addAttribute("savedName", savedName);
 		
-		return "redirect:prj_meeting_report_read/?meeting_id="+meeting.getMeeting_id()+"&project_id="+meeting.getProject_id();
+		return "redirect:prj_meeting_report_read?meeting_id="+meeting.getMeeting_id()+"&project_id="+meeting.getProject_id();
 	}
 	
 	// 회의일정 등록

@@ -78,11 +78,71 @@
         function pr_info(currentpage) {
             var cl_room_val = $('#cl_room_List').val();
             var project_id = $('#pr_List').val();
-
+            var option = {
+                class_id: cl_room_val, //  현재 채팅방
+                project_id: project_id,       //  본인 id
+                currentpage: currentpage,         //  상대 id
+            }
             console.log(cl_room_val);
             // var curpage = 1;
-            var sendurl = '/admin_board/?class_id=' + cl_room_val + "&project_id=" + project_id;			// + currentpage;
+            var sendurl = '/admin_board_pbd_ajax';			// + currentpage;
             console.log(sendurl);
+            $.ajax({
+                url: sendurl,
+                data: option,
+                success: function (jsonData) {
+                    console.log(jsonData);
+                    var PBDList_body = $('#PBDList_body');
+                    PBDList_body.empty();
+                    // 게시글 목록 동적 생성
+                    $.each(jsonData.firList, function (index, board) {
+                        var tr = $('<tr>');
+                        tr.append('<td>' + board.rn + '</td>');
+                        tr.append('<td><a href="javascript:callAction(\'read\',\'prj_board_data_read?doc_no=' + board.doc_no + '&project_id=' + board.project_id + '\')" onclick="console.log(\'click\')">' + board.subject + '</a></td>');
+                        tr.append('<td>' + board.user_name + '</td>');
+                        tr.append('<td>' + formatDate(new Date(board.create_date)) + '</td>'); // 날짜 포맷 변경
+                        tr.append('<td>' + board.bd_category_name + '</td>');
+                        // 첨부 파일 관련
+                        var attach_name = board.attach_name;
+                        var attach_length = attach_name ? attach_name.length : 0;
+                        var extension_name = attach_length > 3 ? attach_name.substring(attach_length - 3, attach_length) : '';
+                        // if (extension_name !== '') {
+                        //     var img = $('<img src="/common/images/attach/icon_' + extension_name + '.png" alt="' + board.attach_name + '" style="cursor:pointer" onclick="popup(\'/upload/' + board.attach_path + '\',800,600)">');
+                        //     tr.append($('<td>').append(img));
+                        // } else {
+                        //     tr.append('<td></td>'); // 빈 칸 처리
+                        // }
+                        tr.append('<td>' + board.bd_count + '</td>');
+                        tr.append('<td>' + board.good_count + '</td>');
+                        tr.append('<td><a href="#">수정</a></td>');
+                        tr.append('<td><input type="checkbox" name="pbd_del_chkbox" />');
+                        PBDList_body.append(tr);
+                    });
+                    // 페이징 동적 생성
+                    var paginationDiv = $('#d_p');
+                    paginationDiv.empty();
+                    var jspPagination = '<div id="d_p" class="pagination">';
+                    if (jsonData.obj.startPage > jsonData.obj.pageBlock) {
+                        jspPagination += '<div onclick="pr_info(' + (jsonData.obj.startPage - jsonData.obj.pageBlock) + ')"><p>[이전]</p></div>';
+                    }
+                    for (var i = jsonData.obj.startPage; i <= jsonData.obj.endPage; i++) {
+                        var currentPageStyle = i === jsonData.obj.currentPage ? '-webkit-text-stroke: thick;' : '';
+                        jspPagination += '<div class="page-item" style="' + currentPageStyle + '" onClick="pr_info(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                    }
+                    if (jsonData.obj.endPage < jsonData.obj.totalPage) {
+                        jspPagination += '<div onclick="pr_info(' + (jsonData.obj.startPage + jsonData.obj.pageBlock) + ')"><p>[다음]</p></div>';
+                    }
+                    jspPagination += '</div>';
+                    paginationDiv.html(jspPagination);
+                    // 날짜 포맷 함수
+                    function formatDate(date) {
+                        var year = date.getFullYear();
+                        var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                        var day = ("0" + date.getDate()).slice(-2);
+                        return year + "-" + month + "-" + day;
+                    }
+                }
+            });
         }
 
         function event_search(currentPage) {
@@ -218,7 +278,7 @@
                                         ${list.class_room_num}</option>
                             </c:forEach>
                         </select>
-                        <select id="pr_List" class="form-select" style="width: 30% " onchange="pr_info()">
+                        <select id="pr_List" class="form-select" style="width: 30% " onchange="pr_info(1)">
                             <c:forEach items="${PIList}" var="list">
                                 <option name="pr_num"
                                         value="${list.project_id}">${list.project_name} <%--${list.class_room_num}--%>
@@ -241,7 +301,7 @@
                         <th>삭제</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="PBDList_body">
                     <c:forEach items="${PBDList}" var="board">
                         <tr>
                             <td>${board.rn}</td>
@@ -265,19 +325,19 @@
                     </c:forEach>
                     <div id="d_p" class="pagination">
                         <c:if test="${page2.startPage > page2.pageBlock}">
-                            <div onclick="event_search(${page2.startPage-page2.pageBlock})">
+                            <div onclick="pr_info(${page2.startPage-page2.pageBlock})">
                                 <p>[이전]</p>
                             </div>
                         </c:if>
                         <c:forEach var="i" begin="${page2.startPage}" end="${page2.endPage}">
-                            <div class="page-item" onclick="event_search(${i})">
+                            <div class="page-item" onclick="pr_info(${i})">
                                 <div class="page-link">${i}</div>
                             </div>
 
                         </c:forEach>
 
                         <c:if test="${page2.endPage > page2.pageBlock}">
-                            <div onclick="event_search(${page2.startPage+page2.pageBlock})">
+                            <div onclick="pr_info(${page2.startPage+page2.pageBlock})">
                                 <p>[다음]</p>
                             </div>
                         </c:if>

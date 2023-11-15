@@ -44,4 +44,22 @@ public class PrjBdDataDaoImpl implements PrjBdDataDao{
         log.info("boardList END");
         return prjBdDataList;
     }
+//    <!--강의실, 프로젝트 별 모든 prj_bd_data-->
+    @Override
+    public List<PrjBdData> findByClassProjectId(PrjBdData prjBdData) {
+        log.info("findByClassProjectId start");
+        List<PrjBdData> prjBdDataList = null;
+        try {
+            prjBdDataList = session.selectList("findByClassProjectId", prjBdData);
+            if (prjBdDataList != null) {
+                log.info("findByClassProjectId Complete");
+            } else {
+                log.info("findByClassProjectId SQL 오류");
+            }
+        } catch (Exception e) {
+            log.info("findByClassProjectId Exception : {}",e.getMessage());
+        }
+        log.info("findByClassProjectId END");
+        return prjBdDataList;
+    }
 }

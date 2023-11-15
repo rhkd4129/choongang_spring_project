@@ -6,6 +6,9 @@ import com.oracle.s202350101.model.KjoRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
 public class BdFreeServiceImpl implements BdFreeService {
 
     private final BdFreeDao BFdao;
+    private final PlatformTransactionManager transactionManager;
     //<!--모든 BdFree조회-->
     @Override
     public List<BdFree> findAllBdFree() {
@@ -49,7 +53,20 @@ public class BdFreeServiceImpl implements BdFreeService {
     @Override
     public int del_bdf(KjoRequestDto kjorequest) {
         List<String> doc_nos = kjorequest.getUser_id();
-        int del_cnt = BFdao.del_bdf(doc_nos);
+        int del_cnt = 0;
+        TransactionStatus txStatus =
+                transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+
+            del_cnt += BFdao.del_bdfg(doc_nos);
+            del_cnt += BFdao.del_bdfc(doc_nos);
+            del_cnt += BFdao.del_bdf(doc_nos);
+
+            transactionManager.commit(txStatus);
+        } catch (Exception e) {
+            log.info("del_bdf Error :{}",e.getMessage());
+            transactionManager.rollback(txStatus);
+        }
         return del_cnt;
     }
 

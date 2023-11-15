@@ -11,13 +11,14 @@
 	<select id="prjBdDataTotal" resultType="int">
 		SELECT Count(*) FROM PRJ_BD_DATA
 	</select>
+
 	<select id="findByPage" parameterType="PrjBdData" resultType="PrjBdData">
 		SELECT *
 		FROM
 			(
 				SELECT rownum rn, a.*
 				FROM
-					( SELECT p.*, u.user_name, u.class_id
+					( SELECT p.*, u.user_name, u.class_id,
 							 (SELECT cate_name
 							  FROM CODE
 							  WHERE UPPER(table_name)='PRJ_BD_DATA'
@@ -25,12 +26,26 @@
 								AND cate_code=p.bd_category) bd_category_name
 					  FROM PRJ_BD_DATA p, USER_INFO u
 					  WHERE p.user_id = u.user_id
-					  and
+					  and p.project_id = #{project_id} and u.class_id = #{class_id}
 					  ORDER BY doc_group DESC, doc_step) a
 			)
 		WHERE rn BETWEEN #{start} AND #{end}
 
 	</select>
-
+<!--강의실, 프로젝트 별 모든 prj_bd_data-->
+	<select id="findByClassProjectId" parameterType="PrjBdData" resultType="PrjBdData">
+		SELECT *
+		FROM
+			( SELECT p.*, u.user_name, u.class_id,
+					 (SELECT cate_name
+					  FROM CODE
+					  WHERE UPPER(table_name)='PRJ_BD_DATA'
+						AND UPPER(field_name)='BD_CATEGORY'
+						AND cate_code=p.bd_category) bd_category_name
+			  FROM PRJ_BD_DATA p, USER_INFO u
+			  WHERE p.user_id = u.user_id
+				and p.project_id = #{project_id} and u.class_id = #{class_id}
+			  ORDER BY doc_group DESC, doc_step) a
+	</select>
 </mapper>
 	 
