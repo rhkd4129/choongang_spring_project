@@ -57,15 +57,16 @@ public class CommonController {
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		log.info("userInfo: {}",userInfoDTO);
+		UserInfo us = uis.findbyuserId(userInfoDTO);
+		log.info("userInfo: {}",us);
 		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
-		List<UserInfo> chatUIList = uis.findbyclassuser(userInfoDTO);
+		List<UserInfo> chatUIList = uis.findbyclassuser(us);
 		//	사용자가 참여중인 채팅방 조회
-		List<ChatRoom> chatRooms = chs.findByUserId(userInfoDTO);
+		List<ChatRoom> chatRooms = chs.findByUserId(us);
 
+		request.setAttribute("userInfo", us);
 
-
-		model.addAttribute("userInfo", userInfoDTO);
+		model.addAttribute("userInfo", us);
 		model.addAttribute("chatUIList", chatUIList);
 		model.addAttribute("chatRooms", chatRooms);
 
