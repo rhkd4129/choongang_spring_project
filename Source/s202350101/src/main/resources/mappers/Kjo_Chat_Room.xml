@@ -20,8 +20,8 @@
               union
               select * from chat_room
               where receiver_id = #{user_id}) chl
-                 left join user_info uil
-                           on chl.receiver_id = uil.user_id
+		 left join user_info uil
+				   on chl.receiver_id = uil.user_id
     </select>
 <!--상대방과의 채팅방 조회-->
 	<select id="findByYouAndMe" parameterType="ChatRoom" resultType="ChatRoom">

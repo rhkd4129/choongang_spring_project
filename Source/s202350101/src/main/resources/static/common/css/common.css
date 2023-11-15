@@ -13,3 +13,15 @@
 	display: block;
 	width: 50%;
 }
+
+a:link {  /* 링크걸린 상태 */
+	text-decoration: none; /* 밑줄을 없앰 */
+	color: #097bed;
+}
+a:hover { /* 마우스 오버한 상태 */
+	color: #555555;
+}
+a:active { /* 마우스 클릭한 상태 */
+}
+a:visited { /* 방문한 상태 */
+}

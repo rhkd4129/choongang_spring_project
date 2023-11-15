@@ -3,8 +3,14 @@ server:
   
 # Oracle Connect
 spring:
+  # File Size
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB  
+      
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
+    driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521/xe
     username: s202350101_kjo
     password: tiger

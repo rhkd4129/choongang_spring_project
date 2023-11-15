@@ -35,7 +35,7 @@
 
 		$.ajax({
 			url : '/header.html',
-			dataType : 'text',
+			dataType : 'html',
 			success : function(data) {
 				$('#header').html(data);
 			}
@@ -43,7 +43,7 @@
 
 		$.ajax({
 			url : '/menubar.html',
-			dataType : 'text',
+			dataType : 'html',
 			success : function(data) {
 				$('#menubar').html(data);
 			}
@@ -51,7 +51,7 @@
 
 		$.ajax({
 			url : '/center.html',
-			dataType : 'text',
+			dataType : 'html',
 			success : function(data) {
 				$('#center').html(data);
 			}

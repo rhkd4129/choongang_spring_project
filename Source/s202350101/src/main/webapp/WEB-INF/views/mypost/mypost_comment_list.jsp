@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header.jsp" %> 
+<%@ include file="/WEB-INF/views/header_main.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +18,7 @@
 		
 		$.ajax({
 			url			: '/main_header',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
@@ -26,7 +26,7 @@
 		
 		$.ajax({
 			url			: '/main_menu',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
 			}
@@ -34,7 +34,7 @@
 	
 		$.ajax({
 			url			: '/main_footer',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#footer').html(data);
 			}
@@ -60,7 +60,11 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div class="container-fluid">
 					<p>
-					<h3>내가 쓴 게시글</h3>
+					<h3>내가 쓴 댓글 :  개</h3>
+					<%-- <h3>내가 쓴 Q&A 게시글 : ${totalBdQna } 개</h3>
+					<h3>내가 쓴 공용 게시글 : ${totalBdFree } 개</h3>
+					<h3>내가 쓴 PJ& 공지자료 게시글 : ${totalDtPrj } 개</h3>
+					<h3>내가 쓴 업무보고 게시글 : ${totalRepPrj } 개</h3> --%>
 					<p>
 					<table>
 						<tr>
@@ -70,94 +74,29 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<td>번호</td>
-								<td>제목</td>
-								<td>작성자</td>
+								<td>게시판</td>
+								<td>댓글내용</td>
 								<td>작성일</td>
-								<td>조회수</td>
-								<td>추천수</td>
 							</tr>
 						</thead>
 						<tbody>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>10</td>
-								<td>[공지] 공지사항입니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>9</td>
-								<td>[web] 참고용 소스입니다</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>8</td>
-								<td>[html] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>7</td>
-								<td>[Java] 자바소스 공유</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>6</td>
-								<td>[css] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>5</td>
-								<td>[Java] 자바소스 공유</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>4</td>
-								<td>[css] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>3</td>
-								<td>[Java] 자바소스 공유</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>2</td>
-								<td>[javascript] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>1</td>
-								<td>[ajax] ajax 소스 분석</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
+							<!-- <tr onclick="goto('project_board_data_read.html')"> -->
+							<tr>	
+								<c:forEach var="fComt" items="${freeComt }">
+									<tr><td>${fComt.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${fComt.doc_no }">${fComt.comment_context }</a></td>
+									<td>${fComt.create_date }</td>
+								</c:forEach>
+								<c:forEach var="dComt" items="${dataComt }">
+									<tr><td>${dComt.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${dComt.doc_no }">${dComt.comment_context }</a></td>
+									<td>${dComt.create_date }</td>
+								</c:forEach>
+								<c:forEach var="rComt" items="${repComt }">
+									<tr><td>${rComt.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${rComt.doc_no }">${rComt.comment_context }</a></td>
+									<td>${rComt.create_date }</td>
+								</c:forEach>
 							</tr>
 						</tbody>
 					</table>

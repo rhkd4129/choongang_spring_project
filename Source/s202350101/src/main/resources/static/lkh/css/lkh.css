@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+.errors{color: red;}
+
+table{
+    margin: 5%;
+}
+table, th, td {
+    border: 1px solid black;
+    width: 10%; /* 모든 테이블의 셀 넓이를 조절합니다. */
+}
+
+#project_time{
+    text-align: center;
+    font-weight: bold;
+}
+
+.controller {
+    padding: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border: 1px solid #0b5ed7;
+    border-radius: 10px;
+}
+
+
+
+/*  task dashboard home */
+ .chart {
+     margin: 1%;
+     display: flex;
+     flex-direction: row; /* 수평으로 배치 */
+     border: 1px solid #0b5ed7;
+     border-radius: 10px;
+ }
+.chart > div {
+    margin:30px; /* 원하는 간격(여기서는 좌우로 10px) */
+}
+
+.project_chart,
+.doughnut_1,
+.bar_chart {
+    flex: 1; /* 각각 1:1 비율 */
+}
+
+.bar_chart {
+    flex: 1.5; /* 2:1 비율 */
+}
+
+
+
+
+/* 프로젝트 단계 차트  */
+.project_step_chart{
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    border: 2px solid black;
+    border-radius: 10px;
+    /*flex-grow: 1; !* 내부 요소에 따라 유동적으로 크기 조절 *!*/
+}
+
+.project_step{
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 3%;
+
+}
+
+.project_step_subject {
+
+    background-color: #0dcaf0;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    margin: 5%;
+    width: 150px;
+}
+
+.project_step_task_subject{
+    background-color: #0a58ca;
+    border: 2px solid black;
+    text-align: center;
+    margin: 2%;
+    width: 150px;
+
+}

@@ -8,7 +8,29 @@
 
 <mapper namespace="com.oracle.s202350101.PrjBdDataMapper">
 	<!-- PrjBdData -->
+	<select id="prjBdDataTotal" resultType="int">
+		SELECT Count(*) FROM PRJ_BD_DATA
+	</select>
+	<select id="findByPage" parameterType="PrjBdData" resultType="PrjBdData">
+		SELECT *
+		FROM
+			(
+				SELECT rownum rn, a.*
+				FROM
+					( SELECT p.*, u.user_name, u.class_id
+							 (SELECT cate_name
+							  FROM CODE
+							  WHERE UPPER(table_name)='PRJ_BD_DATA'
+								AND UPPER(field_name)='BD_CATEGORY'
+								AND cate_code=p.bd_category) bd_category_name
+					  FROM PRJ_BD_DATA p, USER_INFO u
+					  WHERE p.user_id = u.user_id
+					  and
+					  ORDER BY doc_group DESC, doc_step) a
+			)
+		WHERE rn BETWEEN #{start} AND #{end}
 
+	</select>
 
 </mapper>
 	 

@@ -45,6 +45,7 @@ public class BdFreeServiceImpl implements BdFreeService {
         return BFdao.findByCategorySearch(bf);
     }
 
+//<!--게시글 id로 삭제-->
     @Override
     public int del_bdf(KjoRequestDto kjorequest) {
         List<String> doc_nos = kjorequest.getUser_id();

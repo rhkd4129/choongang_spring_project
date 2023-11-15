@@ -11,5 +11,5 @@ import lombok.ToString;
 public class MeetingMember {
 	private int 	meeting_id;
 	private int 	project_id;
-	private String 	user_id;
+	private String 	meetuser_id;
 }

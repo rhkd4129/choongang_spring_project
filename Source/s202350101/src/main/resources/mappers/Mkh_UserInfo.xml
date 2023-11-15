@@ -7,19 +7,61 @@
 	 
 <mapper namespace="com.oracle.s202350101.UserInfoMapper">
 	
-	<!-- 회원가입 sql -->
+	<!-- 회원가입 insert -->
 	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
-		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_number,    user_email,  user_auth) 
-					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_number}, #{user_email}, 'student')  
+		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_gender,    
+							   user_number,    user_birth,    						user_address,    user_email,  user_auth, attach_name, attach_path) 
+					   VALUES (#{user_id},  #{class_id}, #{user_pw}, #{user_name}, #{user_gender, jdbcType = VARCHAR}, 
+					   		   #{user_number}, #{user_birth, jdbcType = VARCHAR}, #{user_address}, #{user_email}, 'student', #{attach_name}, #{attach_path})  
 	</insert>
 	
 	<!-- 로그인 check -->
 	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">
 		Select *
-		From  user_info 
-		Where user_id = #{user_id}
-		And   user_pw = #{user_pw}
+		From   user_info 
+		Where  user_id = #{user_id}
+		And    user_pw = #{user_pw}
 	</select>
 	
-
+	<!-- 회원가입 ID 중복확인 -->
+	<select id="IdConfirm" parameterType="String" resultType="userInfo">
+		Select *
+		From   user_info
+		Where  user_id = #{user_id}
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="userFindId" parameterType="userInfo" resultType="userInfo">
+		Select *
+		From   user_info
+		Where  user_name   = #{user_name}
+		And    user_number = #{user_number}
+	</select>
+	
+	<!-- 비밀번호 업데이트 -->
+	<update id="pwUpdate" parameterType="hashmap">
+		Update user_info
+		Set    user_pw = #{user_pw}
+		where  user_id = #{user_id}
+	</update>
+	
+	<!-- <update id="userInfoUpdate" parameterType="hashmap"> -->
+	<update id="userInfoUpdate" parameterType="userInfo">
+	    UPDATE user_info
+	    SET class_id   = #{class_id},
+	        project_id = #{project_id},
+	        user_pw    = #{user_pw},
+	        user_name  = #{user_name},
+	        user_gender = #{user_gender},
+	        user_number = #{user_number},
+	        <if test="user_birth != null">
+	        	user_birth  = #{user_birth},
+	        </if>
+	        user_address = #{user_address},
+	        user_email   = #{user_email},
+	        attach_name  = #{attach_name}, 
+	        attach_path  = #{attach_path}
+	    WHERE user_id   = #{user_id}
+	</update>
+	
 </mapper>

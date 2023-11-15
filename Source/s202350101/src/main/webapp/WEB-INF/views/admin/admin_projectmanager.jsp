@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%@ include file="/WEB-INF/views/header.jsp" %>
+<%@ include file="/WEB-INF/views/header_main.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +23,7 @@
 
             $.ajax({
                 url: '/main_header',
-                dataType: 'text',
+                dataType: 'html',
                 success: function (data) {
 
                     $('#header').html(data); // 응답 데이터를 #header 요소에 추가
@@ -32,7 +32,7 @@
 
             $.ajax({
                 url: '/main_menu',
-                dataType: 'text',
+                dataType: 'html',
                 success: function (data) {
                     $('#menubar').html(data);
                 }
@@ -40,7 +40,7 @@
 
             $.ajax({
                 url: '/main_footer',
-                dataType: 'text',
+                dataType: 'html',
                 success: function (data) {
                     $('#footer').html(data);
                 }
@@ -119,15 +119,20 @@
                         tbody.append(tr); // <tr>을 <tbody>에 추가
                     });
                     var obj = jsonData.obj; // obj : page 객체 가져오기
+                    console.log("obj");
+                    console.log(obj);
+                    console.log(obj.startPage);
+                    console.log(obj.endPage);
 
                     var paginationDiv = $('#c_b'); // 페이지네이션을 표시할 div
                     paginationDiv.empty(); // 페이지네이션을 초기화
-
-                    var jspPagination = '<div id="c_b" class="pagination">';
+                    // <div id="c_b" className="pagination">
+                    var jspPagination = '';
 
                     if (obj.startPage > obj.pageBlock) {
-                        jspPagination += `<div onclick="cl_room(${obj.startPage - obj.pageBlock})"><p>[이전]</p></div>`;
+                        jspPagination += `<div onclick="cl_room('+ (obj.startPage - obj.pageBlock) ' + )"><p>[이전]</p></div>`;
                     }
+
                     for (var i = obj.startPage; i <= obj.endPage; i++) {
                         jspPagination += `<div class="page-item" onclick="cl_room(` + i
                                         + ')"><div class="page-link">' + i
@@ -170,7 +175,7 @@
                 <div id="admin_page_list">
                     <div class="btn btn-primary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_board'">게시판 관리</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 생성 승인</div>
+                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 관리</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_add_class'">반 생성</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
                 </div>

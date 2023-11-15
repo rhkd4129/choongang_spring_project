@@ -9,7 +9,7 @@
 <mapper namespace="com.oracle.s202350101.PrjBdDataMapper">
 	<!-- user_id에 해당하는 게시물 -->
 	<select id="DataListSelect" parameterType="UserInfo" resultType="PrjBdData">
-		Select a.app_id, a.app_name, p.subject, p.user_id, 
+		Select a.app_id, a.app_name, p.subject, p.user_id, p.doc_no,
 			   p.create_date, p.bd_count, p.good_count
 		From   prj_bd_data p, app_info a
 		Where  a.app_id = p.app_id
@@ -17,21 +17,112 @@
 	</select>
 	
 	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
-		select count(*) 
-		from   bd_qna 
-		where  user_id = #{user_id}
+	<select id="totalDtPjCount" parameterType="UserInfo" resultType="int">
+		Select count(*) 
+		From   PRJ_BD_DATA
+		Where  user_id = #{user_id}
+	</select>
+	
+	<!-- 내가 추천한 게시글 -->
+	<select id="prjDataGoodSelect" parameterType="UserInfo" resultType="PrjBdData">
+		Select s.user_id, a.app_name, m.doc_no, m.app_id, m.subject, m.create_date, m.bd_count, m.good_count
+		From   prj_bd_data m, bd_data_good s, app_info a
+		Where  m.doc_no = s.doc_no
+		And    m.app_id = a.app_id
+		And    s.user_id = #{user_id}
+	</select>
+	
+	<!-- PrjBdDataComt -->
+	<select id="mkhDataComt" parameterType="UserInfo" resultType="BdDataComt">
+		Select 	info.app_name, pdata.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+		From 	app_info info, prj_bd_data pdata, bd_data_comt comt
+		Where 	info.app_id = pdata.app_id
+		And 	pdata.doc_no = comt.doc_no
+		And 	comt.user_id = #{user_id}
+	</select>
+	
+	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
+		SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL project_id, NULL bd_category
+		FROM bd_qna bdq, app_info ai
+		WHERE bdq.app_id = ai.app_id
+		AND bdq.user_id = #{user_id}
+		
+		UNION ALL
+		
+		SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, NULL project_id, bdf.bd_category
+		FROM bd_free bdf, app_info ai
+		WHERE bdf.app_id = ai.app_id
+		AND bdf.user_id = #{user_id}
+		
+		UNION ALL
+		
+		SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, NULL bd_category
+		FROM prj_bd_data pbd, app_info ai
+		WHERE pbd.app_id = ai.app_id
+		AND pbd.user_id = #{user_id}
+		
+		UNION ALL
+		
+		SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.project_id, NULL bd_category
+		FROM prj_bd_rep pbr, app_info ai
+		WHERE pbr.app_id = ai.app_id
+		AND pbr.user_id = #{user_id}
 	</select> -->
 	
-	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
-		SELECT a.bd_qna, b.bd_free, c.bd_rep_comt, d.prj_bd_data
-     	FROM
-           ( select count(*) bd_qna      from bd_qna        where user_id = 'tester1' ) a
-        ,  ( select count(*) bd_free     from bd_free       where user_id = 'tester1' ) b
-        ,  ( select count(*) bd_rep_comt from bd_rep_comt   where user_id = 'tester1' ) c
-        ,  ( select count(*) prj_bd_data from prj_bd_data   where user_id = 'tester1' ) d	
+	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
+		<![CDATA[
+			select * 
+			FROM 
+			(		
+					SELECT rownum rn , a.*
+					FROM
+							  (select * from emp order by empno) a		
+			)
+			WHERE  rn >= #{start} 
+			and    rn <= #{end}
+		   ]]>
 	</select> -->
+	
+	<select id="mkh_bdSelectAll" parameterType="PrjBdData" resultType="PrjBdData">
+		<![CDATA[
+			SELECT * 
+			FROM 
+			(
+			    SELECT rownum rn, a.* 
+			    FROM 
+			    	(
+			        SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, NULL AS bd_category
+			        FROM bd_qna bdq, app_info ai
+			        WHERE bdq.app_id = ai.app_id
+			        AND bdq.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category
+			        FROM bd_free bdf, app_info ai
+			        WHERE bdf.app_id = ai.app_id
+			        AND bdf.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, NULL AS bd_category
+			        FROM prj_bd_data pbd, app_info ai
+			        WHERE pbd.app_id = ai.app_id
+			        AND pbd.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.project_id, NULL AS bd_category
+			        FROM prj_bd_rep pbr, app_info ai
+			        WHERE pbr.app_id = ai.app_id
+			        AND pbr.user_id = #{user_id}
+			        ORDER BY create_date DESC
+			    ) a
+			) WHERE rn >= #{start} 
+			  AND   rn <= #{end}
+		   ]]>
+	</select>
+
 	
 </mapper>
 

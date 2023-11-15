@@ -32,16 +32,6 @@ public class CommonController {
 	
 	@RequestMapping(value = "/main")
 	public String mainPage(HttpServletRequest request,UserInfo userInfoDTO, Model model) {
-		log.info("hi");
-		UserInfo userInfo=null;
-		System.out.println("MkhController mypageMain Start..");
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-
-		if (mkhService.userLoginCheck(userInfoDTO) != null) {
-			model.addAttribute("userInfo", userInfo);
-		}
-
-
 		return "main";
 	}
 

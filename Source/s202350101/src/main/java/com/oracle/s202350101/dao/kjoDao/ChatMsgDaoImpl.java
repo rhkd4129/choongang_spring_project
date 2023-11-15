@@ -16,8 +16,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
 
     private final SqlSession session;
 
-
-    //<!--모든 메시지 조회-->
+//<!--모든 메시지 조회-->
     @Override
     public List<ChatMsg> findAll() {
         log.info("findAll start");
@@ -31,7 +30,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return CMList;
     }
 
-    //<!--특정 채팅방 내 모든 메시지 조회-->
+//<!--특정 채팅방 내 모든 메시지 조회-->
     @Override
     public List<ChatMsg> findByRoomId(ChatRoom cr) {
         log.info("findByRoomId start");
@@ -46,7 +45,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return CMList;
     }
 
-    //<!--메시지 저장-->
+//<!--메시지 저장-->
     @Override
     public int saveMsg(ChatMsg msg) {
         log.info("saveMsg start");
@@ -63,7 +62,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return result;
     }
 
-    //<!--채팅방 내 총 메시지 개수-->
+//<!--채팅방 내 총 메시지 개수-->
     @Override
     public int cntMsg(ChatMsg msg) {
         log.info("cntMsg start");
@@ -90,5 +89,31 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
             System.out.println("findbyCMid Error -->>" + e.getMessage());
         }
         return cm;
+    }
+
+//  메시지 읽음처리
+    @Override
+    public int updateRead(ChatRoom cr) {
+        log.info("updateRead start");
+        int result = 0;
+        try {
+            result = session.update("updateRead", cr);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+
+//  사용자 별 읽지 않은 메세지
+    public List<ChatMsg> findbyuseridnoRead(ChatRoom cr) {
+        log.info("updateRead start");
+        List<ChatMsg> result = null;
+        try {
+            result = session.selectList("findMyAllMessage", cr);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

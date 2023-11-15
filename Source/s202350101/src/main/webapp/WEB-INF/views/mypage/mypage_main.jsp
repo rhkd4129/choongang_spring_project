@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header.jsp" %> 
+<%@ include file="/WEB-INF/views/header_main.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +11,31 @@
 <!-- CSS END -->
 
 <!-- JS START -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+	
+	function user_env_click() {
+		var userEnv = $('#userEnv').serialize();
+//		alert("클릭->"+userEnv);
+		
+		$.ajax({
+			url		  : 'user_env',
+			dataType  : 'text',
+			data	  : userEnv,
+			success : function(data) {
+				if(data == 1) {
+					alert("수정 되었습니다.");
+					location.href='mypage_main';
+				} else {
+					alert("수정실패");
+				}
+			}
+		});
+
+	}
+
+</script>
+
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -60,27 +85,37 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div id="contents">
 		    	<div class="col-lg-4">
-		    		
-			        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-			        <h2 class="fw-normal">문경훈</h2>
-			        <h3 class="fw-normal">Cristalmoon112</h3>
-			        <p>소속 : 중앙 이대점 501반 09번
-			        <p>핸드폰 번호 : 010 - xxxx - xxxx
-			        <p>생년월일 : 2020년 10월 13일
-			        
-			        <p><a class="btn btn-secondary" href="mypage_check_pw">개인정보수정 »</a></p>
+			        <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg> -->
+			        	<tr>
+						<td>
+							<img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDto.attach_path }/${userInfoDto.attach_name}"></td>
+						</tr>
+				        <h2 class="fw-normal">${userInfoDto.user_name }</h2>
+				        <h3 class="fw-normal">ID : ${userInfoDto.user_id }</h3>
+				        <p>핸드폰 번호 : ${userInfoDto.user_number }
+				        <p>생년월일 : ${userInfoDto.user_birth }
+			        	<p>소속 : 중앙  ${classRoom.class_area }반 ${classRoom.class_room_num }호
+			        	<p>기간 : ${classRoom.class_start_date } ~ ${classRoom.class_end_date }
+			        	<p>담당 강사 : ${classRoom.class_master } 
+			        	
+			        <p><a class="btn btn-secondary" href="/mypage_check_pw">개인정보수정 »</a></p>
 		      	</div>
 		  		
 		    	<h1>환경설정</h1><p>
+		    	<form id="userEnv">
+			    	댓글알림  : YES<input type="radio" name="env_alarm_comm" value="Y"  ${userEnv.env_alarm_comm == 'Y' ? 'checked' : ''}>  		 
+			    			NO <input type="radio" name="env_alarm_comm" value="N"  ${userEnv.env_alarm_comm == 'N' ? 'checked' : ''} ><p>
+			    	답글알림  : YES<input type="radio" name="env_alarm_reply" value="Y" ${userEnv.env_alarm_reply == 'Y' ? 'checked' : ''}>    	 
+			    			NO <input type="radio" name="env_alarm_reply" value="N" ${userEnv.env_alarm_reply == 'N' ? 'checked' : ''}><p>
+			    	프로젝트 생성 승인알림  : YES<input type="radio" name="env_alarm_mine" value="Y" ${userEnv.env_alarm_mine == 'Y' ? 'checked' : ''}> 
+			    					 NO <input type="radio" name="env_alarm_mine" value="N" ${userEnv.env_alarm_mine == 'N' ? 'checked' : ''}><p>
+			    	회의일정알림  : YES<input type="radio" name="env_alarm_meeting" value="Y" ${userEnv.env_alarm_meeting == 'Y' ? 'checked' : ''}>    
+			    			   NO <input type="radio" name="env_alarm_meeting" value="N" ${userEnv.env_alarm_meeting == 'N' ? 'checked' : ''}><p>
+			    	채팅이용  : YES<input type="radio" name="env_chat" value="Y" ${userEnv.env_chat == 'Y' ? 'checked' : ''}>    			 
+			    			NO <input type="radio" name="env_chat" value="N" ${userEnv.env_chat == 'N' ? 'checked' : ''}><p>
 		    	
-			    	댓글알림  : YES<input type="radio" value="Y">    NO<input type="radio" value="N"><p>
-			    	답글알림  : YES<input type="radio" value="Y">    NO<input type="radio" value="N"><p>
-			    	프로젝트 생성 승인알림  : YES<input type="radio" value="Y">    NO<input type="radio" value="N"><p>
-			    	회의일정알림  : YES<input type="radio" value="Y">    NO<input type="radio" value="N"><p>
-			    	채팅이용  : YES<input type="radio" value="Y">    NO<input type="radio" value="N"><p>
-		    	
-		    		<p><a class="btn btn-secondary" href="#">확인 »</a></p>
-		    	
+		    		<p><button type="button" class="btn btn-secondary" onclick="user_env_click()">확인 »</button></p>
+		    	</form>
 		    </div>
 	  		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

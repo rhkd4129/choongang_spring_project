@@ -106,6 +106,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
 
     }
 
+//<!--게시글 id로 삭제-->
     @Override
     public int del_bdf(List<String> doc_nos) {
         log.info("del_bdf start");

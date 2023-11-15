@@ -34,18 +34,55 @@
 </style>
 
 <script type="text/javascript">
-/* 	function chk() {
-		if (frm.checkbox.value = null){
-			alert("약관에 동의해 주세요.");
-		} else
-			location.href="user_join_write.html";
-	}
- */
-	/* if(document.getElementById("input_check").checked) {
-	    document.getElementById("input_check_hidden").disabled = true;
-	} */
- 
- 
+	// checkALL이 체크되면 check1, check2가 모두 체크되는 자바스크립트
+	document.addEventListener("DOMContentLoaded", function() {
+	    var checkAll = document.getElementById("checkALL");
+	    var check1 = document.getElementById("check1");
+	    var check2 = document.getElementById("check2");
+	
+	    checkAll.addEventListener("change", function() {
+	        check1.checked = this.checked;
+	        check2.checked = this.checked;
+	    });
+	
+	    check1.addEventListener("change", function() {
+	        if (!this.checked) {
+	            checkAll.checked = false;
+	            
+	        }
+	    });
+	
+	    check2.addEventListener("change", function() {
+	        if (!this.checked) {
+	            checkAll.checked = false;
+	            
+	        }
+	    });
+	    
+	 	// 모두 체크되지 않으면 메세지
+	    var form = document.getElementsByName("frm")[0];
+
+    	form.addEventListener("submit", function(event) {
+	        if (!check1.checked || !check2.checked) {
+	            event.preventDefault(); // 폼 제출 방지
+	            alert("이용약관을 모두 동의해 주세요."); // 오류 메시지 표시
+	        }
+    	});
+	    
+	    
+	    // check1, check2가 체크되면 checkALL이 체크되는 로직
+	    check1.addEventListener("change", updateCheckAll);
+	    check2.addEventListener("change", updateCheckAll);
+
+	    function updateCheckAll() {
+	        if (check1.checked && check2.checked) {
+	            checkAll.checked = true;
+	        } else {
+	            checkAll.checked = false;
+	        }
+	    }
+	    
+	});
 </script>
 
 </head>
@@ -56,12 +93,13 @@
 	<!--<form action="user_join_write" name="frm" onsubmit="return chk()"> -->
         <form action="user_join_write" name="frm">
 	        <div>
-		        <h4><input type="checkbox"> 전체 동의하기</h4>
-		        <h4><input type="checkbox"> [필수] 중앙 정보처리 이용약관 
-		        	<a href="member_agree_neces1.html"><small style="color: red;">[전체보기]</small></a>
+		        <h4><input type="checkbox" id="checkALL"> 전체 동의하기</h4>
+		        <h4><input type="checkbox" id="check1"> [필수] 중앙 정보처리 이용약관
+		        	<div style="overflow:scroll; width:300px; height:100px;">이용약관 넣을예정</div>
 		        </h4>
-		        <h4><input type="checkbox"> [필수] 개인정보 수집 및 이용 
-		        	<a href="member_agree_neces2.html"><small style="color: red;">[전체보기]</small></a>
+		        <h4><input type="checkbox" id="check2"> [필수] 개인정보 수집 및 이용
+		           	<div style="overflow:scroll; width:300px; height:100px;">이용약관 넣을예정</div>
+		        
 		        </h4>
 		       <!--  <h4><input type="checkbox"> [선택] 이벤트・혜택 정보 수신 수집
 		        	<a href="member_agree_option.html"><small style="color: red;">[전체보기]</small></a>

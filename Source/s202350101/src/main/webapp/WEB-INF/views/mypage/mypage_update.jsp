@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header.jsp" %> 
+<%@ include file="/WEB-INF/views/header_main.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,9 +11,45 @@
 <!-- CSS END -->
 
 <!-- JS START -->
-<!-- JS END -->
-
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+	
+	function editAction() {
+		alert("클릭했음");
+	   	var formData = new FormData();
+
+	    var file = $('#file1')[0].files[0]; // 파일을 가져옵니다.
+	    formData.append('file1', file); // FormData에 파일을 추가합니다.
+	
+	    var userInfo = $('#userInfo').serialize(); // 다른 사용자 정보도 FormData에 추가할 수 있습니다.
+	    formData.append('userInfo', userInfo);
+		
+		$.ajax({
+			 url:'mypage_update_result',
+			 method: 'GET',
+			 
+		     dataType : 'text',
+		     data : formData, userInfo
+			 data : userInfo,
+			 contentType : false,
+			 processData : false,
+			 success : function(data) {
+				if(data == 1){
+					alert("수정완료");
+					location.href='mypage_main';
+				} else {
+					alert("수정실패");
+				}
+			}
+	
+		});
+	}
+
+</script> -->
+
+<!-- JS END -->
+<script type="text/javascript">
+
 	$(function() {
 		
 		$.ajax({
@@ -39,6 +75,7 @@
 				$('#footer').html(data);
 			}
 		});
+		
 	});
 </script>
 </head>
@@ -60,33 +97,56 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 		    
 		    <h2>개인 정보 수정</h2>
-			<form action="" method="post">
-				<input type="hidden" name="id" value="${dto.user_id }">
+			<form action="mypage_update_result" id="userInfo" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="user_id" value="${userInfoDTO.user_id }">
+				<input type="hidden" name="project_id" value="${userInfoDTO.project_id }">
 				<table>
-					<tr><th>아이디</th><td>${id.id}</td></tr>
+					<tr>
+						<th>프로필 사진</th>
+						<td><img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDTO.attach_path }/${userInfoDTO.attach_name}"><br>
+						<input type="file" class="form-control" name="file1" id="file1">
+						</td>
+						
+					</tr>
+					<tr><th>아이디</th><td>${userInfoDTO.user_id}</td></tr>
 					<tr><th>새 비밀번호</th><td>
-						<input type="password" placeholder="Password"></td></tr>
+						<input type="password" id="user_pw1" name="user_pw" placeholder="Password"></td></tr>
 					<tr><th>새 비밀번호 확인</th><td>
-						<input type="password" placeholder="Password"></td></tr>
+						<input type="password" id="user_pw2" placeholder="Password"></td></tr>
+					<tr><th>이름</th><td>
+						<input type="text" name="user_name" value="${userInfoDTO.user_name}"></td></tr>
 					<tr><th>소속</th><td>
-						<input type="text" placeholder="select" value="${dto.team }"></td></tr>
+						<select name="class_id">
+							<c:forEach var="classList" items="${classList}">
+								<option value="${classList.class_id }">${classList.class_area }점 ${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
+							</c:forEach>
+						</select><p>
+						</td></tr>
 					<tr><th>핸드폰번호</th><td>
-						<input type="text" name="job" required="required" value="${emp.job }"></td></tr>
+						<input type="text" name="user_number" required="required" value="${userInfoDTO.user_number }"></td></tr>
 					<tr><th>생년월일</th><td>
-						<input type="number" name="sal" required="required" value="${emp.sal }"></td></tr>
+						<input type="date" name="user_birth" required="required" value="${userInfoDTO.user_birth }"></td></tr>
+					<tr><th>성별 : </th><td>
+						남 <input type="radio" name="user_gender" value="M" ${userInfoDTO.user_gender == 'M' ? 'checked' : ''}>
+						여 <input type="radio" name="user_gender" value="F" ${userInfoDTO.user_gender == 'F' ? 'checked' : ''}>
+					</td></tr>			    
+				    <tr><th>이메일 : </th><td>
+				    	<input type="email" name="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com">
+           			  	<input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()"></td></tr>
 					<tr><th>주소</th>
 						<td>
-						<input type="text" name="hiredate" id="hiredate" value="${emp.hiredate }">
+						<input type="text" name="user_address" value="${userInfoDTO.user_address }">
 						</td>
 					</tr>
 					<tr><td colspan="2">
 						<input type="submit" value="수정">
+						<!-- <button type="button" onclick="editAction()">수정</button> -->
 						</td>
 					</tr>
 				</table>
 			
 			</form>
-			  		
+			
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
 		

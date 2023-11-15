@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+#notify {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    background-color: skyblue;
+    right: 300px;
+    z-index: 999;
+}

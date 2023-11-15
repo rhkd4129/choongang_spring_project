@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%@ include file="/WEB-INF/views/header.jsp" %>
+<%@ include file="/WEB-INF/views/header_main.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +22,7 @@
 
             $.ajax({
                 url: '/main_header',
-                dataType: 'text',
+                dataType: 'html',
                 success: function (data) {
                     $('#header').html(data);
                 }
@@ -30,7 +30,7 @@
 
             $.ajax({
                 url: '/main_menu',
-                dataType: 'text',
+                dataType: 'html',
                 success: function (data) {
                     $('#menubar').html(data);
                 }
@@ -38,7 +38,7 @@
 
             $.ajax({
                 url: '/main_footer',
-                dataType: 'text',
+                dataType: 'html',
                 success: function (data) {
                     $('#footer').html(data);
                 }
@@ -142,7 +142,7 @@
                 <div id="admin_page_list">
                     <div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_board'">게시판 관리</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 생성 승인</div>
+                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 관리</div>
                     <div class="btn btn-primary" onclick="location.href='/admin_add_class'">반 생성</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
                 </div>

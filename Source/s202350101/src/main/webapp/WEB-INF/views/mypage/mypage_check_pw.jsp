@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header.jsp" %> 
+<%@ include file="/WEB-INF/views/header_main.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +11,15 @@
 <!-- CSS END -->
 
 <!-- JS START -->
+<script type="text/javascript">
+	function chk() {
+		var user_id = document.getElementById("user_id").value;
+		var user_pw = document.getElementById("user_pw").value;
+		var url = "/mypage_update?user_id="+user_id+"&user_pw="+user_pw;
+		location.href = url;
+	}
+
+</script>
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -65,9 +74,14 @@
 		    	<h4>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요</h4>
 		    	
 		    	<hr>
-		    	아이디 : <input type="text" placeholder="Id"><p>
-		    	비밀번호 : <input type="password" placeholder="Password"><p>
-		    	<a href="mypage_update"><input type="button" value="확인"></a>
+		    	
+		    	<form action="/mypage_update" method="post">
+		    		아이디 : <input type="text" name="user_id" id="user_id" placeholder="Id"><p>
+			    	비밀번호 : <input type="password" name="user_pw" id="user_pw" placeholder="Password"><p>
+			    	<c:if test="${msg != null}">${msg }</c:if>
+			    	<input type="submit" value="확인">
+		    	</form>
+		    	
 		    </div>
 	  		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

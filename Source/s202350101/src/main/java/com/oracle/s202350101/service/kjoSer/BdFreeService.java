@@ -21,6 +21,6 @@ public interface BdFreeService {
 //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
 
     int findByCategorySearch(BdFree bf);
-
+//<!--게시글 id로 삭제-->
     int del_bdf(KjoRequestDto kjorequest);
 }

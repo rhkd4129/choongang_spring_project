@@ -47,7 +47,7 @@
                  left join user_info u
                            on ev.user_id = u.user_id
     </select>
-
+<!--게시글 id로 삭제-->
     <delete id="del_bdf" parameterType="java.util.List">
         <foreach collection="list" item="item" separator=";">
             delete bd_free where doc_no = #{item}
