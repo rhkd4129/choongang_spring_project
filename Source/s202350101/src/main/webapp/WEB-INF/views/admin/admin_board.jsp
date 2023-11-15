@@ -100,6 +100,9 @@
                         var tr = $('<tr>');
                         tr.append('<td>' + board.rn + '</td>');
 
+                        tr.append('<input type="hidden" id="pbd_doc_no" value="' +board.doc_no +'"/>');
+                        tr.append('<input type="hidden" id="pbd_prj_no" value="' +board.project_id +'"/>');
+
                         tr.append('<td onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_read'" + ')">'+ board.subject+'</td>');
                         // tr.append('<td><a href="javascript:callAction(\'read\',\'prj_board_data_read?doc_no=' + board.doc_no + '&project_id=' + board.project_id + '\')" onclick="console.log(\'click\')">' + board.subject + '</a></td>');
                         tr.append('<td>' + board.user_name + '</td>');
@@ -214,7 +217,7 @@
                 }
             })
         }
-//  게시글 삭제
+        //  게시글 삭제
         function bdfree_del(){
             var delbox = [];        //  삭제 버튼에 체크된 게시글
             document.querySelectorAll("input[name=del_chkbox]:checked").forEach(function (checkbox) {
@@ -234,8 +237,40 @@
                 contentType: "application/json",
                 dataType: "json",
                 success: function (response) {
-                    alert("게시글 삭제수: " + response);
+                    alert("삭제가 완료되었습니다.");
                     event_search(1);
+                },
+            })
+        }
+        //  공지 / 자료 삭제
+        function pbdBoard_del(){
+            var prj_delbox = [];        //  삭제 버튼에 체크된 게시글
+            var doc_delbox = [];        //  삭제 버튼에 체크된 게시글
+            document.querySelectorAll("input[name=pbd_del_chkbox]:checked").forEach(function (checkbox) {
+                //  체크된 게시글 id값들 리스트에 저장.
+                var pbd_prj_noInput = checkbox.closest('tr').querySelector("#pbd_prj_no");
+                var pbd_doc_noInput = checkbox.closest('tr').querySelector("#pbd_doc_no");
+                if (pbd_prj_noInput && pbd_doc_noInput) {
+                    var pbd_prj_no = pbd_prj_noInput.value;
+                    var pbd_doc_no = pbd_doc_noInput.value;
+                    prj_delbox.push(pbd_prj_no);
+                    doc_delbox.push(pbd_doc_no);
+                }
+            });
+
+            console.log("Selected pbd_prj_no values: " + prj_delbox);
+            console.log(prj_delbox);
+            console.log("Selected pbd_doc_no values: " + doc_delbox);
+            console.log(doc_delbox);
+            $.ajax({
+                url: "/admin_pbd_del",
+                type: "POST",
+                data: JSON.stringify({firList: prj_delbox , secList:doc_delbox}),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    alert("삭제가 완료되었습니다.");
+                    pr_info(1);
                 },
             })
         }
@@ -308,6 +343,7 @@
                                 </option>
                             </c:forEach>
                         </select>
+                        <input type="button" id="pbdBoard_del" class="btn btn-primary" value="삭제" onclick="pbdBoard_del()"/>
 
 
                     </div>
@@ -328,6 +364,8 @@
                     <c:forEach items="${PBDList}" var="board">
                         <tr>
                             <td>${board.rn}</td>
+                            <input type="hidden" id="pbd_doc_no" value="${board.doc_no}"/>
+                            <input type="hidden" id="pbd_prj_no" value="${board.project_id}"/>
 
                             <td onclick="locatPrj(${board.doc_no},${board.project_id},'prj_board_data_read')"> ${board.subject}</td>
                             <td>${board.user_name}</td>

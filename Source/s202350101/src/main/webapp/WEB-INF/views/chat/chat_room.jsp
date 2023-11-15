@@ -195,7 +195,7 @@
             //  EX_ 인증 토큰, 메시지 유형, 목적지 주소, 메시지ID(식별자), 시간 정보, 사용자 정보
             chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(mainoption));
             chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(option));
-            chatstompClient.send("/queue/chat/receive", {}, JSON.stringify(option)); 
+            chatstompClient.send("/queue/chat/receive", {}, JSON.stringify(option));
             $('#send_message').val('');
         }
 

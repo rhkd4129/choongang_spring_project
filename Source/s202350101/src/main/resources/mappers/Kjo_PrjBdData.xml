@@ -11,7 +11,7 @@
 	<select id="prjBdDataTotal" resultType="int">
 		SELECT Count(*) FROM PRJ_BD_DATA
 	</select>
-
+<!--pbd 게시글 페이징 조회-->
 	<select id="findByPage" parameterType="PrjBdData" resultType="PrjBdData">
 		SELECT *
 		FROM
@@ -47,5 +47,34 @@
 				and p.project_id = #{project_id} and u.class_id = #{class_id}
 			  ORDER BY doc_group DESC, doc_step) a
 	</select>
+<!-- 문서 삭제 -->
+	<delete id="delPrjBdData" parameterType="PrjBdData">
+		DELETE FROM PRJ_BD_DATA
+		WHERE		doc_no = #{doc_no}
+				and
+					project_id = #{project_id}
+	</delete>
+	<!--게시글 id로 삭제-->
+	<delete id="del_bdpg" parameterType="PrjBdData">
+		DELETE FROM BD_DATA_GOOD
+		WHERE		doc_no = #{doc_no}
+				and
+					project_id = #{project_id}
+	</delete>
+	<!--게시글 id로 삭제-->
+	<delete id="del_bdpc" parameterType="PrjBdData">
+		DELETE FROM BD_DATA_COMT
+		WHERE		doc_no = #{doc_no}
+			  and
+					project_id = #{project_id}
+	</delete>
+
+
+
+
+
+
+
+
 </mapper>
 	 
