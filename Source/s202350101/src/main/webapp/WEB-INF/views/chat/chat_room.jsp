@@ -20,7 +20,11 @@
         }
 
         #chat_bottom {
+            width: 100%;
             display: flex;
+            justify-content: center;
+
+            height: 124px;
 
         }
 
@@ -33,11 +37,27 @@
         #left_chat_msg{
             display: flex;
             flex-direction: row;
+            align-items: baseline;
 
         }
         #right_chat_msg{
             display: flex;
             flex-direction: row-reverse;
+            align-items: baseline;
+        }
+
+        #chat_msg_con {
+            font-size: 16px;
+        }
+        #chat_msg_time {
+            font-size: 12px;
+            margin: 0 8px 0 8px;
+        }
+        #chat_msg_read{
+            font-size: 12px;
+        }
+        #send_message{
+            width: 77%;
         }
 
     </style>
@@ -130,21 +150,21 @@
                                 if (read_chker == 'N') {
                                     read_chker = '안 읽음';
                                 } else {
-                                    read_chker = '읽음';
+                                    read_chker = '';
                                 }
                                 console.log("chatmsg.sender_id"+chatmsg.sender_id);
                                 console.log("myID"+myID);
                                 if (chatmsg.sender_id == myID) { //  내가 보낸 메세지
                                     con += '<div id="right_chat_msg" >';
-                                    con += '<p>' + chatmsg.msg_con + '</p>';
-                                    con += '<p>' + chatmsg.show_time + '</p>';
-                                    con += '<p>' + read_chker + '</p>';
+                                    con += '<p id="chat_msg_con">  ' + chatmsg.msg_con + '  </p>';
+                                    con += '<p id="chat_msg_time">  ' + chatmsg.show_time + '  </p>';
+                                    con += '<p id="chat_msg_read"> ' + read_chker + ' </p>';
                                     con += '</div>';
                                 } else {                //  상대방이 보낸 메세지
                                     con += '<div id="left_chat_msg" >';
-                                    con += '<p>' + chatmsg.msg_con + '</p>';
-                                    con += '<p>' + chatmsg.show_time + '</p>';
-                                    con += '<p>' + read_chker + '</p>';
+                                    con += '<p id="chat_msg_con">  ' + chatmsg.msg_con + '  </p>';
+                                    con += '<p id="chat_msg_time">  ' + chatmsg.show_time + '  </p>';
+                                    con += '<p id="chat_msg_read"> ' + read_chker + ' </p>';
                                     con += '</div>';
                                 }
                                 chat_con.append(con);

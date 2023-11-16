@@ -356,7 +356,7 @@
         window.open(
             "/chat_room?user_id=" + user_id,
             "Child",
-            "width=600, height=570, top=50, left=50"
+            "width=600, height=570, top=50, left=50, resizable=no"
         );
     }
 
