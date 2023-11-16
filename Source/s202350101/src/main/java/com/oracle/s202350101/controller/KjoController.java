@@ -92,6 +92,7 @@ public class KjoController {
         }
         /*	상단 셀렉트바	*/
         // prj_board_data 전체 Count
+        /*		페이징 		*/
         int totCnt = PBDser.totalCount();
 
         Paging page2 = new Paging(totCnt, currentPage, 5);
@@ -100,6 +101,7 @@ public class KjoController {
         prjBdData.setEnd(page2.getEnd());            //	시작10
         prjBdData.setClass_id(1);
         prjBdData.setProject_id(1);
+        /*		페이징 		*/
 
         List<PrjBdData> prjBdDataList = PBDser.boardList(prjBdData);
         /*		프로젝트 목록		*/
@@ -132,15 +134,16 @@ public class KjoController {
     @ResponseBody
     @GetMapping("/admin_board_pbd_ajax")
     public KjoResponse admin_board_pbd_ajax(PrjBdData prjBdData, String currentpage) {
-        PrjBdData pbd = new PrjBdData();
-        pbd.setProject_id(prjBdData.getProject_id());
-        pbd.setClass_id(prjBdData.getClass_id());
+//        PrjBdData pbd = new PrjBdData();
+//        pbd.setProject_id(prjBdData.getProject_id());
+//        pbd.setClass_id(prjBdData.getClass_id());
         KjoResponse res = new KjoResponse();
-        int totcnt = PBDser.findByClassProjectId(pbd).size();
+        int totcnt = PBDser.findByClassProjectId(prjBdData).size();
 //		페이징	글 개수 : 5		이벤트 수	현재 페이지	목록 노출 수
         Paging page = new Paging(totcnt, currentpage, 5);
         prjBdData.setStart(page.getStart());
         prjBdData.setEnd(page.getEnd());
+
         List<PrjBdData> prjBdDataList = PBDser.boardList(prjBdData);
         res.setFirList(prjBdDataList);
         res.setObj(page);

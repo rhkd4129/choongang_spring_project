@@ -360,7 +360,7 @@
                                 </option>
                             </c:forEach>
                         </select>
-                        
+
                         <input type="button" id="pbdBoard_del" class="btn btn-primary" value="삭제" onclick="pbdBoard_del()"/>
 
 
