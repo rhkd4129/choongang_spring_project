@@ -106,9 +106,20 @@ public class UserInfoDaoImpl implements UserInfoDao{
 			e.printStackTrace();
 		}
 		return UIList;
-
-
 	}
+//<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
+	@Override
+	public List<UserInfo> findbyClassUserAndChatEnv(UserInfo ui) {
+		log.info("findbyclassuser start");
+		List<UserInfo> UIList = null;
+		try {
+			UIList = session.selectList("findbyClassUserAndChatEnv", ui);
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
 
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 
+		return UIList;
+	}
 }

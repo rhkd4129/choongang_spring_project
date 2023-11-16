@@ -62,6 +62,15 @@
                            on u.project_id = p.project_id
         where rn between #{start} and #{end}
     </select>
-
+<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
+    <select id="findbyClassUserAndChatEnv" parameterType="UserInfo" resultType="UserInfo">
+        select user_info.*, ue.env_chat
+        from user_info inner join user_env ue
+                            on user_info.user_id = ue.user_id
+        where class_id = #{class_id}
+            and user_auth != 'admin'
+            and user_info.user_id != #{user_id}
+            and ue.env_chat = 'Y'
+    </select>
 </mapper>
 

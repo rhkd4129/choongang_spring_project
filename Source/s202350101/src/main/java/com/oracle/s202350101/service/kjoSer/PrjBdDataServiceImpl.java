@@ -16,9 +16,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class PrjBdDataServiceImpl implements PrjBdDataService {
     private final PrjBdDataDao PBDdao;
-    private final PlatformTransactionManager transactionManager;
     @Override
     public int totalCount() {
         log.info("totalCount start");
@@ -44,7 +44,7 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
         log.info("findByClassProjectId END");
         return prjBdDataList;
     }
-    
+
 //pbd 삭제 _ comt, good과 함께
     @Override
     public int delpbd(KjoRequestDto kjoRequestDto) {
@@ -53,8 +53,6 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
         List<String> pbd_nos = (List<String>) kjoRequestDto.getFirList();
         List<String> doc_nos = (List<String>) kjoRequestDto.getSecList();
         int result = 0;
-        TransactionStatus txStatus =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             for (int i = 0; i < doc_nos.size(); i++) {
                 PrjBdData pbd = new PrjBdData();
@@ -66,11 +64,9 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
                 result += PBDdao.del_bdpg(pbd);
                 result += PBDdao.delpbd(pbd);
             }
-            transactionManager.commit(txStatus);
         } catch (Exception e) {
             log.info("delpbd Error :{}",e.getMessage());
             result = 0;
-            transactionManager.rollback(txStatus);
         }
         return result;
 

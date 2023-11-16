@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.text.SimpleDateFormat;
@@ -16,12 +17,12 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class ChatMsgServiceImpl implements ChatMsgService {
     private final ChatMsgDao CMdao;
     private final UserInfoService UIser;
 
     //<!--모든 메시지 조회-->
-    private final PlatformTransactionManager transactionManager;
     @Override
     public List<ChatMsg> findAll() {
         return CMdao.findAll();
@@ -49,16 +50,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     @Override
     public int cntsaveMsg(ChatMsg msg) {
         int result = 0;
-        TransactionStatus txStatus =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try{
-            msg.setMsg_id(CMdao.cntMsg(msg) + 1);
-            result = CMdao.saveMsg(msg);
-            transactionManager.commit(txStatus);
-        } catch (Exception e) {
-            transactionManager.rollback(txStatus);
-            throw new RuntimeException(e);
-        }
+        msg.setMsg_id(CMdao.cntMsg(msg) + 1);
+        result = CMdao.saveMsg(msg);
         return result;
     }
 
@@ -67,21 +60,13 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     @Override
     public ChatMsg findsaveMsg(ChatMsg msg) {
         ChatMsg cm = null;
-        TransactionStatus txStatus =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try{
-            msg.setRead_chk("N");
-            //  채팅방 내 메세지 개수
-            msg.setMsg_id(CMdao.cntMsg(msg) + 1);
-            //  메세지 insert 후 메세지 pk 반환
-            CMdao.saveMsg(msg);
-            //  해당 pk를 지닌 메세지 select
-            cm = CMdao.findbyCMid(msg);
-            transactionManager.commit(txStatus);
-        } catch (Exception e) {
-            transactionManager.rollback(txStatus);
-            throw new RuntimeException(e);
-        }
+        msg.setRead_chk("N");
+        //  채팅방 내 메세지 개수
+        msg.setMsg_id(CMdao.cntMsg(msg) + 1);
+        //  메세지 insert 후 메세지 pk 반환
+        CMdao.saveMsg(msg);
+        //  해당 pk를 지닌 메세지 select
+        cm = CMdao.findbyCMid(msg);
         return cm;
     }
 
@@ -112,17 +97,13 @@ public class ChatMsgServiceImpl implements ChatMsgService {
 //  메시지 읽음 처리 및 조회
     @Override
     public List<ChatMsg> inviteChatRoom(ChatRoom cr) {
-        TransactionStatus txStatus =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
         List<ChatMsg> ChatList = null;
         try {
     //    상대방 메시지 읽음처리
             updateRead(cr);
     //  조회용 날짜로 변경하여 반환
             ChatList = todatelist(cr);
-            transactionManager.commit(txStatus);
         } catch (Exception e) {
-            transactionManager.rollback(txStatus);
             throw new RuntimeException(e);
         }
 

@@ -54,6 +54,6 @@ public class UserInfo {
 	private int     total;
 	private int     start;        
 	private int     end;
-	
+
 	
 }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.HashMap;
@@ -20,11 +21,11 @@ import java.util.Map;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomServiceImpl implements ChatRoomService{
 
     private final ChatRoomDao CHdao;
     private final ChatMsgDao CMdao;
-    private final PlatformTransactionManager transactionManager;
 //<!--모든 채팅방 조회-->
 
     @Override
@@ -57,8 +58,6 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     @Override
     public ChatRoom findByYouAndMeNotEmpty(ChatRoom cr) {
         int result = 0;
-        TransactionStatus txStatus =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
         ChatRoom findChatRoom = null;
         try {
             findChatRoom = CHdao.findByYouAndMe(cr);
@@ -71,10 +70,8 @@ public class ChatRoomServiceImpl implements ChatRoomService{
                 findChatRoom.setReceiver_id(cr.getReceiver_id());
                 findChatRoom.setUser_name(cr.getUser_name());
             }
-            transactionManager.commit(txStatus);
         } catch (Exception e) {
             log.info("findByYouAndMeNotEmpty Error" + e.getMessage());
-            transactionManager.rollback(txStatus);
         }
         return findChatRoom;
     }

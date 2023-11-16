@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 
+import com.oracle.s202350101.service.kjoSer.UserInfoService;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MkhController {
 	
 	private final MkhService mkhService;
+	private final UserInfoService uis;
 	
 	// SMTP(Send Mail Transport protocol) 메일 전송 객체
 	private final JavaMailSender mailSender;
@@ -319,6 +321,8 @@ public class MkhController {
 		System.out.println("result->"+result);
 		if(result == 1) {
 			System.out.println("수정성공");
+			UserInfo us = uis.findbyuserId(userInfo);
+			request.getSession().setAttribute("userInfo",us);
 			return "redirect:/mypage_main";
 		} else {
 			System.out.println("수정실패");
