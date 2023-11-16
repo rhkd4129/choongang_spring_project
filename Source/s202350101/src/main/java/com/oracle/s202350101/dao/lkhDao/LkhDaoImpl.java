@@ -78,21 +78,10 @@ public class LkhDaoImpl implements LkhDao {
 		return prjInfo;
 	}
 
-	public int task_count(int project_id, Optional<String> search) {
+	public int task_count(Task task) {
 		int taskCount = 0;
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("project_id", project_id);
 		try {
-			if (search != null && search.isPresent() && search.get() != null && !search.get().isEmpty()) {
-				params.put("search", search.get());
-				taskCount = sqlSession.selectOne("task_count", params);
-			}
-			else{
-				taskCount = sqlSession.selectOne("task_count", params);
-				params.put("search", null);
-			}
-
+				taskCount = sqlSession.selectOne("task_count", task);
 		} catch (Exception e) {
 			log.info("dao : task_count error Message -> {}", e.getMessage());
 		}

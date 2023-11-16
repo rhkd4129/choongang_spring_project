@@ -241,7 +241,7 @@
 
 
                 <div class="chart_2" >
-                    <div class="project_step_chart">
+                    <div class="project_step_chart" style=" overflow: hidden;">
                     </div>
 
                     <div class ="current_task">

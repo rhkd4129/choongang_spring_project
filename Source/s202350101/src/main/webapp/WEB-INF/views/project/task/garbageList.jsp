@@ -10,6 +10,8 @@
 
     <script type="text/javascript">
         function taskDelete(currentId, taskOwnerId,task_id,project_id){
+
+            alert("삭제 하시겠습니까?");
             if(currentId === taskOwnerId){
                 $.ajax({
                     url:'/task_delete',
@@ -31,6 +33,7 @@
             }
         }
         function taskRestore(currentId, taskOwnerId,task_id,project_id){
+            alert("복구 하시겠습니까?");
             if(currentId === taskOwnerId){
                 $.ajax({
                     url:'/task_restore',
@@ -101,7 +104,7 @@
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
 
-            <h3>총 작업수: ${taskCount}</h3>
+            <h3 style="margin: 3%">휴지통 : ${taskCount} 개</h3>
             <c:choose>
             <c:when test="${not empty param.status}">
             <div class="alert alert-success" role="alert">삭제 완료</div>
@@ -122,17 +125,20 @@
                     <tbody id="tbodys">
                     <c:forEach var="task" items="${garbageList}">
                         <tr>
-                            <td>${task.rn}</td>
+                            <td>
+                                ${task.rn}
+
+                            </td>
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td>${task.task_subject}</td>
                             <td>
                                 <button  onclick="taskDelete('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">영구 삭제</button>
-                                <button  onclick="taskRestore('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">복구 시키기</button>
+                                <button  onclick="taskRestore('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">복구</button>
                             </td>
-
                         </tr>
                         <c:set var="num" value="${num - 1 }"></c:set>
+
                     </c:forEach>
                     </tbody>
                 </table>

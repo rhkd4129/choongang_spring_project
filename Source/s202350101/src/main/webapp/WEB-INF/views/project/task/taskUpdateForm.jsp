@@ -8,7 +8,24 @@
     <meta  charset="UTF-8">
     <title>Insert title here</title>
     <link rel="stylesheet" type="text/css" href="/lkh/css/lkh.css">
+    <style>
 
+        .img_box{
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2%;
+        }
+        .attached_img{
+
+            width: 150px;
+            height: 150px;
+            padding: 1%;
+            margin: 2%;
+            border: 1px solid black;
+
+        }
+        body{overflow: auto; /* 넘치는 부분은 스크롤로 처리 */}
+    </style>
     <script type="text/javascript">
         $(function() {
 
@@ -43,7 +60,7 @@
 
 <!-- HEADER -->
 <header id="header"></header>
-````````
+
 <!-- CONTENT -->
 <div class="container-fluid">
     <div class="row">
@@ -114,6 +131,10 @@
                                 <label for="task_end_time">task_end_time</label>
                                 <input type="date" class="form-control" id="task_end_time" name="task_end_itme" value="${task.task_end_itme}"  min="2023-07-22" max="2030-12-31" />
                             </div>
+
+
+
+                            <button style="margin-top: 20px;" type="submit" class="btn btn-primary">수정완료</button>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -164,11 +185,12 @@
                                 <label for="task_file" class="fw-bold">첨부파일</label>
                                 <c:choose>
                                     <c:when test="${not empty taskAttachList}">
+                                        <div class="img_box">
                                         <c:forEach items="${taskAttachList}" var="taskAttach">
-                                            <p id="task_file"> ${taskAttach.attach_name}</p>
-                                            <p id="task_file"> ${taskAttach.attach_path}</p>
-                                            <a href="${taskAttach.attach_path}/${taskAttach.attach_name}">보기</a>
+                                            <img  class="attached_img" alt ="이미지 없음" src="${taskAttach.attach_path}/${taskAttach.attach_name}" alt="Attached Image">
+                                            <a href="${taskAttach.attach_path}/${taskAttach.attach_name}" target="_blank">보기</a><br>
                                         </c:forEach>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
                                         <p class="fw-bold"> 첨부파일 없음 </p>
@@ -179,7 +201,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">수정완료</button>
+
 
             </form:form>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

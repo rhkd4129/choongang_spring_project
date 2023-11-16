@@ -44,9 +44,11 @@ public class Task {
 		private String project_s_name;
 		private String user_name;
 
-		private String search;   	private String keyword;
+		private String keyword;
+		private String keyword_division;
 		private String pageNum;
-		private int start; 		 	private int end;
+		private int start;
+		private int end;
 		private int rn;
 
 

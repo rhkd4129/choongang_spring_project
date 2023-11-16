@@ -84,13 +84,15 @@ public class LkhAsynController {
 
     // 내림차순 올림차순 으로 보기
     @GetMapping("task_time_desc")
-    public AjaxResponse task_time_desc(HttpServletRequest request, String currentPage){
+    public AjaxResponse task_time_desc(HttpServletRequest request, String currentPage,String keyword_division , String keyword){
         UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
         log.info("내림");
         int projectId = userInfo.getProject_id();
         Task task =  new Task();
         task.setProject_id(projectId);
-        int taskCount = lkhService.task_count(projectId,Optional.empty());
+        task.setKeyword_division(keyword_division);
+        task.setKeyword(keyword);
+        int taskCount = lkhService.task_count(task);
         Paging page = new Paging(taskCount, currentPage);
         task.setStart(page.getStart());
         task.setEnd(page.getEnd());
@@ -103,13 +105,15 @@ public class LkhAsynController {
     }
 
     @GetMapping("task_time_acsc")
-    public  AjaxResponse task_time_aces(HttpServletRequest request,String currentPage){
+    public  AjaxResponse task_time_aces(HttpServletRequest request,String currentPage,String keyword_division , String keyword){
         log.info("올림");
         UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
         int projectId = userInfo.getProject_id();
         Task task =  new Task();
         task.setProject_id(projectId);
-        int taskCount = lkhService.task_count(projectId, Optional.empty());
+        task.setKeyword_division(keyword_division);
+        task.setKeyword(keyword);
+        int taskCount = lkhService.task_count(task);
         Paging   page = new Paging(taskCount, currentPage);
         task.setStart(page.getStart());
         task.setEnd(page.getEnd());

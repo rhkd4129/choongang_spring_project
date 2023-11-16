@@ -23,7 +23,7 @@ public interface LkhService {
 	List<Task> 				task_time_aces(Task task);
 
 	// 해당 프로젝트 작업 수
-	int 					task_count(int project_id, Optional<String> search);
+	int 					task_count(Task task);
 
 	List<Task>				task_list(Task Task);
 

@@ -54,53 +54,52 @@ public class LkhController {
 	//작업 리스트
 	@GetMapping("task_list")
 	public String  task_list(HttpServletRequest request,  Model model,String currentPage
-	,@RequestParam(required = false) String search  ) {
+	,@RequestParam(required = false) String keyword
+	,@RequestParam(required = false) String keyword_division) {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 
 		Task task =  new Task();
 		task.setProject_id(projectId);
+
 		List<Task> taskList = null;
 		int taskCount = 0;
 
-		if(search == null){
-			taskCount = lkhService.task_count(projectId,Optional.empty());
+
+		log.info("task list str project_id: {} search:{}  keyword_division {}",projectId,keyword,keyword_division);
+		if(keyword == null){
+			log.info("검색어가 없는경우");
+			taskCount = lkhService.task_count(task);
 			Paging   page = new Paging(taskCount, currentPage);
 			task.setStart(page.getStart());
 			task.setEnd(page.getEnd());
 			taskList =  lkhService.task_list(task);
 			model.addAttribute("page",page);
-			log.info("검색어가 없습");
+
 		}
 		else{
-			log.info("search  -> :{}",search);
-			taskCount = lkhService.task_count(projectId, Optional.of(search));
+			log.info("검색어가 있는경우");
+			task.setKeyword_division(keyword_division);
+			task.setKeyword(keyword);
+			taskCount = lkhService.task_count(task);
 			Paging   page = new Paging(taskCount, currentPage);
-			task.setSearch(search);
+
 			task.setStart(page.getStart());
 			task.setEnd(page.getEnd());
 			taskList =  lkhService.task_list(task);
+
+			log.info("검색 개수 {}",taskCount);
+			for(Task t:taskList){
+				log.info(t.getTask_subject());
+			}
 			model.addAttribute("page",page);
 		}
-
-
 
 		model.addAttribute("taskList", taskList);
 		model.addAttribute("taskCount",taskCount);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("keyword_division",keyword_division);
 		return "project/task/taskList";
-	}
-	@GetMapping("task_search")
-	public String task_search(HttpServletRequest request,  Model model,String currentPage , @RequestParam(required = false) String search ){
-		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
-		int projectId = userInfo.getProject_id();
-
-		Task task =  new Task();
-		task.setProject_id(projectId);
-		task.setSearch(search);
-
-
-
-		return "project/task/taskSearch";
 	}
 
 

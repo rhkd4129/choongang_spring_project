@@ -91,14 +91,16 @@ public class LkhServicveImpl implements LkhService {
 	}
 
 	@Override
-	public int task_count(int project_id,Optional<String>  search){
-		return lkhDao.task_count(project_id, search);
+	public int task_count(Task task){
+		return lkhDao.task_count(task);
 	}
 
 
 	@Override
 	public List<Task> task_list(Task task) {
 		List<Task> taskList = null;
+
+
 		taskList = lkhDao.task_list(task);
 		return taskList;
 	}
@@ -265,7 +267,7 @@ public class LkhServicveImpl implements LkhService {
 				}
 				// 파일 업데이트
 				if (!taskAttachList.isEmpty()) {
-					lkhDao.task_attach_update(taskAttachList);
+					lkhDao.task_attach_create(taskAttachList);
 				}
 			}
 
