@@ -183,10 +183,27 @@
                     BFList_body.empty();                        //  게시글 목록 중복을 막기 위한 내용 삭제
 
                     $.each(jsonData.firList, function (index, BFL) {        //  반환된 데이터 입력
+                        let board_category = BFL.bd_category;
+                        // category = (category == '공지')? board_content:
+                        switch (board_category) {
+                            case '공지':
+                                board_category = 'board_content';
+                                break;
+                            case "이벤트":
+                                board_category = 'event_content';
+                                break;
+                            case "자유":
+                                board_category = 'free_content';
+                                break;
+                        }
                         var tr = $('<tr>');
                         tr.append('<input type="hidden" id="bf_doc_no" value="'+ BFL.doc_no + '"/>');
                         tr.append('<td>' + BFL.rn + '</td>');
-                        tr.append('<td>' + BFL.subject + '</td>');
+                        tr.append('<td>' + BFL.bd_category + '</td>');
+
+                        tr.append('<td style="cursor: pointer; color: blue;" onclick="location.href=\'/' +board_category +'?doc_no=' + BFL.doc_no + '\'">' + BFL.subject + '</td>');
+
+                        // tr.append('<td onclick="location.href=' + 'board_category' + '">' + BFL.subject + '</td>');
                         tr.append('<td>' + BFL.user_name + '</td>');
                         tr.append('<td>' + BFL.create_date + '</td>');
                         tr.append('<td>' + BFL.good_count + '</td>');
@@ -343,6 +360,7 @@
                                 </option>
                             </c:forEach>
                         </select>
+                        
                         <input type="button" id="pbdBoard_del" class="btn btn-primary" value="삭제" onclick="pbdBoard_del()"/>
 
 
@@ -424,6 +442,7 @@
 
                     <tr>
                         <th>번호</th>
+                        <th>게시종류</th>
                         <th>제목</th>
                         <th>작성자</th>
                         <th>작성일</th>
@@ -438,7 +457,8 @@
 
                                 <input type="hidden" id="bf_doc_no" value="${BF.doc_no}"/>
                                 <td>${BF.rn}</td>
-                                <td>${BF.subject}</td>
+                                <td>${BF.bd_category}</td>
+                                <td><a href="board_content?doc_no=${BF.doc_no}">${BF.subject}</a></td>
                                 <td>${BF.user_name}</td>
                                 <td>${BF.create_date}</td>
                                 <td>${BF.good_count}</td>

@@ -90,6 +90,7 @@
 
             console.log(sendurl);
 
+
             $.ajax({
                 url: sendurl,
                 dataType: 'json',
@@ -104,6 +105,8 @@
                         var tr = $('<tr>'); // 새로운 <tr> 엘리먼트 생성
 
                         // <td> 엘리먼트 생성 및 데이터 추가
+
+                        tr.append('<input type="hidden" name="hid_us_id" value="'+ user.user_id+ '"/>');
                         tr.append('<td>' + user.user_name + '</td>');
                         tr.append('<td>' + user.project_name + '</td>');
 
