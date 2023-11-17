@@ -22,7 +22,6 @@ import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
 
 import lombok.RequiredArgsConstructor;
-import oracle.net.aso.c;
 
 @Service
 @RequiredArgsConstructor
