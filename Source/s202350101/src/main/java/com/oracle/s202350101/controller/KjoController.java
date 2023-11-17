@@ -1,6 +1,5 @@
 package com.oracle.s202350101.controller;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -9,19 +8,23 @@ import java.util.stream.Collectors;
 import com.oracle.s202350101.model.*;
 import com.oracle.s202350101.service.kjoSer.*;
 import lombok.Data;
+import org.hibernate.TypeMismatchException;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +49,8 @@ public class KjoController {
     private final ChatMsgService CMser;            //	메시지
     private final PrjBdDataService PBDser;
 
+    private final MessageSource ms;
+
     //	반 생성 페이지 Get
     @GetMapping("/admin_add_class")
     public String admin_add_class() {
@@ -55,8 +60,19 @@ public class KjoController {
 
     //	반 생성 Post
     @PostMapping("/admin_add_class")
-    public String admin_add_class(ClassRoom cr, BindingResult bindingResult) {
+    public String admin_add_class(@Validated @ModelAttribute("cr")
+                                      ClassRoom cr, BindingResult bindingResult, Model model) {
         log.info("admin_add_class POST");
+
+        if (bindingResult.hasErrors()) {
+            log.info("admin_add_class POST .ERROR : {}", bindingResult);
+            model.addAttribute("cr",cr);
+            log.info(bindingResult.getFieldError().toString());
+//            bindingResult.reject("typeMismatch.java.lang.Integer", "알맞은 숫자를 입력하세요" );
+            log.info("admin_add_class POST .ERROR Return");
+            return "admin/admin_add_class";
+        }
+
         int result = CRser.saveClassRoom(cr);            // 강의실 생성
         log.info("반 생성 개수: " + result);
         return "redirect:/admin_class_list";
@@ -67,6 +83,16 @@ public class KjoController {
     public String admin_class_list(Model model) {
         log.info("admin_class_list");
         List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+
+        SimpleDateFormat newDtFormat = new SimpleDateFormat("yy-MM-dd");
+        for (int i = 0; i < CRList.size(); i++) {
+            Date startDate = CRList.get(i).getClass_start_date();
+            Date endDate = CRList.get(i).getClass_end_date();
+            CRList.get(i).setStartDate(newDtFormat.format(startDate));
+            CRList.get(i).setEndDate(newDtFormat.format(endDate));
+        }
+
+
         model.addAttribute("CRList", CRList);
         return "admin/admin_class_list";
     }
@@ -298,7 +324,6 @@ public class KjoController {
         res.setSecobj(user.getUser_id());
 //	요청의 피주체
         res.setTrdobj(cr.getReceiver_id());
-
         return res;
     }
 

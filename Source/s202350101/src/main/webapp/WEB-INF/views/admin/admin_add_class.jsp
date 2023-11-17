@@ -1,12 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/views/header_main.jsp" %>
+<%@ taglib  prefix="form"  uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
 
     <style text="text/css">
+		.errors{
+			color: red;
+		}
     </style>
 
     <script type="text/javascript">
@@ -167,7 +171,7 @@
 					</nav>
 				</div>
 
-                <form action="/admin_add_class" method="post" style="width:50%">
+                <form:form action="/admin_add_class" modelAttribute="cr" method="post" style="width:50%">
                     <span><h6><b>반생성</b></h6></span>
                     
                     <table width="600" class="table" style="margin-top:20px">
@@ -179,15 +183,25 @@
                     </colgroup>
 						<tr style="">
                   			<td>반 번호</td>
-                  			<td colspan="3"><input class="form-control" type="text" name="class_room_num"></td>
+                  			<td colspan="3">
+								<input class="form-control" type="text" name="class_room_num" value="${cr.class_room_num}">
+								<form:errors path="class_room_num" class="errors" />
+							</td>
+
 						</tr>
 						<tr>
                   			<td>담당 강사</td>
-                  			<td colspan="3"><input class="form-control" type="text" name="class_master"></td>
+                  			<td colspan="3"><input class="form-control" type="text" name="class_master" value="${cr.class_master}">
+								<form:errors path="class_master" class="errors"/>
+							</td>
+
 						</tr>
 						<tr>
                   			<td>강의 이름</td>
-                  			<td colspan="3"><input class="form-control" type="text" name="class_name"></td>
+                  			<td colspan="3"><input class="form-control" type="text" name="class_name" value="${cr.class_name}">
+								<form:errors path="class_name" class="errors"/>
+							</td>
+
 						</tr>
 						<tr>
                   			<td>학원 위치</td>
@@ -200,14 +214,18 @@
 						</tr>
 						<tr>
                   			<td>시작 날짜</td>
-                  			<td><input type="date" name="class_start_date" class="form-control"></td>
+                  			<td><input type="date" name="class_start_date" id="" class="form-control" value="${cr.class_start_date}">
+								<form:errors path="class_start_date" class="errors"/></td>
+
                   			<td>종료 날짜</td>
-                  			<td><input type="date" name="class_end_date" class="form-control"><br></td>
+                  			<td><input type="date" name="class_end_date" class="form-control" value="${cr.class_end_date}">
+								<form:errors path="class_end_date" class="errors"/><br></td>
+
 						</tr>
                     </table>
                     <button class="btn btn-secondary" type="submit">반 생성하기</button>
                     <button class="btn btn-secondary" type="reset">초기화하기</button>
-                </form>
+                </form:form>
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->
         </main>

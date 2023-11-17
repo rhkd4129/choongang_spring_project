@@ -115,8 +115,8 @@
                             <td>${list.class_master}</td>
                             <td>${list.class_name}</td>
 <%--                            <td><fmt:formatDate value="${list.class_start_date}" pattern="yy/MM/dd"/></td>--%>
-                            <td>${list.class_start_date}</td>
-                            <td>${list.class_end_date}</td>
+                            <td>${list.startDate}</td>
+                            <td>${list.endDate}</td>
                         </tr>
                     </c:forEach>
                     </thead>
