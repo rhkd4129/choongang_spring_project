@@ -438,7 +438,8 @@ th {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
-  font-size: var(--bs-body-font-size);
+  /* font-size: var(--bs-body-font-size); */
+  font-size: 12px;
 }
 
 label {
@@ -4735,8 +4736,8 @@ textarea.form-control-lg {
 }
 
 .pagination {
-  --bs-pagination-padding-x: 0.75rem;
-  --bs-pagination-padding-y: 0.375rem;
+  --bs-pagination-padding-x: 0.5rem;
+  --bs-pagination-padding-y: 0.1rem;
   --bs-pagination-font-size: 1rem;
   --bs-pagination-color: var(--bs-link-color);
   --bs-pagination-bg: var(--bs-body-bg);
@@ -9562,7 +9563,8 @@ textarea.form-control-lg {
     margin-left: 3rem !important;
   }
   .ms-sm-auto {
-    margin-left: auto !important;
+   /*  margin-left: auto !important; */
+   margin-left: 260px;
   }
   .p-sm-0 {
     padding: 0 !important;

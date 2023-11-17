@@ -13,4 +13,5 @@ import lombok.ToString;
 public class LjhResponse {
 	private List<?> firList;
 	private List<?> secList;
+	private Object	obj;
 }

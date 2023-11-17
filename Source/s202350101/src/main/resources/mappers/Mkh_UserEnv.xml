@@ -15,7 +15,7 @@
 	</select>
 	
 	<!-- 알림 환경설정 수정 -->
-	<update id="mkh_updateEnv" parameterType="userEnv">
+	<update id="mkhUpdateEnv" parameterType="userEnv">
 		Update 	user_env
 		Set	   	env_alarm_comm      = #{env_alarm_comm},
 				env_alarm_reply     = #{env_alarm_reply},

@@ -8,7 +8,7 @@ function callAction(action, mapping_name) {
 	//수정 : 현재창 or 프레임
 	//추천 : ajax현재창 or 프레임
 	//삭제 : ajax창닫기 or 프레임
-	var checked = true;
+	var checked = false;
 	if($('#idNewWinFlag')) { //목록창에만 새 창 열기 체크박스 존재
 		checked = $("#idNewWinFlag").is(':checked');
 	}

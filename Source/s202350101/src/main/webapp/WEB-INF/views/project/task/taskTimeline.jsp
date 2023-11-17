@@ -103,9 +103,9 @@
             <!-- 본문 -->
             <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!------------------------------ //개발자 소스 입력 START ------------------------------->
-                Task Time Line
+                <h2 style="margin: 3%"> 작업 타임라인 </h2>
 
-                <div id="timeline" style="height: 700px;"></div>
+                <div id="timeline" style=" height:1000px;   ;margin: 2%"></div>
 
 
                 <!------------------------------ //개발자 소스 입력 END ------------------------------->

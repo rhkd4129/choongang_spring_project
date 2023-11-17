@@ -37,4 +37,10 @@ public class BdQna {
 	// 조회용
 	private String app_name;
 	private String user_name;
+	private String bd_category_name;
+	
+	
+	
+
+	
 }

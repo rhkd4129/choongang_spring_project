@@ -36,14 +36,12 @@ public class LkhServicveImpl implements LkhService {
 		return taskStatusList;
 	}
 
-
 	@Override
 	public List<Task> workload_chart(int project_id) {
 		List<Task> taskUserWorkStatusList = null;
 		taskUserWorkStatusList = lkhDao.workload_chart(project_id);
 		return taskUserWorkStatusList;
 	}
-
 
 
 	@Override
@@ -63,15 +61,15 @@ public class LkhServicveImpl implements LkhService {
 		//프로젝트 작업 리스트 
 		stepTaskList =  lkhDao.project_step_chart(project_id);
 
-		AjaxResponse data = new AjaxResponse();
-		Map<String, List<String>> mapData = new HashMap<>();
+
+
+		// 현재 진행중인 작업 리스트들
+		List<Task> currentTaskList = stepTaskList.stream().filter(t->t.getTask_status().equals("1")).collect(Collectors.toList());
 
 		// 맵에 값 추가
-		
+		Map<String, List<String>> mapData = new HashMap<>();
 		// 우선 map을 선언후 키로 각 프로젝트 단계이름을 지정 하고 값에는 빈리스트 생성
-		
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
-		
 		// 프로젝트 단게이름을 순회하고 작업들도 순회하면서 서로 단계이름이 같으면 해당 키에 있는 값 리스트에 추가함
 		for (String key : mapData.keySet()) {
 			for (Task t : stepTaskList) {
@@ -86,29 +84,23 @@ public class LkhServicveImpl implements LkhService {
 			}
 		}
 		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
+		AjaxResponse data = new AjaxResponse();
 		data.setMapData(mapData);
-		// 맵 값 출력
-		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
-			String key = entry.getKey();
-			List<String> values = entry.getValue();
-			System.out.print(key + ": ");
-			for (String value : values) {
-				System.out.print(value + " ");
-			}
-			System.out.println();
-		}
+		data.setOnelist(currentTaskList);
 		return data;
 	}
 
 	@Override
-	public int task_count(int project_id,Optional<String>  search){
-		return lkhDao.task_count(project_id, search);
+	public int task_count(Task task){
+		return lkhDao.task_count(task);
 	}
 
 
 	@Override
 	public List<Task> task_list(Task task) {
 		List<Task> taskList = null;
+
+
 		taskList = lkhDao.task_list(task);
 		return taskList;
 	}
@@ -189,20 +181,28 @@ public class LkhServicveImpl implements LkhService {
 				int taskSubResult = lkhDao.task_worker_create(taskSubList);
 			}
 
+
+			int maxId =lkhDao.task_attach_max();
+			log.info("제발좀 되라 앙 {}",maxId);
 			// 파일 처리 부분
 			if (!multipartFileList.isEmpty()) {
 				log.info("파일이 있다!!!!");
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
+				int i  = 1;
 				for (MultipartFile file : multipartFileList) {
 					TaskAttach taskAttach = new TaskAttach();
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
+					taskAttach.setAttach_no(maxId+i);
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
 					taskAttach.setAttach_name(fileName);
 					taskAttach.setAttach_path(attach_path);
 					taskAttachList.add(taskAttach);
+					i+=1;
+					log.info("DFdfdfd{}",taskAttach.getAttach_no());
 				}
+
 				lkhDao.task_attach_create(taskAttachList);
 			}
 
@@ -214,10 +214,14 @@ public class LkhServicveImpl implements LkhService {
 		return 1;
 	}
 
-	@Override
-	public int task_attach_create(List<TaskAttach> taskAttachList) {
-		return lkhDao.task_attach_create(taskAttachList);
-	}
+//	@Override
+//	public int task_attach_create(List<TaskAttach> taskAttachList ,int fileCount) {
+//		List<Integer> attach_seq = null;
+//		for(int i =1; i<=fileCount;i++){attach_seq.add(i);}
+//
+//
+//		return lkhDao.task_attach_create(taskAttachList,attach_seq);
+//	}
 
 	@Override
 	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
@@ -263,7 +267,7 @@ public class LkhServicveImpl implements LkhService {
 				}
 				// 파일 업데이트
 				if (!taskAttachList.isEmpty()) {
-					lkhDao.task_attach_update(taskAttachList);
+					lkhDao.task_attach_create(taskAttachList);
 				}
 			}
 
@@ -351,3 +355,13 @@ public class LkhServicveImpl implements LkhService {
 
 
 }
+
+//		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
+//			String key = entry.getKey();
+//			List<String> values = entry.getValue();
+//			System.out.print(key + ": ");
+//			for (String value : values) {
+//				System.out.print(value + " ");
+//			}
+//			System.out.println();
+//		}

@@ -28,7 +28,7 @@
 						<input type="hidden" name="attach_name" value="">
 						<input type="hidden" name="attach_path" value="">
 						<div style="margin-top:20px;height:34px">
-							<h3>문서 작성</h3>
+							<span class="apptitle">문서 작성</span>
 						</div>
 						<table width="100%"  style="margin-top:7px">
 							<tr>

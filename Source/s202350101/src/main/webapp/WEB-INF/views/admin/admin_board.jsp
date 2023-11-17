@@ -5,24 +5,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="/project/board/js/prj_board.js"></script>
-
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
 
     <style text="text/css">
-        #test {
-            margin-top: 5%;
-            margin-bottom: 5%;
-        }
-        #event_bar{
-            display: flex;
-        }
-        #search_bar{
-            display: flex;
-            width: 54%;
-        }
-
-
     </style>
 
     <script type="text/javascript">
@@ -104,7 +89,6 @@
                         tr.append('<input type="hidden" id="pbd_prj_no" value="' +board.project_id +'"/>');
 
                         tr.append('<td onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_read'" + ')">'+ board.subject+'</td>');
-                        // tr.append('<td><a href="javascript:callAction(\'read\',\'prj_board_data_read?doc_no=' + board.doc_no + '&project_id=' + board.project_id + '\')" onclick="console.log(\'click\')">' + board.subject + '</a></td>');
                         tr.append('<td>' + board.user_name + '</td>');
                         tr.append('<td>' + formatDate(new Date(board.create_date)) + '</td>'); // 날짜 포맷 변경
                         tr.append('<td>' + board.bd_category_name + '</td>');
@@ -127,7 +111,7 @@
                     // 페이징 동적 생성
                     var paginationDiv = $('#d_p');
                     paginationDiv.empty();
-                    var jspPagination = '<div id="d_p" class="pagination">';
+                    var jspPagination = '<div id="d_p" class="pagination justify-content-center">';
                     if (jsonData.obj.startPage > jsonData.obj.pageBlock) {
                         jspPagination += '<div onclick="pr_info(' + (jsonData.obj.startPage - jsonData.obj.pageBlock) + ')"><p>[이전]</p></div>';
                     }
@@ -327,44 +311,79 @@
     <div class="row">
 
         <!-- 메뉴 -->
-        <div id="menubar"
-             class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        <div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
         </div>
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!------------------------------ //개발자 소스 입력 START ------------------------------->
-
-            <div id="test">
-                <div id="admin_page_list">
-                    <div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
-                    <div class="btn btn-primary" onclick="location.href='/admin_board'">게시판 관리</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 관리</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_add_class'">반 생성</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
-                </div>
-                <p></p>
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="/admin_projectmanager">관리자 설정</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">게시판 관리</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:20px;height:45px">
+					<span class="apptitle">관리자 설정</span>
+				</div>
+			</div>
+			
+            <div class="container-fluid">
+                
+				<div id="admin_page_list" class="bd-example m-0 border-0">
+					<nav>
+						<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+							<button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="false" tabindex="-1" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</button>
+							<button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="true" onclick="location.href='/admin_board'">게시판 관리</button>
+							<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-3" type="button" role="tab" aria-controls="nav-3" aria-selected="false" tabindex="-1" onclick="location.href='/admin_approval'">프로젝트 관리</button>
+							<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-4" type="button" role="tab" aria-controls="nav-4" aria-selected="false" tabindex="-1" onclick="location.href='/admin_add_class'">반 생성</button>
+							<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-5" type="button" role="tab" aria-controls="nav-5" aria-selected="false" tabindex="-1" onclick="location.href='/admin_class_list'">반 목록</button>
+						</div>
+					</nav>
+				</div>
+				
+                <p>
+				<div id="selbox" style="margin-top:5px;margin-bottom:5px">
+					<table style="margin-bottom:5px">
+                    	<tr>
+                    		<td>
+			                   <select id="cl_room_List" class="form-select" onchange="cl_room(1)">
+		                            <c:forEach items="${CRList}" var="list">
+		                                <option name="class_room_num" value="${list.class_id}">${list.class_area} ${list.class_room_num}</option>
+		                            </c:forEach>
+		                        </select>
+							</td>
+							<td>
+		                        <select id="pr_List" class="form-select" onchange="pr_info(1)">
+		                            <c:forEach items="${PIList}" var="list">
+		                                <option name="pr_num"
+		                                        value="${list.project_id}">${list.project_name} <%--${list.class_room_num}--%>
+		                                </option>
+		                            </c:forEach>
+		                        </select>
+	                		</td>
+	                		<td style="padding-left:10px">
+		                		<input type="button" id="pbdBoard_del" class="btn btn-primary" value="삭제" onclick="pbdBoard_del()"/>
+	                		</td>
+	                	</tr>
+                    </table>                    
+				</div>
+				
                 <table class="table">
-                    <div id="selbox" style="display: flex">
-
-                        <select id="cl_room_List" class="form-select" style="width: 30%" onchange="cl_room(1)">
-                            <c:forEach items="${CRList}" var="list">
-                                <option name="class_room_num" value="${list.class_id}">${list.class_area}
-                                        ${list.class_room_num}</option>
-                            </c:forEach>
-                        </select>
-                        <select id="pr_List" class="form-select" style="width: 30% " onchange="pr_info(1)">
-                            <c:forEach items="${PIList}" var="list">
-                                <option name="pr_num"
-                                        value="${list.project_id}">${list.project_name} <%--${list.class_room_num}--%>
-                                </option>
-                            </c:forEach>
-                        </select>
-
-                        <input type="button" id="pbdBoard_del" class="btn btn-primary" value="삭제" onclick="pbdBoard_del()"/>
-
-
-                    </div>
                     <thead>
                     <tr>
                         <th>글 번호</th>
@@ -379,115 +398,121 @@
                     </tr>
                     </thead>
                     <tbody id="PBDList_body">
-                    <c:forEach items="${PBDList}" var="board">
-                        <tr>
-                            <td>${board.rn}</td>
-                            <input type="hidden" id="pbd_doc_no" value="${board.doc_no}"/>
-                            <input type="hidden" id="pbd_prj_no" value="${board.project_id}"/>
-
-                            <td onclick="locatPrj(${board.doc_no},${board.project_id},'prj_board_data_read')"> ${board.subject}</td>
-                            <td>${board.user_name}</td>
-                            <td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
-                            <td>${board.bd_category_name}</td>
-                             <td>${board.bd_count}</td>
-                            <td>${board.good_count}</td>
-                            <td onclick="locatPrj(${board.doc_no},${board.project_id},'prj_board_data_edit')">수정</td>
-                            <td><input type="checkbox" name="pbd_del_chkbox" />
-                        </tr>
-                        <c:set var="num" value="${num-1}"></c:set>
-                    </c:forEach>
-                    <div id="d_p" class="pagination">
-                        <c:if test="${page2.startPage > page2.pageBlock}">
-                            <div onclick="pr_info(${page2.startPage-page2.pageBlock})">
-                                <p>[이전]</p>
-                            </div>
-                        </c:if>
-                        <c:forEach var="i" begin="${page2.startPage}" end="${page2.endPage}">
-                            <div class="page-item" onclick="pr_info(${i})">
-                                <div class="page-link">${i}</div>
-                            </div>
-
-                        </c:forEach>
-
-                        <c:if test="${page2.endPage > page2.pageBlock}">
-                            <div onclick="pr_info(${page2.startPage+page2.pageBlock})">
-                                <p>[다음]</p>
-                            </div>
-                        </c:if>
-                    </div>
+	                    <c:forEach items="${PBDList}" var="board">
+	                        <tr>
+	                            <td>${board.rn}</td>
+	                            <input type="hidden" id="pbd_doc_no" value="${board.doc_no}"/>
+	                            <input type="hidden" id="pbd_prj_no" value="${board.project_id}"/>
+	
+	                            <td><a href="javascript:locatPrj(${board.doc_no},${board.project_id},'prj_board_data_read')"> ${board.subject}</a></td>
+	                            <td>${board.user_name}</td>
+	                            <td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
+	                            <td>${board.bd_category_name}</td>
+	                             <td>${board.bd_count}</td>
+	                            <td>${board.good_count}</td>
+	                            <td onclick="locatPrj(${board.doc_no},${board.project_id},'prj_board_data_edit')">수정</td>
+	                            <td><input type="checkbox" name="pbd_del_chkbox" />
+	                        </tr>
+	                        <c:set var="num" value="${num-1}"></c:set>
+	                    </c:forEach>
+	                    <div id="d_p" class="pagination justify-content-center">
+	                        <c:if test="${page2.startPage > page2.pageBlock}">
+	                            <div onclick="pr_info(${page2.startPage-page2.pageBlock})">
+	                                <p>[이전]</p>
+	                            </div>
+	                        </c:if>
+	                        <c:forEach var="i" begin="${page2.startPage}" end="${page2.endPage}">
+	                            <div class="page-item" onclick="pr_info(${i})">
+	                                <div class="page-link">${i}</div>
+	                            </div>
+	
+	                        </c:forEach>
+	
+	                        <c:if test="${page2.endPage > page2.pageBlock}">
+	                            <div onclick="pr_info(${page2.startPage+page2.pageBlock})">
+	                                <p>[다음]</p>
+	                            </div>
+	                        </c:if>
+	                    </div>
                     </tbody>
                 </table>
-            </div>
-            <div id="ev">
-                <div id="event_bar">
-                    <div class="btn btn-success">작성자</div>
+            
+	            <div id="ev">
+					<table style="margin-bottom:5px">
+                    	<tr>
+                    		<td><div class="btn btn-success">작성자</div></td>
+                    		<td>
+			                    <select id="bd_CTG" class="form-select">
+			                        <option name="bd_ctg_li" value="공지">공지</option>
+			                        <option name="bd_ctg_li" value="자유">자유</option>
+			                        <option name="bd_ctg_li" value="이벤트">이벤트</option>
+			                        <option name="bd_ctg_li" value="전체">전체</option>
+			                    </select>
+	                		</td>
+	                		<td style="padding-left:10px">
+				                <input type="text" id="search_text" class="form-control"/>
+							</td>
+							<td>
+				                <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search(1)"/>
+							</td>
+							<td>
+				                <input type="button" id="del_button" class="btn btn-primary" value="삭제" onclick="bdfree_del()"/>
+	                		</td>
+	                	</tr>
+                    </table>
 
-                    <select id="bd_CTG" class="form-select" style="width: 15%">
-                        <option name="bd_ctg_li" value="공지">공지</option>
-                        <option name="bd_ctg_li" value="자유">자유</option>
-                        <option name="bd_ctg_li" value="이벤트">이벤트</option>
-                        <option name="bd_ctg_li" value="전체">전체</option>
-                    </select>
-
-                    <div id="search_bar">
-                    <input type="text" id="search_text" class="form-control"/>
-                    <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search(1)"/>
-                    <input type="button" id="del_button" class="btn btn-primary" value="삭제" onclick="bdfree_del()"/>
-                    </div>
-                </div>
-
-                <table class="table">
-                    <thead>
-
-
-                    <tr>
-                        <th>번호</th>
-                        <th>게시종류</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                        <th>조회수</th>
-                        <th>수정</th>
-                        <th>삭제</th>
-                    </tr>
-                    </thead>
-                    <tbody id="BFList_body">
-                        <c:forEach items="${BFList}" var="BF">
-                            <tr>
-
-                                <input type="hidden" id="bf_doc_no" value="${BF.doc_no}"/>
-                                <td>${BF.rn}</td>
-                                <td>${BF.bd_category}</td>
-                                <td><a href="board_content?doc_no=${BF.doc_no}">${BF.subject}</a></td>
-                                <td>${BF.user_name}</td>
-                                <td>${BF.create_date}</td>
-                                <td>${BF.good_count}</td>
-                                <td><a href="#">수정</a></td>
-                                <td><input type="checkbox" name="del_chkbox" />
-                            </tr>
-                        </c:forEach>
-                    <div id="e_p" class="pagination">
-                        <c:if test="${page.startPage > page.pageBlock}">
-                            <div onclick="event_search(${page.startPage-page.pageBlock})">
-                                <p>[이전]</p>
-                            </div>
-                        </c:if>
-                        <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-                            <div class="page-item" onclick="event_search(${i})">
-                                <div class="page-link">${i}</div>
-                            </div>
-
-                        </c:forEach>
-
-                        <c:if test="${page.endPage > page.pageBlock}">
-                            <div onclick="event_search(${page.startPage+page.pageBlock})">
-                                <p>[다음]</p>
-                            </div>
-                        </c:if>
-                    </div>
-                    </tbody>
-                </table>
-            </div>
+	                <table class="table">
+	                    <thead>
+		                    <tr>
+		                        <th>번호</th>
+		                        <th>게시종류</th>
+		                        <th>제목</th>
+		                        <th>작성자</th>
+		                        <th>작성일</th>
+		                        <th>조회수</th>
+		                        <th>수정</th>
+		                        <th>삭제</th>
+							</tr>
+						</thead>
+						<tbody id="BFList_body">
+	                        <c:forEach items="${BFList}" var="BF">
+	                            <tr>
+	
+	                                <input type="hidden" id="bf_doc_no" value="${BF.doc_no}"/>
+	                                <td>${BF.rn}</td>
+	                                <td>${BF.bd_category}</td>
+	                                <td><a href="board_content?doc_no=${BF.doc_no}">${BF.subject}</a></td>
+	                                <td>${BF.user_name}</td>
+	                                <td>${BF.create_date}</td>
+	                                <td>${BF.good_count}</td>
+	                                <td><a href="#">수정</a></td>
+	                                <td><input type="checkbox" name="del_chkbox" />
+	                            </tr>
+	                        </c:forEach>
+		                    <div id="e_p" class="pagination justify-content-center">
+		                        <c:if test="${page.startPage > page.pageBlock}">
+		                            <div onclick="event_search(${page.startPage-page.pageBlock})">
+		                                <p>[이전]</p>
+		                            </div>
+		                        </c:if>
+		                        <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+		                            <div class="page-item" onclick="event_search(${i})">
+		                                <div class="page-link" style="cursor:pointer">${i}</div>
+		                            </div>
+		
+		                        </c:forEach>
+		
+		                        <c:if test="${page.endPage > page.pageBlock}">
+		                            <div onclick="event_search(${page.startPage+page.pageBlock})">
+		                                <p>[다음]</p>
+		                            </div>
+		                        </c:if>
+		                    </div>
+	                    </tbody>
+ 					</table>
+ 					
+				</div>
+			</div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->
         </main>
 

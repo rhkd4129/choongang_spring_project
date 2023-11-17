@@ -61,8 +61,12 @@
 		width: 100%;
 	}
 	
-	.delBtn {
-		text-align: left;
+	textarea {
+		width: 100%;
+	}
+	
+	input.form-control.form-control-sm.uploadFile {
+    	width: 80%;
 	}
 </style>
 
@@ -101,7 +105,65 @@
 			}
 		});
 	});
+	
+	function meetpaging(currentPage){
+    	
+    	var project_id = ${project_id};
+        var sendurl = "prj_meeting_report_list_ajax/?project_id=" + project_id + "&currentPage=" + currentPage; // project_id를 적절히 정의해야 합니다.
+        console.log("location.href = 'prj_meeting_report_list?project_id=" + project_id + "&currentPage=" + currentPage + "'");
+        console.log("sendURL : " + sendurl);
 
+        $.ajax({
+            url: sendurl,					// 이동할 페이지
+            dataType: 'json',				// return 데이터 타입
+            success: function(jsondata) {	// 성공 시 실행
+            	console.log(jsondata);
+                var meetingList = $('#meeting');
+                var meetingList_body = $('#meetingList');
+
+                meetingList.empty();
+
+                // jQuery로 스타일 조작
+                /* if (meetingList_body.css('display') == 'none') {
+                	
+                	meetingList_body.show();
+                } else {
+                	meetingList_body.hide();
+                } */
+
+                $.each(jsondata.firList, function(index, MTList) {
+                    console.log("MTList: " + MTList.meeting_title);
+                    console.log("MTList: " + MTList.meeting_date);
+
+                    var authOptionBox = $('<div><p class="list_date">' + MTList.meeting_date + '</p><p class="list_title"><a href="prj_meeting_report_read/?meeting_id=' + MTList.meeting_id + '&project_id=' + MTList.project_id + '">' + MTList.meeting_title + '</a></p></div>');
+
+                    meetingList.append(authOptionBox);
+                });
+                
+                var page = jsondata.obj;
+                
+                var pagediv = $('#mtPage');
+                pagediv.empty();
+                
+                var pagenation = '';
+                if (page.startPage > page.pageBlock) {
+                	pagenation += '<div onclick="meetpaging(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
+                }
+                for (var i = page.startPage; i <= page.endPage; i++) {
+                    var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : '';     // 현재 페이지와 i가 일치할 때 스타일을 적용
+
+                    pagenation += '<div class="page-item" style="' + currentPageStyle + '" onClick="meetpaging(' + i + ')"><div class="page-link">' + i + '</div></div>';
+                }
+                if (page.endPage < page.totalPage) {
+                	pagenation += '<div onclick="meetpaging(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
+                }
+                pagenation += '</div>';
+                
+                pagediv.html(pagenation);
+            }
+        });
+	}
+	
 	// fullcalendar
 	document.addEventListener('DOMContentLoaded', function() {
 		var calendarEl = document.getElementById('calendar');
@@ -158,16 +220,19 @@
 
 				meetingListButton: {
 				    text: '회의록',
-				    click: function() {
+				    click: function () {
+
+				    				    	
 				    	var project_id = ${project_id};
-				        var sendurl = "prj_meeting_report_list_ajax/?project_id=" + ${project_id}; // project_id를 적절히 정의해야 합니다.
-				        console.log("location.href = 'prj_meeting_report_list?project_id=" + project_id + "'");
+				        var sendurl = "prj_meeting_report_list_ajax/?project_id=" + project_id + "&currentPage=" + 1; // project_id를 적절히 정의해야 합니다.
+				        console.log("location.href = 'prj_meeting_report_list?project_id=" + project_id + "&currentPage=" + 1 + "'");
 				        console.log("sendURL : " + sendurl);
 
 				        $.ajax({
 				            url: sendurl,					// 이동할 페이지
 				            dataType: 'json',				// return 데이터 타입
 				            success: function(jsondata) {	// 성공 시 실행
+				            	console.log(jsondata);
 				                var meetingList = $('#meeting');
 				                var meetingList_body = $('#meetingList');
 
@@ -180,7 +245,7 @@
 				                	meetingList_body.hide();
 				                }
 
-				                $.each(jsondata, function(index, MTList) {
+				                $.each(jsondata.firList, function(index, MTList) {
 				                    console.log("MTList: " + MTList.meeting_title);
 				                    console.log("MTList: " + MTList.meeting_date);
 
@@ -188,6 +253,27 @@
 
 				                    meetingList.append(authOptionBox);
 				                });
+				                
+				                var page = jsondata.obj;
+				                
+				                var pagediv = $('#mtPage');
+				                pagediv.empty();
+				                
+				                var pagenation = '';
+				                if (page.startPage > page.pageBlock) {
+				                	pagenation += '<div onclick="meetpaging(' + (page.startPage - page.pageBlock) + ')"><p>이전</p></div>';
+			                    }
+			                    for (var i = page.startPage; i <= page.endPage; i++) {
+			                        var currentPageStyle = i === page.currentPage ? '-webkit-text-stroke: thick;' : '';     // 현재 페이지와 i가 일치할 때 스타일을 적용
+
+			                        pagenation += '<div class="page-item" style="' + currentPageStyle + '" onClick="meetpaging(' + i + ')"><div class="page-link">' + i + '</div></div>';
+			                    }
+			                    if (page.endPage < page.totalPage) {
+			                    	pagenation += '<div onclick="meetpaging(' + (page.startPage + page.pageBlock) + ')"><p>이전</p></div>';
+			                    }
+			                    pagenation += '</div>';
+				                
+				                pagediv.html(pagenation);
 				            }
 				        });
 				    }
@@ -210,6 +296,7 @@
 					var openurl = "/prj_meeting_report_read?meeting_id=" + eventId + "&project_id=" + project_id;
 					
 					window.open(openurl, "_self");
+//					popup(openurl);
 				};
 				
 				// 노란색 회의일정 클릭 시 회의록 등록 모달창 표출
@@ -235,6 +322,8 @@
 			    			var meeting_content = firstData.meeting_content;	// firstData의 meeting_content
 			    			var meeting_category = firstData.meeting_category;	// firstData의 meeting_category
 			    			var meeting_id = firstData.meeting_id;
+			    			var attach_name = firstData.attach_name;
+			    			var attach_path = firstData.attach_path;
 			    			
 			    			var secList = data.secList;				// 프로젝트 팀원 목록
 			    			console.log(secList);
@@ -253,8 +342,10 @@
 			    				});
 			    				
 			    				if (result > 0) {
+			    					authOptionBox += '<input type="hidden" id="meetuser_id_val" name="meetuser_id_val" value="' + prjMemList.user_id + '">';
 			    					authOptionBox += '<input type="checkbox" id="meetuser_id" name="meetuser_id" value="' + prjMemList.user_id + '" checked> ' + prjMemList.user_name + '<br>';
 			    				} else {
+			    					authOptionBox += '<input type="hidden" id="meetuser_id_val"  value="' + prjMemList.user_id + '">';
 			    					authOptionBox += '<input type="checkbox" id="meetuser_id" name="meetuser_id" value="' + prjMemList.user_id + '"> ' + prjMemList.user_name + '<br>';
 			    				}
 			    				console.log("prjMemList, result: "+prjMemList.user_id +""+ result);
@@ -298,6 +389,39 @@
 			    			}
 			    			
 			    			md_category.append(category);
+
+							
+							var filebox = $('#idAttachFile');
+							var fileinput = $('#idAttachInput');
+							filebox.empty();
+							fileinput.empty();
+							
+							var filestr = '';
+							var inputstr = '';
+							
+			    			if (attach_name != null) {
+			    				filestr += 	'<a href="/' + attach_path + '/' + attach_name + '" target="_blank">' + attach_name +
+			    							'</a>&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">';
+			    				filestr +=	'<input type="hidden" name="attach_name" id="attach_name" value="' + attach_name + '">';
+			    				filestr +=	'<input type="hidden" name="attach_path" id="attach_path" value="' + attach_path + '">';
+			    			}
+			    			filebox.append(filestr);
+			    			
+			    			if (attach_name != null) {
+			    				$(fileinput).css({
+			    					"display" : "none"
+		    				    });
+			    				
+			    				inputstr += '<input type="file" style="width: 100%;" class="form-control form-control-sm uploadFile" id="file1" name="file1">';
+			    			} else {
+
+			    				$(fileinput).css({
+			    					"display" : "block"
+		    				    });
+			    				inputstr += '<input type="file" style="width: 100%;" class="form-control form-control-sm uploadFile" id="file1" name="file1">';
+			    			}
+			    			
+			    			fileinput.append(inputstr);
 			    			
 			    			$('input[name = meeting_id]').attr('value', meeting_id);
 			    			$('input[id = md_title]').attr('value', meeting_title);
@@ -323,8 +447,8 @@
 		const selectedElements = document.querySelectorAll(query);	//	모든 체크된 참석자 
 
 		// 선택된 목록의 갯수 세기
-		const selectedElementsCnt = selectedElements.length;	//	체크된 참석자 수
-		console.log("selectedElementsCnt: "+selectedElementsCnt);						//	검증.
+		const selectedElementsCnt = selectedElements.length;		//	체크된 참석자 수
+		console.log("selectedElementsCnt: "+selectedElementsCnt);	//	검증.
 
 		if (!frm1.meeting_status.value) {
 			alert("분류를 선택하세요.");
@@ -337,7 +461,7 @@
 			return false;
 		}
 
-		if (!frm1.meeting_date.value) { 			//	날짜 지정 안하면 발생.
+		if (!frm1.meeting_date.value) { 		//	날짜 지정 안하면 발생.
 			alert("일정을 선택하세요.");
 			return false;
 		}
@@ -347,7 +471,7 @@
 			return false;
 		}
 		
-	}
+	};
 	
 	// form 입력값 체크
 	function chk2() {
@@ -357,8 +481,8 @@
 		const selectedElements = document.querySelectorAll(query);	//	모든 체크된 참석자 
 
 		// 선택된 목록의 갯수 세기
-		const selectedElementsCnt = selectedElements.length;	//	체크된 참석자 수
-		console.log("selectedElementsCnt: "+selectedElementsCnt);						//	검증.
+		const selectedElementsCnt = selectedElements.length;		//	체크된 참석자 수
+		console.log("selectedElementsCnt: "+selectedElementsCnt);	//	검증.
 		
 		if (!frm2.meeting_title.value) { 		//	제목 없으면 발생.
 			alert("제목을 입력하세요.");
@@ -366,7 +490,7 @@
 			return false;
 		}
 
-		if (!frm2.meeting_date.value) { 			//	날짜 지정 안하면 발생.
+		if (!frm2.meeting_date.value) { 		//	날짜 지정 안하면 발생.
 			alert("일정을 선택하세요.");
 			return false;
 		}
@@ -376,7 +500,7 @@
 			return false;
 		}
 		
-	}
+	};
 	
 	// 회의일정 삭제
 	function delMeetingDate() {
@@ -391,14 +515,82 @@
 				url: sendurl,
 				dataType: 'json',
 				success: function(data) {
-					alert("삭제되었습니다");
+					alert("삭제되었습니다.");
 					location.href="/prj_meeting_calendar";
 				}
 			});
 		} else {
 			return false;
 		}
-	}
+	};
+	
+	// 회의일정 변경
+	function upMeetingDate() {
+	    var meeting_id = $('#meeting_id').val();
+	    var project_id = $('#project_id').val();
+	    var meeting_title = $('#md_title').val();
+	    var meeting_date = $('#md_date').val();
+	    var meeting_place = $('#md_place').val();
+	    var meetuser_id = $('#meetuser_id').val();
+	    var meeting_category = $('#md_category').val();
+	    var attach_name = $('#attach_name').val();
+	    var attach_path = $('#attach_path').val();
+	    var fileInput = $('#file1')[0]; // 파일 인풋 엘리먼트
+	    console.log("fileInput");
+	    console.log(fileInput);
+	    var file1 = fileInput.files[0]; // 실제 파일
+
+	    var meeting_content = $('#md_content').val();
+
+	    // 파일 업로드를 위한 FormData 생성
+	    var formData = new FormData();
+	    formData.append('meeting_id', meeting_id);
+	    formData.append('project_id', project_id);
+	    formData.append('meeting_title', meeting_title);
+	    formData.append('meeting_date', meeting_date);
+	    formData.append('meeting_place', meeting_place);
+	    formData.append('meetuser_id', meetuser_id);
+	    formData.append('meeting_category', meeting_category);
+	    formData.append('file1', file1); // 파일 업로드
+	    formData.append('meeting_content', meeting_content);
+	    formData.append('attach_name', attach_name);
+	    formData.append('attach_path', attach_path);
+
+		console.log('file1');
+        
+		var delbox = '';        //  삭제 버튼에 체크된 게시글
+        document.querySelectorAll("input[name=meetuser_id]:checked").forEach(function (checkbox) {
+            //  체크된 게시글 id값들 리스트에 저장.
+            
+            var bf_noInput = checkbox.value;
+            if (bf_noInput) {
+                var bf_no = bf_noInput + ',';
+                delbox += bf_no ;
+            }
+        });
+        
+        delbox = delbox.slice(0,-1);
+        meetuser_id = delbox;
+        
+        console.log("delbox");
+        console.log(delbox);
+		
+//		var sendurl = "/prj_meeting_date_update/?meeting_id=" + meeting_id + "&project_id=" + project_id;
+		
+		$.ajax({
+			url		: '/prj_meeting_date_update',
+			dataType: 'json',
+			type	: 'POST',
+			data	: formData,
+			contentType: false,
+	        processData: false,
+			success	: function(data) {
+				alert("수정되었습니다.")
+				location.href="/prj_meeting_calendar";
+			}
+		});
+	};
+	
 </script>
 </head>
 <body>
@@ -428,9 +620,7 @@
 							<div class="modal-content">
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">회의 등록</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
-										<span aria-hidden="true">&times;</span>
-									</button>
+									<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" data-bs-dismiss="modal"></button>
 								</div>
 								<div class="modal-body">
 									<div class="form-group">
@@ -457,7 +647,8 @@
 											<option value="월간 회의">월간 회의</option>
 											<option value="내부 회의">내부 회의</option>
 											<option value="회의">회의</option>
-										</select><br>
+										</se
+										lect><br>
 										
 										<label for="taskId" class="col-form-label">첨부파일</label>
 										<input type="file" class="form-control" name="file1">
@@ -467,7 +658,7 @@
 									</div>
 								</div>
 								<div class="modal-footer">
-									<input type="submit" class="btn btn-outline-success" value="추가">
+									<input type="submit" class="btn btn-outline-primary" value="추가">
 									<button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="sprintSettingModalClose" data-bs-dismiss="modal">취소</button>
 								</div>
 							</div>
@@ -475,16 +666,14 @@
 					</div>
 				</div>
 				
-				<!-- 일정 선택 시 회의록 등록하는  modal 추가 -->
+				<!-- 노란색 일정 클릭 시 표출되는 modal (일정 수정, 회의록 등록 선택) -->
 				<div class="modal fade" id="dateClickModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<form action="prj_meeting_report_insert" name="frm2" onsubmit="return chk2()" method="post" enctype="multipart/form-data">
 							<div class="modal-content">
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">회의록 등록</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
-										<span aria-hidden="true">&times;</span>
-									</button>
+									<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" data-bs-dismiss="modal"></button>
 								</div>
 								<div class="modal-body">
 									<div class="form-group">
@@ -509,15 +698,20 @@
 										</select><br>
 										
 										<label for="taskId" class="col-form-label">첨부파일</label>
-										<input type="file" class="form-control" name="file1">
-
+										
+										<div id="idAttachFile">
+										</div>
+										<div id="idAttachInput">
+										</div>
+										
 										<label for="taskId" class="col-form-label">회의 내용</label> 
 										<textarea rows="5" cols="60" id="md_content" name="meeting_content"></textarea>
 									</div>
 								</div>
 								<div class="modal-footer">
-									<input type="submit" class="btn btn-outline-success" value="수정">
-									<button type="button" class="btn btn-outline-dark" onclick="delMeetingDate()">일정 삭제</button>
+									<input type="submit" class="btn btn-outline-primary" value="회의록 등록">
+									<button type="button" class="btn btn-outline-primary" onclick="upMeetingDate()">일정 수정</button>
+									<button type="button" class="btn btn-outline-secondary" onclick="delMeetingDate()">일정 삭제</button>
 									<button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="sprintSettingModalClose" data-bs-dismiss="modal">취소</button>
 								</div>
 							</div>
@@ -531,6 +725,9 @@
 							<h3 id="title">회의록</h3>
 							<div id="meeting">
 
+							</div>
+							<div id="mtPage" class="pagination">
+							
 							</div>
 						</div>
 					</div>

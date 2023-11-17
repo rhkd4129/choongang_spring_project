@@ -43,7 +43,7 @@
 
 <!-- HEADER -->
 <header id="header"></header>
-````````
+
 <!-- CONTENT -->
 <div class="container-fluid">
     <div class="row">
@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="task_content">업무 내용:</label>
-                                <input type="text" class="form-control" name="task_content" id="task_content">
+                                <textarea  rows="5" class="form-control" name="task_content" id="task_content"></textarea>
                                 <form:errors path="task_content" class="errors" />
                             </div>
 
@@ -112,6 +112,8 @@
                                     <input type="radio" class="form-check-input" name="task_status" value="2" id="status2">
                                     <label class="form-check-label" for="status2">완료된 작업</label>
                                 </div>
+
+                                <form:errors path="task_status" class="errors" />
                             </div>
                             <div class="form-group">
                                 <label>Priority:</label>
@@ -127,6 +129,8 @@
                                     <input type="radio" class="form-check-input" name="task_priority" value="2" id="priority2">
                                     <label class="form-check-label" for="priority2">높음</label>
                                 </div>
+
+                                <form:errors path="task_priority" class="errors" />
                             </div>
 
 

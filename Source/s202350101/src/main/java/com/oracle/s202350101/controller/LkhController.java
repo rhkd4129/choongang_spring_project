@@ -43,44 +43,6 @@ public class LkhController {
 	}
 
 
-	// 프로젝트 상태별로 보여주기
-	@GetMapping("task_board")
-	public String task_board(HttpServletRequest request , Model model, String currentPage){
-		log.info("board_view ctr start");
-		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
-		int projectId = userInfo.getProject_id();
-		Task task =  new Task();
-		task.setProject_id(projectId);
-		task.setStart(1);
-		task.setEnd(999);
-		String search="";
-		int taskCount = lkhService.task_count(projectId, Optional.empty());
-		List<Task>  taskList =  lkhService.task_list(task);
-
-		// 작업 리스트를 받은 후 작업 상태별로 나누어서 model에 등록
-		List<Task> taskStatus0 = new ArrayList<Task>();
-		List<Task> taskStatus1 = new ArrayList<Task>();
-		List<Task> taskStatus2 = new ArrayList<Task>();
-		for (Task t : taskList) {
-			switch (t.getTask_status()) {
-				case "0":
-					taskStatus0.add(t);
-					break;
-				case "1":
-					taskStatus1.add(t);
-					break;
-				case "2":
-					taskStatus2.add(t);
-					break;
-			}
-		}
-		model.addAttribute("taskStatus0",taskStatus0);
-		model.addAttribute("taskStatus1",taskStatus1);
-		model.addAttribute("taskStatus2",taskStatus2);
-		model.addAttribute("taskCount",taskCount);
-		return "project/task/taskBoard";
-	}
-
 
 	// 작업 시간 그래프
 	@GetMapping("task_timeline")
@@ -92,70 +54,69 @@ public class LkhController {
 	//작업 리스트
 	@GetMapping("task_list")
 	public String  task_list(HttpServletRequest request,  Model model,String currentPage
-	,@RequestParam(required = false) String search  ) {
+	,@RequestParam(required = false) String keyword
+	,@RequestParam(required = false) String keyword_division) {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 
 		Task task =  new Task();
 		task.setProject_id(projectId);
+
 		List<Task> taskList = null;
 		int taskCount = 0;
 
-		if(search == null){
-			taskCount = lkhService.task_count(projectId,Optional.empty());
+
+		log.info("task list str project_id: {} search:{}  keyword_division {}",projectId,keyword,keyword_division);
+		if(keyword == null){
+			log.info("검색어가 없는경우");
+			taskCount = lkhService.task_count(task);
 			Paging   page = new Paging(taskCount, currentPage);
 			task.setStart(page.getStart());
 			task.setEnd(page.getEnd());
 			taskList =  lkhService.task_list(task);
 			model.addAttribute("page",page);
-			log.info("검색어가 없습");
+
 		}
 		else{
-			log.info("search  -> :{}",search);
-			taskCount = lkhService.task_count(projectId, Optional.of(search));
+			log.info("검색어가 있는경우");
+			task.setKeyword_division(keyword_division);
+			task.setKeyword(keyword);
+			taskCount = lkhService.task_count(task);
 			Paging   page = new Paging(taskCount, currentPage);
-			task.setSearch(search);
+
 			task.setStart(page.getStart());
 			task.setEnd(page.getEnd());
 			taskList =  lkhService.task_list(task);
+
+			log.info("검색 개수 {}",taskCount);
+			for(Task t:taskList){
+				log.info(t.getTask_subject());
+			}
 			model.addAttribute("page",page);
 		}
-
-
 
 		model.addAttribute("taskList", taskList);
 		model.addAttribute("taskCount",taskCount);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("keyword_division",keyword_division);
 		return "project/task/taskList";
-	}
-	@GetMapping("task_search")
-	public String task_search(HttpServletRequest request,  Model model,String currentPage , @RequestParam(required = false) String search ){
-		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
-		int projectId = userInfo.getProject_id();
-
-		Task task =  new Task();
-		task.setProject_id(projectId);
-		task.setSearch(search);
-
-
-
-		return "project/task/taskSearch";
 	}
 
 
 	// 작업 상세 화면
 	@GetMapping("task_detail")
-	public String task_detail(int taskId, int projectId,Model model){
-		log.info("task_create_view ctr taskId : {}",taskId);
+	public String task_detail(int task_id, int project_id,Model model){
+		log.info("task_create_view ctr taskId : {}",task_id);
 
 
 		//현재 task 정보
-		Task task = lkhService.task_detail(taskId,projectId);
+		Task task = lkhService.task_detail(task_id,project_id);
 		// 현재 task의 잇는 첨부파일들
-		List<TaskAttach> taskAttachList =  lkhService.task_attach_list(taskId,projectId);
+		List<TaskAttach> taskAttachList =  lkhService.task_attach_list(task_id,project_id);
 		// 현재 task의 잇는 공동 작업자들
 		TaskSub taskSub = new TaskSub();
-		taskSub.setProject_id(projectId);
-		taskSub.setTask_id(taskId);
+		taskSub.setProject_id(project_id);
+		taskSub.setTask_id(task_id);
 		List<TaskSub> taskSubList =lkhService.taskWorkerlist(taskSub);
 
 		model.addAttribute("taskAttachList",taskAttachList);
@@ -304,6 +265,9 @@ public class LkhController {
 		redirectAttributes.addAttribute("status",true);
 		return "redirect:task_list";
 	}
+
+
+	//파일 삭제하기
 
 
 	// 휴지통 보여주기

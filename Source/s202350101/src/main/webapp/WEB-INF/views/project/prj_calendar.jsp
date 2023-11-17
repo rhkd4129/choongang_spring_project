@@ -82,6 +82,22 @@ div #calendar {
 			events : events,
 			dateClick : function(info) {
 				console.log("clicked date : " + info.dateStr);
+			},
+			
+			eventClick: function(prjEvents) {
+				const element = prjEvents.el;
+				const backgroundColor = window.getComputedStyle(element).backgroundColor;
+				
+				console.log("클릭한 곳의 배경색: " + backgroundColor);
+				
+				if (backgroundColor == "rgb(103, 153, 255)") {
+					var openurl = "/dashboard";
+					
+					console.log("openurl: " + openurl);
+					
+					window.open(openurl, "_self");
+				}
+				
 			}
 		});
 

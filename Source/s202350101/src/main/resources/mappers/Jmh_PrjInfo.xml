@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.oracle.s202350101.JmhPrjInfoMapper">
+
+	<select id="jmhPrjInfoStatusList" parameterType="int" resultType="PrjInfo">
+		SELECT p.*, u.user_name project_manager_name 
+		FROM PRJ_INFO p, USER_INFO u 
+		WHERE p.project_manager_id = u.user_id  
+		AND p.project_status = #{project_status}
+	</select>
+
+	<select id="jmhPrjMemList" parameterType="int" resultType="PrjMemList">
+		SELECT p.*, u.user_name user_name 
+		FROM PRJ_MEM_LIST p, USER_INFO u 
+		WHERE p.user_id = u.user_id 
+		AND p.project_id = #{project_id}
+	</select>
+
+</mapper>

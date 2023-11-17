@@ -1,0 +1,147 @@
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('hij123', 1, '1', 'tiger', '황인정','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 176 중앙빌딩', 'hij123@gmail.com', 'manager', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('ljh123', 1, '1', 'tiger', '이진희','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 177 중앙빌딩', 'ljh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('jmh123', 1, '1', 'tiger', '조미혜','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 178 중앙빌딩', 'jmh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('cyj123', 1, '1', 'tiger', '차예지','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 179 중앙빌딩', 'cyj123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('mkh123', 1, '1', 'tiger', '문경훈','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 180 중앙빌딩', 'mkh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('kjo123', 1, '1', 'tiger', '강준우','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 181 중앙빌딩', 'kjo123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('lkh123', 1, '1', 'tiger', '이광현','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 182 중앙빌딩', 'lkh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('syl123', 1, '2', 'tiger', '석유림','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 183 중앙빌딩', 'syl123@gmail.com', 'manager', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('kth123', 1, '2', 'tiger', '김태현','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 184 중앙빌딩', 'kth123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('khb123', 1, '2', 'tiger', '강한빛','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 185 중앙빌딩', 'khb123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('kch123', 1, '2', 'tiger', '김찬하','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 186 중앙빌딩', 'kch123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('pjk123', 1, '2', 'tiger', '박진기','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 187 중앙빌딩', 'pjk123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('yya123', 1, '2', 'tiger', '유연아','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 188 중앙빌딩', 'yya123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('mjh123', 1, '2', 'tiger', '민지혜','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 189 중앙빌딩', 'mjh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('nbk123', 1, '2', 'tiger', '노보경','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 190 중앙빌딩', 'nbk123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('yhl123', 1, '3', 'tiger', '유희라','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 191 중앙빌딩', 'yhl123@gmail.com', 'manager', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('lkb123', 1, '3', 'tiger', '이금비','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 192 중앙빌딩', 'lkb123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('ayj123', 1, '3', 'tiger', '안영준','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 193 중앙빌딩', 'ayj123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('jht123', 1, '3', 'tiger', '조형택','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 194 중앙빌딩', 'jht123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('nsj123', 1, '3', 'tiger', '노상준','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 195 중앙빌딩', 'nsj123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('kyb123', 1, '3', 'tiger', '김용빈','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 196 중앙빌딩', 'kyb123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('ksh123', 1, '3', 'tiger', '곽승현','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 197 중앙빌딩', 'ksh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('lgh123', 1, '4', 'tiger', '이규현','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 198 중앙빌딩', 'lgh123@gmail.com', 'manager', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('amy123', 1, '4', 'tiger', '엄민용','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 199 중앙빌딩', 'amy123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('knh123', 1, '4', 'tiger', '곽나희','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 200 중앙빌딩', 'knh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('kdh123', 1, '4', 'tiger', '기도희','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 201 중앙빌딩', 'kdh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('hno123', 1, '4', 'tiger', '황남오','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 202 중앙빌딩', 'hno123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('ysh123', 1, '4', 'tiger', '윤상엽','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 203 중앙빌딩', 'ysh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('jjo123', 1, '4', 'tiger', '전준오','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 204 중앙빌딩', 'jjo123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('jsh123', 1, '4', 'tiger', '정송환','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 205 중앙빌딩', 'jsh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('bij123', 2, '5', 'tiger', '반인정','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 176 중앙빌딩', 'bij123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('bjh123', 2, '5', 'tiger', '반진희','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 177 중앙빌딩', 'bjh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('bmh123', 2, '5', 'tiger', '반미혜','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 178 중앙빌딩', 'bmh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('byj123', 2, '5', 'tiger', '반예지','F', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 179 중앙빌딩', 'byj123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('bkh123', 2, '5', 'tiger', '반경훈','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 180 중앙빌딩', 'bkh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('bjo123', 2, '5', 'tiger', '반준우','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 181 중앙빌딩', 'bjo123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');
+
+INSERT INTO USER_INFO 
+(USER_ID, CLASS_ID, PROJECT_ID, USER_PW, USER_NAME, USER_GENDER, USER_NUMBER, USER_BIRTH, USER_ADDRESS, USER_EMAIL, USER_AUTH, ATTACH_NAME, ATTACH_PATH, DEL_STATUS, CHAT_ROOM_SES) VALUES 
+('bgh123', 2, '5', 'tiger', '반광현','M', '010-1111-2222', '98/08/13', '서울 마포구 신촌로 182 중앙빌딩', 'bkh123@gmail.com', 'student', 'user_default.png', 'upload', 0, '');

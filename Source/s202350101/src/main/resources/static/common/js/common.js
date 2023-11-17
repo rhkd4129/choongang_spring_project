@@ -59,6 +59,24 @@ function formatDateTime(d) {
 	return d; 
 }
 
+
+/*
+// getUrlParams() 함수를 사용하여 쿼리 매개변수 추출
+// var params = getUrlParams();
+// console.log(params);
+// 출력: { name: 'John', age: '25', city: 'seoul' }
+
+// 예제 : 특정 쿼리 매개변수 값 가져오기
+// var name = params.name;
+// var age  = params.age;
+// var city = params.city;
+*/
+function getUrlParams() {
+  var params = {};
+  window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
+  return params;
+}
+
 function setCookie(cookieName, cookieValue, days, cookiePath, cookieDomain, cookieSecure){
 	var cookieExpire = new Date();
 	cookieExpire.setDate(cookieExpire.getDate() + days); // 설정 일수만큼 현재시간에 만료값으로 지정
@@ -87,4 +105,10 @@ function deleteCookie(cookieName){
 	if(temp){
 		setCookie(cookieName,temp,(new Date(1)));
 	}
+}
+
+function deleteFlagAttach() {
+	$('#idAttachDeleteFlag').val("D");
+	$('#idAttachFile').hide();
+	$('#idAttachInput').show();
 }

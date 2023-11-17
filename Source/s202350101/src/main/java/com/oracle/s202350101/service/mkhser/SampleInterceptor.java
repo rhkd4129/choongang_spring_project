@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.oracle.s202350101.service.kjoSer.UserInfoService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +15,6 @@ import com.oracle.s202350101.model.UserInfo;
 import lombok.RequiredArgsConstructor;
 
 public class SampleInterceptor implements HandlerInterceptor {
-
 	
 	public SampleInterceptor() {
 		
@@ -49,9 +46,6 @@ public class SampleInterceptor implements HandlerInterceptor {
 			response.sendRedirect("user_login");
 			return false;	// 컨트롤러 진행 x
 		}
-
-
-
 		return true;	// 컨트롤러 진행 o
 	}
 

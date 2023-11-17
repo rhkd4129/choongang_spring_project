@@ -45,7 +45,6 @@
 		where  user_id = #{user_id}
 	</update>
 	
-	<!-- <update id="userInfoUpdate" parameterType="hashmap"> -->
 	<update id="userInfoUpdate" parameterType="userInfo">
 	    UPDATE user_info
 	    SET class_id   = #{class_id},
@@ -63,5 +62,6 @@
 	        attach_path  = #{attach_path}
 	    WHERE user_id   = #{user_id}
 	</update>
+	
 	
 </mapper>

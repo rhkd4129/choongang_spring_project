@@ -75,12 +75,21 @@
 			<h3>Q&A 작성</h3>
 
 				<form:form action="qna_insert" method="post" modelAttribute="bdQna" class="mt-3" enctype="multipart/form-data">
+				<input type="hidden" name="parent_doc_user_id" value="${parent_doc_user_id}">
+				
 				<table class="table table-bordered">
 			        <tr>
 			            <th>작성일</th>
 			            <td><%=strDate %></td>
 			        </tr>
 			
+					<tr>
+			            <th>작성자</th>
+			            <td>
+			               ${userInfoDTO.user_name }
+			            </td>
+			        </tr>
+			        
 			        <tr>
 			            <th>질문 종류</th>
 			            <td>
@@ -94,16 +103,18 @@
 			            </td>
 			        </tr>
 			
+					
 			        <tr>
-			            <th>질문 제목</th>
+			            <th>제목</th>
 			            <td>
 			                <input type="text" name="subject" class="form-control">
 			                <form:errors path="subject" class="error"/>
 			            </td>
 			        </tr>
+			    
 			
 			        <tr>
-			            <th>질문 내용</th>
+			            <th>본문</th>
 			            <td>
 			                <input type="text" name="doc_body" class="form-control">
 			                <form:errors path="doc_body" class="error"/>
@@ -111,7 +122,7 @@
 			        </tr>
 			
 			        <tr>
-			            <th>첨부파일</th>
+			            <th>파일첨부</th>
 			            <td>
 			                <div class="custom-file">
 			                    <input type="file" class="custom-file-input" id="file" name="file1">
@@ -127,6 +138,9 @@
 			        </tr>
 			    </table>
 				</form:form>
+				
+			
+				
 	
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

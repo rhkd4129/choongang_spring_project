@@ -80,7 +80,7 @@ function drawCommentList(comments){
 	}
 	else{
 		$(comments).each(function(index, comment){
-			var list = '<label class="list-group-item d-flex gap-2">';
+			var list = '<label class="list-group-item d-flex gap-2" id="comment_' + comment.comment_doc_no + '">';
 			list 	+= '<span>';
 			list 	+= '<small class="d-block text-body-secondary">작성자 : ' + comment.user_name + '</small>';
 			//작성일 표시처리 : common.js안에 formatDateTime() : 2023-11-09T01:44:25.000+00:00->2023-11-09 01:44:25
@@ -96,6 +96,15 @@ function drawCommentList(comments){
 		});
 		$("#divCommentCount").html("댓글 : " + comments.length.toString());
 		$("#divCommentCount").show();
+	}
+	
+	var params = getUrlParams(); //common.js안 정의
+	if(params.comment_doc_no != null) {
+		var comment_doc_no = params.comment_doc_no;
+		var offset = $("#comment_"+comment_doc_no).offset(); //선택한 태그의 위치를 반환
+		//animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
+		$('html, body').animate({scrollTop : offset.top}, 400);
+		$("#comment_"+comment_doc_no).css('backgroundColor', '#fff3cd');
 	}
 }
 
@@ -138,7 +147,7 @@ $(function(){
 			<div class="container-fluid">
 					<form action="" method="post" enctype="multipart/form-data">
 						<div style="margin-top:20px;height:34px">
-							<h3>문서 조회</h3>
+							<span class="apptitle">문서 조회</span>
 						</div>
 						<table width="100%" style="margin-top:10px">
 							<tr>

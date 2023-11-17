@@ -7,14 +7,6 @@
     <meta charset="UTF-8">
 
     <style text="text/css">
-        #test {
-            margin-top: 5%;
-            margin-bottom: 15%;
-        }
-
-        #admin_page_list {
-            margin-bottom: 5%;
-        }
     </style>
 
     <script type="text/javascript">
@@ -130,40 +122,91 @@
     <div class="row">
 
         <!-- 메뉴 -->
-        <div id="menubar"
-             class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        <div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
         </div>
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!------------------------------ //개발자 소스 입력 START ------------------------------->
-
-            <div id="test">
-                <div id="admin_page_list">
-                    <div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_board'">게시판 관리</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">프로젝트 관리</div>
-                    <div class="btn btn-primary" onclick="location.href='/admin_add_class'">반 생성</div>
-                    <div class="btn btn-secondary" onclick="location.href='/admin_class_list'">반 목록</div>
-                </div>
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="/admin_projectmanager">관리자 설정</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">반 목록</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:20px;height:45px">
+					<span class="apptitle">관리자 설정</span>
+				</div>
+			</div>
+			
+            <div class="container-fluid">
+                
+				<div id="admin_page_list" class="bd-example m-0 border-0">
+					<nav>
+						<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+							<button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="false" onclick="location.href='/admin_projectmanager'">팀장 권한 설정</button>
+							<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="nav-2" aria-selected="false" tabindex="-1" onclick="location.href='/admin_board'">게시판 관리</button>
+							<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-3" type="button" role="tab" aria-controls="nav-3" aria-selected="false" tabindex="-1" onclick="location.href='/admin_approval'">프로젝트 관리</button>
+							<button class="nav-link active" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-4" type="button" role="tab" aria-controls="nav-4" aria-selected="true" tabindex="-1" onclick="location.href='/admin_add_class'">반 생성</button>
+							<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-5" type="button" role="tab" aria-controls="nav-5" aria-selected="false" tabindex="-1" onclick="location.href='/admin_class_list'">반 목록</button>
+						</div>
+					</nav>
+				</div>
 
                 <form action="/admin_add_class" method="post" style="width:50%">
-                    <h2>반생성</h2>
-                    반 번호 : <input class="form-control" type="text" name="class_room_num"><br>
-                    담당 강사 : <input class="form-control" type="text" name="class_master"><br>
-                    강의 이름 : <input class="form-control" type="text" name="class_name"><br>
-                    학원 위치 :
-                    <select class="form-select" name="class_area">
-                        <option value="이대">이대</option>
-                        <option value="강남">강남</option>
-                    </select> <br>
-                    시작 날짜 : <input type="date" name="class_start_date"><br>
-                    종료 날짜 : <input type="date" name="class_end_date"><br><br>
-
+                    <span><h6><b>반생성</b></h6></span>
+                    
+                    <table width="600" class="table" style="margin-top:20px">
+                    <colgroup>
+                    	<col width="10%"></col>
+                    	<col width="40%"></col>
+                    	<col width="10%"></col>
+                    	<col width="40%"></col>
+                    </colgroup>
+						<tr style="">
+                  			<td>반 번호</td>
+                  			<td colspan="3"><input class="form-control" type="text" name="class_room_num"></td>
+						</tr>
+						<tr>
+                  			<td>담당 강사</td>
+                  			<td colspan="3"><input class="form-control" type="text" name="class_master"></td>
+						</tr>
+						<tr>
+                  			<td>강의 이름</td>
+                  			<td colspan="3"><input class="form-control" type="text" name="class_name"></td>
+						</tr>
+						<tr>
+                  			<td>학원 위치</td>
+                  			<td colspan="3">
+	                  			<select class="form-select" name="class_area">
+			                        <option value="이대">이대</option>
+			                        <option value="강남">강남</option>
+			                    </select>
+                  			</td>
+						</tr>
+						<tr>
+                  			<td>시작 날짜</td>
+                  			<td><input type="date" name="class_start_date" class="form-control"></td>
+                  			<td>종료 날짜</td>
+                  			<td><input type="date" name="class_end_date" class="form-control"><br></td>
+						</tr>
+                    </table>
                     <button class="btn btn-secondary" type="submit">반 생성하기</button>
-                    <button class="btn btn-secondary" type="reset">
-                        초기화하기
-                    </button>
+                    <button class="btn btn-secondary" type="reset">초기화하기</button>
                 </form>
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

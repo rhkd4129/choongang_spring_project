@@ -19,6 +19,8 @@ public interface JmhDaoPrjBdData {
 	PrjBdData 		selectBoard(PrjBdData prjBdData);
 	int 			updateBoard(PrjBdData prjBdData);
 	int 			deleteBoard(PrjBdData prjBdData);
+	int 			deleteCommentBoard(PrjBdData prjBdData);
+	List<PrjBdData> selectReplyList(PrjBdData prjBdData);
 	int 			readCount(PrjBdData prjBdData);
 	BdDataGood		checkGoodList(BdDataGood bdDataGood);
 	int 			insertGoodList(BdDataGood bdDataGood);

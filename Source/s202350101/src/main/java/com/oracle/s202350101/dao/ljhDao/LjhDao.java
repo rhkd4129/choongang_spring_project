@@ -29,6 +29,9 @@ public interface LjhDao {
 	List<PrjBdData> 	getBoardRep(HashMap<String, String> map);
 	List<PrjBdData> 	getBoardComt(HashMap<String, String> map);
 	List<PrjInfo> 		getPrjApprove(HashMap<String, String> map);
+	List<PrjInfo> 		getNewPrj(HashMap<String, String> map);
+	int 				updateMeetingDate(Meeting meeting);
+	List<Meeting> 		getMtRpListPage(Meeting meeting);
 
 
 }

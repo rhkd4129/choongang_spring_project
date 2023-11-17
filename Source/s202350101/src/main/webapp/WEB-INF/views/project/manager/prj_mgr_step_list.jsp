@@ -271,6 +271,10 @@
 							<c:if test="${prjInfo.project_status == 2}">완료</c:if>
 						</span>
 					</td>
+				</tr>
+				<tr>	
+					<th>첨부파일</th>
+					<td><a href="javascript:popup('/upload/${prjInfo.attach_path}',800,600)">${prjInfo.attach_name}</a></td>
 				</tr>					
 			</table>
 			

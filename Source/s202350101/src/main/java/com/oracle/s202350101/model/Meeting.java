@@ -25,9 +25,16 @@ public class Meeting {
 	private String 	attach_path;
 	private Date 	create_date;
 	
+	// 페이징 작업
+	private int rn;
+	private String search;   	private String keyword;
+	private String pageNum;		private int total;
+	private int start; 		 	private int end;
+	
 	// 조회용
 	private String 			meetuser_id;
 	private String			user_name;
 	private MeetingMember	meetingMember;
+	private String  		attach_delete_flag;		// 편집저장시 기존첨부 삭제여부(D)
 	
 }

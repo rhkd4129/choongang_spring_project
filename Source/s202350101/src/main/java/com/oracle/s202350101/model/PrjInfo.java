@@ -37,4 +37,11 @@ public class PrjInfo {
 	private String search;   	private String keyword;
 	private String pageNum;		private int total;
 	private int start; 		 	private int end;
+	
+	// 첨부파일
+	private String  attach_delete_flag; //편집저장시 기존첨부 삭제여부(D)
+	
+	private String 	member_user_name; //멤버이름
 }
+
+

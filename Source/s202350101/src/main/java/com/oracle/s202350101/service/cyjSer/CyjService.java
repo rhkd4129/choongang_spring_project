@@ -9,6 +9,8 @@ import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdFreeGood;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdQnaGood;
+import com.oracle.s202350101.model.Code;
+import com.oracle.s202350101.model.Todo;
 
 public interface CyjService {
 
@@ -40,6 +42,7 @@ public interface CyjService {
 	int               ajaxComt(BdFreeComt bdFreeComt);
 	List<BdFree>      eventCount(BdFree bdFree);
 	List<BdFreeComt>  eventSelect(BdFreeComt bdFreeComt);
+//	List<BdFreeComt> 	  ajaxComtListEvent(int doc_no);
 	
 	// 자유
 	int               freeTotal();
@@ -55,20 +58,33 @@ public interface CyjService {
 	int               freeDelete(int doc_no);
 	
 	// qna
-	int               qnaTotalCount();
+	int				  qnaCount(int doc_no);
 	List<BdQna>       qnaRow();
 	List<BdQna>       qnaList(BdQna bdQna);
-	int               qnaInsert(BdQna bdQna);
+	int               qnaSelectCount(BdQna bdQna);
+	int 			  qnaInsert(BdQna bdQna);
 	BdQna             qnaContent(int doc_no);
-	int               qnaCount(int doc_no);
 	int               qnaUpdate(BdQna bdQna);
-	
+	BdQna             selectBdQna(BdQna bdQna);	
+	int 			  qnaReply(BdQna bdQna);
+	List<Code> 		  codeList(Code code);
 	
 	// qna 추천
-	int              qnaConfirm(BdQnaGood bdQnaGood);
-	int              qnaGoodInsert(BdQnaGood bdQnaGood);
-	int              qnaGoodUpdate(BdQnaGood bdQnaGood);
-	int              qnaGoodSelect(BdQna bdQna);
+	int               qnaConfirm(BdQnaGood bdQnaGood);
+	int               qnaGoodInsert(BdQnaGood bdQnaGood);
+	int               qnaGoodUpdate(BdQnaGood bdQnaGood);
+	int               qnaGoodSelect(BdQna bdQna);
+	
+
+	
+
+	
+	
+
+	
+
+
+
 	
 
 

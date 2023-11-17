@@ -51,8 +51,8 @@ $(function() {
 						<input type="hidden" name="attach_path" value="">
 						<input type="hidden" name="alarm_flag" value="${alarm_flag}">
 						
-						<div style="margin-top:20px;height:34px">
-							<h3>문서 작성</h3>
+						<div style="height:34px">
+							<span class="apptitle">문서 작성</span>
 						</div>
 						<table width="100%" style="margin-top:7px">
 							<tr>

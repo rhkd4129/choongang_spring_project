@@ -1,222 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
 	 mapper 여러개 쓰셔도 됩니다. -->
-
-
+	 
+	 
 <mapper namespace="com.oracle.s202350101.PrjInfoMapper">
-
+	
 	<select id="ljhPrjInfoSelOne" parameterType="int" resultType="PrjInfo">
 		SELECT	project_name, project_startdate, project_enddate
-		FROM	prj_info
-		WHERE	project_id = #{project_id}
+	 	FROM	prj_info
+	 	WHERE	project_id = #{project_id}
 	</select>
-
+	
 	<!-- 전체 회의 목록 (일정만, 회의록만, 일정+회의 모두 포함) -->
 	<select id="ljhMeetingList" parameterType="int" resultType="Meeting">
 		SELECT	*
 		FROM	meeting
 		WHERE	project_id = #{project_id}
 	</select>
-
+	
 	<!-- 회의 일정만  -->
 	<select id="ljhMeetingDate" parameterType="int" resultType="Meeting">
 		SELECT	*
 		FROM	meeting
 		WHERE	project_id = #{project_id}
-		  AND 	meeting_status = 1
+		AND 	meeting_status = 1
 	</select>
-
+	
 	<!-- 회의록, 일정+회의 목록 -->
 	<select id="ljhMeetingReportList" parameterType="int" resultType="Meeting">
 		SELECT	*
 		FROM	meeting
 		WHERE	project_id = #{project_id}
-		  AND     meeting_status IN (2, 3)
+		AND     meeting_status IN (2, 3)
 		ORDER BY meeting_id asc
 	</select>
-
+	
+	<select id="ljhMtRpListPage" parameterType="Meeting" resultType="Meeting">
+		<![CDATA[
+			SELECT	*
+			FROM	(
+						SELECT	rownum rn, a.*
+						FROM	(
+									SELECT	*
+									FROM	meeting
+									WHERE	project_id = #{project_id}
+									AND     meeting_status IN (2, 3)
+									ORDER BY meeting_id asc
+								) a
+					)
+			WHERE	rn >= #{start}
+			AND		rn <= #{end} 
+		]]>
+	</select>
+	
 	<!-- .getMeetingRead(meeting_id) -->
 	<select id="ljhMeetingRead" parameterType="int" resultType="Meeting">
-		SELECT	m.*, u.user_name,u.user_id as meetuser_id
-		FROM	meeting m, meeting_member m2, user_info u
-		WHERE	m.meeting_id = #{meeting_id}
-		  AND		m.meeting_id = m2.meeting_id
-		  AND     m2.meetuser_id = u.user_id
+    	SELECT	m.*, u.user_name,u.user_id as meetuser_id
+	    FROM	meeting m, meeting_member m2, user_info u
+	    WHERE	m.meeting_id = #{meeting_id}
+	    AND		m.meeting_id = m2.meeting_id
+	    AND     m2.meetuser_id = u.user_id
 	</select>
-
+	
 	<select id="ljhPrjMemList" parameterType="int" resultType="PrjMemList">
 		SELECT  u.user_name, p.user_id
 		FROM    user_info u, prj_mem_list p
 		WHERE   u.user_id = p.user_id
-		  AND     p.project_id = #{project_id}
+		AND     p.project_id = #{project_id}
 	</select>
-
+	
 	<!-- meeting 테이블 수정 -->
 	<update id="ljhMeetingReportUpdate" parameterType="Meeting">
 		UPDATE	meeting
 		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
-				   meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
-				   attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
-				   meeting_content = #{meeting_content}
+		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
+		        attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
+		        meeting_content = #{meeting_content}
 		WHERE	meeting_id = #{meeting_id}
-		  AND     project_id = #{project_id}
-	</update>
-
+		AND     project_id = #{project_id}
+	</update>		
+	
 	<!-- .deleteMeetingMember / meeting_member 테이블 삭제 -->
 	<delete id="ljhDeleteMeetingMember" parameterType="Meeting">
 		DELETE
 		FROM	meeting_member
 		WHERE	meeting_id = #{meeting_id}
-		  AND		project_id = #{project_id}
+		AND		project_id = #{project_id}
 	</delete>
-
+	
 	<!-- 회의록 수정 시 meeting_member 테이블 추가 -->
 	<insert id="ljhInsertMeetingMember" parameterType="Meeting">
 		INSERT INTO meeting_member VALUES (#{meeting_id}, #{project_id}, #{meetuser_id})
 	</insert>
-
+	
 	<!-- .deleteMeetingReport -->
 	<delete id="ljhDeleteMeetingReport" parameterType="int">
 		DELETE FROM meeting WHERE meeting_id = #{meeting_id}
 	</delete>
-
+	
 	<!-- 회의일정 등록 (meeting_status = 1) -->
 	<insert id="ljhMeetingInsert" parameterType="Meeting">
 		INSERT INTO meeting
-		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title},
-				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 1, #{attach_name, jdbcType=VARCHAR},
+		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
+				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 1, #{attach_name, jdbcType=VARCHAR}, 
 				#{attach_path, jdbcType=VARCHAR}, SYSDATE)
 	</insert>
-
+	
 	<!-- 회의일정 등록 시 참석자 추가 -->
 	<insert id="ljhInsertMember" parameterType="Meeting">
 		INSERT INTO meeting_member
 		VALUES ((SELECT max(meeting_id) FROM meeting), #{project_id}, #{meetuser_id})
 	</insert>
-
+	
 	<!-- 회의일정 -> 회의록 등록 (meeting_status = 3 변경) -->
 	<update id="ljhReportUpdate" parameterType="Meeting">
 		UPDATE	meeting
 		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
-				   meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
-				   attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
-				   meeting_content = #{meeting_content}, meeting_status = 3
+		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
+		        attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
+		        meeting_content = #{meeting_content}, meeting_status = 3
 		WHERE	meeting_id = #{meeting_id}
-		  AND     project_id = #{project_id}
+		AND     project_id = #{project_id}
 	</update>
-
+	
 	<!-- 회의록 등록 (meeting_status = 2) -->
 	<insert id="ljhReportInsert" parameterType="Meeting">
 		INSERT INTO meeting
-		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title},
-				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 2, #{attach_name, jdbcType=VARCHAR},
+		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
+				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 2, #{attach_name, jdbcType=VARCHAR}, 
 				#{attach_path, jdbcType=VARCHAR}, SYSDATE)
 	</insert>
-
+	
+	<!-- 회의일정 수정 -->
+	<update id="ljhMeetingDateUpdate" parameterType="Meeting">
+		UPDATE	meeting
+		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
+		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
+		        attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
+		        meeting_content = #{meeting_content}, meeting_status = 1
+		WHERE	meeting_id = #{meeting_id}
+		AND     project_id = #{project_id}
+	</update>
+	
+	
+	
+	
 	<!-- 프로젝트 생성 승인 알림 (팀장) -->
 	<select id="ljhPrjApprove" parameterType="hashmap" resultType="PrjInfo">
 		SELECT  p.*
 		FROM    prj_info p, user_env u
 		WHERE   p.project_manager_id = u.user_id
-		  AND     u.env_alarm_mine = 'Y'
-		  AND     project_approve = 2
-		  AND     alarm_flag = 'N'
-		  AND     del_status = 0
-		  AND     u.user_id = #{user_id}
+		AND     u.env_alarm_mine = 'Y'
+		AND     project_approve = 2
+		AND     alarm_flag = 'N'
+		AND     del_status = 0
+		AND     u.user_id = #{user_id}
 	</select>
-
+	
 	<!-- 알림 - 접속한 회원 별 회의일정 select -->
 	<select id="ljhUserMeeting" parameterType="hashmap" resultType="Meeting">
-		SELECT  *
-		FROM    meeting m, meeting_member m2
+		SELECT  m.*, m2.*
+		FROM    meeting m, meeting_member m2, user_env u
 		WHERE   m.meeting_id = m2.meeting_id
-		  AND     m2.meetuser_id = #{user_id}
-		  AND		m.project_id = #{project_id}
+		AND     m2.meetuser_id = u.user_id
+		AND     m2.meetuser_id = #{user_id}
+		AND		m.project_id = #{project_id}
+		AND     u.env_alarm_meeting = 'Y'
 	</select>
-
+	
 	<!-- 알림 - 접속한 회원 별 게시판 답글 select -->
 	<select id="ljhBoardRep" parameterType="hashmap" resultType="PrjBdData">
 		SELECT  p.app_id, p.doc_no, p.subject, p.doc_group, p.alarm_flag, p.parent_doc_user_id, p.parent_doc_no, p.project_id,
-				(SELECT app_name
-				 FROM   app_info
-				 WHERE  app_id = p.app_id) app_name
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = p.app_id) app_name
 		FROM    prj_bd_data p, app_info a, user_env u
 		WHERE   p.app_id = a.app_id
-		  AND     u.user_id = p.user_id
-		  AND     (
-				(p.doc_no = p.doc_group AND p.user_id = #{user_id})
-				OR
-				(p.parent_doc_user_id = #{user_id} AND alarm_flag = 'N')
-			)
-		  AND     u.env_alarm_reply = 'Y'
+		AND     u.user_id = p.user_id
+		AND     (
+		        (p.doc_no = p.doc_group AND p.user_id = #{user_id}) 
+		        OR
+		        (p.parent_doc_user_id = #{user_id} AND alarm_flag = 'N')
+		)
+		AND     u.env_alarm_reply = 'Y'
 		UNION
 		SELECT  q.app_id, q.doc_no, q.subject, q.doc_group, q.alarm_flag, q.parent_doc_user_id, q.parent_doc_no, null project_id,
-				(SELECT app_name
-				 FROM   app_info
-				 WHERE  app_id = q.app_id) app_name
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = q.app_id) app_name
 		FROM    bd_qna q, app_info a, user_env u
 		WHERE   q.app_id = a.app_id
-		  AND     u.user_id = q.user_id
-		  AND     (
-				(q.doc_group = q.doc_no AND q.user_id = #{user_id})
-				OR
-				(q.parent_doc_user_id = #{user_id} AND alarm_flag = 'N')
-			)
-		  AND     u.env_alarm_reply = 'Y'
+		AND     u.user_id = q.user_id
+		AND     (
+		        (q.doc_group = q.doc_no AND q.user_id = #{user_id}) 
+		        OR
+		        (q.parent_doc_user_id = #{user_id} AND alarm_flag = 'N')
+		)
+		AND     u.env_alarm_reply = 'Y'
 	</select>
-
+	
 	<!-- 알림 - 접속한 회원 별 게시판 원글 및 댓글 select -->
-	<select id="ljhBoardComt" parameterType="hashmap" resultType="PrjBdData">
+	<select id="ljhBoardComt" parameterType="hashmap" resultType="PrjBdData">	
 		SELECT  f.doc_no, f.user_id, f.subject, f.bd_category, fc.comment_context, f.app_id, null project_id,
-				(SELECT app_name
-				 FROM   app_info
-				 WHERE  app_id = f.app_id) app_name,
-				(SELECT count(*)
-				 FROM   bd_free_comt
-				 WHERE  doc_no = f.doc_no) comment_count
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = f.app_id) app_name,
+		        (SELECT count(*)
+		         FROM   bd_free_comt
+		         WHERE  doc_no = f.doc_no
+		         AND    alarm_flag = 'N') comment_count
 		FROM    bd_free f, bd_free_comt fc, app_info a, user_env u
 		WHERE   f.app_id = a.app_id
-		  AND     f.doc_no = fc.doc_no
-		  AND     u.user_id = f.user_id
-		  AND     (f.user_id = #{user_id} AND fc.alarm_flag = 'N')
-		  AND     u.env_alarm_comm = 'Y'
-
+		AND     f.doc_no = fc.doc_no
+		AND     u.user_id = f.user_id
+		AND     (f.user_id = #{user_id} AND fc.alarm_flag = 'N')
+		AND     u.env_alarm_comm = 'Y'
+		
 		UNION
-
+		
 		SELECT  pr.doc_no, pr.user_id, pr.subject, pr.bd_category, prc.comment_context, pr.app_id, pr.project_id,
-				(SELECT app_name
-				 FROM   app_info
-				 WHERE  app_id = pr.app_id) app_name,
-				(SELECT count(*)
-				 FROM   bd_rep_comt
-				 WHERE  doc_no = pr.doc_no) comment_count
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = pr.app_id) app_name,
+		        (SELECT count(*)
+		         FROM   bd_rep_comt
+		         WHERE  doc_no = pr.doc_no
+		         AND    alarm_flag = 'N') comment_count
 		FROM    prj_bd_rep pr, bd_rep_comt prc, app_info a, user_env u
 		WHERE   pr.app_id = a.app_id
-		  AND     pr.doc_no = prc.doc_no
-		  AND     u.user_id = pr.user_id
-		  AND     (pr.user_id = #{user_id} AND prc.alarm_flag = 'N')
-		  AND     u.env_alarm_comm = 'Y'
-
+		AND     pr.doc_no = prc.doc_no
+		AND     u.user_id = pr.user_id
+		AND     (pr.user_id = #{user_id} AND prc.alarm_flag = 'N')
+		AND     u.env_alarm_comm = 'Y'
+		
 		UNION
 
 		SELECT  pd.doc_no, pd.user_id, pd.subject, pd.bd_category, pdc.comment_context, pd.app_id, pd.project_id,
-				(SELECT app_name
-				 FROM   app_info
-				 WHERE  app_id = pd.app_id) app_name,
-				(SELECT count(*)
-				 FROM   bd_data_comt
-				 WHERE  doc_no = pd.doc_no) comment_count
+		        (SELECT app_name
+		         FROM   app_info
+		         WHERE  app_id = pd.app_id) app_name,
+		        (SELECT count(*)
+		         FROM   bd_data_comt
+		         WHERE  doc_no = pd.doc_no
+		         AND    alarm_flag = 'N') comment_count
 		FROM    prj_bd_data pd, bd_data_comt pdc, app_info a, user_env u
 		WHERE   pd.app_id = a.app_id
-		  AND     pd.doc_no = pdc.doc_no
-		  AND     u.user_id = pd.user_id
-		  AND     (pd.user_id = #{user_id} AND pdc.alarm_flag = 'N')
-		  AND     u.env_alarm_comm = 'Y'
+		AND     pd.doc_no = pdc.doc_no
+		AND     u.user_id = pd.user_id
+		AND     (pd.user_id = #{user_id} AND pdc.alarm_flag = 'N')
+		AND     u.env_alarm_comm = 'Y'
 	</select>
-
-
-
+	
+	<select id="ljhNewPrj" parameterType="hashmap" resultType="PrjInfo">
+		SELECT  *
+		FROM    prj_info
+		WHERE   project_approve = 1
+		AND     del_status = 0
+	</select>
+	
 </mapper>

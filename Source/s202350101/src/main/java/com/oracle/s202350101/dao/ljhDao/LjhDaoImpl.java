@@ -238,6 +238,24 @@ public class LjhDaoImpl implements LjhDao {
 		return result;
 	}
 
+	// 회의일정 수정
+	@Override
+	public int updateMeetingDate(Meeting meeting) {
+		System.out.println("LjhDaoImpl updateMeetingDate Start");
+		int result = 0;
+		
+		try {
+			result = session.update("ljhMeetingDateUpdate", meeting);
+			System.out.println("LjhDaoImpl updateMeetingDate result -> " + result);
+		} catch (Exception e) {
+			System.out.println("LjhDaoImpl updateMeetingDate Exception : " + e.getMessage());
+		}
+		
+		return result;
+	}
+	
+	
+	//-----------------------------------------------------------------------------------------//
 	// 알림 - 접속한 회원 별 회의일정 select
 	@Override
 	public List<Meeting> getUserMeeting(HashMap<String, String> map) {
@@ -301,5 +319,38 @@ public class LjhDaoImpl implements LjhDao {
 		
 		return prjApprove;
 	}
+
+	// 프로젝트 생성 신청 - admin 계정만 해당
+	@Override
+	public List<PrjInfo> getNewPrj(HashMap<String, String> map) {
+		System.out.println("LjhDaoImpl getNewPrj Start");
+		List<PrjInfo> newPrjList = null;
+		
+		try {
+			newPrjList = session.selectList("ljhNewPrj", map);
+			System.out.println("LjhDaoImpl getNewPrj newPrjList.size() -> " + newPrjList.size());
+		} catch (Exception e) {
+			System.out.println("LjhDaoImpl getNewPrj Exception : " + e.getMessage());
+		}
+		
+		return newPrjList;
+	}
+
+	@Override
+	public List<Meeting> getMtRpListPage(Meeting meeting) {
+		System.out.println("LjhDaoImpl getMtRpListPage Start");
+		List<Meeting> mtList = null;
+		
+		try {
+			mtList = session.selectList("ljhMtRpListPage", meeting);
+			System.out.println("LjhDaoImpl getMtRpListPage mtList.size() -> " + mtList.size());
+		} catch (Exception e) {
+			System.out.println("LjhDaoImpl getMtRpListPage Exception : " + e.getMessage());
+		}
+		
+		return mtList;
+	}
+
+
 
 }

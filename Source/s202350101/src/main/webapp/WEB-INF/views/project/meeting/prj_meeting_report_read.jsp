@@ -16,6 +16,7 @@
 		width: 80%;
 		padding: 20px;
 		text-align: center;
+		margin-top: 30px;
 	}
 	#title {
 		width: 80%;
@@ -24,7 +25,7 @@
 	}
 	table tr {
 		height: 50px;
-		border-bottom: solid gray 1px;
+		border-top: solid gray 1px;
 	}
 	table td {
 		text-align: left;
@@ -137,7 +138,7 @@
 					<tr>
 						<th>참석자</th>
 						<td><c:forEach items="${meeting }" var="meeting">
-							 ${meeting.user_name}  
+							 ${meeting.user_name}&nbsp;&nbsp;
 						</c:forEach></td>
 					</tr>
 					<c:forEach items="${meeting }" var="meeting" begin="0" end="0">
@@ -146,7 +147,7 @@
 						</tr>
 						<tr>
 							<th>첨부파일</th>
-							<td><c:if test="${meeting.attach_name != null}"><img class="uploadFile" src="${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}"> ${meeting.attach_name}</c:if></td>
+							<td><c:if test="${meeting.attach_name != null}"><a href="javascript:popup('${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}',800,600)">${meeting.attach_name}</a></c:if></td>
 						</tr>
 						<tr>
 							<th>회의내용</th><td>${meeting.meeting_content}</td>

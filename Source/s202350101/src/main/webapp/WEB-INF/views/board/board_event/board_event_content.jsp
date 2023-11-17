@@ -94,22 +94,7 @@
 	        }
 	    });
 	    
-	    // 이벤트_댓글
-	    $("#comment-form").submit(function(e) {
-	        e.preventDefault();  			     	// 폼의 기본 동작을 막음	
-	        var bdFreeComt = $(this).serialize();   // 데이터를 직렬화 : bdFreeComt --> this = #comment-form
-	        console.log(bdFreeComt);
-	        alert(bdFreeComt);
-	        	$.ajax({
-	    			 url      : 'ajaxComt'
-	    			,type     : 'POST' 
-	    			,dataType : 'json'  
-	    			,data     :  bdFreeComt  		     // 보낼 데이터 
-	        		,success  :  function(comtSelect) {  // comtSelect : 입력한 댓글 갖고 옴 , data로 작성해도 됨  
-	        			console.log(comtSelect);
-	    			}
-	    		});
-	    	});
+
 	    
 	    
 	});
@@ -145,7 +130,7 @@
 				<tr> <th>본문</th>        <td>${eventContent.doc_body}</td> </tr>
 				<tr> <th>조회수</th>       <td>${eventContent.bd_count}</td> </tr>
 				<tr> <th>추천</th>        <td>${eventContent.good_count}</td> </tr>
-				<tr> <th>첨부파일명</th>     <td>${eventContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${eventContent.attach_path}/${eventContent.attach_name}"></td> </tr>	
+				<!--  <tr> <th>첨부파일명</th>     <td>${eventContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${eventContent.attach_path}/${eventContent.attach_name}"></td> </tr>-->	
 						
 				
 				<tr>
@@ -156,7 +141,7 @@
 							<input type="button" value="수정" onclick="location.href='event_update?doc_no=${eventContent.doc_no}'">
 						</c:if>
 						 
-						<c:if test="${result == 1}">
+						<c:if test="${result == 1}">		
 							<input type="button" value="삭제" onclick="eventDelete(${eventContent.doc_no}, '${eventContent.user_id }' )">
 						</c:if> 
 					</td>
@@ -168,8 +153,8 @@
 			<button type="button" id="event_btn" onclick="eventGood(${eventContent.doc_no})">추천수  ${eventContent.good_count}</button>
 			
 
-			<!-- 댓글 -->
-			<form id="comment-form">
+			<!-- 댓글 등록 -->
+			<form action="comtInsert" method="post">
 					<input type="hidden" id="doc_no"    name="doc_no"    value="${eventContent.doc_no}">
 					<input type="hidden" id="user_id"   name="user_id"   value="${eventContent.user_id}">
 					
@@ -181,18 +166,15 @@
 				<tr>
 					<th>이름</th> <th>작성일시</th> <th>내용</th>
 				</tr>
-					
-				<c:forEach var="comt" items="${comt}">	
+				<c:forEach var="comment" items="${commentList}">	
 					<tr>
-						<td>${comt.user_name}</td>
-						<td>${comt.create_date}</td>
-						<td>${comt.comment_context}</td>
+						<td>${comment.user_name}</td>
+						<td>${comment.create_date}</td>
+						<td>${comment.comment_context}</td>
 					</tr> 
 				</c:forEach>			
 			</table>
-				
 
-		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
 	

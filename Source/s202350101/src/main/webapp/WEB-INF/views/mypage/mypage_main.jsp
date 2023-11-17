@@ -107,8 +107,10 @@
 			    			NO <input type="radio" name="env_alarm_comm" value="N"  ${userEnv.env_alarm_comm == 'N' ? 'checked' : ''} ><p>
 			    	답글알림  : YES<input type="radio" name="env_alarm_reply" value="Y" ${userEnv.env_alarm_reply == 'Y' ? 'checked' : ''}>    	 
 			    			NO <input type="radio" name="env_alarm_reply" value="N" ${userEnv.env_alarm_reply == 'N' ? 'checked' : ''}><p>
-			    	프로젝트 생성 승인알림  : YES<input type="radio" name="env_alarm_mine" value="Y" ${userEnv.env_alarm_mine == 'Y' ? 'checked' : ''}> 
-			    					 NO <input type="radio" name="env_alarm_mine" value="N" ${userEnv.env_alarm_mine == 'N' ? 'checked' : ''}><p>
+			    	<c:if test="${userInfoDto.user_auth == 'manager'}">
+				    	프로젝트 생성 승인알림  : YES<input type="radio" name="env_alarm_mine" value="Y" ${userEnv.env_alarm_mine == 'Y' ? 'checked' : ''}> 
+				    					 NO <input type="radio" name="env_alarm_mine" value="N" ${userEnv.env_alarm_mine == 'N' ? 'checked' : ''}><p>
+			    	</c:if>
 			    	회의일정알림  : YES<input type="radio" name="env_alarm_meeting" value="Y" ${userEnv.env_alarm_meeting == 'Y' ? 'checked' : ''}>    
 			    			   NO <input type="radio" name="env_alarm_meeting" value="N" ${userEnv.env_alarm_meeting == 'N' ? 'checked' : ''}><p>
 			    	채팅이용  : YES<input type="radio" name="env_chat" value="Y" ${userEnv.env_chat == 'Y' ? 'checked' : ''}>    			 

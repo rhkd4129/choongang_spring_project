@@ -1,5 +1,16 @@
 @charset "UTF-8";
 
+.menubar {
+	min-width: 200px;
+	max-width: 250px;
+	position: fixed;
+}
+
+.apptitle {
+	font-size: 20px;
+	font-weight: bold;
+}
+
 /* 프레임을 좌우 나누고 싶을때 */
 .frame_set {
 	display: flex;
@@ -25,3 +36,5 @@ a:active { /* 마우스 클릭한 상태 */
 }
 a:visited { /* 방문한 상태 */
 }
+
+

@@ -40,8 +40,8 @@ $(function() {
 						<input type="hidden" name="project_id" value="${board.project_id}">
 						<input type="hidden" name="user_id" value="${board.user_id}">
 						<input type="hidden" name="notify_flag" value="${board.notify_flag}">
-						<div style="margin-top:20px;height:34px">
-							<h3>문서 작성</h3>
+						<div style="height:34px">
+							<span class="apptitle">문서 수정</span>
 						</div>
 						<table width="100%" style="margin-top:7px">
 							<tr>

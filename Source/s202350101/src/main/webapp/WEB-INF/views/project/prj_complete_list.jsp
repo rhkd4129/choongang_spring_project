@@ -39,6 +39,7 @@
 				$('#footer').html(data);
 			}
 		});
+		
 	});
 </script>
 </head>
@@ -58,40 +59,56 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-  <section class="py-3 text-center container">
-    <div class="row py-lg-3">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">완료 프로젝트 목록</h1>
-        <p class="lead text-body-secondary">완료된 프로젝트 목록 조회 가능합니다.</p>
-        <p>
-          <a href="#" class="btn btn-primary my-2">버튼1</a>
-          <a href="#" class="btn btn-secondary my-2">버튼2</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <div class="album py-5 bg-body-tertiary">
-    <div class="container">
-
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">완료 프로젝트 목록</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:20px;height:45px">
+					<span class="apptitle">완료 프로젝트 목록</span>
+				</div>
+			</div>
+			
+  <div class="album py-3"><!-- bg-body-tertiary -->
+    <div class="container" style="margin-left:0px">
+    <p>완료 프로젝트 : ${ProjectCount}건</p>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      
-        <div class="col">
-          <div class="card shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-            <div class="card-body">
-              <p class="card-text">프로젝트 소개</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">더보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">입장</button>
-                </div>
-                <small class="text-body-secondary">9 mins</small>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      	<c:forEach var="prjInfo" items="${prjInfoList}">      	
+	        <div class="col">
+	          <div class="card shadow-sm">
+	            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+	            <div class="card-body">
+	              <p class="card-text"><h5>${prjInfo.project_name} </h5></p>
+	              <p class="card-text">${prjInfo.project_intro}</p>
+	              <p class="card-text">프로젝트 기간 : ${prjInfo.project_startdate} ~ ${prjInfo.project_enddate}</p>
+	              <p class="card-text">팀장 : ${prjInfo.project_manager_name}</p>
+	              <p class="card-text">팀원 : ${prjInfo.member_user_name}</p>
+	              <div class="d-flex justify-content-between align-items-center">
+	                <div class="btn-group">
+	                  <button type="button" class="btn btn-sm btn-outline-secondary">더보기</button>
+	                  <button type="button" class="btn btn-sm btn-outline-secondary">입장</button>
+	                </div>
+	                <small class="text-body-secondary">9 mins</small>
+	              </div>
+	            </div>
+	          </div>
+	        </div>	        
+		</c:forEach>
         
       </div>
     </div>

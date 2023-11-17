@@ -8,7 +8,24 @@
     <meta  charset="UTF-8">
     <title>Insert title here</title>
     <link rel="stylesheet" type="text/css" href="/lkh/css/lkh.css">
+    <style>
 
+        .img_box{
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2%;
+        }
+        .attached_img{
+
+            width: 150px;
+            height: 150px;
+            padding: 1%;
+            margin: 2%;
+            border: 1px solid black;
+
+        }
+        body{overflow: auto; /* 넘치는 부분은 스크롤로 처리 */}
+    </style>
     <script type="text/javascript">
         $(function() {
 
@@ -43,7 +60,7 @@
 
 <!-- HEADER -->
 <header id="header"></header>
-````````
+
 <!-- CONTENT -->
 <div class="container-fluid">
     <div class="row">
@@ -84,7 +101,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="task_content">업무 내용:</label>
-                                <input type="text" class="form-control" name="task_content" id="task_content" value="${task.task_content}">
+                                <textarea  rows="5" class="form-control" name="task_content" id="task_content" value="${task.task_content}"></textarea>
+
                                 <form:errors path="task_content" class="errors" />
                             </div>
 
@@ -113,6 +131,10 @@
                                 <label for="task_end_time">task_end_time</label>
                                 <input type="date" class="form-control" id="task_end_time" name="task_end_itme" value="${task.task_end_itme}"  min="2023-07-22" max="2030-12-31" />
                             </div>
+
+
+
+                            <button style="margin-top: 20px;" type="submit" class="btn btn-primary">수정완료</button>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -133,6 +155,7 @@
                                     <c:if test="${task.task_status == 2}">checked</c:if>>
                                     <label class="form-check-label" for="status2">완료된 작업</label>
                                 </div>
+                                <form:errors path="task_status" class="errors" />
                             </div>
                             <div class="form-group">
                                 <label>Priority:</label>
@@ -151,6 +174,7 @@
                                            <c:if test="${task.task_priority == 2}">checked</c:if>>
                                     <label class="form-check-label" for="priority2">높음</label>
                                 </div>
+                                <form:errors path="task_priority" class="errors" />
                             </div>
 
 
@@ -161,11 +185,12 @@
                                 <label for="task_file" class="fw-bold">첨부파일</label>
                                 <c:choose>
                                     <c:when test="${not empty taskAttachList}">
+                                        <div class="img_box">
                                         <c:forEach items="${taskAttachList}" var="taskAttach">
-                                            <p id="task_file"> ${taskAttach.attach_name}</p>
-                                            <p id="task_file"> ${taskAttach.attach_path}</p>
-                                            <a href="${taskAttach.attach_path}/${taskAttach.attach_name}">보기</a>
+                                            <img  class="attached_img" alt ="이미지 없음" src="${taskAttach.attach_path}/${taskAttach.attach_name}" alt="Attached Image">
+                                            <a href="${taskAttach.attach_path}/${taskAttach.attach_name}" target="_blank">보기</a><br>
                                         </c:forEach>
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
                                         <p class="fw-bold"> 첨부파일 없음 </p>
@@ -176,7 +201,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">수정완료</button>
+
 
             </form:form>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

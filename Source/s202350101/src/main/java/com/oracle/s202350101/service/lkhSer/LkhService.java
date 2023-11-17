@@ -23,7 +23,7 @@ public interface LkhService {
 	List<Task> 				task_time_aces(Task task);
 
 	// 해당 프로젝트 작업 수
-	int 					task_count(int project_id, Optional<String> search);
+	int 					task_count(Task task);
 
 	List<Task>				task_list(Task Task);
 
@@ -42,7 +42,7 @@ public interface LkhService {
 	// 작업생성
 	int 						task_create(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 
-	int							task_attach_create(List<TaskAttach>taskAttachList);
+//	int							task_attach_create(List<TaskAttach>taskAttachList,int fileCount);
 
 	int							task_update(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 

@@ -40,7 +40,14 @@ public class CommonController {
 		return "template_frame";
 	}
 
-
+//	@RequestMapping(value = "/main_header")
+//	public String mainHeaderPage(Model model) {
+//		List<UserInfo> chatUIList = uis.findbyclassuser(1);		//	사용자 클래스ID 필요함.	추후 로그인이 완성되면 변경 예정
+//		log.info(String.valueOf(chatUIList.size()));
+//		model.addAttribute("chatUIList", chatUIList);
+//
+//		return "main_header";
+//	}
 	@ResponseBody
 	@RequestMapping(value = "/main_header")
 	public ModelAndView mainHeaderPage(HttpServletRequest request, Model model) {
@@ -50,21 +57,31 @@ public class CommonController {
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-//		UserInfo us = uis.findbyuserId(userInfoDTO);
-//		request.setAttribute("userInfo", us);
-//		log.info("userInfo: {}",us);
+		log.info("userInfo: {}",userInfoDTO);
 		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
-		List<UserInfo> chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
+		List<UserInfo> chatUIList = uis.findbyclassuser(userInfoDTO);
 		//	사용자가 참여중인 채팅방 조회
 		List<ChatRoom> chatRooms = chs.findByUserId(userInfoDTO);
+
 
 
 		model.addAttribute("userInfo", userInfoDTO);
 		model.addAttribute("chatUIList", chatUIList);
 		model.addAttribute("chatRooms", chatRooms);
 
- 		return new ModelAndView("main_header");
+
+		return new ModelAndView("main_header");
 	}
+
+
+//	@ResponseBody
+//	@RequestMapping(value = "/main_header_chat")
+//	public List<UserInfo> main_header_chat(Model model) {
+//
+//
+//		List<UserInfo> chatUIList = uis.findbyclassuser(1);		//	사용자 클래스ID 필요함.	추후 로그인이 완성되면 변경 예정
+//		return chatUIList;
+//	}
 	@RequestMapping(value = "/main_menu")
 	public String mainMenuPage(Model model) {
 		return "main_menu";
