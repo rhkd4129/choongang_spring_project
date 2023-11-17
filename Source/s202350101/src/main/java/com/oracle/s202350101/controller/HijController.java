@@ -1,8 +1,11 @@
 package com.oracle.s202350101.controller;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,12 +13,14 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.s202350101.model.HijPrjStep;
 import com.oracle.s202350101.model.HijRequestDto;
@@ -42,8 +47,16 @@ public class HijController {
 //--------------------------------------------------------------------------------------		
 	// 프로젝트 승인신청
 	@GetMapping("/admin_approval")
-	public String admin_approval(PrjInfo prjInfo, String currentPage,  Model model) {
+	public String admin_approval(PrjInfo prjInfo, String currentPage,  Model model, HttpServletRequest request) {
 		log.info("HijController approval Start");
+		
+		// UserInfo에서 project_id 들고 오기
+//	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//	    String user_id = userInfoDTO.getUser_id();
+//	    if(!userInfoDTO.getUser_auth().equals("manager")){
+//	    	return "";
+//	    }
+		
 		
 		//-------------------------------------------------
 		int totalCount = hs.totalCount(); // Prj_info 전체 목록 리스트 갯수
@@ -143,6 +156,15 @@ public class HijController {
 			//-------------------------------------------------
 			PrjInfo prjInfo = hs.listStep(project_id);				// 초기설정조회
 			//-------------------------------------------------
+			if(userInfoDTO.getUser_id().equals(prjInfo.getProject_manager_id())){
+				System.out.println("승인신청 알람 해제");
+				
+				//-------------------------------------------------
+				int updateAlarmCount = hs.updateAlarmCount(prjInfo); //알람설정
+				//-------------------------------------------------
+			}
+			
+			//-------------------------------------------------
 			List<PrjStep> titleList = hs.titleList(project_id);		// 단계조회
 			//-------------------------------------------------
 			System.out.println("HijController listMember listMember.size() : " +listMember.size());
@@ -185,7 +207,7 @@ public class HijController {
 //--------------------------------------------------------------------------------------		
 	// 프로젝트 정보 수정 조회
 	@GetMapping(value = "prj_mgr_req_edit")
-	public String prjMgrReqEdit(Model model, HttpServletRequest request) {
+	public String prjMgrReqEdit(Model model, MultipartFile file1, HttpServletRequest request) {
 		
 		// UserInfo에서 project_id 들고 오기
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -210,14 +232,141 @@ public class HijController {
 //--------------------------------------------------------------------------------------		
 	// 프로젝트 정보 수정 수행
 	@PostMapping(value = "req_edit")
-	public String reqEdit(PrjInfo prjInfo, Model model) {
+	public String reqEdit(PrjInfo prjInfo, HttpServletRequest request, Model model, MultipartFile file1) throws Exception {
 		System.out.println("HijController req_edit Start");
 		System.out.println("★prjInfo.getMember_user_id() ---> : " + prjInfo.getMember_user_id());
+		
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		
+		String before_attach_delete_flag = prjInfo.getAttach_delete_flag();
+		String before_attach_path = prjInfo.getAttach_path();
+		
+		System.out.println("before_attach_delete_flag->"+before_attach_delete_flag);
+		System.out.println("before_attach_path->"+before_attach_path);
+		
+		if(before_attach_delete_flag.equals("D") && !before_attach_path.isEmpty()) {
+			prjInfo.setAttach_name("");
+			prjInfo.setAttach_path("");
+		}
+		System.out.println("file1.getSize() : " +file1.getSize());
+		if(file1.getSize()>0) {
+			
+			System.out.println("FileUpload START...");
+			log.info("uploadPath: " 	+ uploadPath);
+			log.info("originalName:"	+ file1.getOriginalFilename());
+			log.info("size: " 			+ file1.getSize());
+			log.info("contentType: " 	+ file1.getContentType());
+			
+			System.out.println("file1.getSize() 안:" +file1.getSize());
+			//----------------------------------------------------------------------------------------
+			String savedName = hijUploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);
+			log.info("savedName: " 	+ savedName);
+			//----------------------------------------------------------------------------------------
+			prjInfo.setAttach_name(file1.getOriginalFilename());
+			prjInfo.setAttach_path(savedName);
+	
+		}
 		//-------------------------------------------------
 		int editResult = hs.reqEdit(prjInfo);
 		//-------------------------------------------------
+		
+		if(editResult > 0) {
+			if(before_attach_delete_flag.equals("D")&& !before_attach_path.isEmpty()) {
+				//수정이 정상수행 되었을때 기존파일 삭제처리
+				String deleteFile = uploadPath + before_attach_path;
+				
+				int delResult = hijUpFileDelete(deleteFile);
+				log.info("deleteFile: " + deleteFile);
+			}
+			model.addAttribute("prjInfo", prjInfo);
+		}
 		return "redirect:/prj_mgr_step_list";
 	}
+//--------------------------------------------------------------------------------------		
+	//파일추가
+	//내부 메소드 private으로
+		private String hijUploadFile(String originalName, byte[] fileData, String uploadPath) throws IOException {
+			
+			// Universally Unique Identified (UUID) 유일한 식별자
+			UUID uid = UUID.randomUUID();
+			
+			// requestPath = requestPath + "/resources/image";
+			System.out.println("uploadPath->"+uploadPath);
+			
+			//Directory생성
+			File fileDirectory = new File(uploadPath);
+			
+			if(!fileDirectory.exists()) {
+				//신규 폴더(Directory) 생성 : 폴더가 없으면 새로 자동 생성해줌.
+				fileDirectory.mkdirs();
+				System.out.println("업로드용 폴더 생성: "+uploadPath);
+			}
+			
+			String savedName = uid.toString() + "_" + originalName;
+			
+			log.info("savedName: "+savedName);
+			
+			File target = new File(uploadPath, savedName);
+			
+			// File target = new File(requestPath, savedName);
+			// File UpLoad ----> uploadPath / UUID+_+originalName
+			
+			//실제 업로드 순간
+			FileCopyUtils.copy(fileData, target); //org.springframework.util.FileCopyUtils
+				
+			return savedName;
+		}
+//--------------------------------------------------------------------------------------
+		//파일추가
+		@RequestMapping(value="hijUploadFileDelete", method = RequestMethod.GET)
+		public String hijUploadFileDelete(String attach_path, HttpServletRequest request, Model model) 
+				throws Exception {
+			
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+			String deleteFile = uploadPath + attach_path;
+			
+			log.info("deleteFile: " + deleteFile);
+			System.out.println("uploadFileDelete GET Start");
+			
+			int delResult = hijUpFileDelete(deleteFile);
+			
+			log.info("deleteFile result-> "+delResult);
+			
+			model.addAttribute("deleteFile", deleteFile);
+			model.addAttribute("delResult", delResult);
+			
+			return "uploadResult";
+			
+		}
+//--------------------------------------------------------------------------------------	
+		//파일추가
+		private int hijUpFileDelete(String deleteFileName) throws Exception {
+			int result = 0;
+			
+			log.info("upFileDelete result-> " + deleteFileName);
+			
+			File file = new File(deleteFileName);
+			
+			if(file.exists()) {
+				
+				if(file.delete()) {
+					
+					System.out.println("파일삭제 성공");
+					result = 1;
+				}
+				else {
+					System.out.println("파일삭제 실패");
+					result = 0;
+				}
+			}
+			else {
+				System.out.println("삭제할 파일이 존재하지 않습니다.");
+				result = -1;
+			}
+			return result;
+		}
+	
+	
 //--------------------------------------------------------------------------------------		
 	// 프로젝트 단계 추가 
 	@GetMapping(value = "prj_mgr_step_insert")

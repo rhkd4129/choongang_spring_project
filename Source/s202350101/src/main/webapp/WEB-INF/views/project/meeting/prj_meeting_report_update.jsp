@@ -16,16 +16,17 @@
 	#meeting {
 		width: 80%;
 		padding: 20px;
-		text-align: center;
+		text-align: center;]
 	}
 	#title {
 		width: 80%;
 		text-align: center;
 		font-size: 25pt;
+		margin-bottom: 30px;
 	}
 	table tr {
 		height: 50px;
-		border-bottom: solid gray 1px;
+		border-top: solid gray 1px;
 	}
 	table td {
 		text-align: left;
@@ -35,15 +36,17 @@
 	.button {
 		text-align: center;
 	}
-	.uploadFile {
-		height: 100px;
-		padding-right: 20px;
-	}
 	.box {
 		width: 80%;
 	}
 	textarea {
 		width: 80%;
+	}
+	input.form-control.form-control-sm.uploadFile {
+    	width: 80%;
+	}
+	.textbox {
+		height: 150px;
 	}
 </style>
 <!-- CSS END -->
@@ -120,7 +123,7 @@
 							</c:forEach>
 							<tr>
 								<th>참석자</th>
-								<td>
+								<td class="box">
 									<c:forEach items="${prjMemList}" var="prjMem">
 										<c:set var="result" value="0" />
 										<c:forEach items="${meeting}" var="meet">
@@ -130,10 +133,10 @@
 										</c:forEach>
 										<c:choose>
 											<c:when test="${result > 0}">
-												<input type="checkbox" name="meetuser_id" value="${prjMem.user_id }" checked> ${prjMem.user_name} 
+												<input type="checkbox" name="meetuser_id" value="${prjMem.user_id }" checked> ${prjMem.user_name}&nbsp;&nbsp;
 										    </c:when>
 											<c:otherwise>
-												<input type="checkbox" name="meetuser_id" value="${prjMem.user_id }"> ${prjMem.user_name} 
+												<input type="checkbox" name="meetuser_id" value="${prjMem.user_id }"> ${prjMem.user_name}&nbsp;&nbsp;
 										    </c:otherwise>
 										</c:choose>
 									</c:forEach>
@@ -159,12 +162,25 @@
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td><input type="file" name="file1">
-										<img class="uploadFile" alt="UpLoad File" src="${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}"> ${meeting.attach_name}</td>
+									<td>
+										<input type="hidden" name="attach_name" value="${meeting.attach_name}">
+										<input type="hidden" name="attach_path" value="${meeting.attach_path}">
+										<input type="hidden" name="attach_delete_flag" id="idAttachDeleteFlag" value="">
+										<div id="idAttachFile">
+											<c:if test="${meeting.attach_name ne null}">
+												<a href="/${meeting.attach_path}/${meeting.attach_name}" target="_blank">${meeting.attach_name}</a>
+												&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
+												<%-- <img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${board.attach_path}" width="100"> --%>
+											</c:if>
+										</div>
+										<div id="idAttachInput" <c:if test="${meeting.attach_name ne null}">style="display:none;"</c:if> >
+											<input type="file" class="form-control form-control-sm uploadFile" name="file1">
+										</div>
+									</td>
 								</tr>
 								<tr>
 									<th>회의내용</th>
-									<td><textarea rows="5" cols="30" name="meeting_content">${meeting.meeting_content}</textarea></td>
+									<td class="textbox"><textarea rows="6" cols="30" name="meeting_content">${meeting.meeting_content}</textarea></td>
 								</tr>
 							</c:forEach>
 							<tr>

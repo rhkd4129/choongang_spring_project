@@ -5,7 +5,7 @@
   background-color: #fdb933; /* #ffc107 */
 }
 </style>
-<table>
+<table width="100%">
 	<tr>
 		<td width="70%" style="vertical-align:top">
 
@@ -13,7 +13,7 @@
 				<img class="me-3" src="/bootstrap-5.3.2-examples/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
 				<div class="lh-1">
 					<h1 class="h6 mb-0 text-white lh-1">PMS (Project Management System)</h1>
-					<small>Since 2023</small>
+					<span>Since 2023</span>
 				</div>
 			</div>
 		
@@ -26,7 +26,7 @@
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
 								<div>
 									<strong class="d-block">전체 작업 체계화/시각화 제공</strong>
-									<small>Take a tour through the product</small>
+									<span>Take a tour through the product</span>
 								</div>
 							</a>
 						</li>
@@ -35,7 +35,7 @@
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
 								<div>
 									<strong class="d-block">작업진행 과정 공유로 원활한 의사소통 가능</strong>
-									<small>Take a tour through the product</small>
+									<span>Take a tour through the product</span>
 								</div>
 							</a>
 						</li>
@@ -44,7 +44,7 @@
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
 								<div>
 									<strong class="d-block">프로젝트 스케쥴 관리의 편의성</strong>
-									<small>Take a tour through the product</small>
+									<span>Take a tour through the product</span>
 								</div>
 							</a>
 						</li>
@@ -53,7 +53,7 @@
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
 								<div>
 									<strong class="d-block">개발 표준화 제공 및 프로젝트 품질 향상</strong>
-									<small>Take a tour through the product</small>
+									<span>Take a tour through the product</span>
 								</div>
 							</a>
 						</li>
@@ -62,7 +62,7 @@
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
 								<div>
 									<strong class="d-block">효율적인 프로젝트 산출물 관리 (문서화 폴더링)</strong>
-									<small>Take a tour through the product</small>
+									<span>Take a tour through the product</span>
 								</div>
 							</a>
 						</li>
@@ -72,7 +72,7 @@
 					<hr class="d-lg-none">
 					<div class="col-lg-auto pe-3">
 						<nav>
-							<ul class="d-flex flex-column gap-2 list-unstyled small">
+							<ul class="d-flex flex-column gap-2 list-unstyled span">
 								<li><a href="#" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">Documentation</a></li>
 								<li><a href="#" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">Use cases</a></li>
 								<li><a href="#" class="link-offset-2 link-underline link-underline-opacity-25 link-underline-opacity-75-hover">API status</a></li>
@@ -97,40 +97,40 @@
 						      <input class="form-check-input form-check-input-placeholder bg-body-tertiary flex-shrink-0 pe-none" disabled="" type="checkbox" value="" style="font-size: 1.375em;">
 						      <span class="pt-1 form-checked-content">
 						        <span contenteditable="true" class="w-100">Boot Sprint Project 생성하기</span>
-						        <small class="d-block text-body-secondary">
+						        <span class="d-block text-body-secondary">
 						          <svg class="bi me-1" width="1em" height="1em"><use xlink:href="#list-check"></use></svg>
 						          Choose list...
-						        </small>
+						        </span>
 						      </span>
 						</label>
 						<label class="list-group-item d-flex gap-3">
 							<input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="" style="font-size: 1.375em;">
 							<span class="pt-1 form-checked-content">
 								<strong>index파일 및 각 담당자별 폴더 및 파일 구성하기</strong>
-								<small class="d-block text-body-secondary">
+								<span class="d-block text-body-secondary">
 									<svg class="bi me-1" width="1em" height="1em"><use xlink:href="#calendar-event"></use></svg>
 									1:00–2:00pm
-								</small>
+								</span>
 							</span>
 						</label>
 						<label class="list-group-item d-flex gap-3">
 							<input class="form-check-input flex-shrink-0" type="checkbox" value="" style="font-size: 1.375em;">
 							<span class="pt-1 form-checked-content">
 								<strong>Oracle DB에 ERD F/E으로 Table생성하기</strong>
-								<small class="d-block text-body-secondary">
+								<span class="d-block text-body-secondary">
 									<svg class="bi me-1" width="1em" height="1em"><use xlink:href="#calendar-event"></use></svg>
 									2:00–2:30pm
-								</small>
+								</span>
 							</span>
 						</label>
 						<label class="list-group-item d-flex gap-3">
 							<input class="form-check-input flex-shrink-0" type="checkbox" value="" style="font-size: 1.375em;">
 							<span class="pt-1 form-checked-content">
 								<strong>DB Table에 샘플 데이타 생성하기</strong>
-								<small class="d-block text-body-secondary">
+								<span class="d-block text-body-secondary">
 									<svg class="bi me-1" width="1em" height="1em"><use xlink:href="#alarm"></use></svg>
 									Tomorrow
-								</small>
+								</span>
 							</span>
 						</label>
 						
@@ -229,7 +229,7 @@
           <h6 class="mb-0">List group item heading</h6>
           <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>
         </div>
-        <small class="opacity-50 text-nowrap">now</small>
+        <span class="opacity-50 text-nowrap">now</span>
       </div>
     </a>
     <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
@@ -239,7 +239,7 @@
           <h6 class="mb-0">Another title here</h6>
           <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>
         </div>
-        <small class="opacity-50 text-nowrap">3d</small>
+        <span class="opacity-50 text-nowrap">3d</span>
       </div>
     </a>
     <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
@@ -249,7 +249,7 @@
           <h6 class="mb-0">Third heading</h6>
           <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>
         </div>
-        <small class="opacity-50 text-nowrap">1w</small>
+        <span class="opacity-50 text-nowrap">1w</span>
       </div>
     </a>
   </div>
@@ -259,21 +259,21 @@
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="">
 			      <span>
 			        First checkbox
-			        <small class="d-block text-body-secondary">With support text underneath to add more detail</small>
+			        <span class="d-block text-body-secondary">With support text underneath to add more detail</span>
 			      </span>
 			    </label>
 			    <label class="list-group-item d-flex gap-2">
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="">
 			      <span>
 			        Second checkbox
-			        <small class="d-block text-body-secondary">Some other text goes here</small>
+			        <span class="d-block text-body-secondary">Some other text goes here</span>
 			      </span>
 			    </label>
 			    <label class="list-group-item d-flex gap-2">
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="">
 			      <span>
 			        Third checkbox
-			        <small class="d-block text-body-secondary">And we end with another snippet of text</small>
+			        <span class="d-block text-body-secondary">And we end with another snippet of text</span>
 			      </span>
 			    </label>
 			</div>
@@ -282,21 +282,21 @@
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="">
 			      <span>
 			        First checkbox
-			        <small class="d-block text-body-secondary">With support text underneath to add more detail</small>
+			        <span class="d-block text-body-secondary">With support text underneath to add more detail</span>
 			      </span>
 			    </label>
 			    <label class="list-group-item d-flex gap-2">
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="">
 			      <span>
 			        Second checkbox
-			        <small class="d-block text-body-secondary">Some other text goes here</small>
+			        <span class="d-block text-body-secondary">Some other text goes here</span>
 			      </span>
 			    </label>
 			    <label class="list-group-item d-flex gap-2">
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="">
 			      <span>
 			        Third checkbox
-			        <small class="d-block text-body-secondary">And we end with another snippet of text</small>
+			        <span class="d-block text-body-secondary">And we end with another snippet of text</span>
 			      </span>
 			    </label>
 			</div>
@@ -305,21 +305,21 @@
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="">
 			      <span>
 			        First checkbox
-			        <small class="d-block text-body-secondary">With support text underneath to add more detail</small>
+			        <span class="d-block text-body-secondary">With support text underneath to add more detail</span>
 			      </span>
 			    </label>
 			    <label class="list-group-item d-flex gap-2">
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="">
 			      <span>
 			        Second checkbox
-			        <small class="d-block text-body-secondary">Some other text goes here</small>
+			        <span class="d-block text-body-secondary">Some other text goes here</span>
 			      </span>
 			    </label>
 			    <label class="list-group-item d-flex gap-2">
 			      <input class="form-check-input flex-shrink-0" type="checkbox" value="">
 			      <span>
 			        Third checkbox
-			        <small class="d-block text-body-secondary">And we end with another snippet of text</small>
+			        <span class="d-block text-body-secondary">And we end with another snippet of text</span>
 			      </span>
 			    </label>
 			</div>

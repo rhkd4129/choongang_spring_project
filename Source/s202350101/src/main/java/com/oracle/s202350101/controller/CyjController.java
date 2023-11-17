@@ -3,6 +3,7 @@ package com.oracle.s202350101.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ import com.oracle.s202350101.service.cyjSer.CyjService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+import oracle.net.aso.f;
 
 @Slf4j
 @Controller
@@ -364,30 +365,32 @@ public class CyjController {
 		model.addAttribute("eventCount", eventCount);
 		
 		// 이벤트_댓글리스트
-		List<BdFreeComt> comt = cs.eventComt(doc_no);
-		System.out.println("상세페이지 댓글 comt-> " + comt);
-		model.addAttribute("comt", comt);
+		List<BdFreeComt> commentList = cs.eventComt(doc_no);
+		System.out.println("상세페이지 댓글 commentList-> " + commentList);
+		model.addAttribute("commentList", commentList);
 		
 		return "board/board_event/board_event_content";
 	}
+	
+// ------------------------------------------------------------------------	
+	
+	// 이벤트_댓글 (아작스였던 거 쓰는 거라 이름 수정하기)
+	@PostMapping(value = "comtInsert")
+	public String eventComtInsert(BdFreeComt bdFreeComt, Model model) {
+		System.out.println("CyjController comtInsert Start--------------------------");
 		
-	// 이벤트_댓글
-	@ResponseBody
-	@PostMapping(value = "ajaxComt")
-	public List<BdFreeComt> ajaxComt(BdFreeComt bdFreeComt) {
-		System.out.println("CyjController ajaxComt Start--------------------------");
-		
-		// 댓글 입력
+		// 댓글입력
 		int comt = cs.ajaxComt(bdFreeComt);
 		System.out.println("CyjController comt-> " + comt);
 		
-		// 입력한 댓글 갖고 오기
+		// 입력한 댓글 가져옴
 		List<BdFreeComt> comtSelect = cs.eventSelect(bdFreeComt); 
 		System.out.println("CyjController comtSelect-> " + comt);
+		model.addAttribute("comtSelect", comtSelect);
 		
-		return comtSelect;
+		return "redirect:/event_content?doc_no="+bdFreeComt.getDoc_no();
 	}
-	
+
 // ------------------------------------------------------------------------	
 	
 	// 이벤트_추천

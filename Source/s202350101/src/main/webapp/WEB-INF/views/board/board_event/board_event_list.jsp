@@ -102,6 +102,7 @@
 	 					<td>${good.bd_count }</td>
 	 					<td>${good.good_count }</td>
 	 				</tr>
+	 				
 	 			</c:forEach>
 	 		</table>
 	 	
@@ -115,9 +116,9 @@
 					<th>조회수</th>     <th>추천</th>	
 				</tr> 
 				
-				<c:forEach var="bdFree" items="${eventList }" varStatus="status">
-					<tr id="bdFree${status.count }"> 
-						<td>${status.count}</td> 
+				<c:forEach var="bdFree" items="${eventList}" varStatus="status">
+					<tr id="bdFree${bdFree.rn }"> 
+						<td>${bdFree.rn}</td> 
 						<td>${bdFree.user_name}</td>     
 					    <td>${bdFree.create_date}</td> 
 						<td>${bdFree.modify_date}</td>  
@@ -133,15 +134,15 @@
 			<!-- 페이징 작업 -->
 			<div class="pagebox">
 				<c:if test="${page.startPage > page.pageBlock }">
-					<a href="board_notify?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+					<a href="board_event?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
 				</c:if>
 				
 				<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-					<a href="board_notify?currentPage=${a }">[${a }]</a>
+					<a href="board_event?currentPage=${a }">[${a }]</a>
 				</c:forEach>
 				
 				<c:if test="${page.endPage < page.totalPage }">
-					<a href="board_notify?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+					<a href="board_event?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
 				</c:if>
 			</div>
 

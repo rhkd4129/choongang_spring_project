@@ -115,7 +115,6 @@
 	}
 
 	function write_user_info() {
-		
 		// 중복확인, 이메일 인증 검증
 		let total_ver = pw_ver + mail_ver;
 		
@@ -152,7 +151,11 @@
 	<div class="login-wrapper">
         <h2>ChoongAng</h2>
         
-        <form:form action="write_user_info" method="post" name="frm" id="login-form" modelAttribute="userInfo">
+        <form:form action="write_user_info" method="post" 
+                   name="frm" 
+                   id="login-form" 
+                   modelAttribute="userInfo"
+                   onsubmit="return write_user_info()">
         	<table>
         	
 			<tr>
@@ -170,9 +173,8 @@
 				</th>
 				<td>
 					<!-- <input id="userpass" type="password" name="user_pw" required maxlength="20" autocomplete="off"> --> 
-					<input id="userpass" type="password" name="user_pw" autocomplete="off"><p>
+					<input id="userpass" type="password" name="user_pw" value="${userInfo.user_pw }" autocomplete="off"><p>
 					<small style="color: red"><form:errors path="user_pw"/></small><p>
-					<small><span class="point">※ 비밀번호는 총 20자 까지 입력가능</span></small><p>
 				</td>
 			</tr>
 			<tr>
@@ -181,7 +183,7 @@
 				</th>
 				<td>
 					<!-- <input id="userpasschk" type="password" name="user_pw2" placeholder="동일하게 입력해주세요." required maxlength="20" autocomplete="off"/> -->
-					<input id="userpasschk" type="password" name="user_pw2" placeholder="동일하게 입력해주세요." autocomplete="off"/>
+					<input id="userpasschk" type="password" name="user_pw2" value="${userInfo.user_pw }" placeholder="동일하게 입력해주세요." autocomplete="off"/>
 					
 					<span class="point successPwChk"></span>
 					<input type="hidden" id="pwDoubleChk"/>
@@ -201,20 +203,20 @@
 			<tr>
 				<th>이름 :</th>
 				<td>
-					<input type="text" name="user_name">
+					<input type="text" name="user_name" value="${userInfo.user_name}">
 				</td>
 			</tr>
            	<tr>
            		<th>성별 :</th>
            		<td>
-           			<input type="radio" name="user_gender" value="M">남  
-           			<input type="radio" name="user_gender" value="F">여
+           			남 <input type="radio" name="user_gender" value="M" ${userInfo.user_gender == 'M' ? 'checked' : ''}>
+           			여 <input type="radio" name="user_gender" value="F" ${userInfo.user_gender == 'F' ? 'checked' : ''}>
            		</td>
            	</tr>
           	<tr>
           		<th>전화번호 : </th>
           		<td>
-          			<input type="tel" name="user_number" placeholder="010-xxxx-xxxx" pattern="\d{2,3}-\d{3,4}-\d{4}" title="2,3자리-3,4자리-4자리"><!-- <input type="button" value="인증하기"> -->
+          			<input type="tel" name="user_number" placeholder="010-xxxx-xxxx" value="${userInfo.user_number}">
           			<small style="color: red"><form:errors path="user_number"/></small> 
           		</td>
           	</tr>
@@ -222,27 +224,27 @@
             <tr>
             	<th>이메일 : </th>
             	<td>
-            		<input type="email" name="user_email" id="user_email" placeholder="ID@Email.com">
-            		<input type="button" value="이메일 인증" onclick="return send_save_mail()">     			  
+            		<input type="email" name="user_email" id="user_email" placeholder="ID@Email.com" value="${userInfo.user_email}">
+            		<input type="button" value="이메일 인증" onclick="return send_save_mail()">	  
             		<div id="mail_number" name="mail_number" style="display: none">
 					    <input type="text" name="number" id="number" placeholder="인증번호 입력">
 					    <button type="button" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
-			    		<small style="color: red"><div id="msg2"></div></small>
 			    		<small style="color: red"><form:errors path="user_email"/></small>
 			    		<input type="hidden" id="Confirm" value="">
 			    	</div>
+            		<small style="color: red"><div id="msg2"></div></small>
             	</td>
             </tr>
             <tr>
             	<th>주소 : </th>
             	<td>
-            		<input type="text" name="user_address"><p> 
+            		<input type="text" name="user_address" value="${userInfo.user_address}"><p> 
             	</td>
             </tr>
           	<tr>
           		<th>생년월일test : </th>
           		<td>
-          			<input type="date" name="user_birth"><p>
+          			<input type="date" name="user_birth" value="${userInfo.user_birth}"><p>
           		</td>
           	</tr>
           	<tr><th>생년월일 : </th>
@@ -259,12 +261,18 @@
 				    </select>
 				</div><p> 
 			</td> -->
-        	<!-- <td><input type="submit" onclick="return write_user_info()" value="가입하기(ajax)" style="float: center"></td> -->
+			
         	<tr>
-	        	<td>
-	        		<input type="submit" value="가입하기(ajax)" style="float: center">
-	        	</td>        	
+        		<td>
+        			<input type="submit" value="가입하기"  style="float: center">
+        		</td>
         	</tr>
+        	
+        	<!-- <tr>
+	        	<td>
+	        		<input type="submit" value="가입하기" onclick="writeUserInfo()">
+	        	</td>        	
+        	</tr> -->
 
   			</table>
   		</form:form>

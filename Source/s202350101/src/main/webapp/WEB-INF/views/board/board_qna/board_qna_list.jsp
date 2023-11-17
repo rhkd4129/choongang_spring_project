@@ -58,7 +58,16 @@
 				$('#footer').html(data);
 			}
 		});
+		
+		//분류별 보기 검색
+		$("#bd_category_selectbox").change(function(){
+			//alert("change~~~");
+			document.frmQnaSearch.submit();
+		});
+		
 	});
+	
+	
 </script>
 </head>
 <body>
@@ -78,7 +87,26 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 			<h3>QNA 게시판</h3><p>
+			
 			<input type="button" value="QNA 작성" onclick="location.href='qna_insert_form'">
+	 		
+	 		
+	 		<!-- 검색 -->
+	 		<h5>Q&A CATEGORY SEARCH</h5>
+	 		<form name="frmQnaSearch" action="board_qna">
+		 		<table border="1">
+			 		<tr>
+			 			<td>
+			 				<select id="bd_category_selectbox" name="keyword">
+				 				<option value="ALL">전체</option>
+					 				<c:forEach var="code" items="${codeList}">
+					 					<option value="${code.cate_code}">${code.cate_name}</option>
+					 				</c:forEach>
+				 			</select>
+			 			</td>
+			 		</tr>	
+		 		</table>
+	 		</form>
 	 		
 	 		
 	 		<!-- 추천수 가장 높은 row 3개 -->
@@ -96,7 +124,7 @@
 	 						<td>${qnaRow.user_name }</td>
 	 						<td>${qnaRow.create_date }</td>
 	 						<td>${qnaRow.modify_date }</td>
-	 						<td>${qnaRow.bd_category }</td>
+	 						<td>${qnaRow.bd_category_name }</td>
 	 						<td class="title"><a href="qna_content?doc_no=${qnaRow.doc_no}">${qnaRow.subject}</a></td>
 	 						<td>${qnaRow.bd_count }</td>
 	 						<td>${qnaRow.good_count }</td>
@@ -106,7 +134,7 @@
 
 	 	
 	 		<!-- 전체 리스트 -->
-	 		<h5>All Count : ${qnaTotalCount}</h5><p>
+	 		<h5>Count : ${qnaTotalCount}</h5><p>
 			<table border="1">  
 				<tr>
 					<th>번호</th>      <th>이름</th>      <th>작성일시</th> 
@@ -121,7 +149,7 @@
 						<td>${qnaList.user_name}</td>     
 					    <td>${qnaList.create_date}</td> 
 						<td>${qnaList.modify_date}</td>     
-						<td>${qnaList.bd_category}</td>     
+						<td>${qnaList.bd_category_name}</td>     
 						<td class="title">
 							<c:forEach begin="1" end="${qnaList.doc_indent}">-</c:forEach>
 							<a href="qna_content?doc_no=${qnaList.doc_no}">${qnaList.subject}</a>

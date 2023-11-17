@@ -18,8 +18,11 @@ import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdFreeGood;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdQnaGood;
+import com.oracle.s202350101.model.Code;
+import com.oracle.s202350101.model.PrjBdData;
 
 import lombok.RequiredArgsConstructor;
+import oracle.net.aso.c;
 
 @Service
 @RequiredArgsConstructor
@@ -213,16 +216,6 @@ public class CyjServiceImpl implements CyjService {
 		return eventCount;
 	}
 	
-	// 이벤트_댓글리스트
-	@Override
-	public List<BdFreeComt> eventComt(int doc_no) {
-		System.out.println("CyjServiceImpl eventComt start");
-		List<BdFreeComt> comt = cd.eventComt(doc_no);
-		System.out.println("CyjServiceImpl comt-> " + comt);
-		
-		return comt;
-	}
-	
 	// 이벤트_댓글입력 
 	@Override
 	public int ajaxComt(BdFreeComt bdFreeComt) {
@@ -242,6 +235,28 @@ public class CyjServiceImpl implements CyjService {
 		
 		return eventSelect;
 	}
+	
+	// 이벤트_댓글리스트
+	@Override
+	public List<BdFreeComt> eventComt(int doc_no) {
+		System.out.println("CyjServiceImpl eventComt start");
+		List<BdFreeComt> comt = cd.eventComt(doc_no);
+		System.out.println("CyjServiceImpl comt-> " + comt);
+		
+		return comt;
+	}
+	
+	// 댓글 리스트 보여주는 비동기 컨트롤러 
+//	@Override
+//	public List<BdFreeComt> ajaxComtListEvent(int doc_no) {
+//		System.out.println("CyjServiceImpl ajaxComtListEvent start");
+//		List<BdFreeComt> comtEventList = cd.comtEventList(doc_no);
+//		System.out.println("CyjServiceImpl comtEventList-> " + comtEventList);
+//		
+//		return comtEventList;
+//	}
+
+	
 	
 // ------------------------------------------------------------------------	
 
@@ -403,16 +418,27 @@ public class CyjServiceImpl implements CyjService {
 // ------------------------------------------------------------------------	
 // ------------------------- qna 게시판 ------------------------------------
 
-	// qna_총 갯수
-	@Override
-	public int qnaTotalCount() {
+	// qna_count (전체 or 분류검색) 
+	@Override 
+	public int qnaSelectCount(BdQna bdQna) {
 		System.out.println("CyjServiceImpl qnaTotalCount start");
-		int qnaTotalCount = cd.qnaTotalCount();
-		System.out.println("CyjServiceImpl qnaTotalCount-> " + qnaTotalCount);
 		
-		return qnaTotalCount;
+		int totalCnt = 0;
+		
+		if(bdQna.getKeyword() != null) {
+			if(!bdQna.getKeyword().equals("")) {
+				System.out.println("★검색 SearchKeyword---->" + bdQna.getKeyword()); 
+				totalCnt = cd.searchCount(bdQna);  // 검색 건수 가져오기 
+				System.out.println("CyjServiceImpl qnaSelectCount totalCnt->" + totalCnt);
+				return totalCnt;
+			}
+		}
+		totalCnt = cd.qnaSelectCount(bdQna);   // 전체 검색 건수
+		System.out.println("CyjServiceImpl qnaSelectCount totalCnt-> " + totalCnt);
+		
+		return totalCnt; 
 	}
-
+	
 	// qna_추천수 가장 높은 row 3개
 	@Override
 	public List<BdQna> qnaRow() {
@@ -427,24 +453,32 @@ public class CyjServiceImpl implements CyjService {
 	@Override
 	public List<BdQna> qnaList(BdQna bdQna) {
 		System.out.println("CyjServiceImpl qnaList start");
-		List<BdQna> qnaTotalList = cd.qnaTotalList(bdQna);
-		System.out.println("CyjServiceImpl qnaTotalList-> " + qnaTotalList);
 		
-		return qnaTotalList;
+		List<BdQna> qnaSelectList = null;
+		
+		if(bdQna.getKeyword() != null) {
+			if(!bdQna.getKeyword().equals("")) {
+				System.out.println("★검색 keyword----> " + bdQna.getKeyword());
+				qnaSelectList = cd.searchList(bdQna); // 분류별 검색 리스트
+				return qnaSelectList;
+			}
+		}
+		// 전체 리스트 
+		qnaSelectList = cd.qnaTotalList(bdQna);
+		System.out.println("CyjServiceImpl qnaSelectList-> " + qnaSelectList);
+		return qnaSelectList;
 	}
 
-// ------------------------------------------------------------------------	
-
-	// qna_새 글 입력 
+	// qna_검색 분류 코드 가져오기
 	@Override
-	public int qnaInsert(@Valid BdQna bdQna) {
-		System.out.println("CyjServiceImpl qnaInsert start");
-		int qnaInsert = cd.qnaInsert(bdQna);
-		System.out.println("CyjServiceImpl qnaInsert-> " + qnaInsert);
+	public List<Code> codeList(Code code) {
+		System.out.println("CyjServiceImpl codeList start");
+		List<Code> codeList = cd.codeList(code);
+		System.out.println("CyjServiceImpl codeList-> " + codeList);
 		
-		return qnaInsert;
+		return codeList;
 	}
-
+	
 // ------------------------------------------------------------------------	
 
 	// qna_상세
@@ -520,8 +554,46 @@ public class CyjServiceImpl implements CyjService {
 		
 		return qnaGoodSelect;
 	}
+
+// ------------------------------------------------------------------------	
+
+	// qna_새 글 입력하기 위한 상세 
+	@Override
+	public BdQna selectBdQna(BdQna bdQna) {
+		System.out.println("CyjServiceImpl selectBdQna start");
+		BdQna selectBdQna = cd.selectBdQna(bdQna);
+		System.out.println("CyjServiceImpl selectBdQna-> " + selectBdQna);
+		
+		return selectBdQna;
+	}
 	
+	// qna_새 글 입력 
+	@Override
+	public int qnaInsert(BdQna bdQna) {
+		System.out.println("CyjServiceImpl qnaInsert start");
+		int qnaInsert = cd.qnaInsert(bdQna);
+		System.out.println("CyjServiceImpl qnaInsert-> " + qnaInsert);
+		
+		return qnaInsert;
+	}
+
+	// ------------------------------------------------------------------------	
+
+	// qna_답변 순서 조절 
+	@Override
+	public int qnaReply(BdQna bdQna) {
+		System.out.println("CyjServiceImpl qnaReply start");
+		int qnaReply = cd.qnaReply(bdQna);
+		System.out.println("CyjServiceImpl qnaReply-> " + qnaReply);
+		
+		return qnaReply;
+	}
+
 	
+
+
+
+
 	
 	
 	

@@ -29,10 +29,13 @@ import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
+import com.oracle.s202350101.model.PrjInfo;
+import com.oracle.s202350101.model.PrjMemList;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.model.Paging;
-import com.oracle.s202350101.service.jmhSer.JmhServicePrjBdDataImpl;
-import com.oracle.s202350101.service.jmhSer.JmhServicePrjBdRepImpl;
+import com.oracle.s202350101.service.jmhSer.JmhServicePrjBdData;
+import com.oracle.s202350101.service.jmhSer.JmhServicePrjBdRep;
+import com.oracle.s202350101.service.jmhSer.JmhServicePrjInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +45,40 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JmhController {
 	
-	private final JmhServicePrjBdDataImpl jmhDataSer;
-	private final JmhServicePrjBdRepImpl jmhRepSer;
+	private final JmhServicePrjBdData jmhDataSer;
+	private final JmhServicePrjBdRep jmhRepSer;	
+	private final JmhServicePrjInfo jmhPrjInfoSer;
 	
 	//완료 프로젝트 목록
 	@RequestMapping(value = "prj_complete_list")
 	public String prjCompleteList(HttpServletRequest request, Model model) {
+
+		int project_status = 2; //완료
+		
+		//-------------------------------------------------------------------
+		List<PrjInfo> prjInfoList = jmhPrjInfoSer.selectList(project_status);
+		//-------------------------------------------------------------------
+		System.out.println("완료 프로젝트 개수 : " + prjInfoList.size());
+		
+		String memberNames = "";
+		for(PrjInfo prjInfo : prjInfoList) {
+			memberNames = "";
+			//-------------------------------------------------------------------------------------
+			List<PrjMemList> prjMemList = jmhPrjInfoSer.selectMemList(prjInfo.getProject_id());
+			//-------------------------------------------------------------------------------------
+			for(PrjMemList prjMem : prjMemList) {
+				if(memberNames.isEmpty()) {
+					memberNames = prjMem.getUser_name();
+				}else {
+					memberNames = memberNames + ", " + prjMem.getUser_name();
+				}
+			}
+			prjInfo.setMember_user_name(memberNames);
+		}
+
+		model.addAttribute("prjInfoList", prjInfoList);
+		model.addAttribute("ProjectCount", prjInfoList.size());
+		
 		
 		return "/project/prj_complete_list";
 	}
@@ -769,6 +800,9 @@ public class JmhController {
 	public String prjBoardRepRead(PrjBdRep prjBdRep, HttpServletRequest request, Model model) {
 		System.out.println("-----프로젝트 업무보고 게시판 조회(prj_board_report_read) START-----");
 		
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+
 		System.out.println("doc_no->"+prjBdRep.getDoc_no());
 		System.out.println("project_id->"+prjBdRep.getProject_id());
 
@@ -777,8 +811,13 @@ public class JmhController {
 		//---------------------------------------------------------
 		System.out.println("subject->"+selectPrjBdRep.getSubject());
 		
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		if(userInfoDTO.getUser_id().equals(selectPrjBdRep.getUser_id())) {
+			//현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			//-------------------------------------------------------------------------------
+			int updateCommentAlarmCount = jmhRepSer.updateCommentAlarmFlag(selectPrjBdRep);
+			//-------------------------------------------------------------------------------
+		}
 		
 		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
 		model.addAttribute("board", selectPrjBdRep);

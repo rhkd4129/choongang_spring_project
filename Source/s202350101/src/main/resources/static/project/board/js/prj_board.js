@@ -8,12 +8,11 @@ function callAction(action, mapping_name) {
 	//수정 : 현재창 or 프레임
 	//추천 : ajax현재창 or 프레임
 	//삭제 : ajax창닫기 or 프레임
-	var checked = false;
-	if($('#idNewWinFlag')) { //목록창에만 새 창 열기 체크박스 존재
+	var checked = true;
+	if(document.getElementById("idNewWinFlag")  != null) {
 		checked = $("#idNewWinFlag").is(':checked');
 	}
 	if(checked || opener) { //목록에 새 창 열기 체크되어 있거나, 이미 문서가 열린 경우 opener가 있는 경우(새 창 열기로 연 경우)
-		
 		switch(action) {
 		case "write": case "read": //작성, 조회(새창), 답변작성
 			popup(mapping_name);

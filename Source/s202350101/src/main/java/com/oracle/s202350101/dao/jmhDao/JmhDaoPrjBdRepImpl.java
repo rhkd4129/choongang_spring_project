@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
-import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 
 import lombok.RequiredArgsConstructor;
@@ -302,6 +301,29 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 			System.out.println("JmhDaoImpl updateCommentAlarmFlag Exception->"+e.getMessage());
 		}
 		System.out.println("JmhDaoImpl updateCommentAlarmFlag END...");
+		return resultCount;
+	}
+
+	//문서의 댓글들 모두 삭제
+	@Override
+	public int deleteCommentBoard(PrjBdRep prjBdRep) {
+
+		System.out.println("JmhDaoImpl deleteCommentBoard START...");
+		int resultCount = 0;		
+		try {
+			//----------------------------------------------------------------------
+			resultCount = session.delete("jmhPrjBdRepDeleteCommentBoard", prjBdRep);
+			//----------------------------------------------------------------------
+			System.out.println("JmhDaoImpl resultCount->"+resultCount);
+			if(resultCount > 0) {
+				//성공
+			}else {
+				System.out.println("SQL오류");
+			}
+		} catch (Exception e) {
+			System.out.println("JmhDaoImpl deleteCommentBoard Exception->"+e.getMessage());
+		}
+		System.out.println("JmhDaoImpl deleteCommentBoard END...");
 		return resultCount;
 	}
 }

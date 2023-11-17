@@ -424,6 +424,17 @@ public class HijServiceImpl implements HijService {
 		
 		return hijSearchResponsMerge;
 	}
+//------------------------------------------------------------------------------------------------------------------
+	// 알람
+	@Override
+	public int updateAlarmCount(PrjInfo prjInfo) {
+		int resultCount=0;
+		System.out.println("HijServiceImple updateAlarmCount START");
+		
+		resultCount = hd.updateAlarmCount(prjInfo);
+		
+		return resultCount;
+	}
 
 
 

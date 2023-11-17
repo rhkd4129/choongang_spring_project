@@ -159,10 +159,45 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 	@Override
 	public int deleteBoard(PrjBdData prjBdData) {
 		System.out.println("JmhServiceImpl deleteBoard START...");
-		int resultCount = 0;				
+		int resultCount = 0;
+		int resultReplyCount = 0;
+		int resultCommentCount = 0;
+
+		//삭제할 문서 정보 가져오기
+		//----------------------------------------------
+		prjBdData = jmhDataDao.selectBoard(prjBdData);
+		//----------------------------------------------
+		
+		//삭제할 하위 답글 정보 가져오기
+		//-------------------------------------------------------------------
+		List<PrjBdData> replyDocList = jmhDataDao.selectReplyList(prjBdData);
+		//-------------------------------------------------------------------
+
+		System.out.println("하위 답글 수:"+replyDocList.size());
+		if(replyDocList.size() > 0) {
+			for(PrjBdData replyDoc : replyDocList) {
+				//-----------------------------------------------------------
+				resultCommentCount = jmhDataDao.deleteCommentBoard(replyDoc);
+				//-----------------------------------------------------------
+				if(resultReplyCount > 0) {System.out.println("답글의 댓글 삭제완료:"+resultCommentCount);}
+				//--------------------------------------------------
+				resultReplyCount = jmhDataDao.deleteBoard(replyDoc);
+				//--------------------------------------------------				
+				if(resultReplyCount > 0) {System.out.println("답글 삭제완료:"+resultReplyCount);}
+			}
+		}
+		
+		//문서의 댓글들 모두 삭제
+		//------------------------------------------------------------
+		resultCommentCount = jmhDataDao.deleteCommentBoard(prjBdData);
+		//------------------------------------------------------------
+		if(resultCommentCount > 0) {System.out.println("댓글 삭제완료:"+resultCommentCount);}
+
 		//----------------------------------------------
 		resultCount = jmhDataDao.deleteBoard(prjBdData);
 		//----------------------------------------------
+		if(resultCount > 0) {System.out.println("문서 삭제완료:"+resultCount);}
+		
 		System.out.println("JmhServiceImpl deleteBoard resultCount->"+resultCount);
 		System.out.println("JmhServiceImpl deleteBoard END...");
 		return resultCount;
@@ -314,6 +349,5 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 		System.out.println("JmhServiceImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
-
 
 }

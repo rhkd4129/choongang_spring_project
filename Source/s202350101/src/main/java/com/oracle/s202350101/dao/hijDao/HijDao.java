@@ -50,6 +50,7 @@ public interface HijDao {
 	int updateStep(PrjStep prjStep);							// 프로젝트 단계 수정 수행
 	int deleteStep(int project_id, int project_step_seq);  		// 프로젝트 단계 삭제
 	List<HijSearchResponseDto> searchAll(HijSearchRequestDto hijSearchRequestDto); // 통합검색
+	int updateAlarmCount(PrjInfo prjInfo);						// 알람
 	
 
 	

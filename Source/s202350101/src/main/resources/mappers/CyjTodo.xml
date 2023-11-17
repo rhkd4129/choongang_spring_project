@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+
+<mapper namespace="com.oracle.s202350101.model.Todo">
+
+
+	<!-- 				todo_insert						 -->
+	
+		<insert id="cyTodoListInsert" parameterType="Todo">
+			insert into todo 
+					(   user_id, 
+	                    todo_no, 
+	                    todo_list, 
+	                    todo_check, 
+	                    todo_date, 
+	                    todo_priority )
+	        values (    #{user_id},
+	                  (SELECT NVL(MAX(todo_no) + 1, 0) FROM todo WHERE user_id = #{user_id}),
+	                    #{todo_list},
+	                    'N',
+	                    sysdate,
+	                    #{todo_priority}
+	                    )
+		</insert>
+
+
+</mapper>

@@ -6,6 +6,7 @@ import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdDataGood;
 import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
+import com.oracle.s202350101.model.PrjBdRep;
 
 public interface JmhServicePrjBdData {
 	int 			totalCount(PrjBdData prjBdData);

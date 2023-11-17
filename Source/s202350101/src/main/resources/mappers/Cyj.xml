@@ -205,7 +205,7 @@
 	
 	
 	<!-- event_댓글 리스트 -->
-	<select id="cyEventComt" parameterType="BdFree" resultType="BdFreeComt">
+	<select id="cyEventComt" parameterType="int" resultType="BdFreeComt">
 		select   u.user_name, c.*
 		from     user_info u, bd_free b, bd_free_comt c
 		where    u.user_id = b.user_id
@@ -236,6 +236,14 @@
 		where  b.user_id = u.user_id  
 		and    doc_no = #{doc_no}
 	</select>
+	
+	
+	<!-- 댓글 리스트 보여줌 -->
+ 	<select id="cyComtEventList" parameterType="int">
+		select  *
+		from    bd_free_comt
+		where   doc_no = #{doc_no}
+	</select>  
 	
 	
 	<!--                          free                            -->
@@ -360,9 +368,17 @@
 	<!--                          qna                            -->
 	
 	
-	<!-- qna_총 갯수 -->
+	<!-- qna_전체 count -->
 	<select id="cyQnaTotalCount" resultType="int">
 		select Count(*) from bd_qna
+	</select>
+	
+	
+	<!-- qna_검색 건수 가져오기  -->
+	<select id="cyQnaSearchCount" parameterType="BdQna" resultType="int">
+		select 	Count(*)
+		from	bd_qna 
+        where   bd_category = #{keyword} 
 	</select>
 	
 	
@@ -371,11 +387,16 @@
 	   <![CDATA[	
 			select   *
 			from     (
-			            select     u.user_name, b.*
+			            select     u.user_name, b.*,
+			            	(SELECT cate_name 
+							 FROM CODE 
+							 WHERE UPPER(table_name)='BD_QNA' 
+							 AND UPPER(field_name)='BD_CATEGORY' 
+							 AND cate_code=b.bd_category) bd_category_name
 			            from       user_info u, bd_qna b
 			            where      u.user_id(+) = b.user_id
 			            order by   b.good_count desc
-			          )
+			          ) 
 			where     rownum <= 3
 		]]>
 	</select>
@@ -386,7 +407,12 @@
 		<![CDATA[	 
 			select * 
 			from (  
-			           select rownum rn, a.*
+			           select rownum rn, a.*,
+			                 (SELECT cate_name 
+							  FROM   CODE 
+							  WHERE  UPPER(table_name)='BD_QNA' 
+							  AND    UPPER(field_name)='BD_CATEGORY' 
+							  AND    cate_code=a.bd_category) bd_category_name
 			           from 
 			                ( select      u.user_name, b.*
 			                  from        user_info u, bd_qna b
@@ -398,35 +424,6 @@
 			and    rn <= #{end}        
 		]]>
 	</select>
-	
-	
-	<!-- qna_새 글 입력 -->
-	<insert id="cyQnaInsert" parameterType="BdQna">
-		insert into 
-			bd_qna  (doc_no, app_id, user_id, 
-                     subject, doc_body, create_date, bd_category,
-                     bd_count, good_count, 
-                     doc_group, 
-                     doc_step, doc_indent
-                     parent_doc_user_id,
-                     parent_doc_no
-                     )
-            values  
-            		(SEQ_BD_QNA_DOC_NO.nextval, 2, #{user_id0},
-                     #{subject], #{doc_body}, sysdate, #{bd_category},
-                      0 , 0, 
-                      <choose>
-                      	<when test="parent_doc_user_id != ''">#{doc_group}</when>
-                      	<otherwise>#{doc_no}</otherwise>
-                      </choose>
-                      #{doc_step}, #{doc_indent},
-                      #{parent_doc_user_id},
-                      <choose>
-                      	<when test="parent_doc_user_id != ''">#{parent_doc_no}</when>
-                      	<otherwise>null</otherwise>
-                      </choose>
-                    ) 
-	</insert>
 	
 	
 	<!-- qna_상세  -->
@@ -487,17 +484,81 @@
 	</select>
 	
 	
+	<!-- qna_새 글 입력하기 위한 상세 -->
+	<select id="cySelectBdQna" parameterType="BdQna" resultType="BdQna">
+		select  u.user_name, b.*
+		from    user_info u, bd_qna b 
+		where   u.user_id = b.user_id
+		and     doc_no = #{doc_no}
+	</select>
+
+
+	<!-- qna_답글 순서 조절 -->
+	<update id="cyQnaReply" parameterType="BdQna">
+		update  bd_qna
+		set     doc_step = doc_step + 1
+		where   doc_group = #{doc_group} 
+		AND     doc_step > #{doc_step}
+	</update>	
 	
 	
+	<!-- qna_원글/답글 입력 -->
+	<insert id="cyQnaInsert" parameterType="BdQna">
+		    insert into bd_qna (
+		        doc_no, app_id, user_id,
+		        subject, doc_body, create_date, bd_category,
+		        bd_count, good_count,
+		        doc_group,
+		        doc_step, doc_indent,
+		        parent_doc_user_id,
+		        parent_doc_no
+		    ) values (
+		        SEQ_BD_QNA_DOC_NO.nextval, 2, #{user_id},
+		        #{subject}, #{doc_body}, sysdate, #{bd_category},
+		        0, 0,
+		        <choose>
+		            <when test="parent_doc_user_id != ''">#{doc_group}</when>
+		            <otherwise>SEQ_BD_QNA_DOC_NO.nextval</otherwise>
+		        </choose>,
+		        #{doc_step}, #{doc_indent},
+		        #{parent_doc_user_id},
+		        <choose>
+		            <when test="parent_doc_user_id != ''">#{parent_doc_no}</when>
+		            <otherwise>null</otherwise>
+		        </choose>
+		    )
+	</insert>
+	 
+	
+	<!-- 검색 분류 코드 가져오기 -->
+ 	<select id="cyCodeListSelect" parameterType="Code" resultType="Code">
+		select *
+		from   code
+		where  upper(table_name) = #{table_name}
+		and    upper(field_name) = #{field_name}
+	</select> 
 	
 	
-	
-	
-	
-	
-	
-	
-	
+	<!-- qna_검색 목록  -->
+	<select id="cyQnaSearchList" parameterType="BdQna" resultType="BdQna">
+			select * 
+			from (  
+			           select rownum rn, a.*,
+			                ( SELECT cate_name 
+							  FROM CODE 
+							  WHERE UPPER(table_name)='BD_QNA' 
+							  AND UPPER(field_name)='BD_CATEGORY' 
+							  AND cate_code = a.bd_category ) bd_category_name
+			           from 
+			                ( select      u.user_name, b.*
+			                  from        user_info u, bd_qna b
+			                  where       u.user_id(+) = b.user_id 
+			                  order by    b.doc_group desc, b.doc_step asc
+			                 ) a
+			           where  a.bd_category = #{keyword} 
+			      )
+			WHERE rn BETWEEN #{start} AND #{end}        
+	</select>
 	
 	
 	

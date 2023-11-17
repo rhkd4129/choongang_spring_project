@@ -2,13 +2,12 @@ package com.oracle.s202350101.dao.cyjDao;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdFreeGood;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdQnaGood;
+import com.oracle.s202350101.model.Code;
 
 public interface CyjDao {
 
@@ -40,6 +39,7 @@ public interface CyjDao {
 	int                ajaxComt(BdFreeComt bdFreeComt);
 	List<BdFree>       eventGood(BdFree bdFree);
 	List<BdFreeComt>   eventSelect(BdFreeComt bdFreeComt);
+//	List<BdFreeComt>   comtEventList(int doc_no);
 	
 	// free
 	int                freeTotal();
@@ -55,19 +55,30 @@ public interface CyjDao {
 	int                freeDelete(int doc_no);
 	
 	// qna
-	int                qnaTotalCount();
+	int                qnaSelectCount(BdQna bdQna);
 	List<BdQna>        qnaList();
 	List<BdQna>        qnaTotalList(BdQna bdQna);
-	int                qnaInsert(@Valid BdQna bdQna);
+	int                qnaInsert(BdQna bdQna);
 	BdQna              qnaContent(int doc_no);
 	int                qnaCount(int doc_no);
 	int                qnaUpdate(BdQna bdQna);
+	BdQna 			   selectBdQna(BdQna bdQna);
+	int 			   qnaReply(BdQna bdQna);
+	List<Code>         codeList(Code code);
+	List<BdQna> 	   searchList(BdQna bdQna);
+	int 			   searchCount(BdQna bdQna);   // select 한 검색 건수 
 	
 	// qna 추천
 	int				   qnaConfrim(BdQnaGood bdQnaGood);
 	int                qnaGoodInsert(BdQnaGood bdQnaGood);
 	int                qnaGoodUpdate(BdQnaGood bdQnaGood);
 	int                qnaGoodSelect(BdQna bdQna);
+	
+
+	
+
+	
+	
 
 	
 	

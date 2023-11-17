@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header_main.jsp" %> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,41 +12,65 @@
 <!-- CSS END -->
 
 <!-- JS START -->
-<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	
-	function editAction() {
-		alert("클릭했음");
-	   	var formData = new FormData();
-
-	    var file = $('#file1')[0].files[0]; // 파일을 가져옵니다.
-	    formData.append('file1', file); // FormData에 파일을 추가합니다.
-	
-	    var userInfo = $('#userInfo').serialize(); // 다른 사용자 정보도 FormData에 추가할 수 있습니다.
-	    formData.append('userInfo', userInfo);
-		
-		$.ajax({
-			 url:'mypage_update_result',
-			 method: 'GET',
-			 
-		     dataType : 'text',
-		     data : formData, userInfo
-			 data : userInfo,
-			 contentType : false,
-			 processData : false,
-			 success : function(data) {
-				if(data == 1){
-					alert("수정완료");
-					location.href='mypage_main';
-				} else {
-					alert("수정실패");
-				}
+	/* 비밀번호 확인 */
+	$(document).ready(function(){
+		$("#user_pw2").blur(function(){
+			if($("#user_pw2").val() == $("#user_pw1").val()){
+				$(".successPwChk").text("비밀번호가 일치합니다.");
+				$(".successPwChk").css("color", "green");
+				$("#pwDoubleChk").val("true");
+			}else{
+				$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
+				$(".successPwChk").css("color", "red");
+				$("#pwDoubleChk").val("false");
 			}
-	
 		});
+	});
+	
+	function send_save_mail() {
+//		alert("클릭!");
+		
+		if($('#user_email').val() === "") {
+			alert("이메일을 입력해 주세요!");
+		} else {
+			$("#mail_number").css("display", "block");
+//			alert("이메일을 입력했음");
+			$.ajax({
+				url : 'send_save_mail',
+				type : 'POST',
+				dataType : 'text',
+				data : { auth_email : $('#user_email').val() },
+				success : function(data) {
+					alert("인증번호가 전송 되었습니다!");
+					$("#Confirm").attr("value", data);
+				}
+			});
+		}
 	}
+	
+	function confirm_authNumber() {
+		
+//		alert("클릭!");
+		var number1 = $("#number").val();
+		var number2 = $("#Confirm").val();
+		
+		if(number1 == "") {
+			$('#msg2').text("인증 번호를 입력해주세요.");
+			return false;
+		} else if(number1 != number2) {
+			$('#msg2').text("인증 번호가 다릅니다.");
+			return false;
+		} else {
+			$('#msg2').text("인증 되었습니다.");
+			mail_ver = 1;	// 이메일 인증되면 0 -> 1
+			return true;
+		}
+	}
+	
 
-</script> -->
+</script>
 
 <!-- JS END -->
 <script type="text/javascript">
@@ -97,7 +122,7 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 		    
 		    <h2>개인 정보 수정</h2>
-			<form action="mypage_update_result" id="userInfo" method="post" enctype="multipart/form-data">
+			<form:form action="mypage_update_result" id="userInfo" method="post" enctype="multipart/form-data" modelAttribute="userInfo">
 				<input type="hidden" name="user_id" value="${userInfoDTO.user_id }">
 				<input type="hidden" name="project_id" value="${userInfoDTO.project_id }">
 				<table>
@@ -109,30 +134,58 @@
 						
 					</tr>
 					<tr><th>아이디</th><td>${userInfoDTO.user_id}</td></tr>
-					<tr><th>새 비밀번호</th><td>
-						<input type="password" id="user_pw1" name="user_pw" placeholder="Password"></td></tr>
-					<tr><th>새 비밀번호 확인</th><td>
-						<input type="password" id="user_pw2" placeholder="Password"></td></tr>
-					<tr><th>이름</th><td>
-						<input type="text" name="user_name" value="${userInfoDTO.user_name}"></td></tr>
+					<tr><th>새 비밀번호(*)</th>
+						<td>
+							<input type="password" id="user_pw1" name="user_pw" placeholder="Password">
+							<small style="color: red"><form:errors path="user_pw"/></small><p>
+						</td>
+					</tr>
+						
+					<tr><th>새 비밀번호 확인(*)</th><td>
+						<input type="password" id="user_pw2" placeholder="Password">
+							<span class="point successPwChk"></span>
+							<input type="hidden" id="pwDoubleChk"/>
+						</td></tr>
+					<tr><th>이름(*)</th>
+						<td>
+							<input type="text" name="user_name" value="${userInfoDTO.user_name}">
+							<small style="color: red"><form:errors path="user_name"/></small><p>
+						</td>
+					</tr>
+				
 					<tr><th>소속</th><td>
 						<select name="class_id">
-							<c:forEach var="classList" items="${classList}">
-								<option value="${classList.class_id }">${classList.class_area }점 ${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
+							<c:forEach var="cList" items="${classList}">
+								<option value="${cList.class_id }">${cList.class_area }점 ${cList.class_room_num }반   ${cList.class_start_date } ~ ${cList.class_end_date }</option>
 							</c:forEach>
 						</select><p>
 						</td></tr>
-					<tr><th>핸드폰번호</th><td>
-						<input type="text" name="user_number" required="required" value="${userInfoDTO.user_number }"></td></tr>
+					<tr><th>핸드폰번호(*)</th>
+						<td>
+							<input type="text" name="user_number" required="required" value="${userInfoDTO.user_number }">
+							<small style="color: red"><form:errors path="user_number"/></small> 
+						</td>
+					</tr>
 					<tr><th>생년월일</th><td>
-						<input type="date" name="user_birth" required="required" value="${userInfoDTO.user_birth }"></td></tr>
+						<input type="date" name="user_birth" value="${userInfoDTO.user_birth }"></td></tr>
 					<tr><th>성별 : </th><td>
 						남 <input type="radio" name="user_gender" value="M" ${userInfoDTO.user_gender == 'M' ? 'checked' : ''}>
 						여 <input type="radio" name="user_gender" value="F" ${userInfoDTO.user_gender == 'F' ? 'checked' : ''}>
 					</td></tr>			    
-				    <tr><th>이메일 : </th><td>
-				    	<input type="email" name="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com">
-           			  	<input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()"></td></tr>
+				    <tr>
+				    	<th>이메일(*) : </th>
+					    <td>
+					    	<input type="email" name="user_email" id="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com">
+	           			  	<input type="button" value="수정" onclick="return send_save_mail()">
+	           			  	<div id="mail_number" name="mail_number" style="display: none">
+							    <input type="text" name="number" id="number" placeholder="인증번호 입력">
+							    <button type="button" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
+					    		<small style="color: red"><div id="msg2"></div></small>
+					    		<small style="color: red"><form:errors path="user_email"/></small>
+					    		<input type="hidden" id="Confirm" value="">
+					    	</div>
+	           			</td>
+           			</tr>
 					<tr><th>주소</th>
 						<td>
 						<input type="text" name="user_address" value="${userInfoDTO.user_address }">
@@ -145,7 +198,7 @@
 					</tr>
 				</table>
 			
-			</form>
+			</form:form>
 			
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

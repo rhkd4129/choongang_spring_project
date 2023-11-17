@@ -118,7 +118,8 @@ public class LjhServiceImpl implements LjhService {
 		
 		return insertResult;
 	}
-
+	
+	// 회의록 삭제
 	@Override
 	public int deleteMeetingReport(Meeting meeting) {
 		System.out.println("LjhServiceImpl deleteMeetingReport Start");
@@ -145,6 +146,7 @@ public class LjhServiceImpl implements LjhService {
 		return totalResult;
 	}
 	
+	// 회의록 수정
 	@Override
 	public int meetingReportUpdate(Meeting meeting) {
 		
@@ -324,7 +326,51 @@ public class LjhServiceImpl implements LjhService {
 		return totalResult;
 	}
 	
+	// 회의일정 수정
+	@Override
+	public int updateMeetingDate(Meeting meeting) {
+		System.out.println("LjhServiceImpl updateMeetingDate Start");
+		
+		String[] meetMems = meeting.getMeetuser_id().split(",");
+		
+		System.out.println("LjhServiceImpl updateMeetingDate meetMems -> " + meetMems);
+		
+		int updateResult = 0;
+		int deleteResult = 0;
+		int insertResult = 0;
+		
+		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		
+		try {
+			updateResult = ljhd.updateMeetingDate(meeting);
+			System.out.println("updateMeetingDate updateResult -> " + updateResult);
+			
+			deleteResult = ljhd.deleteMeetingMember(meeting);
+			System.out.println("updateMeetingDate deleteResult -> " + deleteResult);
+			
+			for (int i = 0; i < meetMems.length; i++) {
+				Meeting mt = new Meeting();
+				mt.setMeetuser_id(meetMems[i]);
+				mt.setMeeting_id(meeting.getMeeting_id());
+				mt.setProject_id(meeting.getProject_id());
+				
+				insertResult += ljhd.insertMeetingMember(mt);
+				System.out.println("updateMeetingDate insertResult -> " + insertResult);
+			}
+			
+			transactionManager.commit(txStatus);
+		} catch (Exception e) {
+			transactionManager.rollback(txStatus);
+			System.out.println("LjhServiceImpl updateMeetingDate Exception -> " + e.getMessage());
+		}
+		
+		int totalResult = updateResult+insertResult+deleteResult;
+		
+		return totalResult;
+	}
 	
+	
+	//-----------------------------------------------------------------------------------------//
 	// 알림 - 접속한 회원 별 회의일정 select 
 	@Override
 	public List<Meeting> getUserMeeting(HashMap<String, String> map) {
@@ -368,5 +414,27 @@ public class LjhServiceImpl implements LjhService {
 		
 		return prjApprove;
 	}
+
+	// 프로젝트 생성 신청 - admin 계정만 해당
+	@Override
+	public List<PrjInfo> getNewPrj(HashMap<String, String> map) {
+		System.out.println("LjhServiceImpl getNewPrj Start");
+		List<PrjInfo> newPrjList = null;
+		
+		newPrjList = ljhd.getNewPrj(map);
+		
+		return newPrjList;
+	}
+
+	@Override
+	public List<Meeting> getMtRpListPage(Meeting meeting) {
+		System.out.println("LjhServiceImpl getMtRpListPage Start");
+		
+		List<Meeting> mtList = ljhd.getMtRpListPage(meeting);
+		
+		return mtList;
+	}
+
+
 	
 }

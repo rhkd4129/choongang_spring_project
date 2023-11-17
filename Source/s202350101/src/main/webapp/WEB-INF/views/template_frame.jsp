@@ -52,7 +52,7 @@
 	<div class="row">
  		
  		<!-- 메뉴 -->
-		<div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+		<div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style="position:fixed">
 		</div>
 		
 		<!-- 본문 -->

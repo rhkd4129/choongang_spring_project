@@ -65,12 +65,46 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div id="test">
                 <div id="admin_page_list">
-	                <div class="btn btn-primary" onclick="location.href='/admin_class_list'">내가 쓴 전체 게시글</div>
+	                <div class="btn btn-primary">내가 쓴 전체 게시글 </div>
                     <!-- <div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">내가 쓴 Q&A 게시글</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_board'">내가 쓴 공용 게시글</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_approval'">내가 쓴 PJ& 공지자료 게시글</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_add_class'">내가 쓴 업무보고 게시글</div> -->
                 </div>
+                <table width="100%" style="margin-top:20px;height:45px">
+					<tr>
+						<td align="right">
+							<form action="mypost_board_list">
+								<table>
+									<tr>
+										<td>
+											<select class="form-select" name="search" style="font-size:0.8rem">
+												<c:forEach var="code" items="${search_codelist}">
+													<option value="${code.cate_code}">${code.cate_name}</option>
+												</c:forEach>
+											</select>
+										</td>
+										<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
+										<td><button type="submit" class="btn btn-primary btn-sm">검색</button></td>
+									</tr>
+								</table>
+							</form>	
+						</td>
+					</tr>
+				</table>						
+				<table width="100%">
+					<tr>
+						<td width="*" style="text-align:right">
+							<c:if test="${not empty keyword}">								
+								<a href="mypost_board_list"><img src="/common/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
+								검색어( <c:forEach var="code" items="${search_codelist}"><c:if test="${code.cate_code == search}">${code.cate_name}</c:if></c:forEach> = ${keyword} ) 
+								<img src="/common/images/icon_search.png" width="14" height="14" style="vertical-align:bottom"> 검색 건수
+							</c:if>
+							<c:if test="${keyword eq null}">총 건수</c:if>
+							 : ${totalBDCount}
+						</td>
+					</tr>
+				</table>
 
                 <table class="table">
                     <thead>
@@ -120,6 +154,7 @@
 								<tr>
 									<td>${sAll.app_name }</td>
 									<td><a href="bdQnaContent?doc_no=${sAll.doc_no }">${sAll.subject }</a></td>
+									
 									<td>${sAll.user_id }</td>
 									<td>${sAll.create_date }</td>
 									<td>${sAll.bd_count }</td>
@@ -129,7 +164,7 @@
 							<c:when test="${sAll.app_id == 3}">
 								<tr>
 									<td>${sAll.app_name }</td>
-									<td><a href="prj_board_data_read?doc_no=${sAll.doc_no }&project_id=${sAll.project_id}">${sAll.subject }</a></td>
+									<td><a href="javascript:popup('prj_board_data_read?doc_no=${sAll.doc_no}&project_id=${sAll.project_id}')">${sAll.subject }</a></td>
 									<td>${sAll.user_id }</td>
 									<td>${sAll.create_date }</td>
 									<td>${sAll.bd_count }</td>
@@ -154,18 +189,32 @@
             </div>
 	  		
 	  		
-					<!-- 페이징 작업 -->
-					<c:if test="${page.startPage > page.pageBlock }">
-						<a href="mypost_board_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
-					</c:if>
-					
-					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-						<a href="mypost_board_list?currentPage=${a }">[${a }]</a>
-					</c:forEach>
-					
-					<c:if test="${page.endPage < page.totalPage }">
-						<a href="mypost_board_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
-					</c:if>
+			<!-- 페이징 작업 -->
+			<%-- <c:if test="${page.startPage > page.pageBlock }">
+				<a href="mypost_board_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+			</c:if>
+			
+			<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
+				<a href="mypost_board_list?currentPage=${a }">[${a }]</a>
+			</c:forEach>
+			
+			<c:if test="${page.endPage < page.totalPage }">
+				<a href="mypost_board_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+			</c:if> --%>
+			
+			<c:if test="${page.startPage > page.pageBlock}">
+			   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
+			</c:if>
+		    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+				<c:choose>
+					<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+					<c:otherwise><li class="page-item"></c:otherwise>
+				</c:choose>
+				<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
+			</c:forEach>						
+		    <c:if test="${page.endPage > page.totalPage}">
+		    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
+		    </c:if>
 					  
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

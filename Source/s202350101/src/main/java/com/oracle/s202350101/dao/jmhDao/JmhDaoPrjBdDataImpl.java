@@ -256,6 +256,50 @@ public class JmhDaoPrjBdDataImpl implements JmhDaoPrjBdData {
 		return resultCount;
 	}
 
+	//문서의 하위 답글들 가져오기
+	@Override
+	public List<PrjBdData> selectReplyList(PrjBdData prjBdData) {
+		
+		System.out.println("JmhDaoImpl selectReplyList START...");
+		List<PrjBdData> prjBdDataList = null;		
+		try {
+			//----------------------------------------------------------------------------
+			prjBdDataList = session.selectList("jmhPrjBdDataSelectReplyBoard", prjBdData);
+			//----------------------------------------------------------------------------
+			System.out.println("하위 답글 수1 :" + prjBdDataList.size());
+			if(prjBdDataList != null) {
+				System.out.println("JmhDaoImpl selectReplyList prjBdDataList.get(0).getSubject()->"+((PrjBdData) prjBdDataList.get(0)).getSubject());
+			}
+		} catch (Exception e) {
+			System.out.println("JmhDaoImpl selectReplyList Exception->"+e.getMessage());
+		}
+		System.out.println("JmhDaoImpl selectReplyList END...");
+		return prjBdDataList;
+	}
+
+	//문서의 댓글들 모두 삭제
+	@Override
+	public int deleteCommentBoard(PrjBdData prjBdData) {
+
+		System.out.println("JmhDaoImpl deleteCommentBoard START...");
+		int resultCount = 0;		
+		try {
+			//------------------------------------------------------------------------
+			resultCount = session.delete("jmhPrjBdDataDeleteCommentBoard", prjBdData);
+			//------------------------------------------------------------------------
+			System.out.println("JmhDaoImpl resultCount->"+resultCount);
+			if(resultCount > 0) {
+				//성공
+			}else {
+				System.out.println("SQL오류");
+			}
+		} catch (Exception e) {
+			System.out.println("JmhDaoImpl deleteCommentBoard Exception->"+e.getMessage());
+		}
+		System.out.println("JmhDaoImpl deleteCommentBoard END...");
+		return resultCount;
+	}
+	
 	//조회수
 	@Override
 	public int readCount(PrjBdData prjBdData) {
@@ -500,4 +544,5 @@ public class JmhDaoPrjBdDataImpl implements JmhDaoPrjBdData {
 		System.out.println("JmhDaoImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
+
 }

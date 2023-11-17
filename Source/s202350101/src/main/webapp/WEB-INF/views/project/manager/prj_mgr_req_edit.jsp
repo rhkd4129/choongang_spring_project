@@ -22,7 +22,7 @@
 
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 
-			<form action="req_edit" method="post">
+			<form action="req_edit" method="post" enctype="multipart/form-data">
 			
 			<h2>프로젝트 정보</h2>
 			<hr>
@@ -73,6 +73,31 @@
 				<tr>
 					<th>프로젝트 소개</th>
 					<td><textarea class="form-control" name="project_intro" aria-label="With textarea" rows="5">${prjInfo.project_intro}</textarea></td>
+				</tr>
+				
+				<tr>
+					<td>파일첨부</td>
+					<td>
+						<table width="100%">
+							<tr>
+								<td>
+									<input type="hidden" name="attach_name" value="${prjInfo.attach_name}">
+									<input type="hidden" name="attach_path" value="${prjInfo.attach_path}">
+									<input type="hidden" name="attach_delete_flag" id="idAttachDeleteFlag" value="">
+									<div id="idAttachFile">
+										<c:if test="${prjInfo.attach_path ne null}">
+											<a href="/upload/${prjInfo.attach_path}" target="_blank">${prjInfo.attach_name}</a>
+											&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">
+											<%-- <img alt="UpLoad Image" src="${pageContext.request.contextPath}/upload/${board.attach_path}" width="100"> --%>
+										</c:if>													
+									</div>																						
+									<div id="idAttachInput" <c:if test="${prjInfo.attach_path ne null}">style="display:none;"</c:if> >
+										<input type="file" class="form-control form-control-sm" name="file1">
+									</div>
+								</td>
+							</tr>
+						</table>								
+					</td>
 				</tr>
 	 				
 			</table>

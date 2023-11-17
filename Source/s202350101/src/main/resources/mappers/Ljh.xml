@@ -38,6 +38,24 @@
 		ORDER BY meeting_id asc
 	</select>
 	
+	<select id="ljhMtRpListPage" parameterType="Meeting" resultType="Meeting">
+		<![CDATA[
+			SELECT	*
+			FROM	(
+						SELECT	rownum rn, a.*
+						FROM	(
+									SELECT	*
+									FROM	meeting
+									WHERE	project_id = #{project_id}
+									AND     meeting_status IN (2, 3)
+									ORDER BY meeting_id asc
+								) a
+					)
+			WHERE	rn >= #{start}
+			AND		rn <= #{end} 
+		]]>
+	</select>
+	
 	<!-- .getMeetingRead(meeting_id) -->
 	<select id="ljhMeetingRead" parameterType="int" resultType="Meeting">
     	SELECT	m.*, u.user_name,u.user_id as meetuser_id
@@ -116,13 +134,27 @@
 				#{attach_path, jdbcType=VARCHAR}, SYSDATE)
 	</insert>
 	
+	<!-- 회의일정 수정 -->
+	<update id="ljhMeetingDateUpdate" parameterType="Meeting">
+		UPDATE	meeting
+		SET		meeting_title = #{meeting_title}, meeting_date = #{meeting_date},
+		        meeting_place = #{meeting_place}, meeting_category = #{meeting_category},
+		        attach_name = #{attach_name, jdbcType=VARCHAR}, attach_path = #{attach_path, jdbcType=VARCHAR},
+		        meeting_content = #{meeting_content}, meeting_status = 1
+		WHERE	meeting_id = #{meeting_id}
+		AND     project_id = #{project_id}
+	</update>
+	
+	
+	
+	
 	<!-- 프로젝트 생성 승인 알림 (팀장) -->
 	<select id="ljhPrjApprove" parameterType="hashmap" resultType="PrjInfo">
 		SELECT  p.*
 		FROM    prj_info p, user_env u
 		WHERE   p.project_manager_id = u.user_id
 		AND     u.env_alarm_mine = 'Y'
-		AND     project_approve = 1
+		AND     project_approve = 2
 		AND     alarm_flag = 'N'
 		AND     del_status = 0
 		AND     u.user_id = #{user_id}
@@ -130,11 +162,13 @@
 	
 	<!-- 알림 - 접속한 회원 별 회의일정 select -->
 	<select id="ljhUserMeeting" parameterType="hashmap" resultType="Meeting">
-		SELECT  *
-		FROM    meeting m, meeting_member m2
+		SELECT  m.*, m2.*
+		FROM    meeting m, meeting_member m2, user_env u
 		WHERE   m.meeting_id = m2.meeting_id
+		AND     m2.meetuser_id = u.user_id
 		AND     m2.meetuser_id = #{user_id}
 		AND		m.project_id = #{project_id}
+		AND     u.env_alarm_meeting = 'Y'
 	</select>
 	
 	<!-- 알림 - 접속한 회원 별 게시판 답글 select -->
@@ -176,7 +210,8 @@
 		         WHERE  app_id = f.app_id) app_name,
 		        (SELECT count(*)
 		         FROM   bd_free_comt
-		         WHERE  doc_no = f.doc_no) comment_count
+		         WHERE  doc_no = f.doc_no
+		         AND    alarm_flag = 'N') comment_count
 		FROM    bd_free f, bd_free_comt fc, app_info a, user_env u
 		WHERE   f.app_id = a.app_id
 		AND     f.doc_no = fc.doc_no
@@ -192,7 +227,8 @@
 		         WHERE  app_id = pr.app_id) app_name,
 		        (SELECT count(*)
 		         FROM   bd_rep_comt
-		         WHERE  doc_no = pr.doc_no) comment_count
+		         WHERE  doc_no = pr.doc_no
+		         AND    alarm_flag = 'N') comment_count
 		FROM    prj_bd_rep pr, bd_rep_comt prc, app_info a, user_env u
 		WHERE   pr.app_id = a.app_id
 		AND     pr.doc_no = prc.doc_no
@@ -208,7 +244,8 @@
 		         WHERE  app_id = pd.app_id) app_name,
 		        (SELECT count(*)
 		         FROM   bd_data_comt
-		         WHERE  doc_no = pd.doc_no) comment_count
+		         WHERE  doc_no = pd.doc_no
+		         AND    alarm_flag = 'N') comment_count
 		FROM    prj_bd_data pd, bd_data_comt pdc, app_info a, user_env u
 		WHERE   pd.app_id = a.app_id
 		AND     pd.doc_no = pdc.doc_no
@@ -217,6 +254,11 @@
 		AND     u.env_alarm_comm = 'Y'
 	</select>
 	
-
+	<select id="ljhNewPrj" parameterType="hashmap" resultType="PrjInfo">
+		SELECT  *
+		FROM    prj_info
+		WHERE   project_approve = 1
+		AND     del_status = 0
+	</select>
 	
 </mapper>

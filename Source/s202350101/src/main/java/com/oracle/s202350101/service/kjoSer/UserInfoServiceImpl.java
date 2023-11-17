@@ -17,10 +17,12 @@ import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserInfoServiceImpl implements UserInfoService {
 
     private final UserInfoDao UIdao;
@@ -50,6 +52,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         kjo.setObj(page);
 
         return kjo;
+    }
+
+    //<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
+    @Override
+    public List<UserInfo> findbyClassUserAndChatEnv(UserInfo userInfo) {
+        log.info("findbyclassuser start");
+        List<UserInfo> UIList = UIdao.findbyClassUserAndChatEnv(userInfo);
+        return UIList;
     }
 
 

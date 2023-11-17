@@ -3,7 +3,6 @@ package com.oracle.s202350101.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +26,13 @@ import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdFreeGood;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdQnaGood;
+import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.cyjSer.CyjService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @Controller
@@ -316,8 +315,8 @@ public class CyjControllerFreeQna {
 	public String boardQna(BdQna bdQna, String currentPage, Model model) {
 		System.out.println("CyjControllerQna board_qna Start----------------------");
 		
-		// 총 갯수
-		int qnaTotalCount = cs.qnaTotalCount();
+		// 갯수 (전체 or 분류검색)
+		int qnaTotalCount = cs.qnaSelectCount(bdQna);
 		System.out.println("CyjControllerQna qnaTotalCount-> " + qnaTotalCount);
 		model.addAttribute("qnaTotalCount", qnaTotalCount);
 		
@@ -332,17 +331,27 @@ public class CyjControllerFreeQna {
 		bdQna.setEnd(page.getEnd());
 		model.addAttribute("page", page);
 		
-		// 전제 리스트
+		// 리스트 (전체 or 분류검색)
 		List<BdQna> qnaList = cs.qnaList(bdQna);
 		System.out.println("CyjControllerQna qnaList.size()-> " + qnaList.size());
 		model.addAttribute("qnaList", qnaList);
+		
+		// 검색 분류 코드 가져오기
+		Code code = new Code();
+		code.setTable_name("BD_QNA");
+		code.setField_name("BD_CATEGORY");
+		 
+		// qna_검색 분류 코드 가져오기
+		List<Code> codeList = cs.codeList(code); 
+		System.out.println("CyjControllerQna codeList-> " + codeList);
+		model.addAttribute("codeList", codeList);
 		
 		return "board/board_qna/board_qna_list";
 	}
 	
 // ----------------------------------------------------------------------		
 
-	// QNA_새 글 작성하기 위한 페이지 이동
+	// QNA_원글 작성하기 위한 페이지 이동
 	@RequestMapping(value = "qna_insert_form")
 	public String qnaInsertForm(HttpServletRequest request, Model model) {
 		System.out.println("CyjControllerQna qna_insert_form Start----------------------");
@@ -351,30 +360,38 @@ public class CyjControllerFreeQna {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
 		BdQna bdQna = new BdQna();		
-		String parent_doc_no = request.getParameter("parent_doc_no");
-
-//		BdQna selectBdQna = cs.selectBdQna(bdQna);
-//		System.out.println("CyjControllerQna selectBdQna-> " + selectBdQna);
-//		model.addAttribute("selectBdQna", selectBdQna);
+		model.addAttribute("doc_group", "0");
+		model.addAttribute("doc_step", "0");
+		model.addAttribute("doc_indent", "0");
+		model.addAttribute("subject", "");
+		model.addAttribute("parent_doc_no", "0");
+		model.addAttribute("parent_doc_user_id", "");
+		model.addAttribute("bd_category", "");	
+		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인 사용자 정보 
 		
+		// 답변등록의 경우, 기존 답변들 Doc_Step처리
+		int parent_doc_no = bdQna.getParent_doc_no();
+		if (parent_doc_no > 0) {
+			// 답변 순서 조절
+			int qnaReply = cs.qnaReply(bdQna);
+			bdQna.setDoc_step(bdQna.getDoc_no() + 1);
+			bdQna.setDoc_indent(bdQna.getDoc_indent() + 1);
+		}
 		return "board/board_qna/board_qna_insert";
 	}
 	
-	// 새 글 입력
+	// 원글 작성
 	@PostMapping(value = "qna_insert")
 	public String qnaInsert(@Valid @ModelAttribute BdQna bdQna, BindingResult bindingResult
 						   ,@RequestParam(value = "file1", required = false) MultipartFile file1
 						   ,HttpServletRequest request , Model model) throws IOException {
 		System.out.println("CyjControllerQna qna_insert Start----------------------");
-		
-		// validation
-		if (bindingResult.hasErrors()) {
-			System.out.println("CyjControllerQna free_insert hasErrors");
-			return "board/board_free/board_free_insert";
-		}
+
+		// 폼 에러검사 해야함 
+		// !!!!!
 		
 		// file Upload
-		String attach_path = "upload"; // 실제 파일이 저장되는 폴더명, uploadPath의 이름과 동일하게 해야 오류 X
+		String attach_path = "upload"; 	  // 실제 파일이 저장되는 폴더명, uploadPath의 이름과 동일하게 해야 오류 X
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/"); // 저장 위치 지정 
 		
 		System.out.println("CyjController File Upload Post Start");
@@ -393,8 +410,8 @@ public class CyjControllerFreeQna {
 		
 		// loginId : 새 글 작성에는 접속자이자 작성자 
 		String loginId = userInfoDTO.getUser_id();
-		System.out.println(request.getSession().getAttribute("loginId"));
 		bdQna.setUser_id(loginId);
+		System.out.println(request.getSession().getAttribute("loginId"));
 		
 		if(!file1.isEmpty()) {
 			log.info("파일이 존재합니다  ");
@@ -402,20 +419,7 @@ public class CyjControllerFreeQna {
 			bdQna.setAttach_name(saveName);
 		}	
 		
-		//////////
-		//답변등록의 경우, 기존 답변들 Doc_Step처리
-//		int parent_doc_no = prjBdData.getParent_doc_no();
-//		int project_id = prjBdData.getProject_id();
-//		if(parent_doc_no > 0 && project_id > 0) {
-//			//답변작성인 경우
-//			//------------------------------------------------------
-//			int replyCount = jmhDataSer.updateOtherReply(prjBdData);
-//			//------------------------------------------------------
-//			prjBdData.setDoc_step(prjBdData.getDoc_step()+1);
-//			prjBdData.setDoc_indent(prjBdData.getDoc_indent()+1);
-//		}
-		
-		// 새 게시글 입력
+		// 새 글 입력 (원글)
 		int qnaInsert = cs.qnaInsert(bdQna);
 		System.out.println("CyjControllerQna qnaInsert-> " + qnaInsert);
 		model.addAttribute("qnaInsert", qnaInsert);
@@ -432,6 +436,7 @@ public class CyjControllerFreeQna {
 		
 		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfoDTO", userInfoDTO);
 		
 		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
 		String loginId = userInfoDTO.getUser_id();
@@ -456,8 +461,31 @@ public class CyjControllerFreeQna {
 		System.out.println("CyjControllerQna qnaCount-> " + qnaCount);
 		model.addAttribute("qnaCount", qnaCount);
 		
-		
 		return "board/board_qna/board_qna_content";
+	}
+	
+	// 상세페이지 내부 (답글)
+	@PostMapping(value = "qna_content_replyInsert")
+	public String qnaContentReplyInsert(BdQna bdQna, Model model) {
+		
+		System.out.println("CyjControllerQna subject: "  + bdQna.getSubject());
+		System.out.println("CyjControllerQna doc_body: " + bdQna.getDoc_body());
+		
+		// 기존 답변들 Doc_Step 처리
+		int parent_doc_no = bdQna.getParent_doc_no();
+		if (parent_doc_no > 0) {
+			// 답변 순서 조절
+			int qnaReply = cs.qnaReply(bdQna);
+			bdQna.setDoc_step(bdQna.getDoc_no() + 1);
+			bdQna.setDoc_indent(bdQna.getDoc_indent() + 1);
+		}
+		
+		// 새 글 작성 (답글)
+		int qnaInsert = cs.qnaInsert(bdQna);
+		System.out.println("CyjControllerQna qnaInsert-> " + qnaInsert);
+		model.addAttribute("qnaInsert", qnaInsert);
+		
+		return "redirect:/board_qna";
 	}
 	
 // ----------------------------------------------------------------------		
@@ -489,9 +517,9 @@ public class CyjControllerFreeQna {
 		BdQna bdQna = new BdQna();
 		bdQna.setDoc_no(doc_no);
 		
-		if (qnaConfirm == 1) {  	// 중복 O
+		if (qnaConfirm == 1) {  	  // 중복 O
 			result = "duplication";
-		} else {					// 중복 X
+		} else {					  // 중복 X
 			// 2. 추천 insert
 			int qnaGoodInsert = cs.qnaGoodInsert(bdQnaGood);
 			System.out.println("CyjControllerQna qnaGoodInsert-> " + qnaGoodInsert);
@@ -540,8 +568,11 @@ public class CyjControllerFreeQna {
 	}
 	
 // ----------------------------------------------------------------------		
+		
+	// qna_삭제
 	
 	
+
 	
 	
 	

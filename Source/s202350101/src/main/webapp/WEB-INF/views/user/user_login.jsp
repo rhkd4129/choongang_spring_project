@@ -7,6 +7,32 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+	/* function chkInfo() {
+	    // user_id와 user_pw의 값을 가져옵니다.
+	    var userId = document.getElementById("user_id").value;
+	    var userPw = document.getElementById("user_pw").value;
+	
+	    if (userId.trim() === "") {
+	        document.getElementById("id_error").innerText = "아이디를 입력해주세요.";
+	        return false;
+	    } else {
+	        document.getElementById("id_error").innerText = ""; // 에러 메시지 초기화
+	    }
+	
+	    if (userPw.trim() === "") {
+	        document.getElementById("pw_error").innerText = "비밀번호를 입력해주세요.";
+	        return false;
+	    } else {
+	        document.getElementById("pw_error").innerText = ""; // 에러 메시지 초기화
+	    }
+	
+	    return true;
+	} */
+
+</script>
+
 <style type="text/css">
 .login-wrapper{
     width: 400px;
@@ -63,17 +89,22 @@
 <body>
     <div class="login-wrapper">
         <h2>ChoongAng</h2>
-        <form:form action="user_login_check" id="login-form" method="post" modelAttribute="userInfo">
-            <input type="text" 	   name="user_id" placeholder="ID" value="${userInfo.user_id }">
-            	<small style="color: red"><form:errors path="user_id"/></small>
-            <input type="password" name="user_pw" placeholder="Password">
-            	<small style="color: red"><form:errors path="user_pw"/></small>
+        <form action="user_login_check" id="login-form" method="post">
+            <input type="text" 	   name="user_id" id="user_id" placeholder="ID" value="${user_id}">
+            	<c:if test="${idMsgBox != null}">
+			        <small style="color: red;">${idMsgBox}</small>
+			    </c:if>
+            <input type="password" name="user_pw" id="user_pw" placeholder="Password">
+				<c:if test="${pwMsgBox != null}">
+			        <small style="color: red;">${pwMsgBox}</small>
+			    </c:if>
             <label for="remember-check">
                 <input type="checkbox" id="remember-check">아이디 저장하기
             </label>
             
+            <!-- <input type="submit" value="Login" onclick="chkInfo()"> -->
             <input type="submit" value="Login">
-        </form:form>
+        </form>
         <a href="user_find_pw"><input type="button" value="비밀번호 찾기"></a>
    	    <a href="user_find_id"><input type="button" value="아이디 찾기"></a>
    	    <a href="user_join_agree"><input type="button" value="회원가입"></a>

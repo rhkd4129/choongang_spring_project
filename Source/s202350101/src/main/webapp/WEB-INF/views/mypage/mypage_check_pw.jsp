@@ -76,7 +76,7 @@
 		    	<hr>
 		    	
 		    	<form action="/mypage_update" method="post">
-		    		아이디 : <input type="text" name="user_id" id="user_id" placeholder="Id"><p>
+		    		아이디 : <input type="text" name="user_id" id="user_id" placeholder="Id" value="${user_id }"><p>
 			    	비밀번호 : <input type="password" name="user_pw" id="user_pw" placeholder="Password"><p>
 			    	<c:if test="${msg != null}">${msg }</c:if>
 			    	<input type="submit" value="확인">

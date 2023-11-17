@@ -37,4 +37,5 @@ public class PrjBdData {
 	private String	search;				//검색대상 필드
 	private String	keyword;			//검색어 키워드
 	private String  doc_group_list;		//알림용 목록 표시 (Y/y)
+	private int		class_id;			//반ID
 }

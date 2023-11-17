@@ -1,74 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <style>
-#menubar {
-	max-width: 280px;
-}
-.project-title {
-	padding-left: 30px;
-	color: #fdb933;
-	font-weight: bold;
-}
-.menu-title{
-	padding-left: 30px;
-	color: #000000;
-	font-weight: bold;
-	
-	border:0px;
-	/* background-color: #e2e3e5; */
-	border-radius: 5px;
-	padding: 5px 5px 5px 10px;
-	margin: 5px 5px 5px 20px;
-	width: 222px;
-	list-style-type: none; /* 불릿 제거 */
-	list-style-position: inside;  /* 들여쓰기 */
-}
-	.menu-title:hover {
-		background-color: #fff1eb;
-	}
-	.menu-title a:link {
-		text-decoration: none;
-		color: #212529;
-	}
-	.menu-title a:hover {
-		color: #212529;
-	}
-	.menu-title a:active {
-		color: #212529;
-	}
-	.menu-title a:visited {
-		color: #212529;
-	} 
-
-.menu-box {
-	border:0px;
-	background-color: #ffffff;
-	border-radius: 5px;
-	padding: 3px 3px 3px 10px;
-	margin: 5px;
-	width: 200px;
-	list-style-type: none; /* 불릿 제거 */
-	/* list-style-type: square  네모모양 */
-	list-style-position: inside;  /* 들여쓰기 */
-}
-	.menu-box:hover {
-		background-color: #fff1eb;
-	}
-	.menu-box a:link {
-		text-decoration: none;
-		color: #212529;
-	}
-	.menu-box a:hover {
-		color: #212529;
-	}
-	.menu-box a:active {
-		color: #212529;
-	}
-	.menu-box a:visited {
-		color: #212529;
-	}
 </style>
- 
+
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
   <symbol id="bootstrap" viewBox="0 0 118 94">
     <title>Bootstrap</title>
@@ -92,7 +26,7 @@
     <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"></path>
   </symbol>
 </svg>
-<div class="flex-shrink-0 p-3" style="width: 280px;">
+<div class="flex-shrink-0 p-3">
     <ul class="list-unstyled ps-0">
       <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#mypost-collapse" aria-expanded="true">
@@ -108,7 +42,7 @@
       </li>
       <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#todolist-collapse" aria-expanded="false">
-		<span onclick="goto('todolist')" style="cursor:pointer">오늘 할 일</span>
+		<span onclick="goto('todo_list')" style="cursor:pointer">오늘 할 일</span>
         </button>
       </li>
       <li class="mb-1">
@@ -148,10 +82,10 @@
           </ul>
         </div>
       </li>
-      <li class="border-top my-3"></li>
+      <hr>
       <li class="mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="true">
-		관리자 페이지
+		관리자 설정
         </button>
         <div class="collapse show" id="admin-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
