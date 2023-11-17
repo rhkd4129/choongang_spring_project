@@ -47,5 +47,46 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		return result;
 	}
 
+//	강의실 id를 기준으로 삭제
+    @Override
+    public int deletebyId(ClassRoom cr) {
+		log.info("deletebyId START");
+		int result = 0;
+		try {
+			result = session.delete("deletebyId", cr);
+			log.info("deletebyId {}",result);
+		} catch (Exception e) {
+            log.info("deletebyId ERROR : {}",e.getMessage());
+        }
+		return result;
+
+    }
+
+	@Override
+	public int deletebyUsClassId(ClassRoom cr) {
+		log.info("deletebyClassId START");
+		int result = 0;
+		try {
+			result = session.delete("deletebyClassId", cr);
+			log.info("deletebyClassId {}",result);
+		} catch (Exception e) {
+			log.info("deletebyClassId ERROR : {}",e.getMessage());
+		}
+		return result;
+	}
+
+	@Override
+	public int deleteUsInfobyClassId(ClassRoom cr) {
+		log.info("deleteUsInfobyClassId START");
+		int result = 0;
+		try {
+			result = session.delete("deleteUsInfobyClassId", cr);
+			log.info("deleteUsInfobyClassId {}",result);
+		} catch (Exception e) {
+			log.info("deleteUsInfobyClassId ERROR : {}",e.getMessage());
+		}
+		return result;
+	}
+
 
 }

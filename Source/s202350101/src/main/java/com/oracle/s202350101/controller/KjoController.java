@@ -58,15 +58,21 @@ public class KjoController {
         return "admin/admin_add_class";
     }
 
+    @GetMapping("/admin_del_class")
+    public String admin_del_class(ClassRoom cr) {
+        log.info("admin_del_class POST");
+        int result = CRser.deletebyId(cr);
+        return "redirect:/admin_class_list";
+    }
     //	반 생성 Post
     @PostMapping("/admin_add_class")
     public String admin_add_class(@Validated @ModelAttribute("cr")
-                                      ClassRoom cr, BindingResult bindingResult, Model model) {
+                                  ClassRoom cr, BindingResult bindingResult, Model model) {
         log.info("admin_add_class POST");
 
         if (bindingResult.hasErrors()) {
             log.info("admin_add_class POST .ERROR : {}", bindingResult);
-            model.addAttribute("cr",cr);
+            model.addAttribute("cr", cr);
             log.info(bindingResult.getFieldError().toString());
 //            bindingResult.reject("typeMismatch.java.lang.Integer", "알맞은 숫자를 입력하세요" );
             log.info("admin_add_class POST .ERROR Return");

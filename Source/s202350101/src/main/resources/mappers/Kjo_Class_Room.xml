@@ -29,5 +29,19 @@
 		insert into class_room
 		values ((SELECT COUNT(class_id) + 1 FROM class_room), #{class_room_num}, #{class_start_date}, #{class_end_date}, #{class_master}, #{class_name}, #{class_area})
 	</insert>
+<!--강의실 id를 기준으로 삭제-->
+	<delete id="deletebyId" parameterType="ClassRoom">
+		delete class_room
+		where class_id = #{class_id}
+	</delete>
+
+	<delete id="deletebyClassId" parameterType="ClassRoom">
+		delete user_info
+		where class_id = #{class_id}
+	</delete>
+	<delete id="deleteUsInfobyClassId" parameterType="ClassRoom">
+		delete user_info
+		where class_id = #{class_id}
+	</delete>
 </mapper>
 	 

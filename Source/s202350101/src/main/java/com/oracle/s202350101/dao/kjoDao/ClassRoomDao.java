@@ -11,4 +11,10 @@ public interface ClassRoomDao {
 
     //	ClassRoom	생성
     int saveClassRoom(ClassRoom cr);
+
+    int deletebyId(ClassRoom cr);
+
+    int deletebyUsClassId(ClassRoom cr);
+
+    int deleteUsInfobyClassId(ClassRoom cr);
 }

@@ -107,6 +107,7 @@
                         <th>강의 이름</th>
                         <th>시작 날짜</th>
                         <th>종료 날짜</th>
+                        <th>삭제</th>
                     </tr>
                     <c:forEach items="${CRList}" var="list">
                         <tr>
@@ -117,6 +118,7 @@
 <%--                            <td><fmt:formatDate value="${list.class_start_date}" pattern="yy/MM/dd"/></td>--%>
                             <td>${list.startDate}</td>
                             <td>${list.endDate}</td>
+                            <td><a href="/admin_del_class?class_id=${list.class_id}">삭제</a> </td>
                         </tr>
                     </c:forEach>
                     </thead>
