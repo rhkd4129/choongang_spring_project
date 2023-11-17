@@ -89,12 +89,12 @@
 
 
                             <div class="form-group">
-                                <label for="task_stat_time">Start date:</label>
-                                <input type="date" class="form-control" id="task_stat_time" name="task_stat_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
+                                <label for="task_start_time">Start date:</label>
+                                <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
                             </div>
                             <div class="form-group">
                                 <label for="task_end_time">task_end_time</label>
-                                <input type="date" class="form-control" id="task_end_time" name="task_end_itme" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
+                                <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
                             </div>
                         </div>
                         <div class="col-md-6">

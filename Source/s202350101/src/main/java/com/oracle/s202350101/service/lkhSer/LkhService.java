@@ -44,7 +44,7 @@ public interface LkhService {
 
 //	int							task_attach_create(List<TaskAttach>taskAttachList,int fileCount);
 
-	int							task_update(Task task, List<MultipartFile> multipartFileList,String uploadPath);
+	int							task_update(Task task, List<MultipartFile> multipartFileList,String uploadPath,List<String> attachDeleteList);
 
 	//휴지통으로 이동
 	int 						task_garbage(Task task);

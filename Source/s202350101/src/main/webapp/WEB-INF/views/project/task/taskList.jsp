@@ -46,8 +46,8 @@
                     "<td>" + data[i].user_name + "</td>" +
                     "<td>" + data[i].project_s_name + "</td>" +
                     "<td><a href='task_detail?task_id=" + data[i].task_id + "&project_id=" + data[i].project_id + "'>" + data[i].task_subject + "</a></td>" +
-                    "<td>" + data[i].task_stat_time + "</td>" +
-                    "<td>" + data[i].task_end_itme + "</td>" +
+                    "<td>" + data[i].task_start_time + "</td>" +
+                    "<td>" + data[i].task_end_time + "</td>" +
                     "<td>" + statusText + "</td>" +
                     "<td>" + task_priority + "</td>" +
                     "</tr>";
@@ -158,10 +158,15 @@
 
 
             <c:choose>
-                <c:when test="${not empty param.status}">
+                <c:when test="${true== param.status}">
                     <div class="alert alert-success" role="alert">저장 완료!</div>
                 </c:when>
+                <c:when test="${false== param.status}">
+                    <div class="alert alert-warning" role="alert">서버에러 ...</div>
+                </c:when>
             </c:choose>
+
+
             <c:set var="num" value="${page.total - page.start + 1 }"></c:set>
 
             <div class="table-responsive">
@@ -185,8 +190,8 @@
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td><a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a></td>
-                            <td>${task.task_stat_time}</td>
-                            <td>${task.task_end_itme}</td>
+                            <td>${task.task_start_time}</td>
+                            <td>${task.task_end_time}</td>
                             <td>
                                 <c:choose>
                                     <c:when test="${task.task_priority == '0'}">낮음</c:when>

@@ -61,13 +61,13 @@
                                 rows[user_id] = predefinedColors.shift(); // predefinedColors에서 색상 추출
                             }
 
-                            let start_year = Number(data[i].task_stat_time.slice(0, 4));
-                            let start_month = Number(data[i].task_stat_time.slice(5, 7));
-                            let start_day = Number(data[i].task_stat_time.slice(8, 10));
+                            let start_year = Number(data[i].task_start_time.slice(0, 4));
+                            let start_month = Number(data[i].task_start_time.slice(5, 7));
+                            let start_day = Number(data[i].task_start_time.slice(8, 10));
 
-                            let end_year = Number(data[i].task_end_itme.slice(0, 4));
-                            let end_month = Number(data[i].task_end_itme.slice(5, 7));
-                            let end_day = Number(data[i].task_end_itme.slice(8, 10));
+                            let end_year = Number(data[i].task_end_time.slice(0, 4));
+                            let end_month = Number(data[i].task_end_time.slice(5, 7));
+                            let end_day = Number(data[i].task_end_time.slice(8, 10));
 
                             dataTable.addRow([
                                 data[i].user_name,

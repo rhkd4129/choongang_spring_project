@@ -50,18 +50,19 @@ public interface LkhDao {
 
 
 	//----------------------  작업 생성   ----------------------//
-	int 				task_create(Task task);
-	int					task_worker_create(List<TaskSub> taskSubList);
+	int 				task_create(Task task) throws Exception;
+	int					task_worker_create(List<TaskSub> taskSubList) throws Exception;
 	int					task_attach_max();
-	int					task_attach_create(List<TaskAttach> taskAttachList);
+	int					task_attach_create(List<TaskAttach> taskAttachList) throws Exception;
 	//----------------------  작업 수정  task  ----------------------//
 
-	int					task_update(Task task);
+	int					task_update(Task task)throws Exception;
 
-	int					task_worker_init(int projectId,int taskId);
-	int					task_worker_update(List<TaskSub> taskSubList);
-	int					task_attach_update(List<TaskAttach> taskAttachList);
+	int					task_worker_init(int projectId,int taskId)throws Exception;
+	int					task_worker_update(List<TaskSub> taskSubList)throws Exception;
+//	int					task_attach_update(List<TaskAttach> taskAttachList)throws Exception ;
 
+	int					task_attach_delete(TaskAttach taskAttach) throws Exception;
 	// ----------------- 휴지통관련 ,삭제관련 ------------- ///
 	//휴지통 목록
 	List<Task> 			garbage_list(Task task);

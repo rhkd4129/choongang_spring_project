@@ -184,9 +184,15 @@ public class LkhController {
 		// task_create => 트랜잭션 처리 기본 task, 공동작업자, 파일 3개의 dao메서드가 실행됨\
 
 		int result = lkhService.task_create(task,multipartFileList,uploadPath);
+		if(result == 1){
+			redirectAttributes.addAttribute("status",true);
+		}
+		else{
+			redirectAttributes.addAttribute("status",false);
+		}
 		// 6.트랜잭션처리 까지 완료된 상태
 		log.info("6. taskCreate success");
-		redirectAttributes.addAttribute("status",true);
+
 		return "redirect:task_list";
 	}
 
@@ -226,6 +232,7 @@ public class LkhController {
 	public String task_update(
 			@Validated @ModelAttribute Task task, BindingResult bindingResult,
 			@RequestParam(value = "file1", required = false) List<MultipartFile> multipartFileList,
+			@RequestParam(value = "attach_delete_no" ,required = false) List<String> attachDeleteList,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) throws IOException {
 
 		// 1 .컨트롤러 시작
@@ -259,9 +266,11 @@ public class LkhController {
 		// 저장 위치
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 
-		int result = lkhService.task_update(task,multipartFileList,uploadPath);
+		int result = lkhService.task_update(task,multipartFileList,uploadPath, attachDeleteList);
 		// 6.트랜잭션처리 까지 완료된 상태
 		log.info("6. taskCreate success");
+
+
 		redirectAttributes.addAttribute("status",true);
 		return "redirect:task_list";
 	}

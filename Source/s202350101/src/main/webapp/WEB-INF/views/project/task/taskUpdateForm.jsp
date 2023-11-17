@@ -124,12 +124,12 @@
 
 
                             <div class="form-group">
-                                <label for="task_stat_time">Start date:</label>
-                                <input type="date" class="form-control" id="task_stat_time" name="task_stat_time" value="${task.task_stat_time}" min="2023-07-22" max="2030-12-31" />
+                                <label for="task_start_time">Start date:</label>
+                                <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="${task.task_start_time}" min="2023-07-22" max="2030-12-31" />
                             </div>
                             <div class="form-group">
                                 <label for="task_end_time">task_end_time</label>
-                                <input type="date" class="form-control" id="task_end_time" name="task_end_itme" value="${task.task_end_itme}"  min="2023-07-22" max="2030-12-31" />
+                                <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="${task.task_end_time}"  min="2023-07-22" max="2030-12-31" />
                             </div>
 
 
@@ -182,13 +182,16 @@
                                 <label for="file1">파일첨부</label>
                                 <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
 
-                                <label for="task_file" class="fw-bold">첨부파일</label>
+                                <label  class="fw-bold">첨부파일</label>
                                 <c:choose>
                                     <c:when test="${not empty taskAttachList}">
                                         <div class="img_box">
                                         <c:forEach items="${taskAttachList}" var="taskAttach">
                                             <img  class="attached_img" alt ="이미지 없음" src="${taskAttach.attach_path}/${taskAttach.attach_name}" alt="Attached Image">
                                             <a href="${taskAttach.attach_path}/${taskAttach.attach_name}" target="_blank">보기</a><br>
+
+                                            <label for="attach_delete_no">삭제 </label>
+                                            <input type="checkbox" id="attach_delete_no" name="attach_delete_no" value="${taskAttach.attach_no}">
                                         </c:forEach>
                                         </div>
                                     </c:when>

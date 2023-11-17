@@ -214,17 +214,10 @@ public class LkhServicveImpl implements LkhService {
 		return 1;
 	}
 
-//	@Override
-//	public int task_attach_create(List<TaskAttach> taskAttachList ,int fileCount) {
-//		List<Integer> attach_seq = null;
-//		for(int i =1; i<=fileCount;i++){attach_seq.add(i);}
-//
-//
-//		return lkhDao.task_attach_create(taskAttachList,attach_seq);
-//	}
+
 
 	@Override
-	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
+	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath,List<String> attachDeleteList) {
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
 			int taskResult = lkhDao.task_update(task);
@@ -252,6 +245,19 @@ public class LkhServicveImpl implements LkhService {
 				log.info("taskSbResult : {}",taskSbResult);
 			}
 
+
+		// 파일 삭제 하기
+			if (attachDeleteList != null && !attachDeleteList.isEmpty()) {
+				for(String no :attachDeleteList){
+					TaskAttach taskAttach = new TaskAttach();
+					taskAttach.setTask_id(task.getTask_id());
+					taskAttach.setProject_id(task.getProject_id());
+					taskAttach.setAttach_no(Integer.parseInt(no));
+					lkhDao.task_attach_delete(taskAttach);
+				}
+			}
+
+			//파일 추가 업로드
 			if (multipartFileList != null && !multipartFileList.isEmpty()) {
 				// 파일 업로드
 				List<TaskAttach> taskAttachList = new ArrayList<>();
@@ -270,7 +276,6 @@ public class LkhServicveImpl implements LkhService {
 					lkhDao.task_attach_create(taskAttachList);
 				}
 			}
-
 			transactionManager.commit(txStatus);
 			log.info("transactionManager.commit(txStatus) --> 성공!!!!!!!!!");
 		} catch (Exception e) {

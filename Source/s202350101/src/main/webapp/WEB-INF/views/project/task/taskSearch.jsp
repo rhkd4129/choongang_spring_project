@@ -46,7 +46,7 @@
                     "<td>" + data[i].user_name + "</td>" +
                     "<td>" + data[i].project_s_name + "</td>" +
                     "<td><a href='task_detail?taskId=" + data[i].task_id + "&projectId=" + data[i].project_id + "'>" + data[i].task_subject + "</a></td>" +
-                    "<td>" + data[i].task_stat_time + "</td>" +
+                    "<td>" + data[i].task_start_time + "</td>" +
                     "<td>" + data[i].task_end_itme + "</td>" +
                     "<td>" + statusText + "</td>" +
                     "<td>" + task_priority + "</td>" +
@@ -161,7 +161,7 @@
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td><a href='task_detail?taskId=${task.task_id}&projectId=${task.project_id}'>${task.task_subject}</a></td>
-                            <td>${task.task_stat_time}</td>
+                            <td>${task.task_start_time}</td>
                             <td>${task.task_end_itme}</td>
                             <td>
                                 <c:choose>
