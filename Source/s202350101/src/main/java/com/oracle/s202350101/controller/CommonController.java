@@ -58,8 +58,8 @@ public class CommonController {
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		log.info("userInfo: {}",userInfoDTO);
-		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
-		List<UserInfo> chatUIList = uis.findbyclassuser(userInfoDTO);
+		//	로그인 사용자와 같은 반 학생들 조회 && 채팅을 허용한.(어드민제외)
+		List<UserInfo> chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
 		//	사용자가 참여중인 채팅방 조회
 		List<ChatRoom> chatRooms = chs.findByUserId(userInfoDTO);
 
