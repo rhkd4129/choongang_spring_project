@@ -165,7 +165,7 @@ public class LkhController {
 		if(bindingResult.hasErrors()){
 			log.info("3 validation .errer : {}",bindingResult);
 			// 유효성 검사 에러가 있을 때 폼에 다시 입력한 값을 유지하기 위해 모델 속성 추가
-			List<PrjStep> prjStepList = lkhService.project_step_list(projectId);
+			List<PrjStep> prjStepList 	= lkhService.project_step_list(projectId);
 			List<UserInfo> task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
 			model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
 			model.addAttribute("prjStepList",prjStepList);

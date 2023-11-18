@@ -182,10 +182,11 @@ public class LkhServicveImpl implements LkhService {
 			}
 
 
-			int maxId =lkhDao.task_attach_max();
+			int maxId =lkhDao.task_attach_max(task.getTask_id());
+			//이 값이 없을때(처음생성될시 0을 반환)
 			log.info("제발좀 되라 앙 {}",maxId);
 			// 파일 처리 부분
-			if (!multipartFileList.isEmpty()) {
+			if (!multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0) {
 				log.info("파일이 있다!!!!");
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
@@ -248,17 +249,28 @@ public class LkhServicveImpl implements LkhService {
 
 		// 파일 삭제 하기
 			if (attachDeleteList != null && !attachDeleteList.isEmpty()) {
-				for(String no :attachDeleteList){
+				for(String no :attachDeleteList)	{
 					TaskAttach taskAttach = new TaskAttach();
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
 					taskAttach.setAttach_no(Integer.parseInt(no));
-					lkhDao.task_attach_delete(taskAttach);
+					log.info("삭제될 파일의 no {}",no);
+
+					TaskAttach selectFile = lkhDao.physical_file_delete(taskAttach);
+					log.info("selectFile.getTask_id() :{}", selectFile.getTask_id());
+					log.info("selectFile.getAttach_no() :{}", selectFile.getAttach_no());
+
+					//삭제할 파일의 path와 name갖고오기
+					String deleteFile = uploadPath+selectFile.getAttach_name();
+					log.info("삭제할 파일 이름 {}",deleteFile);
+					upFileDelete(deleteFile);			 // 실제 물리 파일 삭제
+					log.info("물리 파일 삭제 이제 db파일 삭제 할 차레");
+					lkhDao.task_attach_delete(taskAttach); //DB상에서 삭제 완료
 				}
 			}
 
 			//파일 추가 업로드
-			if (multipartFileList != null && !multipartFileList.isEmpty()) {
+			if (multipartFileList != null && !multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0 ) {
 				// 파일 업로드
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
@@ -338,6 +350,7 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public int upFileDelete(String deleteFileName) throws Exception {
+		log.info("물리적 파일 삭제 시작");
 		int result =0;
 		log.info("upFileDelete result-> " + deleteFileName);
 		File file = new File(deleteFileName);

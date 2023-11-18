@@ -289,10 +289,10 @@ public class LkhDaoImpl implements LkhDao {
 //
 
 
-	public  int					task_attach_max(){
+	public  int					task_attach_max(int task_id){
 		int result = 0;
 		try {
-			result = sqlSession.selectOne("taskAttach_max");
+			result = sqlSession.selectOne("taskAttach_max",task_id);
 		} catch (Exception e) {
 			log.info("dao :task_attach_max error Message -> {}", e.getMessage());
 		}
@@ -340,6 +340,18 @@ public class LkhDaoImpl implements LkhDao {
 		}
 		return reuslt;
 
+	}
+
+	public TaskAttach physical_file_delete(TaskAttach  taskAttach) throws Exception{
+		TaskAttach resultTaskAttach = null;
+		try {
+			resultTaskAttach = sqlSession.selectOne("physical_file_delete",taskAttach);
+		}catch (Exception e){
+			log.info("dao :physical_file_delete error Message -> {}", e.getMessage());
+			throw new Exception("dao :physical_file_delete Message ->{}", e);
+		}
+
+		return resultTaskAttach;
 	}
 
 	@Override
