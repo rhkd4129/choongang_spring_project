@@ -53,24 +53,30 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public AjaxResponse 	project_step_chart(int project_id) {
-		List<Task> stepTaskList = null;
-		List<PrjStep> stepList = null;
-		stepList = lkhDao.project_step_select(project_id);
-		//프로젝트 단계 리스트
+
+		List<PrjStep> stepList = lkhDao.project_step_select(project_id);
+		// 현재 프로젝트에 있는 단계 리스트
+
 		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
-		//프로젝트 작업 리스트 
-		stepTaskList =  lkhDao.project_step_chart(project_id);
+		//현재 프로젝트에 잇는 단계에 이름만 따로 갖고옴
+
+		List<Task> stepTaskList =  lkhDao.project_step_chart(project_id);
+		// 현재 프로젝트에 잇는 작업 리스트
 
 
-
-		// 현재 진행중인 작업 리스트들
+		// 작업 리스트중에 진행중인 작업만 가져오기  -> 최종적으로 보낼 데이터
 		List<Task> currentTaskList = stepTaskList.stream().filter(t->t.getTask_status().equals("1")).collect(Collectors.toList());
 
-		// 맵에 값 추가
+
+
+		// 우선 map을 선언후 키로 각 프로젝트 단계 이름을 지정
+		// 값에는 빈리스트 지정
 		Map<String, List<String>> mapData = new HashMap<>();
-		// 우선 map을 선언후 키로 각 프로젝트 단계이름을 지정 하고 값에는 빈리스트 생성
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
-		// 프로젝트 단게이름을 순회하고 작업들도 순회하면서 서로 단계이름이 같으면 해당 키에 있는 값 리스트에 추가함
+
+
+		// map의 키를 순회(프로젝트 단계이름)하면서 작업들도 같이 순회 ->
+		// 작업의 단계이름과 키의 단계이름이 같으면 해당 키의 값에 잇는 리스트에 추가함
 		for (String key : mapData.keySet()) {
 			for (Task t : stepTaskList) {
 				if (t.getProject_s_name().equals(key)) {
@@ -83,8 +89,10 @@ public class LkhServicveImpl implements LkhService {
 				}
 			}
 		}
+
 		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
 		AjaxResponse data = new AjaxResponse();
+
 		data.setMapData(mapData);
 		data.setOnelist(currentTaskList);
 		return data;
@@ -98,16 +106,7 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public List<Task> task_list(Task task) {
-		List<Task> taskList = null;
-
-
-		taskList = lkhDao.task_list(task);
-		return taskList;
-	}
-
-	public List<Task> task_search(Task task) {
-		List<Task> taskList = null;
-		taskList = lkhDao.task_list(task);
+		List<Task> taskList = lkhDao.task_list(task);
 		return taskList;
 	}
 
@@ -145,8 +144,8 @@ public class LkhServicveImpl implements LkhService {
 
 	//프로젝트 타임라이ㅏㄴ
 	@Override
-	public List<Task> task_timeline() {
-		return lkhDao.task_timeline();
+	public List<Task> task_timeline(int project_id) {
+		return lkhDao.task_timeline(project_id);
 	}
 
 	//task create get form view
@@ -155,6 +154,8 @@ public class LkhServicveImpl implements LkhService {
 	public List<PrjStep> project_step_list(int project_id) {
 		return lkhDao.project_step_list(project_id);
 	}
+
+
 
 	//프로젝트 인원 보여주기
 	@Override
@@ -183,8 +184,6 @@ public class LkhServicveImpl implements LkhService {
 				int taskSubResult = lkhDao.task_worker_create(taskSubList);
 				log.info("taskSub 결과  : {}",taskSubResult);
 			}
-
-
 			//작업 생성시 업로드할 파일이 존재할경우
 			if (!multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0) {
 
@@ -361,7 +360,6 @@ public class LkhServicveImpl implements LkhService {
 			fileDirectory.mkdirs();
 			System.out.println("업로드용 폴더 생성 : " + uploadPath);
 		}
-
 		String savedName = uid.toString() + "_" + originalName;
 		log.info("savedName: " + savedName);
 		File target = new File(uploadPath, savedName);

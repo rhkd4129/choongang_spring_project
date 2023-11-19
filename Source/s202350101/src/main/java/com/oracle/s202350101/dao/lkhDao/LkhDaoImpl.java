@@ -169,10 +169,10 @@ public class LkhDaoImpl implements LkhDao {
 
 	//작업별 타임라인
 	@Override
-	public List<Task> task_timeline() {
+	public List<Task> task_timeline(int project_id) {
 		List<Task> timelineTask = null;
 		try {
-			timelineTask = sqlSession.selectList("task_timeline");
+			timelineTask = sqlSession.selectList("task_timeline",project_id);
 
 		} catch (Exception e) {
 			log.info("dao :task_timeline error Message -> {}", e.getMessage());

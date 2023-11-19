@@ -52,14 +52,14 @@
                         dataTable.addColumn({ type: 'string', id: 'task_name' });
                         dataTable.addColumn({ type: 'date', id: 'Start' });
                         dataTable.addColumn({ type: 'date', id: 'End' });
-                        dataTable.addColumn({ type: 'string', role: 'style' }); // 색상 열 추가
+                        // dataTable.addColumn({ type: 'string', role: 'style' }); // 색상 열 추가
 
                         for (let i = 0; i < data.length; i++) {
-                            let user_id = data[i].user_id;
-                            if (!rows[user_id]) {
-                                // 사용자(user_id)에 색상을 할당하지 않은 경우, predefinedColors에서 색상 할당
-                                rows[user_id] = predefinedColors.shift(); // predefinedColors에서 색상 추출
-                            }
+                        //     let user_id = data[i].user_id;
+                        //     if (!rows[user_id]) {
+                        //         // 사용자(user_id)에 색상을 할당하지 않은 경우, predefinedColors에서 색상 할당
+                        //         rows[user_id] = predefinedColors.shift(); // predefinedColors에서 색상 추출
+                        //     }
 
                             let start_year = Number(data[i].task_start_time.slice(0, 4));
                             let start_month = Number(data[i].task_start_time.slice(5, 7));
@@ -73,12 +73,18 @@
                                 data[i].user_name,
                                 data[i].task_subject,
                                 new Date(start_year, start_month - 1, start_day),
-                                new Date(end_year, end_month - 1, end_day),
-                                rows[user_id] // 사용자(user_id)에 할당된 색상
+                                new Date(end_year, end_month - 1, end_day)
+                                // rows[user_id] // 사용자(user_id)에 할당된 색상
                             ]);
                         }
 
-                        var options = { timeline: { groupByRowLabel: false } };
+                        var options = {
+                            timeline: { groupByRowLabel: false },
+                            hAxis:{format:'M/d',gridlines:{count:-1}},
+                            minorGridlines: {count: -1 },// 작은 그리드 라인 수 조절
+
+                            tooltip: {format: 'M/d'}// 툴팁의 날짜 형식을 변경
+                        };
                         chart.draw(dataTable, options);
                     }
                 }

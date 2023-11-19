@@ -32,7 +32,7 @@ public interface LkhService {
 
 	List<TaskSub>			taskWorkerlist(TaskSub taskSub);
 
-	List<Task> 				task_timeline();
+	List<Task> 				task_timeline(int project_id);
 
 	List<PrjStep> 			project_step_list(int project_id);
 

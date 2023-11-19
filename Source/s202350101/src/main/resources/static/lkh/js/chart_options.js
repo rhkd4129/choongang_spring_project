@@ -3,7 +3,7 @@
     plugins: {
       title: {
         display: true,
-        text: '작업 현황도 '
+        text: '작업 현황도'
       },
         legend: {// display: false // 범례 삭제
          },
@@ -37,8 +37,8 @@ const horizontalStackBarOption = {
       beginAtZero: true,
       stacked: true,
         ticks: {
-            stepSize: 1, // Set step size to 1 for natural numbers
-            beginAtZero: true, // Start the axis at zero
+            stepSize: 1,
+            beginAtZero: true,
         }
     },
     y: {

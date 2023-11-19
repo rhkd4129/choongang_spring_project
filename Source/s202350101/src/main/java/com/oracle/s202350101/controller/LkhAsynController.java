@@ -83,9 +83,11 @@ public class LkhAsynController {
 
     //  작업 타임라인 페이지 들어가자마자 비동기로 뿌리기
     @GetMapping("task_timeline_asyn")
-    public List<Task> task_timeline(){
+    public List<Task> task_timeline(HttpServletRequest request){
         log.info("task_timeline AsynController init");
-        return  lkhService.task_timeline();
+
+        UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
+        return  lkhService.task_timeline(userInfo.getProject_id());
     }
 
 
@@ -107,6 +109,7 @@ public class LkhAsynController {
         task.setStart(page.getStart());
         task.setEnd(page.getEnd());
         List<Task>  taskList =  lkhService.task_time_decs(task);
+
         AjaxResponse data = new AjaxResponse();
         data.setOnelist(taskList);
         data.setOneObject(page);

@@ -161,6 +161,11 @@
                 <c:when test="${true== param.status}">
                     <div class="alert alert-success" role="alert">저장 완료!</div>
                 </c:when>
+
+                <c:when test="${true== update_param.status}">
+                    <div class="alert alert-warning" role="alert">수정완료! ...</div>
+                </c:when>
+
                 <c:when test="${false== param.status}">
                     <div class="alert alert-warning" role="alert">서버에러 ...</div>
                 </c:when>
@@ -178,7 +183,8 @@
                         <th>Project Step</th>
                         <th>작업명</th>
                         <th>작업시작일</th>
-                        <th>마감일<button id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')">내</button></th>
+                        <th> 마감일 <button  class="btn btn-outline-primary" id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')">오</button></th>
+
                         <th>우선순위</th>
                         <th>작업상태</th>
                     </tr>

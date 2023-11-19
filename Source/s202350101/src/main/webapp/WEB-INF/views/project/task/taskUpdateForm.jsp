@@ -13,6 +13,7 @@
         .img_box{
             display: flex;
             flex-wrap: wrap;
+            align-items: center;
             padding: 2%;
         }
         .attached_img{
@@ -113,7 +114,7 @@
                                     <c:set var="isChecked" value=""/>
                                     <c:forEach var="select_user" items="${taskSubList}">
                                         <c:if test="${all_user.user_id eq select_user.worker_id}">
-                                            <c:set var="isChecked" value="checked "/>
+                                            <c:set var="isChec'ked" value="checked "/>
                                         </c:if>
                                     </c:forEach>
                                     <input type="checkbox" name="workerIdList" ${isChecked} value="${all_user.user_id}" id="user_${all_user.user_id}">
@@ -124,11 +125,11 @@
 
 
                             <div class="form-group">
-                                <label for="task_start_time">Start date:</label>
+                                <label for="task_start_time">작업 시작일</label>
                                 <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="${task.task_start_time}" min="2023-07-22" max="2030-12-31" />
                             </div>
                             <div class="form-group">
-                                <label for="task_end_time">task_end_time</label>
+                                <label for="task_end_time">작업 마감일</label>
                                 <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="${task.task_end_time}"  min="2023-07-22" max="2030-12-31" />
                             </div>
 
@@ -138,7 +139,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Status:</label>
+                                <label>작업 상태</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" name="task_status" value="0" id="status0"
                                            <c:if test="${task.task_status == 0}">checked</c:if>>
@@ -158,7 +159,7 @@
                                 <form:errors path="task_status" class="errors" />
                             </div>
                             <div class="form-group">
-                                <label>Priority:</label>
+                                <label>우선순위 :</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" name="task_priority" value="0" id="priority0"
                                            <c:if test="${task.task_priority == 0}">checked</c:if>>
@@ -181,19 +182,21 @@
                             <div class="form-group">
                                 <label for="file1">파일첨부</label>
                                 <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
-
                                 <label  class="fw-bold">첨부파일</label>
+                                <form:errors path="*" class="errors"/>
                                 <c:choose>
                                     <c:when test="${not empty taskAttachList}">
                                         <div class="img_box">
                                         <c:forEach items="${taskAttachList}" var="taskAttach">
+
                                             <img  class="attached_img" alt ="이미지 없음" src="${taskAttach.attach_path}/${taskAttach.attach_name}" alt="Attached Image">
                                             <a href="${taskAttach.attach_path}/${taskAttach.attach_name}" target="_blank">보기</a><br>
-
                                             <label for="attach_delete_no">삭제 </label>
                                             <input type="checkbox" id="attach_delete_no" name="attach_delete_no" value="${taskAttach.attach_no}">
+
                                         </c:forEach>
                                         </div>
+
                                     </c:when>
                                     <c:otherwise>
                                         <p class="fw-bold"> 첨부파일 없음 </p>

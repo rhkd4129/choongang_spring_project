@@ -41,7 +41,7 @@
                 success: function (response) {
                     const doughnutCtx = document.getElementById('doughnut_1').getContext('2d');
                     const doughnut_data = {
-                        labels: ['예정', '진행중', '완료됨'],
+                        labels: ['예정된 작업', '진행중인 작업', '완료된 작업'],
                         datasets: [{
                             data: response,
                             backgroundColor: [
@@ -82,19 +82,19 @@
                         labels: labels,
                         datasets: [
                             {
-                                label: '진행전',
+                                label: '예정된 작업',
                                 data: stats_0,
                                 backgroundColor: 'rgba(255, 99, 132, 0.5)',  // 빨간색 배경
                                 borderColor: 'rgb(255, 99, 132)',  // 빨간색 테두리
                             },
                             {
-                                label: '진행중',
+                                label: '진행중인 작업',
                                 data: stats_1,
                                 backgroundColor: 'rgba(75, 192, 192, 0.5)',  // 녹색 배경
                                 borderColor: 'rgb(75, 192, 192)',  // 녹색 테두리
                             },
                             {
-                                label: '완료',
+                                label: '완료된 작업',
                                 data: stats_2,
                                 backgroundColor: 'rgba(153, 102, 255, 0.5)',  // 보라색 배경
                                 borderColor: 'rgb(153, 102, 255)',  // 보라색 테두리
@@ -109,7 +109,6 @@
                 url: "<%=request.getContextPath()%>/project_day",
                 dataType: 'json',
                 success: function (prjInfo) {
-
                     // Oracle에서 가져온 문자열을 JavaScript Date 객체로 변환
                     const projectStartDate = new Date(prjInfo.project_startdate);
                     const projectEndDate = new Date(prjInfo.project_enddate);
@@ -150,6 +149,7 @@
                     createDrawChart(barCtx, 'bar', proejctData, proejctOption);
                 }
             });
+
             $.ajax({
                 url: "<%=request.getContextPath()%>/project_step_chart",
                 dataType: 'json',
