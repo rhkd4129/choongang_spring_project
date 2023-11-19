@@ -167,10 +167,12 @@ public class LkhServicveImpl implements LkhService {
 	@Override
 	public int task_create(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		log.info("task_create 서비스 시작");
 		try {
 			int taskResult = lkhDao.task_create(task);
-
+			log.info("task_create 결과 : {}",taskResult);
 			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
+				log.info("공동작업자가 있다. 공동작업자 생성 시작");
 				List<TaskSub> taskSubList = new ArrayList<>();
 				for (String workId : task.getWorkerIdList()) {
 					TaskSub taskSub = new TaskSub();
@@ -179,15 +181,18 @@ public class LkhServicveImpl implements LkhService {
 					taskSubList.add(taskSub);
 				}
 				int taskSubResult = lkhDao.task_worker_create(taskSubList);
+				log.info("taskSub 결과  : {}",taskSubResult);
 			}
 
 
-			int maxId =lkhDao.task_attach_max(task.getTask_id());
-			//이 값이 없을때(처음생성될시 0을 반환)
-			log.info("제발좀 되라 앙 {}",maxId);
-			// 파일 처리 부분
+			//작업 생성시 업로드할 파일이 존재할경우
 			if (!multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0) {
-				log.info("파일이 있다!!!!");
+
+				log.info("업로드할 파일이 하나이상 존재합니다.");
+				int maxId =lkhDao.task_attach_max(task.getTask_id());
+				log.info("지금현재 task_attach의 max값은 ? {}",maxId);
+
+
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
 				int i  = 1;
@@ -201,13 +206,14 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setAttach_path(attach_path);
 					taskAttachList.add(taskAttach);
 					i+=1;
-					log.info("DFdfdfd{}",taskAttach.getAttach_no());
+					log.info("현재 저장될 taskAttach의 attach_no의 값은 ? -> {}",taskAttach.getAttach_no());
 				}
-
-				lkhDao.task_attach_create(taskAttachList);
+				int taskAttachReuslt = lkhDao.task_attach_create(taskAttachList);
+				log.info("taskAttachCreate의 결과는 : {}",taskAttachReuslt);
 			}
 
 			transactionManager.commit(txStatus);
+			log.info("커밋 성공하였습니다.");
 		} catch (Exception e) {
 			transactionManager.rollback(txStatus);
 			log.info("service: createGroupTask, transactionManager error Message -> {}", e.getMessage());
@@ -216,19 +222,30 @@ public class LkhServicveImpl implements LkhService {
 	}
 
 
+	// 1.작업만 수정하는경우
+	// 2.공동작업자는 수정할경우 기존에잇던 것을 다 delete처리하고 다시 insert함
 
 	@Override
 	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath,List<String> attachDeleteList) {
+		log.info("task_create 서비스 시작");
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
+					//////////////		Task update		//////////////
 			int taskResult = lkhDao.task_update(task);
-			log.info("taskReuslt : {}",taskResult);
+			log.info("taskupdate Reuslt : {}",taskResult);
+
+				//////////////		TaskSub테이블 update		//////////////
+
+
+			//수정 폼에서 공동작업자를 아무도 선택하지 않았다면 해당 작업의 taskSub를 다 delete처리
 			if(taskResult == 1 && task.getWorkerIdList() == null){
 				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
-				log.info("작업자가 없는상태로 되돌리기 taskSbinit :{}",taskSbinit);
+				log.info("작업자가 없는상태로 되돌리기 taskSbinit 결과  :{}",taskSbinit);
 			}
+
+			//공동작업자리스트에 하나라도 있다면.
 			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
-				// 작업자 업데이트
+
 				List<TaskSub> taskSubList = new ArrayList<>();
 				for (String workId : task.getWorkerIdList()) {
 					TaskSub taskSub = new TaskSub();
@@ -236,18 +253,19 @@ public class LkhServicveImpl implements LkhService {
 					taskSub.setProject_id(task.getProject_id());
 					taskSub.setWorker_id(workId);
 					taskSubList.add(taskSub);
-					log.info("proejct_id ----- {}   task_id {}: ",task.getProject_id(),task.getTask_id());
 					log.info("workerId ----- {}: ",workId);
-
 				}
+				// 기존에잇던 명단을 delete처리하고  다시 insert함
 				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
-				log.info("taskSbinit : {}",taskSbinit);
 				int taskSbResult = lkhDao.task_worker_update(taskSubList);
+				log.info("taskSbinit : {}",taskSbinit);
 				log.info("taskSbResult : {}",taskSbResult);
 			}
 
 
-		// 파일 삭제 하기
+			//////////////		TaskAttach테이블 update		//////////////
+
+			//삭제할 파일이 하나라도 존재한다면
 			if (attachDeleteList != null && !attachDeleteList.isEmpty()) {
 				for(String no :attachDeleteList)	{
 					TaskAttach taskAttach = new TaskAttach();
@@ -256,6 +274,7 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setAttach_no(Integer.parseInt(no));
 					log.info("삭제될 파일의 no {}",no);
 
+					//먼저 물리적 경로에 잇는 파일을 삭제하기위해 select해오기
 					TaskAttach selectFile = lkhDao.physical_file_delete(taskAttach);
 					log.info("selectFile.getTask_id() :{}", selectFile.getTask_id());
 					log.info("selectFile.getAttach_no() :{}", selectFile.getAttach_no());
@@ -269,24 +288,28 @@ public class LkhServicveImpl implements LkhService {
 				}
 			}
 
-			//파일 추가 업로드
+			// 추가적으로 파일을 업로드 해야한다면
 			if (multipartFileList != null && !multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0 ) {
 				// 파일 업로드
 				List<TaskAttach> taskAttachList = new ArrayList<>();
+				int maxId =lkhDao.task_attach_max(task.getTask_id());
+				log.info("현재 작업에 대한 taskAttach의 max값은?  : {}",maxId);
+				int i=1;
 				String attach_path = "upload";
 				for (MultipartFile file : multipartFileList) {
 					TaskAttach taskAttach = new TaskAttach();
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
+					taskAttach.setAttach_no(maxId+i);
+					i+=1;
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
 					taskAttach.setAttach_name(fileName);
 					taskAttach.setAttach_path(attach_path);
+					log.info("저장될 파일의정보 TaskID : {}   attachPk: {}",taskAttach.getTask_id(), taskAttach.getAttach_no());
 					taskAttachList.add(taskAttach);
 				}
-				// 파일 업데이트
-				if (!taskAttachList.isEmpty()) {
-					lkhDao.task_attach_create(taskAttachList);
-				}
+				lkhDao.task_attach_update(taskAttachList);
+
 			}
 			transactionManager.commit(txStatus);
 			log.info("transactionManager.commit(txStatus) --> 성공!!!!!!!!!");
@@ -370,16 +393,4 @@ public class LkhServicveImpl implements LkhService {
 		}
 		return result;
 	}
-
-
 }
-
-//		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
-//			String key = entry.getKey();
-//			List<String> values = entry.getValue();
-//			System.out.print(key + ": ");
-//			for (String value : values) {
-//				System.out.print(value + " ");
-//			}
-//			System.out.println();
-//		}

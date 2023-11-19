@@ -209,17 +209,9 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 
-	// task_create post 실행
-//	@Override
-//	public int task_create(Task task) {
-//		int result = 0;
-//		try {
-//			result = sqlSession.insert("task_create", task);
-//		} catch (Exception e) {
-//			log.info("dao :task_create error Message -> {}", e.getMessage());
-//		}
-//		return result;
-//	}
+
+
+	///////////// 작업 생성 ///////////////////////
 
 	@Override
 	public int task_create(Task task) throws Exception {
@@ -229,7 +221,6 @@ public class LkhDaoImpl implements LkhDao {
 		} catch (Exception e) {
 			// 로깅은 여기서 수행
 			log.error("dao: task_create error Message -> {}", e.getMessage());
-
 			// 예외를 상위로 전파
 			throw new Exception("task_create 메서드에서 예외 발생", e);
 		}
@@ -243,7 +234,6 @@ public class LkhDaoImpl implements LkhDao {
 		} catch (Exception e) {
 			// 로깅은 여기서 수행
 			log.error("dao: task_worker_create error Message -> {}", e.getMessage());
-
 			// 예외를 상위로 전파
 			throw new Exception("task_worker_create 메서드에서 예외 발생", e);
 		}
@@ -258,38 +248,17 @@ public class LkhDaoImpl implements LkhDao {
 		} catch (Exception e) {
 			// 로깅은 여기서 수행
 			log.error("dao: taskAttach_create error Message -> {}", e.getMessage());
-
 			// 예외를 상위로 전파
-			throw new Exception("taskAttach_create 메서드에서 예외 발생", e);
+			throw new Exception("task_attach_create 메서드에서 예외 발생", e);
 		}
 		return result;
 	}
 
-//	@Override
-//	public int task_worker_create(@Param("list") List<TaskSub> taskSubList) {
-//		int result = 0;
-//		try {
-//			result = sqlSession.insert("task_worker_create", taskSubList);
-//		} catch (Exception e) {
-//			log.info("dao :task_worker_create error Message -> {}", e.getMessage());
-//		}
-//		return result;
-//	}
-//
-//	@Override
-//	public int task_attach_create(@Param("list") List<TaskAttach> taskAttachList) {
-//		int result = 0;
-//		try {
-//			result = sqlSession.insert("taskAttach_create", taskAttachList);
-//		} catch (Exception e) {
-//			log.info("dao :taskAttach_create error Message -> {}", e.getMessage());
-//		}
-//		return result;
-//	}
+
 //
 
 
-	public  int					task_attach_max(int task_id){
+	public  int	task_attach_max(int task_id){
 		int result = 0;
 		try {
 			result = sqlSession.selectOne("taskAttach_max",task_id);
@@ -307,7 +276,6 @@ public class LkhDaoImpl implements LkhDao {
 		}
 		catch (Exception e) {
 			log.info("dao :task_update error Message -> {}", e.getMessage());
-
 			throw new Exception("task_update error Message ->", e);
 		}
 		return result;
@@ -316,11 +284,11 @@ public class LkhDaoImpl implements LkhDao {
 	@Override
 	public int task_worker_init(int projectId,int taskId) throws Exception {
 		int result = 0;
-		try{
+		try{				//update엿음
 			Map<String, Integer> params = new HashMap<>();
 			params.put("task_id", taskId);
 			params.put("project_id", projectId);
-			result = sqlSession.update("task_worker_init",params);
+			result = sqlSession.delete("task_worker_init",params);
 		}catch (Exception e) {
 			log.info("dao :task_worker_init error Message -> {}", e.getMessage());
 			throw new Exception("dao :task_worker_init error Message ->", e);
@@ -331,8 +299,8 @@ public class LkhDaoImpl implements LkhDao {
 	@Override
 	public int task_worker_update(List<TaskSub> taskSubList)  throws Exception{
 		int reuslt =0;
-		try {
-			reuslt = sqlSession.update("task_worker_update",taskSubList);
+		try {						//update엿음
+			reuslt = sqlSession.insert("task_worker_update",taskSubList);
 		}
 		catch (Exception e) {
 			log.info("dao :task_worker_update error Message -> {}", e.getMessage());
@@ -368,18 +336,18 @@ public class LkhDaoImpl implements LkhDao {
 
 	}
 
-//	@Override
-//	public int task_attach_update(List<TaskAttach> taskAttachList) throws Exception{
-//		int reuslt =0;
-//		try {
-//			reuslt = sqlSession.update("task_attach_update",taskAttachList);
-//		}
-//		catch (Exception e) {
-//			log.info("dao :task_attach_update error Message -> {}", e.getMessage());
-//			throw new Exception("dao :task_attach_update error Message ->", e);
-//		}
-//		return reuslt;
-//	}
+	@Override
+	public int task_attach_update(List<TaskAttach> taskAttachList) throws Exception{
+		int reuslt =0;
+		try {				//update엿음
+			reuslt = sqlSession.insert("task_attach_update",taskAttachList);
+		}
+		catch (Exception e) {
+			log.info("dao :task_attach_update error Message -> {}", e.getMessage());
+			throw new Exception("dao :task_attach_update error Message ->", e);
+		}
+		return reuslt;
+	}
 
 
 	@Override

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.oracle.s202350101.model.*;
 import org.springframework.core.io.UrlResource;
@@ -33,12 +34,16 @@ import javax.validation.Valid;
 public class LkhController {
 	private final LkhService lkhService;
 	//git config --global core.autocrlf true
+
+
+
+
+
 	// 대시보드 홈
 	@GetMapping("dashboard")
 	public String dashboard(HttpServletRequest request, Model model ) {
-		log.info("board_view ctr start");
+		log.info("dashboard Controller init");
 		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
-
 		return "project/task/dashboard";
 	}
 
@@ -47,6 +52,7 @@ public class LkhController {
 	// 작업 시간 그래프
 	@GetMapping("task_timeline")
 	public String task_timeline(){
+		log.info("task_timeline Controller init");
 		return "project/task/taskTimeline";
 	}
 
@@ -56,6 +62,9 @@ public class LkhController {
 	public String  task_list(HttpServletRequest request,  Model model,String currentPage
 	,@RequestParam(required = false) String keyword
 	,@RequestParam(required = false) String keyword_division) {
+		log.info("task_list Controller init");
+
+
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 
@@ -93,12 +102,13 @@ public class LkhController {
 				log.info(t.getTask_subject());
 			}
 			model.addAttribute("page",page);
+			model.addAttribute("keyword",keyword);
+			model.addAttribute("keyword_division",keyword_division);
 		}
 
 		model.addAttribute("taskList", taskList);
 		model.addAttribute("taskCount",taskCount);
-		model.addAttribute("keyword",keyword);
-		model.addAttribute("keyword_division",keyword_division);
+
 		return "project/task/taskList";
 	}
 
@@ -106,7 +116,8 @@ public class LkhController {
 	// 작업 상세 화면
 	@GetMapping("task_detail")
 	public String task_detail(int task_id, int project_id,Model model){
-		log.info("task_create_view ctr taskId : {}",task_id);
+		log.info("task_detail Controller init");
+
 
 
 		//현재 task 정보
@@ -133,19 +144,23 @@ public class LkhController {
 		UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
 		int projectId = userInfo.getProject_id();
 		Task task = new Task();
-		log.info("task_create_view ctr projectId : {}",projectId);
+		log.info("task_create_view ctr projectId : {} userId: {}",projectId,userInfo.getUser_id());
 		List<PrjStep>  prjStepList = lkhService.project_step_list(projectId);
 		List<UserInfo>  task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
-		// 현재 프로젝트에 속한 프로젝트 단계 리스트와 프로젝트 인원들도 같이 선택해서 입력해야함
+
+
+		//지금 접속한 유저는 곧 작업의 담당자이므로 현재 프로젝트멤버들을 가져온 쿼리에서 현재 접속자는 필터링한다.
+		List<UserInfo> filterWorkList = task_create_form_worker_list.stream().filter(user->!user.getUser_id().equals(userInfo.getUser_id())).collect(Collectors.toList());
+
+
+
+		// 현재 프로젝트에 속한 프로젝트 단계 리스트와 프로젝트 인원들도 같이 보여줘서 선택하게 해야 함
 		model.addAttribute("prjStepList",prjStepList);
-		model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
+		model.addAttribute("task_create_form_worker_list",filterWorkList);
 		model.addAttribute("task", task);
 		return "project/task/taskInsertForm";
 	}
 
-
-	//		if(task.getGarbage()  != null && task.getProject_s_name() != null){bindingResult.reject("total",new Object[]{10000, });}
-	// 작업 생성 Post @RequestParam(value = "worker" ,required = false) List<String> selectedWorkers,
 	@PostMapping("task_create")
 	public String task_create(
 			@Validated @ModelAttribute Task task, BindingResult bindingResult,
@@ -211,17 +226,19 @@ public class LkhController {
 		List<PrjStep>  prjStepList = lkhService.project_step_list(projectId);
 		// 현재 프토젝트의 속한  인원들의 user_id와 user_name을가져옴
 		List<UserInfo>  task_create_form_worker_list = lkhService.task_create_form_worker_list(projectId);
+		List<UserInfo> filterWorkList = task_create_form_worker_list.stream().filter(user->!user.getUser_id().equals(userInfo.getUser_id())).collect(Collectors.toList());
 		// 원래 작업자들의 명단을 가져옴
 		TaskSub taskSub = new TaskSub();
 		taskSub.setProject_id(projectId);
 		taskSub.setTask_id(taskId);
 		List<TaskSub> taskSubList =lkhService.taskWorkerlist(taskSub);
+
 		List<TaskAttach> taskAttachList =  lkhService.task_attach_list(taskId,projectId);
 
 
 		model.addAttribute("taskAttachList",taskAttachList);
 		model.addAttribute("prjStepList",prjStepList);
-		model.addAttribute("task_create_form_worker_list",task_create_form_worker_list);
+		model.addAttribute("task_create_form_worker_list",filterWorkList);
 		model.addAttribute("taskSubList",taskSubList);
 		model.addAttribute("task", task);
 

@@ -23,7 +23,7 @@
                         console.log('result:',result);
                         if(result === '1'){
                             alert("삭제 완료");
-                            window.location.href ="/dashboard_home";
+                            window.location.href ="/dashboard";
                         }
                     }
                 })
@@ -45,7 +45,7 @@
                         console.log('result:',result);
                         if(result === '1'){
                             alert("복구 완료");
-                            window.location.href ="/dashboard_home";
+                            window.location.href ="/dashboard";
                         }
                     }
                 })

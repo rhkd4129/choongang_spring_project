@@ -151,7 +151,7 @@
                 }
             });
             $.ajax({
-                url: "<%=request.getContextPath()%>/step",
+                url: "<%=request.getContextPath()%>/project_step_chart",
                 dataType: 'json',
                 success: function (data) {
                     ////////////////////// 현재 진행중인 프로젝트 보기 /////////////////////////////

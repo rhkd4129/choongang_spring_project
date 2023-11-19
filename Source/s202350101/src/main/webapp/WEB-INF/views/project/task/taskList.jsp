@@ -178,7 +178,7 @@
                         <th>Project Step</th>
                         <th>작업명</th>
                         <th>작업시작일</th>
-                        <th>마감일<button id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')"><img  src="/images/sort.png" width="15px" height="15px" alt="정렬"></button></th>
+                        <th>마감일<button id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')">내</button></th>
                         <th>우선순위</th>
                         <th>작업상태</th>
                     </tr>

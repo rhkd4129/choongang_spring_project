@@ -16,7 +16,7 @@ public interface LkhService {
 
 	PrjInfo 				project_day(int project_id);
 
-	AjaxResponse				project_step_chart(int project_id);
+	AjaxResponse			project_step_chart(int project_id);
 
 	List<Task> 				task_time_decs(Task task);
 
@@ -39,11 +39,10 @@ public interface LkhService {
 	List<UserInfo> 			task_create_form_worker_list(int project_id);
 
 
-	// 작업생성
+	// 작업생성 DAO메서드 여러개 포함되어있음 -> 트랜잭션처리
 	int 						task_create(Task task, List<MultipartFile> multipartFileList,String uploadPath);
 
-//	int							task_attach_create(List<TaskAttach>taskAttachList,int fileCount);
-
+	// 작업생성 DAO메서드 여러개 포함되어있음 -> 트랜잭션처리
 	int							task_update(Task task, List<MultipartFile> multipartFileList,String uploadPath,List<String> attachDeleteList);
 
 	//휴지통으로 이동

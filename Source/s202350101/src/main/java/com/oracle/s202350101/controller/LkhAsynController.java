@@ -25,8 +25,8 @@ import java.util.Optional;
 
 
 /*******************************************
-    **   비동기 만 모아 놓은 컨트롤러             **
-    *******************************************/
+**   비동기 만 모아 놓은 컨트롤러             **
+*******************************************/
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -34,59 +34,69 @@ public class LkhAsynController {
     private final LkhService lkhService;
 
 
+    /********************************************
+     **********      대시보드 홈             ******
+     *******************************************/
+
+    // 총 프로젝트 기간 그래프
     @GetMapping("project_day")
     public PrjInfo project_day(HttpServletRequest request , Model model){
+        log.info("project_day AsynController init");
+
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-        int projectId = userInfo.getProject_id();
-        return lkhService.project_day(projectId);
+        return lkhService.project_day(userInfo.getProject_id());   // 현재 유저의 프로젝트 기간 정보를 리턴해줌
     }
 
-        // 대시보드 홈에서 도넛 그래프
+    // 도넛 그래프
     @GetMapping("doughnut_chart")
     public List<Integer> doughnut_chart(HttpServletRequest request) {
+        log.info("doughnut_chart AsynController init");
+
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
-        int id = userInfo.getProject_id();
-        log.info("dashboard Controller init");
-        List<Integer> taskStatusList = new ArrayList<>();
-        taskStatusList =  lkhService.doughnut_chart(id);
-        return taskStatusList;
+        return lkhService.doughnut_chart(userInfo.getProject_id());     //현재 프로젝트의 작업에 작업상태(예정, 짆랭중, 완료됨)별로 합계를 구하여 넘겨줌
     }
 
-    // 대시보드 홈에서 진척률 그래프
+    // 인원별  진척률 그래프
     @GetMapping("workload_chart")
     public List<Task> workload_chart(HttpServletRequest request) {
+        log.info("workload_chart AsynController init");
+
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
-        int id = userInfo.getProject_id();
-        log.info("dashboard_bar Controller init");
-        List<Task> taskUserWorkStatusList = new ArrayList<>();
-        taskUserWorkStatusList =  lkhService.workload_chart(id);
-        return taskUserWorkStatusList;
+        return lkhService.workload_chart(userInfo.getProject_id());     //현재 프로젝트의 인원별 각 작업의 상태를 구하여 넘겨줌
     }
 
-    //대시보드 홈에서 프로젝트 단계별 그래프
-    @GetMapping("step")
-    public AjaxResponse step_view(HttpServletRequest request){
+    //프로젝트 단계별 그래프
+    @GetMapping("project_step_chart")
+    public AjaxResponse project_step_chart(HttpServletRequest request){
+        log.info("project_step_chart AsynController init");
+
         UserInfo userInfo  = (UserInfo) request.getSession().getAttribute("userInfo");
-        int id = userInfo.getProject_id();
-        AjaxResponse data  =lkhService.project_step_chart(id);
-        //serivce에서 다 필터링된 데이터만 받아서 리턴  data형태는 map형태이고 각 프로젝트 단계별 작업들이 잇음
-        return data;
+        AjaxResponse projectStepData  =lkhService.project_step_chart(userInfo.getProject_id());
+        return projectStepData;
+
+        //serivce에서 다 필터링된 데이터만 받아서 리턴  projectStepData map형태이고 각 프로젝트 단계별 작업들의 정보가 존재
 
     }
+    /********************************************
+     **********      대시보드 페이지 끝          ******
+     *******************************************/
 
-        //  작업 타임라인 페이지 들어가자마자 비동기로 뿌리기
+    //  작업 타임라인 페이지 들어가자마자 비동기로 뿌리기
     @GetMapping("task_timeline_asyn")
     public List<Task> task_timeline(){
-        log.info("task_timeline ctr");
+        log.info("task_timeline AsynController init");
         return  lkhService.task_timeline();
     }
-    ///// 대시 보드 홈 /////
 
-    // 내림차순 올림차순 으로 보기
+
+    //  내림차순 올림차순 으로 보기
     @GetMapping("task_time_desc")
     public AjaxResponse task_time_desc(HttpServletRequest request, String currentPage,String keyword_division , String keyword){
+        log.info("task_time_desc AsynController init");
+
+
         UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
-        log.info("내림");
+
         int projectId = userInfo.getProject_id();
         Task task =  new Task();
         task.setProject_id(projectId);
@@ -106,7 +116,9 @@ public class LkhAsynController {
 
     @GetMapping("task_time_acsc")
     public  AjaxResponse task_time_aces(HttpServletRequest request,String currentPage,String keyword_division , String keyword){
-        log.info("올림");
+        log.info("task_time_aces AsynController init");
+
+
         UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
         int projectId = userInfo.getProject_id();
         Task task =  new Task();
@@ -129,7 +141,7 @@ public class LkhAsynController {
     //휴지통으로넣기
     @PostMapping("task_garbage")
     public int task_garbage(int task_id, int project_id){
-        log.info("task_garbage ctr : task_id :{}  proejct_id :{} ",task_id,project_id);
+        log.info("task_garbage AsynController init");
 
         Task task = new Task();
         task.setTask_id(task_id);
@@ -143,10 +155,11 @@ public class LkhAsynController {
     // 휴지통에서 영구삭제시키기
     @PostMapping("task_delete")
     public int task_delete(int task_id,  int project_id){
-        log.info("task_delete ctr : task_id :{}  proejct_id :{} ",task_id,project_id);
+        log.info("task_delete AsynController init");
         Task task = new Task();
         task.setProject_id(project_id);
         task.setTask_id(task_id);
+
         int result = lkhService.task_delete(task);
         log.info("result-> {}",result);
         return result;
@@ -159,6 +172,7 @@ public class LkhAsynController {
         Task task = new Task();
         task.setProject_id(project_id);
         task.setTask_id(task_id);
+
         int result = lkhService.task_restore(task);
         log.info("result-> {}",result);
         return  result;
