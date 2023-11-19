@@ -127,7 +127,7 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1>Task List</h1>
+            <h1>작업 목록</h1>
         <div class="container border border-black p-3">
             <form action="task_list" method="GET">
                 <div class="form-row">

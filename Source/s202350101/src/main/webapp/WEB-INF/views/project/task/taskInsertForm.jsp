@@ -55,16 +55,18 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
-            <!------------------------------ //개발자 소스 입력 START ----- "-------------------------->
+
+            <h3 style="margin: 2%;">작업 생성</h3>
             <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" enctype="multipart/form-data" >
                 <div class="container">
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="order_by">프로젝트 단계</label>
                                 <select id="order_by" name="project_step_seq">
                                     <c:forEach var="step" items="${prjStepList}">
-                                        <option value="${step.project_step_seq}">${step.project_order}: ${step.project_s_name}</option>
+                                        <option  value="${step.project_step_seq}">${step.project_order}: ${step.project_s_name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -89,7 +91,7 @@
 
 
                             <div class="form-group">
-                                <label for="task_start_time"작업시작일</label>
+                                <label for="task_start_time">작업시작일</label>
                                 <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
                             </div>
                             <div class="form-group">

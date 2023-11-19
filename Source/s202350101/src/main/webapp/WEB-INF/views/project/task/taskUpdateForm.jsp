@@ -73,8 +73,8 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
-            <form></form>
-            <h3>작업 수정 폼</h3>
+
+            <h3 style="margin: 2%">작업 수정</h3>
             <!------------------------------ //개발자 소스 입력 START ----- "-------------------------->
             <form:form action="task_update" method="post" modelAttribute='task' class="border border-dark p-4" enctype="multipart/form-data" >
                 <input type="hidden" name="task_id" value="${task.task_id}">
@@ -84,6 +84,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="order_by">프로젝트 단계</label>
                                 <select id="order_by" name="project_step_seq">
                                     <c:forEach var="step" items="${prjStepList}">
 
