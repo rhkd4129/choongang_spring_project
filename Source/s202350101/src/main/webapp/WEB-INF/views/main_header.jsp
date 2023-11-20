@@ -519,18 +519,12 @@
                                 chatroom_con += '<div id="chat_chat_list" onclick="chat_room('+"'" + ChatRoom.sender_id + "'" + ')">';
                             }
                             chatroom_con += '<div id="chat_ch_left">';
-                            // chatroom_con += '<p>이미지</p></div>';
                             console.log("hihi");
                             console.log(ChatRoom.attach_path);
                             console.log(ChatRoom.attach_name);
                             chatroom_con += '<img className='+'"uploadFile"'+'style='+'"width:30px; height: 30px; border-radius: 70%;"'+' src='+'"'+'${pageContext.request.contextPath}'+ChatRoom.attach_path+'/'+ChatRoom.attach_name+'"></div>';
                             chatroom_con += '<div id="chat_ch_center">';
-                            if (ChatRoom.sender_id == user) {
-                                chatroom_con += '<p>' + ChatRoom.receiver_id+ '</p>';
-                            } else {
-                                chatroom_con += '<p>' + ChatRoom.sender_id + '</p>';
-                            }
-
+                            chatroom_con += '<p>' + ChatRoom.user_name + '</p>';
                             chatroom_con += '<p>'+"'"+ msg_con+"'"+'</p></div>';
                             chatroom_con += '<div id="chat_ch_right"><p>' + show_time + '</p></div>';
                             chatroom_con += '<div id="readCnt"> <p>'+"'"+read_cnt + "'" +'</p></div></div>';

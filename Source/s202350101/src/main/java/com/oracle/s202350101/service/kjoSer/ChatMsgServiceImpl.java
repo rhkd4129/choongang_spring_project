@@ -190,6 +190,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                 }
             }
         }
+//      채팅 상태방의 프로필 사진을 가져오기 위함.
         for (ChatRoom chatR : chatRooms) {
             int noreadCnt = findbyChatRoomMsg(findmsg, chatR,user);
             UserInfo us = new UserInfo();
