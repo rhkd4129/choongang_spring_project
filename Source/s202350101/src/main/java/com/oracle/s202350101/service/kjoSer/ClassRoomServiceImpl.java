@@ -2,6 +2,8 @@ package com.oracle.s202350101.service.kjoSer;
 
 import java.util.List;
 
+import com.oracle.s202350101.dao.kjoDao.ClassRoomDao;
+import com.oracle.s202350101.model.UserInfo;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.kjoDao.ClassRoomDaoImpl;
@@ -17,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ClassRoomServiceImpl implements ClassRoomService{
 
-	private final ClassRoomDaoImpl CRdao;
-	
+	private final ClassRoomDao CRdao;
 //	모든 ClassRoom 조회
 	@Override
 	public List<ClassRoom> findAllClassRoom() {
@@ -37,9 +38,18 @@ public class ClassRoomServiceImpl implements ClassRoomService{
     public int deletebyId(ClassRoom cr) {
 		int result = 0;
 
-		result += CRdao.deleteUsInfobyClassId(cr);
-		result += CRdao.deletebyUsClassId(cr);
-		result += CRdao.deletebyId(cr);
+		try{
+//	강의실 id를 기준으로 삭제_USENV
+			result += CRdao.deleteUsEnvbyClassId(cr);
+//	강의실 id를 기준으로 삭제_TODO
+			result += CRdao.deleteTodobyClassId(cr);
+//	강의실 id를 기준으로 삭제_UserInfo
+			result += CRdao.deleteUsInfobyUsClassId(cr);
+//	강의실 id를 기준으로 삭제_Class
+			result += CRdao.deletebyId(cr);
+		} catch (Exception e) {
+            log.info("deletebyId ERROR : {}",e.getMessage());
+        }
 
 		return result;
     }

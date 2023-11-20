@@ -35,13 +35,27 @@
 		where class_id = #{class_id}
 	</delete>
 
-	<delete id="deletebyClassId" parameterType="ClassRoom">
+	<delete id="deleteUsInfobyUsClassId" parameterType="ClassRoom">
 		delete user_info
 		where class_id = #{class_id}
 	</delete>
-	<delete id="deleteUsInfobyClassId" parameterType="ClassRoom">
-		delete user_info
-		where class_id = #{class_id}
+	<delete id="deleteTodobyClassId" parameterType="ClassRoom">
+		DELETE FROM todo T
+		WHERE T.user_id in  (
+			SELECT ui.user_id
+			FROM user_info ui
+			WHERE ui.class_id = #{class_id}
+		)
 	</delete>
+	<delete id="deleteUsEnvbyClassId" parameterType="ClassRoom">
+		delete from USER_ENV ue
+		where ue.user_id in
+			  (
+				  SELECT ui.user_id
+				  FROM user_info ui
+				  WHERE ui.class_id = #{class_id}
+			  )
+	</delete>
+
 </mapper>
 	 

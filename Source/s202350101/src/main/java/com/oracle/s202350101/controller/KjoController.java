@@ -90,6 +90,7 @@ public class KjoController {
         log.info("admin_class_list");
         List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
 
+        //  날짜처리
         SimpleDateFormat newDtFormat = new SimpleDateFormat("yy-MM-dd");
         for (int i = 0; i < CRList.size(); i++) {
             Date startDate = CRList.get(i).getClass_start_date();
@@ -396,6 +397,7 @@ public class KjoController {
     public ResponseEntity<?> auth_mod(@RequestBody KjoRequestDto kjorequest) {
         //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
         int result = UIser.auth_modify(kjorequest);
+        //  HTTP 200과 db 업데이트 수 반환 result == 15가 정상.
         return ResponseEntity.ok(result);
     }
 
@@ -413,7 +415,7 @@ public class KjoController {
     @ResponseBody
     public ResponseEntity<?> admin_pbd_del(@RequestBody KjoRequestDto kjorequest) {
 //	firList: prj_delbox , secList:doc_delbox
-        //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
+    //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
         int result = PBDser.delpbd(kjorequest);
 
         return ResponseEntity.ok(result);

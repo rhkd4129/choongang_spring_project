@@ -47,7 +47,7 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		return result;
 	}
 
-//	강의실 id를 기준으로 삭제
+//	강의실 id를 기준으로 삭제_Class
     @Override
     public int deletebyId(ClassRoom cr) {
 		log.info("deletebyId START");
@@ -62,28 +62,44 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 
     }
 
+	//	강의실 id를 기준으로 삭제_UserInfo
 	@Override
-	public int deletebyUsClassId(ClassRoom cr) {
-		log.info("deletebyClassId START");
+	public int deleteUsInfobyUsClassId(ClassRoom cr) {
+		log.info("deleteUsInfobyUsClassId START");
 		int result = 0;
 		try {
-			result = session.delete("deletebyClassId", cr);
-			log.info("deletebyClassId {}",result);
+			result = session.delete("deleteUsInfobyUsClassId", cr);
+			log.info("deleteUsInfobyUsClassId {}",result);
 		} catch (Exception e) {
-			log.info("deletebyClassId ERROR : {}",e.getMessage());
+			log.info("deleteUsInfobyUsClassId ERROR : {}",e.getMessage());
 		}
 		return result;
 	}
 
+	//	강의실 id를 기준으로 삭제_TODO
 	@Override
-	public int deleteUsInfobyClassId(ClassRoom cr) {
-		log.info("deleteUsInfobyClassId START");
+	public int deleteTodobyClassId(ClassRoom cr) {
+		log.info("deleteTodobyClassId START");
 		int result = 0;
 		try {
-			result = session.delete("deleteUsInfobyClassId", cr);
-			log.info("deleteUsInfobyClassId {}",result);
+			result = session.delete("deleteTodobyClassId", cr);
+			log.info("deleteTodobyClassId {}",result);
 		} catch (Exception e) {
-			log.info("deleteUsInfobyClassId ERROR : {}",e.getMessage());
+			log.info("deleteTodobyClassId ERROR : {}",e.getMessage());
+		}
+		return result;
+	}
+
+	//	강의실 id를 기준으로 삭제_USENV
+	@Override
+	public int deleteUsEnvbyClassId(ClassRoom cr) {
+		log.info("deleteUsEnvbyClassId START");
+		int result = 0;
+		try {
+			result = session.delete("deleteUsEnvbyClassId", cr);
+			log.info("deleteUsEnvbyClassId {}",result);
+		} catch (Exception e) {
+			log.info("deleteUsEnvbyClassId ERROR : {}",e.getMessage());
 		}
 		return result;
 	}

@@ -368,7 +368,8 @@
 		                        </select>
 							</td>
 							<td>
-		                        <select id="pr_List" class="form-select" onchange="pr_info(1)">
+								<%--onchange -> onclick 변경--%>
+		                        <select id="pr_List" class="form-select" onclick="pr_info(1)">
 		                            <c:forEach items="${PIList}" var="list">
 		                                <option name="pr_num"
 		                                        value="${list.project_id}">${list.project_name} <%--${list.class_room_num}--%>
