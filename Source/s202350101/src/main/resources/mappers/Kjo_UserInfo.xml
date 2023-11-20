@@ -78,5 +78,6 @@
         select *
         from user_info
     </select>
+
 </mapper>
 

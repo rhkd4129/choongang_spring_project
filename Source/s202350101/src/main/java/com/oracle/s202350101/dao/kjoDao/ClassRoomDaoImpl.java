@@ -104,5 +104,19 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		return result;
 	}
 
+	//	강의실 id를 기준으로 변경_USINFO
+    @Override
+    public int updateUsInfobyUsClassId(ClassRoom cr) {
+		log.info("updateUsInfobyUsClassId START");
+		int result = 0;
+		try {
+			result = session.delete("updateUsInfobyUsClassId", cr);
+			log.info("updateUsInfobyUsClassId {}",result);
+		} catch (Exception e) {
+			log.info("updateUsInfobyUsClassId ERROR : {}",e.getMessage());
+		}
+		return result;
+    }
+
 
 }

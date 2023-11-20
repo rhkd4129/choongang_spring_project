@@ -56,6 +56,10 @@
 				  WHERE ui.class_id = #{class_id}
 			  )
 	</delete>
+	<update id="updateUsInfobyUsClassId" parameterType="ClassRoom">
+		update user_info set del_status=1
+		where class_id = #{class_id}
 
+	</update>
 </mapper>
 	 
