@@ -376,7 +376,7 @@
         position: absolute;
         z-index: 999;
         float: right;
-        width: 30%;
+        width: 20%;
         height: auto; /* 변경된 높이 값 */
         background-color: rgba(13, 110, 253, 0.25);
         /*display: none;*/
@@ -444,6 +444,12 @@
             con.style.display = 'none';
             chat_users.style.display = 'none';
         }
+    }
+    function chat_close() {
+        var con = document.getElementById("chatbox");
+
+        con.style.display = 'none';
+        chat_users.style.display = 'none';
     }
 
     function chat_user_bt() {
@@ -679,6 +685,7 @@
     <div id="chat_top">
         <input onclick="chat_user_bt()" id="chat_user_bt" class="btn btn-warning" type="button" value="학생 목록">
         <input onclick="chat_chats_bt()" id="chat_chat_bt" class="btn btn-warning" type="button" value="채팅 목록">
+        <input onclick="chat_close()" id="chat_close" class="btn btn-warning" type="button" value="닫기">
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <div id="chat_users" style="display: none">
