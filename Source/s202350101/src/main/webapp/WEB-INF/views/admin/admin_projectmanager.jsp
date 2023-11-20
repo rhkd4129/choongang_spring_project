@@ -6,12 +6,12 @@
 <html>
 <head>
 
-    <c:if test="${userInfo.user_auth != 'admin' }">
-        <script type="text/javascript">
-            alert("관리자 권한이 없습니다. 관리자에게 문의하세요");
-            location.href = "/main";
-        </script>
-    </c:if>
+<%--    <c:if test="${userInfo.user_auth != 'admin' }">--%>
+<%--        <script type="text/javascript">--%>
+<%--            alert("관리자 권한이 없습니다. 관리자에게 문의하세요");--%>
+<%--            location.href = "/main";--%>
+<%--        </script>--%>
+<%--    </c:if>--%>
 
     <meta charset="UTF-8">
 
