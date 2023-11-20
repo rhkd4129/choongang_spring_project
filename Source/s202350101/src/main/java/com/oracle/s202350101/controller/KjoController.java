@@ -58,6 +58,7 @@ public class KjoController {
         return "admin/admin_add_class";
     }
 
+    //	반 제거
     @GetMapping("/admin_del_class")
     public String admin_del_class(ClassRoom cr) {
         log.info("admin_del_class POST");
@@ -98,7 +99,6 @@ public class KjoController {
             CRList.get(i).setStartDate(newDtFormat.format(startDate));
             CRList.get(i).setEndDate(newDtFormat.format(endDate));
         }
-
 
         model.addAttribute("CRList", CRList);
         return "admin/admin_class_list";
@@ -167,9 +167,6 @@ public class KjoController {
     @ResponseBody
     @GetMapping("/admin_board_pbd_ajax")
     public KjoResponse admin_board_pbd_ajax(PrjBdData prjBdData, String currentpage) {
-//        PrjBdData pbd = new PrjBdData();
-//        pbd.setProject_id(prjBdData.getProject_id());
-//        pbd.setClass_id(prjBdData.getClass_id());
         KjoResponse res = new KjoResponse();
         int totcnt = PBDser.findByClassProjectId(prjBdData).size();
 //		페이징	글 개수 : 5		이벤트 수	현재 페이지	목록 노출 수

@@ -22,7 +22,7 @@ public class UserInfoDaoImpl implements UserInfoDao{
 //<!--사용자 ID로 사용자 조회-->
 	@Override
 	public UserInfo findbyuserId(UserInfo ui) {
-		log.info("findbyuserId start ID : " + ui.getUser_id());
+//		log.info("findbyuserId start ID : " + ui.getUser_id());
 		try {
 			ui = session.selectOne("findbyuserId", ui);
 		} catch (Exception e) {

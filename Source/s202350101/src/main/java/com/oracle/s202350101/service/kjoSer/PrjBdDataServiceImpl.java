@@ -45,7 +45,7 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
         return prjBdDataList;
     }
 
-//pbd 삭제 _ comt, good과 함께
+//PrjBdData 삭제 _ comt, good과 함께
     @Override
     public int delpbd(KjoRequestDto kjoRequestDto) {
 //	firList: prj_delbox , secList:doc_delbox

@@ -29,7 +29,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfo findbyuserId(UserInfo userInfo) {
-        log.info("findbyuserId start ID : " + userInfo.getUser_id());
+//        log.info("findbyuserId start ID : " + userInfo.getUser_id());
         userInfo = UIdao.findbyuserId(userInfo);
         return userInfo;
     }
