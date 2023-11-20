@@ -84,9 +84,8 @@
             var table = $("#table1"); // 기본 테이블
             var button = $("#sort");
             console.log(keyword_division,keyword);
-            if (button.text() === "내") {
-                button.text("오");
-                $("image").src=""
+            if (button.val()=== "내") {
+                button.val("오");
                 $.ajax({
                     url: '/task_time_desc',
                     data:{"keyword":keyword, "keyword_division":keyword_division},
@@ -98,7 +97,7 @@
                     }
                 });
             } else {
-                button.text("내");
+                button.val("내");
                 console.log(keyword_division,keyword);
                 $.ajax({
                     url: '/task_time_acsc',
@@ -183,7 +182,7 @@
                         <th>Project Step</th>
                         <th>작업명</th>
                         <th>작업시작일</th>
-                        <th> 마감일 <button  class="btn btn-outline-primary" id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')">오</button></th>
+                        <th> 마감일 <button value="내" class="btn btn-outline-primary" id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')"> <img style ="width: 15px; height: 15px;" src="images/sort_icon.png"></button></th>
 
                         <th>우선순위</th>
                         <th>작업상태</th>

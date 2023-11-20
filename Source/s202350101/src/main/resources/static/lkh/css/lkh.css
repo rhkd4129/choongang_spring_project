@@ -8,7 +8,7 @@ table{
 table, th, td {
 
     border: 1px solid black;
-    width: 10%; /* 모든 테이블의 셀 넓이를 조절합니다. */
+    width: 2.5%; /* 모든 테이블의 셀 넓이를 조절합니다. */
 }
 
 
