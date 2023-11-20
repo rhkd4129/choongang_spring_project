@@ -115,7 +115,7 @@
                                     <c:set var="isChecked" value=""/>
                                     <c:forEach var="select_user" items="${taskSubList}">
                                         <c:if test="${all_user.user_id eq select_user.worker_id}">
-                                            <c:set var="isChec'ked" value="checked "/>
+                                            <c:set var="isChecked" value="checked"/>
                                         </c:if>
                                     </c:forEach>
                                     <input type="checkbox" name="workerIdList" ${isChecked} value="${all_user.user_id}" id="user_${all_user.user_id}">

@@ -168,10 +168,12 @@ public class LkhServicveImpl implements LkhService {
 	@Override
 	public int task_create(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		
 		log.info("task_create 서비스 시작");
 		try {
 			int taskResult = lkhDao.task_create(task);
 			log.info("task_create 결과 : {}",taskResult);
+			
 			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
 				log.info("공동작업자가 있다. 공동작업자 생성 시작");
 				List<TaskSub> taskSubList = new ArrayList<>();
@@ -184,6 +186,7 @@ public class LkhServicveImpl implements LkhService {
 				int taskSubResult = lkhDao.task_worker_create(taskSubList);
 				log.info("taskSub 결과  : {}",taskSubResult);
 			}
+			
 			//작업 생성시 업로드할 파일이 존재할경우
 			if (!multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0) {
 
@@ -200,6 +203,7 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
 					taskAttach.setAttach_no(maxId+i);
+					// 파일리스트에 3개가 들어모면 i+1을 더하는 형식으로 현재 max값에 +1 , +2  , +3 으로 pk생성하는방식
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
 					taskAttach.setAttach_name(fileName);
 					taskAttach.setAttach_path(attach_path);
@@ -208,6 +212,7 @@ public class LkhServicveImpl implements LkhService {
 					log.info("현재 저장될 taskAttach의 attach_no의 값은 ? -> {}",taskAttach.getAttach_no());
 				}
 				int taskAttachReuslt = lkhDao.task_attach_create(taskAttachList);
+				// 다중 첨부파일 업로드 
 				log.info("taskAttachCreate의 결과는 : {}",taskAttachReuslt);
 			}
 
@@ -254,7 +259,8 @@ public class LkhServicveImpl implements LkhService {
 					taskSubList.add(taskSub);
 					log.info("workerId ----- {}: ",workId);
 				}
-				// 기존에잇던 명단을 delete처리하고  다시 insert함
+				// 공동작업자의 수정(update)는 기존에잇던 명단을 다  delete처리하고  새로 다시 insert한다는 개념
+				// 필드내용을 업데이트하는게 아니라 아예 행을 새로 넣고 삭제하고 (insert, delete)해야 해서   
 				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
 				int taskSbResult = lkhDao.task_worker_update(taskSubList);
 				log.info("taskSbinit : {}",taskSbinit);
@@ -263,7 +269,6 @@ public class LkhServicveImpl implements LkhService {
 
 
 			//////////////		TaskAttach테이블 update		//////////////
-
 			//삭제할 파일이 하나라도 존재한다면
 			if (attachDeleteList != null && !attachDeleteList.isEmpty()) {
 				for(String no :attachDeleteList)	{
