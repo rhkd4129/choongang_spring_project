@@ -5,6 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<c:if test="${userInfo.user_auth != 'admin' }">
+		<script type="text/javascript">
+			alert("관리자 권한이 없습니다. 관리자에게 문의하세요");
+			location.href = "/main";
+		</script>
+	</c:if>
 	<meta charset="UTF-8">
 
     <style text="text/css">
@@ -88,7 +94,7 @@
                         tr.append('<input type="hidden" id="pbd_doc_no" value="' +board.doc_no +'"/>');
                         tr.append('<input type="hidden" id="pbd_prj_no" value="' +board.project_id +'"/>');
 
-                        tr.append('<td onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_read'" + ')">'+ board.subject+'</td>');
+                        tr.append('<td style="cursor: pointer; color: blue;" onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_read'" + ')">'+ board.subject+'</td>');
                         tr.append('<td>' + board.user_name + '</td>');
                         tr.append('<td>' + formatDate(new Date(board.create_date)) + '</td>'); // 날짜 포맷 변경
                         tr.append('<td>' + board.bd_category_name + '</td>');
@@ -104,7 +110,8 @@
                         // }
                         tr.append('<td>' + board.bd_count + '</td>');
                         tr.append('<td>' + board.good_count + '</td>');
-                        tr.append('<td onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_edit'" + ')">수정</td>');
+
+                        tr.append('<td style="cursor: pointer; color: blue;" onClick="locatPrj(' + board.doc_no + ',' + board.project_id + ',' + "'prj_board_data_edit'" + ')">수정</td>');
                         tr.append('<td><input type="checkbox" name="pbd_del_chkbox" />');
                         PBDList_body.append(tr);
                     });
@@ -168,16 +175,20 @@
 
                     $.each(jsonData.firList, function (index, BFL) {        //  반환된 데이터 입력
                         let board_category = BFL.bd_category;
+						let board_update = BFL.bd_category;
                         // category = (category == '공지')? board_content:
                         switch (board_category) {
                             case '공지':
-                                board_category = 'board_content';
+								board_category = 'board_content';
+								board_category = 'board_update';
                                 break;
                             case "이벤트":
-                                board_category = 'event_content';
+								board_category = 'event_content';
+								board_category = 'event_update';
                                 break;
                             case "자유":
-                                board_category = 'free_content';
+								board_category = 'free_content';
+								board_category = 'free_update';
                                 break;
                         }
                         var tr = $('<tr>');
@@ -191,7 +202,8 @@
                         tr.append('<td>' + BFL.user_name + '</td>');
                         tr.append('<td>' + BFL.create_date + '</td>');
                         tr.append('<td>' + BFL.good_count + '</td>');
-                        tr.append('<td><a href="#">수정</a></td>');
+						<%--<td><a href="board_update?doc_no=${BF.doc_no}">수정</a></td>--%>
+						tr.append('<td style="cursor: pointer; color: blue;" onclick="location.href=\'/' +board_category +'?doc_no=' + BFL.doc_no + '\'">' +"수정"+ '</td>');
                         tr.append('<td><input type="checkbox" name="del_chkbox" />');
                         BFList_body.append(tr);
                     });
@@ -486,7 +498,7 @@
 	                                <td>${BF.user_name}</td>
 	                                <td>${BF.create_date}</td>
 	                                <td>${BF.good_count}</td>
-	                                <td><a href="#">수정</a></td>
+									<td><a href="board_update?doc_no=${BF.doc_no}">수정</a></td>
 	                                <td><input type="checkbox" name="del_chkbox" />
 	                            </tr>
 	                        </c:forEach>

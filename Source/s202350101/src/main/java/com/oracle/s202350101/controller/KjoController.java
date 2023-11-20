@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -53,7 +54,12 @@ public class KjoController {
 
     //	반 생성 페이지 Get
     @GetMapping("/admin_add_class")
-    public String admin_add_class() {
+    public String admin_add_class(HttpServletRequest request) {
+
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
         log.info("admin_add_class GET");
         return "admin/admin_add_class";
     }
@@ -87,7 +93,13 @@ public class KjoController {
 
     //	반 목록 페이지	GET
     @GetMapping("/admin_class_list")
-    public String admin_class_list(Model model) {
+    public String admin_class_list(HttpServletRequest request, Model model) {
+
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
+
         log.info("admin_class_list");
         List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
 
@@ -106,7 +118,11 @@ public class KjoController {
 
     //	게시판 관리 페이지	GET
     @GetMapping("/admin_board")
-    public String admin_board(@RequestParam(defaultValue = "1") String currentPage, ClassRoom cr, Model model) {
+    public String admin_board(@RequestParam(defaultValue = "1") String currentPage, ClassRoom cr, Model model, HttpServletRequest request) {
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
 
         log.info("admin_board");
         /*------------------비즈니스 로직--------------------*/
@@ -247,6 +263,9 @@ public class KjoController {
         //	로그인 사용자DTO
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
         /*------------------비즈니스 로직--------------------*/
         //	채팅할 대상자와 로그인 사용자의 채팅방 조회
         ChatRoom cr = new ChatRoom();
@@ -339,6 +358,10 @@ public class KjoController {
         log.info("captainManage");
         //	로그인 사용자DTO
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfo.getUser_id().equals("admin")) {
+//            log.info("admin아님.");
+//            return "/main";
+//        }
         /*------------------비즈니스 로직--------------------*/
 // 모든 강의실 조회
         List<ClassRoom> CRList = CRser.findAllClassRoom();

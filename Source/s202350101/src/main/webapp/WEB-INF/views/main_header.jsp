@@ -700,7 +700,7 @@
     <div id="chat_top">
         <input onclick="chat_user_bt()" id="chat_user_bt" class="btn btn-warning" type="button" value="학생 목록">
         <input onclick="chat_chats_bt()" id="chat_chat_bt" class="btn btn-warning" type="button" value="채팅 목록">
-        <input onclick="chat_close()" id="chat_close" class="btn btn-warning" type="button" value="닫기">
+        <input onclick="chat_close()" id="chat_close" class="btn-close" type="button">
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <div id="chat_users" style="display: none">
