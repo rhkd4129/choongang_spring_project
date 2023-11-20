@@ -49,6 +49,12 @@
 	    margin-top: 10px;
 	    border-radius: 10px;
 	}
+    #notify_close{
+        margin: 8px 0px 8px 0px;
+    }
+    #notify_close_btn{
+        margin: 0 0 0 83%;
+    }
 </style>
 
 <script type="text/javascript">
@@ -297,6 +303,10 @@
 	    }, 5000);
 	};
 
+    function notify_close(){
+        let con = document.getElementById("notify");
+        con.style.display = 'none';
+    }
 	// 알림버튼 클릭 시 작동
 	function notifyClick() {
 
@@ -664,6 +674,11 @@
 </nav>
 
 <div id="notify" style="display: none;">
+    <div id="notify_close" >
+
+        <input onclick="notify_close()" id="notify_close_btn" class="btn btn-warning" type="button" value="닫기">
+    </div>
+
 	<div id="prjApproveNotify">
 	<!-- 프로젝트 생성 승인 알림 -->
 	</div>
