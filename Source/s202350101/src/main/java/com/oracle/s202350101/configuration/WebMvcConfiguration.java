@@ -1,6 +1,6 @@
 package com.oracle.s202350101.configuration;
 
-import com.oracle.s202350101.configuration.interceptor.KjoInterceptor;
+import com.oracle.s202350101.service.kjoSer.adminInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -26,11 +26,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 						)
 				;
 
-		registry.addInterceptor(new KjoInterceptor())		//	어드민 권한 조회
+		registry.addInterceptor(new adminInterceptor())		//	어드민 권한 조회
 				.addPathPatterns("/admin_add_class", "/admin_del_class", "/admin_class_list", "/admin_board",
 						"/admin_projectmanager", "/admin_approval");
-
-
 	}
 
 }

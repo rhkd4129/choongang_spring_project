@@ -25,4 +25,7 @@ public interface UserInfoService {
 
 //<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
 	List<UserInfo> findbyClassUserAndChatEnv(UserInfo userInfo);
+
+
+	List<UserInfo> findAllUser();
 }

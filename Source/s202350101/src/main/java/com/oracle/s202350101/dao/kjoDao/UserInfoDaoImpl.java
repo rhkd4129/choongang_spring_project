@@ -122,4 +122,23 @@ public class UserInfoDaoImpl implements UserInfoDao{
 
 		return UIList;
 	}
+
+//	어드민의 모든 학생 조회	
+    @Override
+    public List<UserInfo> findAllUser() {
+		log.info("findAllUser start");
+		List<UserInfo> UIList = null;
+		try {
+			UIList = session.selectList("findAllUserWithAdmin");
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
+
+		}catch (Exception e) {
+			log.info("findAllUser ERROR : {}",e.getMessage());
+		}
+
+		return UIList;
+
+
+
+    }
 }
