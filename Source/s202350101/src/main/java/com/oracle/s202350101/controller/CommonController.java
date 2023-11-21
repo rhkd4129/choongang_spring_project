@@ -69,6 +69,7 @@ public class CommonController {
 
 
 
+
 		model.addAttribute("userInfo", userInfoDTO);
 		model.addAttribute("chatUIList", chatUIList);
 		model.addAttribute("chatRooms", chatRooms);

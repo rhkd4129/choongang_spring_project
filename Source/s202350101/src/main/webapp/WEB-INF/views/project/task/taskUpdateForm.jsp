@@ -31,26 +31,26 @@
         $(function() {
 
             $.ajax({
-                url			: '/main_header',
-                dataType 	: 'text',
-                success		: function(data) {
+                url         : '/main_header',
+                dataType    : 'text',
+                success      : function(data) {
                     $('#header').html(data);
                 }
             });
 
             $.ajax({
-                url			: '/main_menu',
-                dataType 	: 'text',
-                success		: function(data) {
+                url         : '/main_menu',
+                dataType    : 'text',
+                success      : function(data) {
                     $('#menubar').html(data);
                 }
             });
 
 
             $.ajax({
-                url			: '/main_footer',
-                dataType 	: 'text',
-                success		: function(data) {
+                url         : '/main_footer',
+                dataType    : 'text',
+                success      : function(data) {
                     $('#footer').html(data);
                 }
             });
@@ -84,7 +84,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="order_by">프로젝트 단계</label>
+                                <label for="order_by" class="fw-bold fs-6">프로젝트 단계</label>
                                 <select id="order_by" name="project_step_seq">
                                     <c:forEach var="step" items="${prjStepList}">
 
@@ -96,40 +96,26 @@
 
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group  fw-bold fs-6 mt-4">
                                 <label for="task_subject">작업명:</label>
                                 <input type="text" class="form-control" name="task_subject" id="task_subject" value="${task.task_subject}">
                                 <form:errors path="task_subject" class="errors"/>
                             </div>
-                            <div class="form-group">
-                                <label for="task_content">업무 내용:</label>
+                            <div class="form-group  fw-bold fs-6 mt-4">
+                                <label for="task_content">작업 내용:</label>
                                 <textarea  rows="5" class="form-control" name="task_content" id="task_content" value="${task.task_content}"></textarea>
 
                                 <form:errors path="task_content" class="errors" />
                             </div>
 
-                            <div class="form-group">
-                                <label>공동작업자</label><br>
-
-                                <c:forEach var="all_user" items="${task_create_form_worker_list}">
-                                    <c:set var="isChecked" value=""/>
-                                    <c:forEach var="select_user" items="${taskSubList}">
-                                        <c:if test="${all_user.user_id eq select_user.worker_id}">
-                                            <c:set var="isChecked" value="checked"/>
-                                        </c:if>
-                                    </c:forEach>
-                                    <input type="checkbox" name="workerIdList" ${isChecked} value="${all_user.user_id}" id="user_${all_user.user_id}">
-                                    <label for="user_${all_user.user_id}">${all_user.user_name}</label><br>
-                                </c:forEach>
-
-                            </div>
 
 
-                            <div class="form-group">
+
+                            <div class="form-group w-bold fs-6 mt-4">
                                 <label for="task_start_time">작업 시작일</label>
                                 <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="${task.task_start_time}" min="2023-07-22" max="2030-12-31" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group w-bold fs-6">
                                 <label for="task_end_time">작업 마감일</label>
                                 <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="${task.task_end_time}"  min="2023-07-22" max="2030-12-31" />
                             </div>
@@ -139,7 +125,7 @@
                             <button style="margin-top: 20px;" type="submit" class="btn btn-primary">수정완료</button>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6">
                                 <label>작업 상태</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" name="task_status" value="0" id="status0"
@@ -159,7 +145,8 @@
                                 </div>
                                 <form:errors path="task_status" class="errors" />
                             </div>
-                            <div class="form-group">
+
+                            <div class="form-group fw-bold fs-6 mt-5">
                                 <label>우선순위 :</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" name="task_priority" value="0" id="priority0"
@@ -180,10 +167,11 @@
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6 mt-4">
                                 <label for="file1">파일첨부</label>
                                 <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
-                                <label  class="fw-bold">첨부파일</label>
+
+                                <label  class="fw-bold mt-4">첨부파일</label>
                                 <form:errors path="*" class="errors"/>
                                 <c:choose>
                                     <c:when test="${not empty taskAttachList}">
@@ -200,9 +188,26 @@
 
                                     </c:when>
                                     <c:otherwise>
-                                        <p class="fw-bold"> 첨부파일 없음 </p>
+                                        <p class="fw-bold">   첨부파일 없음 </p>
                                     </c:otherwise>
                                 </c:choose>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label>공동작업자</label><br>
+
+                                <c:forEach var="all_user" items="${task_create_form_worker_list}">
+                                    <c:set var="isChecked" value=""/>
+                                    <c:forEach var="select_user" items="${taskSubList}">
+                                        <c:if test="${all_user.user_id eq select_user.worker_id}">
+                                            <c:set var="isChecked" value="checked"/>
+                                        </c:if>
+                                    </c:forEach>
+                                    <input type="checkbox" name="workerIdList" ${isChecked} value="${all_user.user_id}" id="user_${all_user.user_id}">
+                                    <label for="user_${all_user.user_id}">${all_user.user_name}</label><br>
+                                </c:forEach>
 
                             </div>
                         </div>

@@ -13,26 +13,26 @@
         $(function() {
 
             $.ajax({
-                url			: '/main_header',
-                dataType 	: 'text',
-                success		: function(data) {
+                url         : '/main_header',
+                dataType    : 'text',
+                success      : function(data) {
                     $('#header').html(data);
                 }
             });
 
             $.ajax({
-                url			: '/main_menu',
-                dataType 	: 'text',
-                success		: function(data) {
+                url         : '/main_menu',
+                dataType    : 'text',
+                success      : function(data) {
                     $('#menubar').html(data);
                 }
             });
 
 
             $.ajax({
-                url			: '/main_footer',
-                dataType 	: 'text',
-                success		: function(data) {
+                url         : '/main_footer',
+                dataType    : 'text',
+                success      : function(data) {
                     $('#footer').html(data);
                 }
             });
@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="order_by">프로젝트 단계</label>
+                                <label for="order_by" class="fw-bold fs-6">프로젝트 단계</label>
                                 <select id="order_by" name="project_step_seq">
                                     <c:forEach var="step" items="${prjStepList}">
                                         <option  value="${step.project_step_seq}">${step.project_order}: ${step.project_s_name}</option>
@@ -71,36 +71,29 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="task_subject">작업명:</label>
-                                <input type="text" class="form-control" name="task_subject" id="task_subject">
+                            <div class="form-group fw-bold fs-6 mt-4">
+                                <label for="task_subject">작업명</label>
+                                <input type="text" id="task_subject" class="form-control" name="task_subject" id="task_subject">
                                 <form:errors path="task_subject" class="errors"/>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6 mt-3">
                                 <label for="task_content">작업 내용:</label>
                                 <textarea  rows="5" class="form-control" name="task_content" id="task_content"></textarea>
                                 <form:errors path="task_content" class="errors" />
                             </div>
 
-                            <div class="form-group">
-                                <label>공동작업자</label><br>
-                                <c:forEach var="user" items="${task_create_form_worker_list}">
-                                    <input type="checkbox" name="workerIdList" value="${user.user_id}"> ${user.user_name}<br>
-                                </c:forEach>
-                            </div>
 
-
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6 mt-5">
                                 <label for="task_start_time">작업시작일</label>
                                 <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6">
                                 <label for="task_end_time">작업 마감일</label>
                                 <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6">
                                 <label>작업상태</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" name="task_status" value="0" id="status0">
@@ -117,7 +110,7 @@
 
                                 <form:errors path="task_status" class="errors" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6 mt-3">
                                 <label>우선순위</label>
                                 <div class="form-check">
                                     <input type="radio" class="form-check-input" name="task_priority" value="0" id="priority0">
@@ -136,11 +129,21 @@
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group fw-bold fs-6 mt-5">
                                 <label for="file1">파일첨부</label>
                                 <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
                                 <form:errors path="*" class="errors"/>
                             </div>
+
+
+
+                            <div class="form-group mt-5">
+                                <label class="fw-bold fs-6">공동작업자</label><br>
+                                <c:forEach var="user" items="${task_create_form_worker_list}">
+                                    <input type="checkbox" name="workerIdList" value="${user.user_id}"> ${user.user_name}<br>
+                                </c:forEach>
+                            </div>
+
 
                         </div>
                     </div>

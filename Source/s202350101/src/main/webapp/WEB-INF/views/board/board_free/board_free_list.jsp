@@ -9,28 +9,6 @@
 
 <!--CSS START -->
 <style type="text/css">
-	table {
-		width: 100%;
-		margin-top: 10px;
-	}
-	
-	.title {
-		width: 350px;
-	}
-	
-	td, th, tr {
-		padding-left: 20px;
-		vertical-align: middle;	
-	}
-	
-	table tr {
-		height: 50px;
-	}
-	
-	table th, td {
-		text-align: center;
-	}
-	
 	.pagebox {
 		margin-top: 10px;
 		text-align: center;
@@ -114,72 +92,79 @@
 				</div>
 			</div>
 		
-			<input type="button" class="mt-4 mb-4" value="작성" onclick="location.href='free_insert_from'">
-			
-			
-			<!-- 추천수 가장 높은 row 3개 -->
-			<h5>Best</h5>
-	 		<table class="table table-sm">
-	 			<tr>
-	 				<th>번호</th>      <th>이름</th>        <th>작성일</th> 
-					<th>수정일</th>     <th>게시종류</th>     <th>제목</th>      
-					<th>조회수</th>     <th>추천</th>
-	 			</tr>
-	 			
-	 			<c:forEach var="free" items="${freeRow}" varStatus="status"> 
-	 				<tr id="free${status.count}">
-	 					<td>${status.count}</td>
-	 					<td>${free.user_name }</td>
-	 					<td>${free.create_date }</td>
-	 					<td>${free.modify_date }</td>
-	 					<td>${free.bd_category }</td>
-	 					<td><a href="free_content?doc_no=${free.doc_no}">${free.subject }</a></td>
-	 					<td>${free.bd_count }</td>
-	 					<td>${free.good_count }</td>
-	 				</tr>
-	 			</c:forEach>
-			</table>
-			
-			
-			<!-- 전체 리스트 -->
-			<h5 class="mt-5 pt-3">Count  ${freeTotal} </h5>
-			<table class="table table-sm"> 
-				<tr>
-					<th>번호</th>       <th>이름</th>       <th>작성일</th> 
-					<th>수정일</th>     <th>게시종류</th>     <th>제목</th>      
-					<th>조회수</th>     <th>추천</th>	
-				</tr> 
+			<div class="container-fluid">
+				<input type="button" class="btn btn-secondary btn-sm" value="작성" onclick="location.href='free_insert_from'">
 				
-				<c:forEach var="list" items="${freeList }" varStatus="status">
-					<tr id="bdFree${status.count }"> 
-						<td>${status.count}</td> 
-						<td>${list.user_name}</td>     
-					    <td>${list.create_date}</td> 
-						<td>${list.modify_date}</td>  
-						<td>${list.bd_category}</td>
-						<td><a href="free_content?doc_no=${list.doc_no}">${list.subject}</a></td>
-					    <td>${list.bd_count}</td>     
-					    <td>${list.good_count}</td> 
-					</tr>
-				</c:forEach>
-			</table>
-			
-			
-			<!-- 페이징 작업 -->
-			<div class="pagebox">
-				<c:if test="${page.startPage > page.pageBlock }">
-					<a href="board_notify?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
-				</c:if>
 				
-				<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-					<a href="board_notify?currentPage=${a }">[${a }]</a>
-				</c:forEach>
+				<!-- 추천수 가장 높은 row 3개 -->
+				<h5>Best</h5>
+		 		<table class="table">
+		 			<thead class="table-light">
+		 			<tr>
+		 				<th>번호</th>      <th>이름</th>        <th>작성일</th> 
+						<th>수정일</th>     <th>게시종류</th>     <th>제목</th>      
+						<th>조회수</th>     <th>추천</th>
+		 			</tr>
+		 			</thead>
+		 			<tbody>
+		 			<c:forEach var="free" items="${freeRow}" varStatus="status"> 
+		 				<tr id="free${status.count}">
+		 					<td>${status.count}</td>
+		 					<td>${free.user_name }</td>
+		 					<td>${free.create_date }</td>
+		 					<td>${free.modify_date }</td>
+		 					<td>${free.bd_category }</td>
+		 					<td><a href="free_content?doc_no=${free.doc_no}">${free.subject }</a></td>
+		 					<td>${free.bd_count }</td>
+		 					<td>${free.good_count }</td>
+		 				</tr>
+		 			</c:forEach>
+		 			</tbody>
+				</table>
 				
-				<c:if test="${page.endPage < page.totalPage }">
-					<a href="board_notify?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
-				</c:if>
+				
+				<!-- 전체 리스트 -->
+				<h6 class="mt-5 pt-3" style="text-align:right">총 건수 : ${freeTotal} </h6>
+				<table class="table">
+					<thead class="table-light">
+					<tr>
+						<th>번호</th>       <th>이름</th>       <th>작성일</th> 
+						<th>수정일</th>     <th>게시종류</th>     <th>제목</th>      
+						<th>조회수</th>     <th>추천</th>	
+					</tr> 
+					</thead>
+					<tbody>
+					<c:forEach var="list" items="${freeList }" varStatus="status">
+						<tr id="bdFree${status.count }"> 
+							<td>${status.count}</td> 
+							<td>${list.user_name}</td>     
+						    <td>${list.create_date}</td> 
+							<td>${list.modify_date}</td>  
+							<td>${list.bd_category}</td>
+							<td><a href="free_content?doc_no=${list.doc_no}">${list.subject}</a></td>
+						    <td>${list.bd_count}</td>     
+						    <td>${list.good_count}</td> 
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
+				
+				
+				<!-- 페이징 작업 -->
+				<div class="pagebox">
+					<c:if test="${page.startPage > page.pageBlock }">
+						<a href="board_notify?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+					</c:if>
+					
+					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
+						<a href="board_notify?currentPage=${a }">[${a }]</a>
+					</c:forEach>
+					
+					<c:if test="${page.endPage < page.totalPage }">
+						<a href="board_notify?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+					</c:if>
+				</div>
 			</div>
-			
 		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

@@ -46,26 +46,26 @@
 		Set    user_pw = #{user_pw}
 		where  user_id = #{user_id}
 	</update>
-	
-	<update id="userInfoUpdate" parameterType="userInfo">
-	    UPDATE user_info
-	    SET class_id   = #{class_id},
-	        project_id = #{project_id},
-	        user_pw    = #{user_pw},
-	        user_name  = #{user_name},
-	        <if test="user_birth != null">
-	        	user_gender = #{user_gender},
-	        </if>
-	        user_number = #{user_number},
-	        <if test="user_birth != null">
-	        	user_birth  = #{user_birth},
-	        </if>
-	        user_address = #{user_address},
-	        user_email   = #{user_email},
-	        attach_name  = #{attach_name}, 
-	        attach_path  = #{attach_path}
-	    WHERE user_id   = #{user_id}
+	            
+	<update id="userInfoUpdate" parameterType="UserInfo">
+    <![CDATA[
+        UPDATE user_info
+        SET
+	            class_id   = #{class_id}
+	            ,project_id = #{project_id}
+	            ,user_pw    = #{user_pw}
+	            ,user_name  = #{user_name}
+		        ,user_gender = #{user_gender, jdbcType=VARCHAR}
+ 	            ,user_number = #{user_number}
+	            ,user_birth  = #{user_birth, jdbcType=DATE}
+	            ,user_address = #{user_address}
+	            ,user_email   = #{user_email}
+	            ,attach_name  = #{attach_name, jdbcType=VARCHAR}
+	            ,attach_path  = #{attach_path, jdbcType=VARCHAR}
+        WHERE user_id = #{user_id}
+    ]]>
 	</update>
+
 	
 	
 </mapper>

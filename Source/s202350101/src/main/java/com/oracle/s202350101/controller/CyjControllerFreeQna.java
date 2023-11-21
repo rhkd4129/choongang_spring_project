@@ -673,7 +673,47 @@ public class CyjControllerFreeQna {
 	
 	
 	
-	
+	// 자유 : 팝업 조회용
+	@RequestMapping(value = "board_qna_read")
+	public String boardQnaRead(HttpServletRequest request, String currentPage, int doc_no, Model model) {
+		System.out.println("CyjControllerQna qna_content");
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfoDTO", userInfoDTO);
+		
+		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("상세페이지 접속자 loginId-> " + loginId);
+		
+		// qna_상세
+		BdQna qnaContent = cs.qnaContent(doc_no);
+		System.out.println("CyjControllerQna qnaContent-> " + qnaContent);
+		model.addAttribute("qnaContent", qnaContent);
+		
+		if(userInfoDTO.getUser_id().equals(qnaContent.getParent_doc_user_id())) {
+			// 현재 로그인 사용자가 답글의 부모글 작성자인 경우 답글 조회시 alarm_flag='Y'로 변경처리
+			System.out.println("부모글작성자가 답글조회시 alarm_flag='Y'로 변경처리");
+			int cyUpdateReplyAlarmCount = cs.cyUpdateReplyAlarmFlag(qnaContent);
+		}
+//		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
+		
+		// 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		int result = 0;
+		if (loginId.equals(qnaContent.getUser_id())) {
+			result = 1;
+		} else {
+			result = 0;
+		}
+		model.addAttribute("result", result);
+		
+		// qna_조회수
+		int qnaCount = cs.qnaCount(doc_no);
+		System.out.println("CyjControllerQna qnaCount-> " + qnaCount);
+		model.addAttribute("qnaCount", qnaCount);
+		
+		return "board/board_qna/board_qna_read";
+	}
 	
 	
 	

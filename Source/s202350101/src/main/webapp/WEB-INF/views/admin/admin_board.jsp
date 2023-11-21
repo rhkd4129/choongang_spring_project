@@ -174,15 +174,15 @@
                         switch (board_category) {
                             case '공지':
 								board_category = 'board_content';
-								board_category = 'board_update';
+								board_update = 'board_update';
                                 break;
                             case "이벤트":
 								board_category = 'event_content';
-								board_category = 'event_update';
+								board_update = 'event_update';
                                 break;
                             case "자유":
 								board_category = 'free_content';
-								board_category = 'free_update';
+								board_update = 'free_update';
                                 break;
                         }
                         var tr = $('<tr>');
@@ -197,7 +197,7 @@
                         tr.append('<td>' + BFL.create_date + '</td>');
                         tr.append('<td>' + BFL.good_count + '</td>');
 						<%--<td><a href="board_update?doc_no=${BF.doc_no}">수정</a></td>--%>
-						tr.append('<td style="cursor: pointer; color: blue;" onclick="location.href=\'/' +board_category +'?doc_no=' + BFL.doc_no + '\'">' +"수정"+ '</td>');
+						tr.append('<td style="cursor: pointer; color: blue;" onclick="location.href=\'/' +board_update +'?doc_no=' + BFL.doc_no + '\'">' +"수정"+ '</td>');
                         tr.append('<td><input type="checkbox" name="del_chkbox" />');
                         BFList_body.append(tr);
                     });
@@ -391,7 +391,7 @@
 				</div>
 				
                 <table class="table">
-                    <thead>
+                    <thead class="table-light">
                     <tr>
                         <th>글 번호</th>
                         <th>제목</th>
@@ -469,7 +469,7 @@
                     </table>
 
 	                <table class="table">
-	                    <thead>
+	                    <thead class="table-light">
 		                    <tr>
 		                        <th>번호</th>
 		                        <th>게시종류</th>

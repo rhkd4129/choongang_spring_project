@@ -59,7 +59,7 @@
 	// 프로젝트 정보 수정
 	function list_up(){
 		$.ajax({
-			url			: '/prj_mgr_req_edit',
+			url			: '/prj_mgr_req_edit?project_id=${prjInfo.project_id}',
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#divPrjInfo').html(data);

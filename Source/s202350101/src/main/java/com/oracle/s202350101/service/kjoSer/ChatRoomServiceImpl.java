@@ -38,6 +38,9 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     public List<ChatRoom> findByUserId(UserInfo ui) {
 
         List<ChatRoom> crList = CHdao.findByUserId(ui);
+
+
+
         return crList;
     }
 

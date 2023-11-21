@@ -236,7 +236,7 @@
                     </table>
                     
                     <table class="table">
-                        <thead>
+                        <thead class="table-light">
                         <tr>
                             <th>이름</th>
                             <!-- <th>닉네임 OR 반</th> -->

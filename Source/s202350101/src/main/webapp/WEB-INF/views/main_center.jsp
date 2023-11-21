@@ -189,9 +189,9 @@
 				list 	= '';
 				list 	+= '<div style="cursor:pointer" onclick="popup(\'';
 				switch(cate_idx) {
-				case "1": list += 'event_read'; break;
-				case "2": list += 'event_read'; break;
-				case "3": list += 'event_read'; break;
+				case "1": list += 'board_notify_read'; break;
+				case "2": list += 'board_event_read'; break;
+				case "3": list += 'board_free_read'; break;
 				case "4": list += 'board_qna_read'; break;
 				}
 				list	+= '?doc_no=' + board.doc_no + '\')" class="list-group-item list-group-item-action d-flex gap-3 pms-py-1" aria-current="true">';
