@@ -302,7 +302,7 @@ function onSocket() {
 	            			if (bd_category == '자유') {		// 자유 게시판
 								let loc ='free_content';
 	            				if (doc != doc_no || app != app_id){
-	            					comtStr += '<p onclick="locatFree('+ doc_no + ", 'free_read'" + ')">[' + bd_category + ' 게시판] ' + subject + '에 새로운 댓글이 ' + comment_count + '건 등록되었습니다.</p>';
+	            					comtStr += '<p onclick="locatFree('+ doc_no + ", 'board_free_read'" + ')">[' + bd_category + ' 게시판] ' + subject + '에 새로운 댓글이 ' + comment_count + '건 등록되었습니다.</p>';
 	            					console.log('comment_count');
 	            					console.log(comment_count);
 	            					doc = doc_no;
@@ -312,7 +312,7 @@ function onSocket() {
 	            			if (bd_category == '이벤트') {	// 이벤트 게시판
 	            				let loc = 'event_content';
 	            				if (doc != doc_no || app != app_id){
-	            					comtStr += '<p onclick="locatFree('+ doc_no + ", 'event_read'" + ')">[' + bd_category + ' 게시판] ' + subject + '에 새로운 댓글이 ' + comment_count + '건 등록되었습니다.</p>';
+	            					comtStr += '<p onclick="locatFree('+ doc_no + ", 'board_event_read'" + ')">[' + bd_category + ' 게시판] ' + subject + '에 새로운 댓글이 ' + comment_count + '건 등록되었습니다.</p>';
 	            					console.log('comment_count');
 	            					console.log(comment_count);
 	            					doc = doc_no;
@@ -761,27 +761,44 @@ function showSearchList(docList, keyword){
 </nav>
 
 <div id="notify" style="display: none;">
-	<div id="prjApproveNotify">
-	<!-- 프로젝트 생성 승인 알림 -->
-	</div>
-	<div id="meetingNotify">
-	<!-- 회의일정 알림 -->
-	</div>
-	<div id="repNotify">
-	<!-- 답글 알림 -->
-	</div>
-	<div id="comtNotify">
-	<!-- 댓글 알림 -->
-	</div>
-	<div id="adminNotify">
-	<!-- 댓글 알림 -->
-	</div>
+    <div id="notify_close" >
+      <input onclick="notify_close()" id="notify_close_btn" class="btn-close" type="button">
+    </div>
+    <div id="notify_box">
+      <c:if test="${userInfo.user_auth == 'manager'}">
+         <div class="noticate">프로젝트 승인</div>
+         <div id="prjApproveNotify">
+         <!-- 프로젝트 생성 승인 알림 -->
+         </div>
+      </c:if>
+      <c:if test="${userInfo.user_auth == 'manager' || userInfo.user_auth == 'student'}">
+         <div class="noticate">회의</div>
+         <div id="meetingNotify">
+         <!-- 회의일정 알림 -->
+         </div>
+         <div class="noticate">답글</div>
+         <div id="repNotify">
+         <!-- 답글 알림 -->
+         </div>
+         <div class="noticate">댓글</div>
+         <div id="comtNotify">
+         <!-- 댓글 알림 -->
+         </div>
+      </c:if>
+      <c:if test="${userInfo.user_auth == 'admin'}">
+         <div class="noticate">프로젝트 생성 신청</div>
+         <div id="adminNotify">
+         <!-- admin 알림 -->
+         </div>
+      </c:if>
+   </div>
 </div>
 
 <div id="chatbox" style="display: none">
     <div id="chat_top">
         <input onclick="chat_user_bt()" id="chat_user_bt" class="btn btn-warning" type="button" value="학생 목록">
         <input onclick="chat_chats_bt()" id="chat_chat_bt" class="btn btn-warning" type="button" value="채팅 목록">
+        <input onclick="chat_close()" id="chat_close" class="btn-close" type="button">
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <div id="chat_users" style="display: none">
@@ -813,7 +830,7 @@ function showSearchList(docList, keyword){
                     </c:otherwise>
                     </c:choose>
                     <div id="chat_ch_left">
-                        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 70%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${chatRoom.attach_path }/${chatRoom.attach_name}"></td>
+                        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 70%;" src="${pageContext.request.contextPath}/${chatRoom.attach_path }/${chatRoom.attach_name}">
                     </div>
                     <div id="chat_ch_center">
 

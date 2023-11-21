@@ -182,7 +182,7 @@
                     </table>
                     
                     <table class="table">
-                        <thead>
+						<thead class="table-light">
                         <tr>
                         	<th>프로젝트 번호</th>
                             <th>프로젝트 이름</th>

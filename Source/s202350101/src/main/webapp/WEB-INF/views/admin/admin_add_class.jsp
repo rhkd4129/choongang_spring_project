@@ -181,6 +181,7 @@
                     	<col width="10%"></col>
                     	<col width="40%"></col>
                     </colgroup>
+					<tbody>
 						<tr style="">
                   			<td>반 번호</td>
                   			<td colspan="3">
@@ -222,6 +223,7 @@
 								<form:errors path="class_end_date" class="errors"/><br></td>
 
 						</tr>
+					</tbody>
                     </table>
                     <button class="btn btn-secondary" type="submit">반 생성하기</button>
                     <button class="btn btn-secondary" type="reset">초기화하기</button>

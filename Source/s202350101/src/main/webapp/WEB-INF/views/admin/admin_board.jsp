@@ -391,7 +391,7 @@
 				</div>
 				
                 <table class="table">
-                    <thead>
+                    <thead class="table-light">
                     <tr>
                         <th>글 번호</th>
                         <th>제목</th>
@@ -469,7 +469,7 @@
                     </table>
 
 	                <table class="table">
-	                    <thead>
+	                    <thead class="table-light">
 		                    <tr>
 		                        <th>번호</th>
 		                        <th>게시종류</th>

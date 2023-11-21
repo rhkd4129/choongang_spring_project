@@ -113,13 +113,13 @@
 		INSERT INTO prj_info (project_id, project_name, project_startdate, project_enddate,
 							  project_manager_id, project_intro, project_approve,
 							  project_status, project_create_date)
-		VALUES (project_step_seq.nextval, #{project_name}, #{project_startdate}, #{project_enddate}, 
+		VALUES (project_id_seq.nextval, #{project_name}, #{project_startdate}, #{project_enddate}, 
 				#{project_manager_id}, #{project_intro}, #{project_approve}, #{project_status}, sysdate)
 	</insert>
 
 	<!-- prj_mem_list에 팀원 추가 -->
 	<insert id="ijMemCreate" parameterType="PrjInfo">
-		INSERT INTO prj_mem_list (project_id, user_id) VALUES (project_step_seq.currval, #{member_user_id})
+		INSERT INTO prj_mem_list (project_id, user_id) VALUES (project_id_seq.currval, #{member_user_id})
 	</insert>
 	
 

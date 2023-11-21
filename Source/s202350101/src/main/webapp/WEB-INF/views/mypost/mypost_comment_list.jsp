@@ -79,15 +79,11 @@
 			      <li class="breadcrumb-item active" aria-current="page">내가 쓴 댓글</li>
 			    </ol>
 			</nav>
-			<div class="container-fluid">
-				<div style="margin-top:15px;height:45px">
-					<span class="apptitle">내가 쓴 댓글</span>
-				</div>
-			</div>
 	  		
 	  		<div class="container-fluid">
 					<table width="100%" style="margin-top:20px;height:45px">
 						<tr>
+							<td style="vertical-align:top"><span class="apptitle">내가 쓴 댓글</span></td>
 							<td align="right">
 								<form action="mypost_comment_list">
 									<table>
@@ -122,11 +118,11 @@
 					</table>
 					
 					<table class="table table-hover">
-						<thead>
+						<thead class="table-light">
 							<tr>
-								<td>게시판</td>
-								<td>댓글내용</td>
-								<td>작성일</td>
+								<th>게시판</th>
+								<th>댓글내용</th>
+								<th>작성일</th>
 							</tr>
 						</thead>
 						<tbody>

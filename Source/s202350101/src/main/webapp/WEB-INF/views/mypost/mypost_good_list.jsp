@@ -78,14 +78,11 @@
 			      <li class="breadcrumb-item active" aria-current="page">내가 추천한 게시글</li>
 			    </ol>
 			</nav>
-			<div class="container-fluid">
-				<div style="margin-top:15px;height:45px">
-					<span class="apptitle">내가 추천한 게시글</span>
-				</div>
-			</div>
-                
+            
+            <div class="container-fluid">
                 <table width="100%" style="margin-top:20px;height:45px">
 					<tr>
+						<td style="vertical-align:top"><span class="apptitle">내가 추천한 게시글</span></td>
 						<td align="right">
 							<form action="mypost_good_list">
 								<table>
@@ -104,7 +101,8 @@
 							</form>	
 						</td>
 					</tr>
-				</table>						
+				</table>
+										
 				<table width="100%">
 					<tr>
 						<td width="*" style="text-align:right">
@@ -120,15 +118,17 @@
 				</table>
 
                 <table class="table">
-                    <thead>
-                    <tr class="table-warning">
-                        <td>게시판</td>
-						<td>제목</td>
-						<td>작성자</td>
-						<td>작성일</td>
-						<td>조회수</td>
-						<td>추천수</td>
+                    <thead class="table-light">
+                    <tr>
+                        <th>게시판</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>조회수</th>
+						<th>추천수</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <c:forEach var="sAllGood" items="${selectAllGood }">
                     	<c:choose>
 							<c:when test="${sAllGood.app_id == 1}">
@@ -196,8 +196,7 @@
 							</c:when>
 						</c:choose>
 					</c:forEach>
-                
-                    </thead>
+                    </tbody>
                 </table>
             </div>
 	  		

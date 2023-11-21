@@ -99,8 +99,8 @@
 				</div>
 
                 <table class="table" style="margin-top:5px;margin-bottom:5px">
-                    <thead>
-                    <tr class="table-warning">
+                    <thead class="table-light">
+                    <tr>
                         <th>학원 위치</th>
                         <th>반 번호</th>
                         <th>담당 강사</th>
@@ -109,6 +109,8 @@
                         <th>종료 날짜</th>
                         <th>삭제</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <c:forEach items="${CRList}" var="list">
                         <tr>
                             <td>${list.class_area}</td>
@@ -121,7 +123,7 @@
                             <td><a href="/admin_del_class?class_id=${list.class_id}">삭제</a> </td>
                         </tr>
                     </c:forEach>
-                    </thead>
+                    </tbody>
                 </table>
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

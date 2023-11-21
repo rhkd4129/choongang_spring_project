@@ -125,7 +125,7 @@
 								</td>
 							</tr>
 						</table>						
-						<table width="100%">
+						<table width="100%" style="margin-bottom:5px">
 							<tr>
 								<td width="100">
 									<button type="button" class="btn btn-secondary btn-sm" onclick="callAction('write','prj_board_data_write')">작성</button>
@@ -159,7 +159,7 @@
 								<col width="7%"></col>
 								<col width="6%"></col>
 							</colgroup>
-							<thead>
+							<thead class="table-light">
 								<tr>
 									<th>No.</th>
 									<th>제목</th>

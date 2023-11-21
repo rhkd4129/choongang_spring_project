@@ -17,13 +17,39 @@
 	div #calendar {
 		width: 80%;
 		margin-top: 50px;
+		padding-left: 15px;
 	}
 	
 	:root {
-		--fc-button-text-color: black;
+		/* --fc-button-text-color: black;
 		--fc-button-bg-color: white;
 		--fc-button-hover-bg-color: rgba(13, 110, 253, 0.1);
+		--fc-button-active-bg-color: white; */
 	}
+	
+	.fc .fc-daygrid-day-frame {
+	    position: relative;
+	    height: 100px;
+	}
+	
+	.fc .fc-col-header-cell-cushion {
+	    text-decoration: none;
+	    color: black;
+	}
+	
+	.fc .fc-daygrid-day-number {
+	    text-decoration: none;
+	    color: black;
+	}
+	
+	tr[role="row"] {
+		height: 20px;
+    }
+    
+	.fc .fc-daygrid-day-top {
+    	display: flex;
+    	flex-direction: row;
+    }
 </style>
 <!-- CSS END -->
 
@@ -89,6 +115,8 @@
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			initialView : 'dayGridMonth',
 			selectable : true,
+			locale : "ko",
+			height : 815,
 			events : events,
 			dateClick : function(info) {
 				console.log("clicked date : " + info.dateStr);

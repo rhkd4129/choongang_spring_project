@@ -15,6 +15,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -586,9 +587,51 @@ public class CyjController {
 	
 // ------------------------------------------------------------------------	
 
-	// 이벤트_read : 알림 조회용
-	@RequestMapping(value = "event_read")
-	public String eventRead(HttpServletRequest request, String currentPage, int doc_no, Model model) {
+	// 공지 : 팝업 조회용
+	@RequestMapping(value = "board_notify_read")
+	public String boardNotifyRead(HttpServletRequest request, String currentPage, int doc_no, Model model) {
+		System.out.println("CyjController eventContent Start--------------------------");
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
+		
+		// 이벤트_상세
+		BdFree content = cs.bdFreeContent(doc_no);
+		System.out.println("CyjController eventContent-> " + content);
+		model.addAttribute("notifyContent", content);
+		
+		if(userInfoDTO.getUser_id().equals(content.getUser_id())) {
+			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(content);
+		}	
+//		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
+		
+		// 게시글의 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		int result = 0;
+		if (loginId.equals(content.getUser_id())) {
+			result = 1;
+			System.out.println("접속자와 작성자 같다");
+		} else {
+			result = 0;
+		}
+		model.addAttribute("result", result);
+		
+		// 이벤트_조회수 
+		int count = cs.eventBdCount(doc_no);
+		System.out.println("CyjController count-> " + count);
+		model.addAttribute("count", count);
+				
+		return "board/board_notify/board_notify_read";
+	}
+	
+	// 이벤트_read : 팝업 조회용
+	@RequestMapping(value = "board_event_read")
+	public String boardEventRead(HttpServletRequest request, String currentPage, int doc_no, Model model) {
 		System.out.println("CyjController eventContent Start--------------------------");
 		
 		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
@@ -647,18 +690,66 @@ public class CyjController {
 		return "board/board_event/board_event_read";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	// 자유 : 팝업 조회용
+	@RequestMapping(value = "board_free_read")
+	public String boardFreeRead(HttpServletRequest request, String currentPage, int doc_no, Model model) {
+		System.out.println("CyjController eventContent Start--------------------------");
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
+		
+		// 이벤트_상세
+		BdFree content = cs.freeContent(doc_no);
+		System.out.println("CyjController eventContent-> " + content);
+		model.addAttribute("freeContent", content);
+		
+		if(userInfoDTO.getUser_id().equals(content.getUser_id())) {
+			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(content);
+		}	
+//		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
+		
+		// 게시글의 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		int result = 0;
+		if (loginId.equals(content.getUser_id())) {
+			result = 1;
+			System.out.println("접속자와 작성자 같다");
+		} else {
+			result = 0;
+		}
+		model.addAttribute("result", result);
+		
+		// 이벤트_조회수 
+		int count = cs.eventBdCount(doc_no);
+		System.out.println("CyjController count-> " + count);
+		model.addAttribute("eventCount", count);
+		
+		// 이벤트_해당 게시글에 대한 댓글 총 갯수
+		int comtCount = cs.eventComtCount(doc_no);
+		System.out.println("CyjController comtCount-> " + comtCount);
+		model.addAttribute("eventComtCount", comtCount);
+		
+		BdFreeComt bdFreeComt = new BdFreeComt();
+		bdFreeComt.setDoc_no(doc_no);
+		
+		// 이벤트_댓글 paging 작업
+		Paging page = new Paging(comtCount, currentPage);   
+		bdFreeComt.setStart(page.getStart());
+		bdFreeComt.setEnd(page.getEnd());
+		model.addAttribute("page", page);
+		
+		// 이벤트_댓글리스트 보여주기 위해 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
+		System.out.println("CyjController commentList.size()-> " + commentList.size());
+		model.addAttribute("commentList", commentList);
+
+		return "board/board_free/board_free_read";
+	}
+
 }
 			 
