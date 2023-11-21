@@ -341,17 +341,17 @@
 		if (adminNotify.text() == '') {
 			adminNotify.css('display', 'none');
 		}
-	};
+	}
 
 	// 페이지 이동
 	function locatFree(cdoc_no, lloc){
 		console.log("locat!");
 		console.log(cdoc_no);
 
-		var _width = '800';
-		var _height = '700';
-		var _left = Math.ceil(( window.screen.width - _width )/2);
-		var _top = Math.ceil(( window.screen.height - _height )/2);
+		var _width='800';
+		var _height='700';
+		var _left=Math.ceil((window.screen.width-_width)/2);
+		var _top=Math.ceil((window.screen.height -_height)/2);
 
 		window.open(
 			"/" + lloc + "?doc_no=" + cdoc_no,
@@ -364,10 +364,10 @@
 		console.log("locat!");
 		console.log(cdoc_no);
 
-		var _width = '800';
-		var _height = '700';
-		var _left = Math.ceil(( window.screen.width - _width )/2);
-		var _top = Math.ceil(( window.screen.height - _height )/2);
+        var _width='800';
+        var _height='700';
+        var _left=Math.ceil((window.screen.width-_width)/2);
+        var _top=Math.ceil((window.screen.height -_height)/2);
 
 		window.open(
 			"/" + lloc + "?doc_no=" + cdoc_no + "&project_id=" + cproject_id,
