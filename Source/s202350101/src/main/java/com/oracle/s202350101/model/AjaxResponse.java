@@ -11,7 +11,7 @@ import java.util.Map;
 public class AjaxResponse {
     private List<?> onelist;
     private Object oneObject;
-    private List<Object> listObject;
+//    private List<Object> listObject;
     private Map<String,List<String>> mapData;
 
 

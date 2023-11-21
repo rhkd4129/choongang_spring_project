@@ -40,7 +40,9 @@ select {
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+	
 	function sendNumber() {
+		$('#msg2').text("");
 	    $.ajax({
 	        url: 'user_find_pw_auth',
 	        dataType: 'text',
@@ -51,7 +53,6 @@ select {
 	        success: function (data) {
 	            if (data == 1) {
 	            	$("#mail_number").css("display", "block");	// 입력박스
-	            	alert("인증번호 전송중입니다. 잠시만 기다려주세요");
 	                $.ajax({
 	                    url: 'send_save_mail',
 	                    dataType: 'text',
@@ -66,10 +67,55 @@ select {
 	                        $("#Confirm").attr("value", data);
 	                    }
 	                });
+	            	
+	                /* 메일 타이머 */
+	            	var timer = null;
+	            	var isRunning = false;
+	            	
+	                $(function(){
+			    		    	var display = $('.time');
+			    		    	var leftSec = 10;
+			    		    	// 남은 시간
+			    		    	// 이미 타이머가 작동중이면 중지
+			    		    	if (isRunning){
+			    		    		clearInterval(timer);
+			    		    		display.html("");
+			    		    		startTimer(leftSec, display);
+			    		    	}else{
+			    		    	startTimer(leftSec, display);
+			    	    		
+			    	    		}
+			    	})
+	    	    
+			    	function startTimer(count, display) {
+			    	            
+			    	    		var minutes, seconds;
+			    	            timer = setInterval(function () {
+			    	            minutes = parseInt(count / 60, 10);
+			    	            seconds = parseInt(count % 60, 10);
+			    	     
+			    	            minutes = minutes < 10 ? "0" + minutes : minutes;
+			    	            seconds = seconds < 10 ? "0" + seconds : seconds;
+			    	     
+			    	            display.html(minutes + ":" + seconds);
+			    	     
+			    	            // 타이머 끝
+			    	            if (--count < 0) {
+			    	    	     clearInterval(timer);
+			    	    	     display.html("다시 인증해 주세요");
+			    	    	     $('.confirmBtn').attr("disabled","disabled");
+			    	    	     isRunning = false;
+			    	            }
+			    	        }, 1000);
+			    	             isRunning = true;
+			    	}
+	            	
 	            } else if (data == 0) {
-	                alert("이메일 주소가 다릅니다!");
+	                $('#msg2').text("이메일 주소가 다릅니다!");
 	            } else if (data == 2) {
-	                alert("아이디가 존재하지 않습니다!");
+	                $('#msg2').text("아이디가 존재하지 않습니다!");
+	            } else if (data == 3) {
+	                $('#msg2').text("이메일 주소가 존재하지 않습니다!");
 	            } else {
 	                alert("무엇도아님");
 	            }
@@ -80,32 +126,46 @@ select {
 	function confirmNumber(){
 		var number1 = $("#number").val();
 		var number2 = $("#Confirm").val();
+		var number3 = 0;
 		
 		var user_id = $('#user_id').val();
 		console.log("user_id->" + user_id);
 		var sendurl = "/user_find_pw_new?user_id=" + user_id;
-		
-		// 문제 1. authNumber가 넘어 오기전에 곧바로 확인 누르면 number1과 number2가 빈칸이라서 같음 처리됨
-		// 문제 2. 인증후에 user_id를 바꿔서 확인 누르면 바뀐 아이디의 비밀번호가 바뀜
-		/* if(number1 == number2){
-			alert("인증 되었습니다.");
-			location.href=sendurl;
-		} else if(number1 == "") {
-			alert("인증 번호를 입력해주세요.");
-		} else {
-			alert("인증 번호가 다릅니다.")
-		} */
-		
 		if(number1 == "") {
-			alert("인증 번호를 입력해주세요.");
+            $('#msg2').text("인증 번호를 입력해주세요.");
+
 		} else if(number1 != number2) {
-			alert("인증 번호가 다릅니다.");
+            $('#msg2').text("인증 번호가 다릅니다.");
+
 		} else {
 			alert("인증 되었습니다.")
-			location.href=sendurl;
+			number3 = 1;
+			location.href=sendurl + "&number3=1";
 		}
 		
 	}
+	
+	/* 비밀번호 확인 */
+	$(document).ready(function(){
+		$("#userpasschk").blur(function(){
+			if($("#userpasschk").val() != "" && $("#userpass").val() != ""){
+				if($("#userpasschk").val() == $("#userpass").val()){
+					$(".successPwChk").text("비밀번호가 일치합니다.");
+					$(".successPwChk").css("color", "green");
+					$("#pwDoubleChk").val("true");
+				}else{
+					$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
+					$(".successPwChk").css("color", "red");
+					$("#pwDoubleChk").val("false");
+				}
+			}
+		});
+	});
+	
+	/* msg box 초기화 */
+	/* $("#user_id, #auth_email").on('click', function() {
+	    $('#msg2').text("");
+	}); */
 
 </script>
 
@@ -116,15 +176,18 @@ select {
         <form method="post" action="" id="login-form">
             아이디 : <input type="text" id="user_id" name="user_id" required="required" placeholder="ID"><p>
             이메일주소 : 
-            <div id="mail_input" name="mail_input">
+            <div id="mail_input">
 	            <input type="text" name="auth_email" id="auth_email" required="required" placeholder="ID@gmail.com">
-	            <button type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()">인증번호 전송</button>
+	            <button class="timerButton" type="button" onclick="sendNumber()">인증번호 전송</button>
             </div>
             	<br>
             <div id="mail_number" name="mail_number" style="display: none">
 	            <input type="text" name="number" id="number" placeholder="인증번호 입력">
-	    		<button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">확인</button>
+	            <small style="color: red"><div class="time"></div></small>
+	    		<button class="confirmBtn" type="button" onclick="confirmNumber()">확인</button>
     		</div>
+    			<small style="color: red"><div id="msg2"></div></small>
+    		
     		<br>
     		<input type="hidden" id="Confirm" name="Confirm" value="">
     		

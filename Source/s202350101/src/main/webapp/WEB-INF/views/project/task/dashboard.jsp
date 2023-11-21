@@ -41,7 +41,7 @@
                 success: function (response) {
                     const doughnutCtx = document.getElementById('doughnut_1').getContext('2d');
                     const doughnut_data = {
-                        labels: ['예정', '진행중', '완료됨'],
+                        labels: ['예정된 작업', '진행중인 작업', '완료된 작업'],
                         datasets: [{
                             data: response,
                             backgroundColor: [
@@ -82,19 +82,19 @@
                         labels: labels,
                         datasets: [
                             {
-                                label: '진행전',
+                                label: '예정된 작업',
                                 data: stats_0,
                                 backgroundColor: 'rgba(255, 99, 132, 0.5)',  // 빨간색 배경
                                 borderColor: 'rgb(255, 99, 132)',  // 빨간색 테두리
                             },
                             {
-                                label: '진행중',
+                                label: '진행중인 작업',
                                 data: stats_1,
                                 backgroundColor: 'rgba(75, 192, 192, 0.5)',  // 녹색 배경
                                 borderColor: 'rgb(75, 192, 192)',  // 녹색 테두리
                             },
                             {
-                                label: '완료',
+                                label: '완료된 작업',
                                 data: stats_2,
                                 backgroundColor: 'rgba(153, 102, 255, 0.5)',  // 보라색 배경
                                 borderColor: 'rgb(153, 102, 255)',  // 보라색 테두리
@@ -109,7 +109,6 @@
                 url: "<%=request.getContextPath()%>/project_day",
                 dataType: 'json',
                 success: function (prjInfo) {
-
                     // Oracle에서 가져온 문자열을 JavaScript Date 객체로 변환
                     const projectStartDate = new Date(prjInfo.project_startdate);
                     const projectEndDate = new Date(prjInfo.project_enddate);
@@ -150,8 +149,9 @@
                     createDrawChart(barCtx, 'bar', proejctData, proejctOption);
                 }
             });
+
             $.ajax({
-                url: "<%=request.getContextPath()%>/step",
+                url: "<%=request.getContextPath()%>/project_step_chart",
                 dataType: 'json',
                 success: function (data) {
                     ////////////////////// 현재 진행중인 프로젝트 보기 /////////////////////////////
@@ -210,49 +210,74 @@
     <div id="header"></div>
     <div class="container-fluid">
         <div class="row">
-        <!-- 메뉴 -->
-        <div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-        </div>
-        <!-- 본문 -->
-            <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="chart_1">
-                    <div class="project_chart">
-                        <canvas id="project_chart"></canvas>
-                        <p id="project_time"></p>
-                        <div class="controller">
-                                <!-------------- 디자인 수정 예정---------------------->
-                                <a type="button" class="btn btn btn-outline-primary" href="task_list">작업 목록</a>
-                                <a type="button" class="btn btn btn-outline-primary" href="garbage_list">휴지통</a>
-                                <a type="button" class="btn btn-outline-primary" href="task_timeline">타임 라인</a>
-                                <a type="button" class="btn btn-outline-primary" href="task_create_form"> 새작업 </a>
+	        <!-- 메뉴 -->
+	        <div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+	        </div>
+	        <!-- 본문 -->
+	        <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	            <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+				  <symbol id="house-door-fill" viewBox="0 0 16 16">
+				    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+				  </symbol>
+				</svg>		
+				<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+				    <ol class="breadcrumb breadcrumb-chevron p-1">
+				      <li class="breadcrumb-item">
+				        <a class="link-body-emphasis" href="/main">
+				          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+				          <span class="visually-hidden">Home</span>
+				        </a>
+				      </li>
+				      <li class="breadcrumb-item">
+				        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+				      </li>
+				      <li class="breadcrumb-item active" aria-current="page">작업 보드</li>
+				    </ol>
+				</nav>
+				<div class="container-fluid">
+					<div style="margin-top:15px;height:45px">
+						<span class="apptitle">작업 보드</span>
+					</div>
+				</div>
+	            
+				<div class="chart_1">
+                   <div class="project_chart">
+                       <canvas id="project_chart"></canvas>
+                       <p id="project_time"></p>
+                       <div class="controller">
+                               <!-------------- 디자인 수정 예정---------------------->
+                               <a type="button" class="btn btn btn-outline-primary" href="task_list">작업 목록</a>
+                               <a type="button" class="btn btn btn-outline-primary" href="garbage_list">휴지통</a>
+                               <a type="button" class="btn btn-outline-primary" href="task_timeline">타임 라인</a>
+                               <a type="button" class="btn btn-outline-primary" href="task_create_form"> 새작업 </a>
 
-                        </div>
+                       </div>
 
-                    </div>
+                   </div>
 
-                    <div class="doughnut_1">
-                        <canvas id="doughnut_1"></canvas>
-                    </div>
+                   <div class="doughnut_1">
+                       <canvas id="doughnut_1"></canvas>
+                   </div>
 
-                    <div class="bar_chart">
-                        <canvas id="bar_chart"></canvas>
-                    </div>
-                </div>
-
-
-                <div class="chart_2" >
-                    <div class="project_step_chart" style=" overflow: hidden;">
-                    </div>
-
-                    <div class ="current_task">
+                   <div class="bar_chart">
+                       <canvas id="bar_chart"></canvas>
+                   </div>
+				</div>
 
 
-                        <div class="current_name">현재 작업중인 작업</div>
-                    </div>
+				<div class="chart_2" >
+                   <div class="project_step_chart" style=" overflow: hidden;">
+                   </div>
+
+                   <div class ="current_task">
 
 
-                </div>
-            </main>
+                       <div class="current_name">현재 작업중인 작업</div>
+                   </div>
+
+
+				</div>
+			</main>
 
         </div>
     </div>

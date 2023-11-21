@@ -101,6 +101,7 @@ public class MkhDaoImpl implements MkhDao {
 		UserInfo userInfo = new UserInfo();
 		try {
 			userInfo = session.selectOne("IdConfirm", user_id);
+			System.out.println("confirm userInfo -> " + userInfo);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl confirm Exception->"+e.getMessage());
 		}
@@ -139,6 +140,7 @@ public class MkhDaoImpl implements MkhDao {
 		System.out.println("MkhDaoImpl selectEnv start...");
 		try {
 			userEnv = session.selectOne("selectUserEnv", user_id);
+			System.out.println("selectClass userEnv -> " + userEnv);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl selectEnv Exception->" +e.getMessage());
 		}
@@ -152,6 +154,7 @@ public class MkhDaoImpl implements MkhDao {
 		System.out.println("MkhDaoImpl selectClass start...");
 		try {
 			classRoom = session.selectOne("selectUserClass", user_id);
+			System.out.println("selectClass classRoom -> " + classRoom);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl selectClass Exception->" +e.getMessage());
 		}

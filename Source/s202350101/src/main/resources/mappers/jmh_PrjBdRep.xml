@@ -28,7 +28,7 @@
 					(SELECT Count(*) FROM BD_REP_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 			FROM PRJ_BD_REP p, USER_INFO u 
 			WHERE p.user_id = u.user_id			
-			ORDER BY doc_no DESC
+			ORDER BY p.doc_no DESC
 		)
 		WHERE project_id = #{project_id} 
 		AND 
@@ -65,7 +65,7 @@
 					  FROM PRJ_BD_REP p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
 					  AND p.project_id = #{project_id} 
-					  ORDER BY doc_no DESC) a
+					  ORDER BY p.doc_no DESC) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
@@ -86,7 +86,7 @@
 							(SELECT Count(*) FROM BD_REP_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 					  FROM PRJ_BD_REP p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
-					  ORDER BY doc_no DESC) a
+					  ORDER BY p.doc_no DESC) a
 			WHERE
 			a.project_id = #{project_id} 
 			AND 

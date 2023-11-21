@@ -25,12 +25,14 @@ public interface LjhDao {
 	int 				insertMember(Meeting mt);
 	int 				updateReport(Meeting meeting);
 	int 				insertMeetingReport(Meeting meeting);
+	int 				updateMeetingDate(Meeting meeting);
+	
+	// 알림
 	List<Meeting> 		getUserMeeting(HashMap<String, String> map);
 	List<PrjBdData> 	getBoardRep(HashMap<String, String> map);
 	List<PrjBdData> 	getBoardComt(HashMap<String, String> map);
 	List<PrjInfo> 		getPrjApprove(HashMap<String, String> map);
 	List<PrjInfo> 		getNewPrj(HashMap<String, String> map);
-	int 				updateMeetingDate(Meeting meeting);
 	List<Meeting> 		getMtRpListPage(Meeting meeting);
 
 

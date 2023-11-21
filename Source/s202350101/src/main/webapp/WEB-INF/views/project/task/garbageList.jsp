@@ -23,7 +23,7 @@
                         console.log('result:',result);
                         if(result === '1'){
                             alert("삭제 완료");
-                            window.location.href ="/dashboard_home";
+                            window.location.href ="/dashboard";
                         }
                     }
                 })
@@ -45,7 +45,7 @@
                         console.log('result:',result);
                         if(result === '1'){
                             alert("복구 완료");
-                            window.location.href ="/dashboard_home";
+                            window.location.href ="/dashboard";
                         }
                     }
                 })
@@ -125,16 +125,13 @@
                     <tbody id="tbodys">
                     <c:forEach var="task" items="${garbageList}">
                         <tr>
-                            <td>
-                                ${task.rn}
-
-                            </td>
+                            <td>${task.rn}</td>
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td>${task.task_subject}</td>
                             <td>
-                                <button  onclick="taskDelete('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">영구 삭제</button>
-                                <button  onclick="taskRestore('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">복구</button>
+                                <button class="btn btn-outline-primary" onclick="taskDelete('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">영구 삭제</button>
+                                <button class="btn btn-outline-primary" onclick="taskRestore('${currentUserId}','${task.user_id}',${task.task_id},${task.project_id})">복구</button>
                             </td>
                         </tr>
                         <c:set var="num" value="${num - 1 }"></c:set>

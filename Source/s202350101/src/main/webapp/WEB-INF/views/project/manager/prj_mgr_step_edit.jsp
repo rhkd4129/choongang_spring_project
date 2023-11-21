@@ -64,14 +64,15 @@
 			<input type="hidden" name="project_order" value="${prjStep.project_order}">
 			<div class="container">
 				<div style="text-align: center">
+                    <br>
+                    <h2>단계 수정</h2>
+                </br>
 					<p>
-					<input type="text" name="project_s_name" value="${prjStep.project_s_name }">
+					<input type="text" name="project_s_name" class="form-control" value="${prjStep.project_s_name }">
 					<hr>
 				</div>
 				<div class="input-group mb-3">
-					<textarea name="project_s_context" class="form-control" aria-label="With textarea" rows="15" >
-${prjStep.project_s_context }
-					</textarea>  
+					<textarea name="project_s_context" class="form-control" aria-label="With textarea" rows="15" >${prjStep.project_s_context }</textarea>
 				</div>
 				<div align="center">
 					<button type="reset" class="btn btn-secondary">다시쓰기</button>

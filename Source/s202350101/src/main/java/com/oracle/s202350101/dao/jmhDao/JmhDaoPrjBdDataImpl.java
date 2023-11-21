@@ -375,7 +375,7 @@ public class JmhDaoPrjBdDataImpl implements JmhDaoPrjBdData {
 	@Override
 	public List<BdDataGood> selectGoodList(BdDataGood bdDataGood) {
 		
-		System.out.println("JmhDaoImpl insertGoodList START...");
+		System.out.println("JmhDaoImpl selectGoodList START...");
 		List<BdDataGood> resultBdDataGoodList = null;		
 		try {
 			//-----------------------------------------------------------------------------------
@@ -383,9 +383,9 @@ public class JmhDaoPrjBdDataImpl implements JmhDaoPrjBdData {
 			//-----------------------------------------------------------------------------------
 			System.out.println("resultBdDataGoodList.size()->"+resultBdDataGoodList.size());
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl insertGoodList Exception->"+e.getMessage());
+			System.out.println("JmhDaoImpl selectGoodList Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl insertGoodList END...");
+		System.out.println("JmhDaoImpl selectGoodList END...");
 		return resultBdDataGoodList;
 	}
 	
@@ -507,7 +507,7 @@ public class JmhDaoPrjBdDataImpl implements JmhDaoPrjBdData {
 		int resultCount = 0;	
 		try {
 			//--------------------------------------------------------------------------
-			resultCount = session.insert("jmhPrjBdDataUpdateReplyAlarmFlag", prjBdData);
+			resultCount = session.update("jmhPrjBdDataUpdateReplyAlarmFlag", prjBdData);
 			//--------------------------------------------------------------------------
 			System.out.println("resultCount->"+resultCount);
 			if(resultCount > 0) {
@@ -530,7 +530,7 @@ public class JmhDaoPrjBdDataImpl implements JmhDaoPrjBdData {
 		int resultCount = 0;	
 		try {
 			//----------------------------------------------------------------------------
-			resultCount = session.insert("jmhPrjBdDataUpdateCommentAlarmFlag", prjBdData);
+			resultCount = session.update("jmhPrjBdDataUpdateCommentAlarmFlag", prjBdData);
 			//----------------------------------------------------------------------------
 			System.out.println("resultCount->"+resultCount);
 			if(resultCount > 0) {

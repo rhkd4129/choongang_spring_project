@@ -7,7 +7,7 @@ import com.oracle.s202350101.model.*;
 
 public interface LkhDao {
 	
-	//DashBoard Home   도넛 그래프, 진척률 막대그래프
+	// DashBoard Home   도넛 그래프, 진척률 막대그래프
 	// 작업별 상태 count -> 도넛차트
 	List<Integer> 		doughnut_chart(int project_id);
 	//회원별 작업 진척도
@@ -26,9 +26,8 @@ public interface LkhDao {
 	List<Task>			task_search(Task task);
 	List<Task>			task_time_decs(Task task);
 	List<Task>			task_time_aces(Task task);
-
 	// 작업 타임라인보기
-	List<Task>			task_timeline();
+	List<Task>			task_timeline(int project_id);
 
 
 	// ----------------------작업 상세 내용 ----------------------//
@@ -36,33 +35,47 @@ public interface LkhDao {
 	//작업 상세 내역에서 첨부파일 리스트 보여주기
 	List<TaskAttach>	task_attach_list(int task_id, int project_id);
 
-
 	//해당 작업의 같이하는 사람들 리스트
 	List<TaskSub> 		taskWorkerlist(TaskSub taskSub);
+	// ----------------------------------------------------------------//
 
 
 
-
-	// 현재 속한 팀프로젝트의 프로젝트 단계 보여주기(생성폼에서 보여주는 거 )
+//--------------------------------  작업 생성   ---------------------------------//
+	// 1 . 새작업 폼에서 현재 프로젝트의 단계와 참여하는 인원 보여주는 메서드들 		GET
 	List<PrjStep> 		project_step_list(int project_id);
 	// 현재 속한 팀프로젝트의  인원들보여주기
 	List<UserInfo> 		task_create_form_worker_list(int project_id);
 
 
-	//----------------------  작업 생성   ----------------------//
-	int 				task_create(Task task);
-	int					task_worker_create(List<TaskSub> taskSubList);
-	int					task_attach_max();
-	int					task_attach_create(List<TaskAttach> taskAttachList);
+	// 2.작성하기 눌럿을떄  작업테이블의 생성과 공동작업자 생성  첨부파일테이블의 생성 4개의 dao가 순차실행 -> 트랜잭션 처리 	POST
+	int 				task_create(Task task) throws Exception;
+	int					task_worker_create(List<TaskSub> taskSubList) throws Exception;
+	int					task_attach_max(int task_id);
+	int					task_attach_create(List<TaskAttach> taskAttachList) throws Exception;
+	//-----------------------------------------------------------------------------------------//
+
+
+
+
 	//----------------------  작업 수정  task  ----------------------//
 
-	int					task_update(Task task);
+	int					task_update(Task task)throws Exception;
+	int					task_worker_init(int projectId,int taskId)throws Exception;
+	int					task_worker_update(List<TaskSub> taskSubList)throws Exception;
+	int					task_attach_update(List<TaskAttach> taskAttachList)throws Exception ;
 
-	int					task_worker_init(int projectId,int taskId);
-	int					task_worker_update(List<TaskSub> taskSubList);
-	int					task_attach_update(List<TaskAttach> taskAttachList);
 
-	// ----------------- 휴지통관련 ,삭제관련 ------------- ///
+	// 수정할때 첨부파일 삭제 시  물리적 파일 삭제 후 DB에서 파일 삭제
+	TaskAttach 				physical_file_delete(TaskAttach  taskAttach) throws Exception;
+	int					task_attach_delete(TaskAttach taskAttach) throws Exception;
+
+	// --------------------------------------------------------- ///
+
+
+
+
+	// ----------------- 휴지통관련 ,삭제관련 --------------------------------- ///
 	//휴지통 목록
 	List<Task> 			garbage_list(Task task);
 

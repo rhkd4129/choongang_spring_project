@@ -62,7 +62,8 @@ $(function() {
 							</tr>
 							<tr>
 								<td>작성일</td>
-								<td><input type="text" class="form-control" name="create_date_str" value="${board.create_date}" readonly></td>
+								
+								<td><input type="text" class="form-control" name="create_date_str" value="<fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" readonly></td>
 							</tr>
 							<c:if test="${board.parent_doc_no ne ''}">
 							<tr>

@@ -8,6 +8,45 @@
 <title>Insert title here</title>
 
 <!--CSS START -->
+<style>
+	/* 좌측 프로필 컨텐츠 스타일 */
+    #contents .col-lg-4 {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #contents .col-lg-4 img {
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+
+    #contents .col-lg-4 h2 {
+        color: #007bff;
+    }
+
+    #contents .col-lg-4 h3 {
+        color: #6c757d;
+    }
+
+    /* 우측 환경 설정 컨텐츠 스타일 */
+    #contents .col-lg-8 {
+        padding: 20px;
+    }
+
+    #contents h1 {
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    #contents button {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+</style>
+
 <!-- CSS END -->
 
 <!-- JS START -->
@@ -83,9 +122,8 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-	  		<div id="contents">
+	  		<%-- <div id="contents">
 		    	<div class="col-lg-4">
-			        <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg> -->
 			        	<tr>
 						<td>
 							<img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDto.attach_path }/${userInfoDto.attach_name}"></td>
@@ -118,8 +156,51 @@
 		    	
 		    		<p><button type="button" class="btn btn-secondary" onclick="user_env_click()">확인 »</button></p>
 		    	</form>
-		    </div>
-	  		
+		    </div> --%>
+		    
+            <div id="contents">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img class="uploadFile" style="width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDto.attach_path }/${userInfoDto.attach_name}">
+                        <h2 class="fw-normal">${userInfoDto.user_name }</h2>
+                        <h5 class="fw-normal">ID : ${userInfoDto.user_id }</h5>
+                        <p>핸드폰 번호 : ${userInfoDto.user_number }
+				        <p>생년월일 : ${user_birth }
+			        	<p>소속 : 중앙  ${classRoom.class_area }반 ${classRoom.class_room_num }호
+			        	<p>기간 : ${classRoom.class_start_date } ~ ${classRoom.class_end_date }
+			        	<p>담당 강사 : ${classRoom.class_master } 
+                        <p><a class="btn btn-secondary" href="/mypage_check_pw">개인정보수정 »</a></p>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <h1>환경설정</h1>
+                        <form id="userEnv">
+                        
+                        	댓글알림  : YES<input type="radio" name="env_alarm_comm" value="Y"  ${userEnv.env_alarm_comm == 'Y' ? 'checked' : ''}>  		 
+			    			NO <input type="radio" name="env_alarm_comm" value="N"  ${userEnv.env_alarm_comm == 'N' ? 'checked' : ''} ><p>
+			    			답글알림  : YES<input type="radio" name="env_alarm_reply" value="Y" ${userEnv.env_alarm_reply == 'Y' ? 'checked' : ''}>    	 
+			    			NO <input type="radio" name="env_alarm_reply" value="N" ${userEnv.env_alarm_reply == 'N' ? 'checked' : ''}><p>
+					    						<c:if test="${userInfoDto.user_auth == 'manager'}">
+						         프로젝트 생성 승인알림  : YES<input type="radio" name="env_alarm_mine" value="Y" ${userEnv.env_alarm_mine == 'Y' ? 'checked' : ''}> 
+						    					 NO <input type="radio" name="env_alarm_mine" value="N" ${userEnv.env_alarm_mine == 'N' ? 'checked' : ''}><p>
+			    								</c:if>
+					                  회의일정알림  : YES<input type="radio" name="env_alarm_meeting" value="Y" ${userEnv.env_alarm_meeting == 'Y' ? 'checked' : ''}>    
+					    			   NO <input type="radio" name="env_alarm_meeting" value="N" ${userEnv.env_alarm_meeting == 'N' ? 'checked' : ''}><p>
+					                  채팅이용  : YES<input type="radio" name="env_chat" value="Y" ${userEnv.env_chat == 'Y' ? 'checked' : ''}>    			 
+					    			NO <input type="radio" name="env_chat" value="N" ${userEnv.env_chat == 'N' ? 'checked' : ''}><p>
+<!-- 			                       게시글에 댓글이 달릴 경우 알림을 받을 수 있습니다.
+						게시글에 답글이 달릴 경우 알림을 받을 수 있습니다.
+						프로젝트 생성 승인이 된 경우 경우 알림을 받을 수 있습니다.
+						회의 일정이 잡힌 경우 알림을 받을 수 있습니다.
+						채팅 기능을 이용 할 수 있습니다.
+ -->                    
+                        
+                            <p><button type="button" class="btn btn-secondary" onclick="user_env_click()">확인 »</button></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+		   
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
 		

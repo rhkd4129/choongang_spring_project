@@ -10,10 +10,20 @@
 
 <!--CSS START -->
 <style type="text/css">
-div #calendar {
-	width: 80%;
-	margin-top: 30px;
-}
+	#category_title {
+		position: absolute;
+	}
+
+	div #calendar {
+		width: 80%;
+		margin-top: 50px;
+	}
+	
+	:root {
+		--fc-button-text-color: black;
+		--fc-button-bg-color: white;
+		--fc-button-hover-bg-color: rgba(13, 110, 253, 0.1);
+	}
 </style>
 <!-- CSS END -->
 
@@ -122,6 +132,28 @@ div #calendar {
 			<!-- 본문 -->
 			<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 				<!------------------------------ //개발자 소스 입력 START ------------------------------->
+				<div id="category_title">
+					<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+					  <symbol id="house-door-fill" viewBox="0 0 16 16">
+					    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+					  </symbol>
+					</svg>		
+					<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+					    <ol class="breadcrumb breadcrumb-chevron p-1">
+					      <li class="breadcrumb-item">
+					        <a class="link-body-emphasis" href="/main">
+					          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+					          <span class="visually-hidden">Home</span>
+					        </a>
+					      </li>
+					      <li class="breadcrumb-item">
+					        <a class="link-body-emphasis fw-semibold text-decoration-none" href="/dashboard">프로젝트</a>
+					      </li>
+					      <li class="breadcrumb-item active" aria-current="page">회의록</li>
+					    </ol>
+					</nav>
+				</div>
+				
 				<!-- fullcalendar 추가 -->
 				<div id='calendar'></div>
 

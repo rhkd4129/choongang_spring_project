@@ -72,8 +72,7 @@
 						<hr>
 					</div>
 					<div class="input-group mb-3">
-						<textarea class="form-control" name="project_s_context" aria-label="With textarea" rows="15">
-						</textarea>
+						<textarea class="form-control" name="project_s_context" aria-label="With textarea" rows="15"></textarea>
 					</div>
 					<div align="center">
 						<button type="reset" class="btn btn-secondary">다시쓰기</button>

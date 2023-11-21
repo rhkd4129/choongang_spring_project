@@ -40,7 +40,6 @@ public class BdFree {
 	// 조회용 
 	private String user_name;
 	private String app_name;
-	private String comment_context;
 
 		
 }

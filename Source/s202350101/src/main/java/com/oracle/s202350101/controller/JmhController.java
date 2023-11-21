@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdDataGood;
+import com.oracle.s202350101.model.BdFree;
+import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
@@ -33,6 +36,7 @@ import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.model.Paging;
+import com.oracle.s202350101.service.jmhSer.JmhServiceMain;
 import com.oracle.s202350101.service.jmhSer.JmhServicePrjBdData;
 import com.oracle.s202350101.service.jmhSer.JmhServicePrjBdRep;
 import com.oracle.s202350101.service.jmhSer.JmhServicePrjInfo;
@@ -48,6 +52,78 @@ public class JmhController {
 	private final JmhServicePrjBdData jmhDataSer;
 	private final JmhServicePrjBdRep jmhRepSer;	
 	private final JmhServicePrjInfo jmhPrjInfoSer;
+	private final JmhServiceMain jmhMainSer;
+	
+	
+	//#######################################################################
+	//############  MAIN 화면 포틀릿 데이타 /bd_free_main/{번호}  ############
+	//#######################################################################
+	
+	@GetMapping("/main_bd_free/{bd_category}")
+	@ResponseBody
+	public List<BdFree> mainBdFree(HttpServletRequest request, @PathVariable String bd_category, Model model) {
+		List<BdFree> mainBoardList = null;
+
+		
+		//검색 분류코드 가져오기
+		Code code = new Code();
+		code.setTable_name("BD_FREE");
+		code.setField_name("BD_CATEGORY");
+		//-----------------------------------------------------
+		List<Code> codelist = jmhDataSer.codeList(code);
+		//-----------------------------------------------------
+		for(Code c : codelist) {
+			if(c.getCate_code().equals(bd_category)) {
+				bd_category = c.getCate_name();
+			}
+		}
+		
+		BdFree bdFree = new BdFree();
+		
+		bdFree.setBd_category(bd_category);
+		bdFree.setStart(1);
+		bdFree.setEnd(3);
+		
+		mainBoardList = jmhMainSer.selectMainBdFree(bdFree);
+		
+		return mainBoardList;
+	}
+
+	@GetMapping("/main_bd_qna")
+	@ResponseBody
+	public List<BdQna> mainBdQna(HttpServletRequest request, Model model) {
+		List<BdQna> mainBoardList = null;
+		
+		BdQna bdQna = new BdQna();
+		bdQna.setStart(1);
+		bdQna.setEnd(3);
+		
+		mainBoardList = jmhMainSer.selectMainBdQna(bdQna);
+		
+		return mainBoardList;
+	}
+
+	//#######################################################################
+	//############  완료 프로젝트 목록 prj_complete_list  ############
+	//#######################################################################
+
+	
+	//프로젝트 Home
+	@RequestMapping(value = "prj_home")
+	public String prjHome(HttpServletRequest request, Model model) {
+
+		int project_status = 1; //진행중
+		
+		//-------------------------------------------------------------------
+		List<PrjInfo> prjInfoList = jmhPrjInfoSer.selectList(project_status);
+		//-------------------------------------------------------------------
+
+		model.addAttribute("prjInfoList", prjInfoList);
+		model.addAttribute("ProjectCount", prjInfoList.size());
+		
+		return "/project/prj_home";
+	}
+	
 	
 	//완료 프로젝트 목록
 	@RequestMapping(value = "prj_complete_list")
@@ -113,7 +189,7 @@ public class JmhController {
 		//--------------------------------------------------------------
 		List<PrjBdData> prjBdDataList = jmhDataSer.boardList(prjBdData);
 		//--------------------------------------------------------------
-
+		
 		//검색 분류코드 가져오기
 		Code code = new Code();
 		code.setTable_name("SEARCH");
@@ -405,7 +481,7 @@ public class JmhController {
 			model.addAttribute("errorMsg", "분류가져오기 실패");
 			return "error";
 		}
-	
+		
 		model.addAttribute("bd_category_codelist", bd_category_codelist); //분류
 		model.addAttribute("board", selectPrjBdData);
 		

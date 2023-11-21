@@ -9,7 +9,7 @@
 
 <!--CSS START -->
 <style type="text/css">
-		table {
+	table {
 		width: 100%;
 		margin-top: 10px;
 	}
@@ -19,7 +19,16 @@
 	}
 	
 	td, th, tr {
-		padding: 10px;	
+		padding-left: 20px;
+		vertical-align: middle;	
+	}
+	
+	table tr {
+		height: 50px;
+	}
+	
+	table th, td {
+		text-align: center;
 	}
 	
 	.pagebox {
@@ -58,9 +67,7 @@
 	            $('#footer').html(data);
 	        }
 	    });
-	    
-
-	    
+  
 	    
 	});
 
@@ -82,23 +89,46 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-
-			<h3>자유 게시판</h3><p>
-			<input type="button" value="새 글 작성" onclick="location.href='free_insert_from'">
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">전체 게시판</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">자유 게시판</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:15px;height:45px">
+					<span class="apptitle">자유 게시판</span>
+				</div>
+			</div>
+		
+			<input type="button" class="mt-4 mb-4" value="작성" onclick="location.href='free_insert_from'">
 			
 			
 			<!-- 추천수 가장 높은 row 3개 -->
-			<h5>추천수 가장 높은 게시글</h5>
-	 		<table border="1">
+			<h5>Best</h5>
+	 		<table class="table table-sm">
 	 			<tr>
-	 				<th>번호</th>      <th>이름</th>       <th>작성일시</th> 
-					<th>수정일시</th>   <th>게시종류</th>     <th>제목</th>      
+	 				<th>번호</th>      <th>이름</th>        <th>작성일</th> 
+					<th>수정일</th>     <th>게시종류</th>     <th>제목</th>      
 					<th>조회수</th>     <th>추천</th>
 	 			</tr>
 	 			
 	 			<c:forEach var="free" items="${freeRow}" varStatus="status"> 
-	 				<tr id="freeRow${free.rn }">
-	 					<td>${free.rn }</td>
+	 				<tr id="free${status.count}">
+	 					<td>${status.count}</td>
 	 					<td>${free.user_name }</td>
 	 					<td>${free.create_date }</td>
 	 					<td>${free.modify_date }</td>
@@ -112,11 +142,11 @@
 			
 			
 			<!-- 전체 리스트 -->
-			<h5>All Count : ${freeTotal} </h5>
-			<table border="1"> 
+			<h5 class="mt-5 pt-3">Count  ${freeTotal} </h5>
+			<table class="table table-sm"> 
 				<tr>
-					<th>번호</th>      <th>이름</th>       <th>작성일시</th> 
-					<th>수정일시</th>   <th>게시종류</th>     <th>제목</th>      
+					<th>번호</th>       <th>이름</th>       <th>작성일</th> 
+					<th>수정일</th>     <th>게시종류</th>     <th>제목</th>      
 					<th>조회수</th>     <th>추천</th>	
 				</tr> 
 				

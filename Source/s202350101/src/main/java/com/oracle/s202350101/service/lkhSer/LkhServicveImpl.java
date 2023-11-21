@@ -53,24 +53,30 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public AjaxResponse 	project_step_chart(int project_id) {
-		List<Task> stepTaskList = null;
-		List<PrjStep> stepList = null;
-		stepList = lkhDao.project_step_select(project_id);
-		//프로젝트 단계 리스트
+
+		List<PrjStep> stepList = lkhDao.project_step_select(project_id);
+		// 현재 프로젝트에 있는 단계 리스트
+
 		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
-		//프로젝트 작업 리스트 
-		stepTaskList =  lkhDao.project_step_chart(project_id);
+		//현재 프로젝트에 잇는 단계에 이름만 따로 갖고옴
+
+		List<Task> stepTaskList =  lkhDao.project_step_chart(project_id);
+		// 현재 프로젝트에 잇는 작업 리스트
 
 
-
-		// 현재 진행중인 작업 리스트들
+		// 작업 리스트중에 진행중인 작업만 가져오기  -> 최종적으로 보낼 데이터
 		List<Task> currentTaskList = stepTaskList.stream().filter(t->t.getTask_status().equals("1")).collect(Collectors.toList());
 
-		// 맵에 값 추가
+
+
+		// 우선 map을 선언후 키로 각 프로젝트 단계 이름을 지정
+		// 값에는 빈리스트 지정
 		Map<String, List<String>> mapData = new HashMap<>();
-		// 우선 map을 선언후 키로 각 프로젝트 단계이름을 지정 하고 값에는 빈리스트 생성
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
-		// 프로젝트 단게이름을 순회하고 작업들도 순회하면서 서로 단계이름이 같으면 해당 키에 있는 값 리스트에 추가함
+
+
+		// map의 키를 순회(프로젝트 단계이름)하면서 작업들도 같이 순회 ->
+		// 작업의 단계이름과 키의 단계이름이 같으면 해당 키의 값에 잇는 리스트에 추가함
 		for (String key : mapData.keySet()) {
 			for (Task t : stepTaskList) {
 				if (t.getProject_s_name().equals(key)) {
@@ -83,8 +89,10 @@ public class LkhServicveImpl implements LkhService {
 				}
 			}
 		}
+
 		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
 		AjaxResponse data = new AjaxResponse();
+
 		data.setMapData(mapData);
 		data.setOnelist(currentTaskList);
 		return data;
@@ -98,16 +106,7 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public List<Task> task_list(Task task) {
-		List<Task> taskList = null;
-
-
-		taskList = lkhDao.task_list(task);
-		return taskList;
-	}
-
-	public List<Task> task_search(Task task) {
-		List<Task> taskList = null;
-		taskList = lkhDao.task_list(task);
+		List<Task> taskList = lkhDao.task_list(task);
 		return taskList;
 	}
 
@@ -145,8 +144,8 @@ public class LkhServicveImpl implements LkhService {
 
 	//프로젝트 타임라이ㅏㄴ
 	@Override
-	public List<Task> task_timeline() {
-		return lkhDao.task_timeline();
+	public List<Task> task_timeline(int project_id) {
+		return lkhDao.task_timeline(project_id);
 	}
 
 	//task create get form view
@@ -155,6 +154,8 @@ public class LkhServicveImpl implements LkhService {
 	public List<PrjStep> project_step_list(int project_id) {
 		return lkhDao.project_step_list(project_id);
 	}
+
+
 
 	//프로젝트 인원 보여주기
 	@Override
@@ -167,10 +168,14 @@ public class LkhServicveImpl implements LkhService {
 	@Override
 	public int task_create(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+		
+		log.info("task_create 서비스 시작");
 		try {
 			int taskResult = lkhDao.task_create(task);
-
+			log.info("task_create 결과 : {}",taskResult);
+			
 			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
+				log.info("공동작업자가 있다. 공동작업자 생성 시작");
 				List<TaskSub> taskSubList = new ArrayList<>();
 				for (String workId : task.getWorkerIdList()) {
 					TaskSub taskSub = new TaskSub();
@@ -179,14 +184,17 @@ public class LkhServicveImpl implements LkhService {
 					taskSubList.add(taskSub);
 				}
 				int taskSubResult = lkhDao.task_worker_create(taskSubList);
+				log.info("taskSub 결과  : {}",taskSubResult);
 			}
+			
+			//작업 생성시 업로드할 파일이 존재할경우
+			if (!multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0) {
+
+				log.info("업로드할 파일이 하나이상 존재합니다.");
+				int maxId =lkhDao.task_attach_max(task.getTask_id());
+				log.info("지금현재 task_attach의 max값은 ? {}",maxId);
 
 
-			int maxId =lkhDao.task_attach_max();
-			log.info("제발좀 되라 앙 {}",maxId);
-			// 파일 처리 부분
-			if (!multipartFileList.isEmpty()) {
-				log.info("파일이 있다!!!!");
 				List<TaskAttach> taskAttachList = new ArrayList<>();
 				String attach_path = "upload";
 				int i  = 1;
@@ -195,18 +203,21 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
 					taskAttach.setAttach_no(maxId+i);
+					// 파일리스트에 3개가 들어모면 i+1을 더하는 형식으로 현재 max값에 +1 , +2  , +3 으로 pk생성하는방식
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
 					taskAttach.setAttach_name(fileName);
 					taskAttach.setAttach_path(attach_path);
 					taskAttachList.add(taskAttach);
 					i+=1;
-					log.info("DFdfdfd{}",taskAttach.getAttach_no());
+					log.info("현재 저장될 taskAttach의 attach_no의 값은 ? -> {}",taskAttach.getAttach_no());
 				}
-
-				lkhDao.task_attach_create(taskAttachList);
+				int taskAttachReuslt = lkhDao.task_attach_create(taskAttachList);
+				// 다중 첨부파일 업로드 
+				log.info("taskAttachCreate의 결과는 : {}",taskAttachReuslt);
 			}
 
 			transactionManager.commit(txStatus);
+			log.info("커밋 성공하였습니다.");
 		} catch (Exception e) {
 			transactionManager.rollback(txStatus);
 			log.info("service: createGroupTask, transactionManager error Message -> {}", e.getMessage());
@@ -214,27 +225,31 @@ public class LkhServicveImpl implements LkhService {
 		return 1;
 	}
 
-//	@Override
-//	public int task_attach_create(List<TaskAttach> taskAttachList ,int fileCount) {
-//		List<Integer> attach_seq = null;
-//		for(int i =1; i<=fileCount;i++){attach_seq.add(i);}
-//
-//
-//		return lkhDao.task_attach_create(taskAttachList,attach_seq);
-//	}
+
+	// 1.작업만 수정하는경우
+	// 2.공동작업자는 수정할경우 기존에잇던 것을 다 delete처리하고 다시 insert함
 
 	@Override
-	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath) {
+	public int task_update(Task task, List<MultipartFile> multipartFileList, String uploadPath,List<String> attachDeleteList) {
+		log.info("task_create 서비스 시작");
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
+					//////////////		Task update		//////////////
 			int taskResult = lkhDao.task_update(task);
-			log.info("taskReuslt : {}",taskResult);
+			log.info("taskupdate Reuslt : {}",taskResult);
+
+				//////////////		TaskSub테이블 update		//////////////
+
+
+			//수정 폼에서 공동작업자를 아무도 선택하지 않았다면 해당 작업의 taskSub를 다 delete처리
 			if(taskResult == 1 && task.getWorkerIdList() == null){
 				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
-				log.info("작업자가 없는상태로 되돌리기 taskSbinit :{}",taskSbinit);
+				log.info("작업자가 없는상태로 되돌리기 taskSbinit 결과  :{}",taskSbinit);
 			}
+
+			//공동작업자리스트에 하나라도 있다면.
 			if (taskResult == 1 && task.getWorkerIdList() != null && !task.getWorkerIdList().isEmpty()) {
-				// 작업자 업데이트
+
 				List<TaskSub> taskSubList = new ArrayList<>();
 				for (String workId : task.getWorkerIdList()) {
 					TaskSub taskSub = new TaskSub();
@@ -242,35 +257,64 @@ public class LkhServicveImpl implements LkhService {
 					taskSub.setProject_id(task.getProject_id());
 					taskSub.setWorker_id(workId);
 					taskSubList.add(taskSub);
-					log.info("proejct_id ----- {}   task_id {}: ",task.getProject_id(),task.getTask_id());
 					log.info("workerId ----- {}: ",workId);
-
 				}
+				// 공동작업자의 수정(update)는 기존에잇던 명단을 다  delete처리하고  새로 다시 insert한다는 개념
+				// 필드내용을 업데이트하는게 아니라 아예 행을 새로 넣고 삭제하고 (insert, delete)해야 해서   
 				int taskSbinit = lkhDao.task_worker_init(task.getProject_id(), task.getTask_id());
-				log.info("taskSbinit : {}",taskSbinit);
 				int taskSbResult = lkhDao.task_worker_update(taskSubList);
+				log.info("taskSbinit : {}",taskSbinit);
 				log.info("taskSbResult : {}",taskSbResult);
 			}
 
-			if (multipartFileList != null && !multipartFileList.isEmpty()) {
+
+			//////////////		TaskAttach테이블 update		//////////////
+			//삭제할 파일이 하나라도 존재한다면
+			if (attachDeleteList != null && !attachDeleteList.isEmpty()) {
+				for(String no :attachDeleteList)	{
+					TaskAttach taskAttach = new TaskAttach();
+					taskAttach.setTask_id(task.getTask_id());
+					taskAttach.setProject_id(task.getProject_id());
+					taskAttach.setAttach_no(Integer.parseInt(no));
+					log.info("삭제될 파일의 no {}",no);
+
+					//먼저 물리적 경로에 잇는 파일을 삭제하기위해 select해오기
+					TaskAttach selectFile = lkhDao.physical_file_delete(taskAttach);
+					log.info("selectFile.getTask_id() :{}", selectFile.getTask_id());
+					log.info("selectFile.getAttach_no() :{}", selectFile.getAttach_no());
+
+					//삭제할 파일의 path와 name갖고오기
+					String deleteFile = uploadPath+selectFile.getAttach_name();
+					log.info("삭제할 파일 이름 {}",deleteFile);
+					upFileDelete(deleteFile);			 // 실제 물리 파일 삭제
+					log.info("물리 파일 삭제 이제 db파일 삭제 할 차레");
+					lkhDao.task_attach_delete(taskAttach); //DB상에서 삭제 완료
+				}
+			}
+
+			// 추가적으로 파일을 업로드 해야한다면
+			if (multipartFileList != null && !multipartFileList.isEmpty() && multipartFileList.get(0).getSize()>0 ) {
 				// 파일 업로드
 				List<TaskAttach> taskAttachList = new ArrayList<>();
+				int maxId =lkhDao.task_attach_max(task.getTask_id());
+				log.info("현재 작업에 대한 taskAttach의 max값은?  : {}",maxId);
+				int i=1;
 				String attach_path = "upload";
 				for (MultipartFile file : multipartFileList) {
 					TaskAttach taskAttach = new TaskAttach();
 					taskAttach.setTask_id(task.getTask_id());
 					taskAttach.setProject_id(task.getProject_id());
+					taskAttach.setAttach_no(maxId+i);
+					i+=1;
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
 					taskAttach.setAttach_name(fileName);
 					taskAttach.setAttach_path(attach_path);
+					log.info("저장될 파일의정보 TaskID : {}   attachPk: {}",taskAttach.getTask_id(), taskAttach.getAttach_no());
 					taskAttachList.add(taskAttach);
 				}
-				// 파일 업데이트
-				if (!taskAttachList.isEmpty()) {
-					lkhDao.task_attach_create(taskAttachList);
-				}
-			}
+				lkhDao.task_attach_update(taskAttachList);
 
+			}
 			transactionManager.commit(txStatus);
 			log.info("transactionManager.commit(txStatus) --> 성공!!!!!!!!!");
 		} catch (Exception e) {
@@ -321,7 +365,6 @@ public class LkhServicveImpl implements LkhService {
 			fileDirectory.mkdirs();
 			System.out.println("업로드용 폴더 생성 : " + uploadPath);
 		}
-
 		String savedName = uid.toString() + "_" + originalName;
 		log.info("savedName: " + savedName);
 		File target = new File(uploadPath, savedName);
@@ -333,6 +376,7 @@ public class LkhServicveImpl implements LkhService {
 
 	@Override
 	public int upFileDelete(String deleteFileName) throws Exception {
+		log.info("물리적 파일 삭제 시작");
 		int result =0;
 		log.info("upFileDelete result-> " + deleteFileName);
 		File file = new File(deleteFileName);
@@ -352,16 +396,4 @@ public class LkhServicveImpl implements LkhService {
 		}
 		return result;
 	}
-
-
 }
-
-//		for (Map.Entry<String, List<String>> entry : mapData.entrySet()) {
-//			String key = entry.getKey();
-//			List<String> values = entry.getValue();
-//			System.out.print(key + ": ");
-//			for (String value : values) {
-//				System.out.print(value + " ");
-//			}
-//			System.out.println();
-//		}

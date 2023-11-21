@@ -6,7 +6,6 @@ import com.oracle.s202350101.service.kjoSer.ChatRoomService;
 import com.oracle.s202350101.service.kjoSer.ClassRoomService;
 import com.oracle.s202350101.service.kjoSer.UserInfoService;
 import com.oracle.s202350101.service.mkhser.MkhService;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +40,14 @@ public class CommonController {
 		return "template_frame";
 	}
 
+//	@RequestMapping(value = "/main_header")
+//	public String mainHeaderPage(Model model) {
+//		List<UserInfo> chatUIList = uis.findbyclassuser(1);		//	사용자 클래스ID 필요함.	추후 로그인이 완성되면 변경 예정
+//		log.info(String.valueOf(chatUIList.size()));
+//		model.addAttribute("chatUIList", chatUIList);
+//
+//		return "main_header";
+//	}
 	@ResponseBody
 	@RequestMapping(value = "/main_header")
 	public ModelAndView mainHeaderPage(HttpServletRequest request, Model model) {
@@ -51,17 +58,12 @@ public class CommonController {
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		log.info("userInfo: {}",userInfoDTO);
-		//	로그인 사용자와 같은 반 학생들 조회 && 채팅을 허용한.(어드민제외)
-		List<UserInfo> chatUIList = null;
-		if (userInfoDTO.getUser_id().equals("admin")) {
-			chatUIList = uis.findAllUser();
-		} else {
-
-			chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
-		}
-
+		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
+		List<UserInfo> chatUIList = uis.findbyclassuser(userInfoDTO);
 		//	사용자가 참여중인 채팅방 조회
 		List<ChatRoom> chatRooms = chs.findByUserId(userInfoDTO);
+
+
 
 		model.addAttribute("userInfo", userInfoDTO);
 		model.addAttribute("chatUIList", chatUIList);
@@ -71,6 +73,15 @@ public class CommonController {
 		return new ModelAndView("main_header");
 	}
 
+
+//	@ResponseBody
+//	@RequestMapping(value = "/main_header_chat")
+//	public List<UserInfo> main_header_chat(Model model) {
+//
+//
+//		List<UserInfo> chatUIList = uis.findbyclassuser(1);		//	사용자 클래스ID 필요함.	추후 로그인이 완성되면 변경 예정
+//		return chatUIList;
+//	}
 	@RequestMapping(value = "/main_menu")
 	public String mainMenuPage(Model model) {
 		return "main_menu";

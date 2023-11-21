@@ -169,7 +169,7 @@ $(function(){
 							</tr>
 							<tr>
 								<td>작성일</td>
-								<td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
+								<td><fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/></td>
 							</tr>
 							<tr>
 								<td>제목</td>
@@ -187,7 +187,7 @@ $(function(){
 							</c:if>
 							<tr style="height:100px">
 								<td>본문</td>
-								<td>${board.doc_body}</td>
+								<td><pre>${board.doc_body}</pre></td>
 							</tr>
 						</table>
 						<!-- 댓글 작성 -->

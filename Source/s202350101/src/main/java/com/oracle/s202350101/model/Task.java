@@ -4,9 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.ScriptAssert;
 
@@ -28,8 +25,8 @@ public class Task {
 		@NotEmpty(message = "이 항목은 필수입니다")
 		private String	task_content;
 
-		private java.sql.Date task_stat_time;
-		private java.sql.Date task_end_itme;
+		private java.sql.Date task_start_time;
+		private java.sql.Date task_end_time;
 		private java.sql.Date create_time;
 		@NotNull(message = "이 항목은 필수입니다")
 		private String	task_priority;

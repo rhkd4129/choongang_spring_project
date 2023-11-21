@@ -36,7 +36,7 @@
 					(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 			FROM PRJ_BD_DATA p, USER_INFO u 
 			WHERE p.user_id = u.user_id			
-			ORDER BY doc_group DESC, doc_step
+			ORDER BY p.doc_group DESC, p.doc_step
 		)
 		WHERE project_id = #{project_id} 
 		AND 
@@ -73,7 +73,7 @@
 					  FROM PRJ_BD_DATA p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
 					  AND p.project_id = #{project_id} 
-					  ORDER BY doc_group DESC, doc_step) a
+					  ORDER BY p.doc_group DESC, p.doc_step) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
@@ -96,7 +96,7 @@
 					  WHERE p.user_id = u.user_id 
 					  AND p.project_id = #{project_id} 
 					  AND p.doc_group = #{doc_group}
-					  ORDER BY doc_group DESC, doc_step) a
+					  ORDER BY p.doc_group DESC, p.doc_step) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
@@ -117,7 +117,7 @@
 							(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 					  FROM PRJ_BD_DATA p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
-					  ORDER BY doc_group DESC, doc_step) a
+					  ORDER BY p.doc_group DESC, p.doc_step) a
 			WHERE
 			a.project_id = #{project_id} 
 			AND 

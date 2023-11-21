@@ -282,7 +282,7 @@ $(document).ready(function(){
 							</tr>
 							<tr style="height:100px">
 								<td>본문</td>
-								<td>${board.doc_body}</td>
+								<td><pre>${board.doc_body}</pre></td>
 							</tr>
 						</table>
 						<!-- 댓글 작성 -->

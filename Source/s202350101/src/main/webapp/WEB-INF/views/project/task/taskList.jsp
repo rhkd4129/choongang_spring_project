@@ -46,8 +46,8 @@
                     "<td>" + data[i].user_name + "</td>" +
                     "<td>" + data[i].project_s_name + "</td>" +
                     "<td><a href='task_detail?task_id=" + data[i].task_id + "&project_id=" + data[i].project_id + "'>" + data[i].task_subject + "</a></td>" +
-                    "<td>" + data[i].task_stat_time + "</td>" +
-                    "<td>" + data[i].task_end_itme + "</td>" +
+                    "<td>" + data[i].task_start_time + "</td>" +
+                    "<td>" + data[i].task_end_time + "</td>" +
                     "<td>" + statusText + "</td>" +
                     "<td>" + task_priority + "</td>" +
                     "</tr>";
@@ -84,9 +84,8 @@
             var table = $("#table1"); // 기본 테이블
             var button = $("#sort");
             console.log(keyword_division,keyword);
-            if (button.text() === "내") {
-                button.text("오");
-                $("image").src=""
+            if (button.val()=== "내") {
+                button.val("오");
                 $.ajax({
                     url: '/task_time_desc',
                     data:{"keyword":keyword, "keyword_division":keyword_division},
@@ -98,7 +97,7 @@
                     }
                 });
             } else {
-                button.text("내");
+                button.val("내");
                 console.log(keyword_division,keyword);
                 $.ajax({
                     url: '/task_time_acsc',
@@ -127,7 +126,32 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1>Task List</h1>
+       		<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">작업 목록</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:15px;height:45px">
+					<span class="apptitle">작업 목록</span>
+				</div>
+			</div>
+        
+        
         <div class="container border border-black p-3">
             <form action="task_list" method="GET">
                 <div class="form-row">
@@ -158,10 +182,20 @@
 
 
             <c:choose>
-                <c:when test="${not empty param.status}">
+                <c:when test="${true== param.status}">
                     <div class="alert alert-success" role="alert">저장 완료!</div>
                 </c:when>
+
+                <c:when test="${true== update_param.status}">
+                    <div class="alert alert-warning" role="alert">수정완료! ...</div>
+                </c:when>
+
+                <c:when test="${false== param.status}">
+                    <div class="alert alert-warning" role="alert">서버에러 ...</div>
+                </c:when>
             </c:choose>
+
+
             <c:set var="num" value="${page.total - page.start + 1 }"></c:set>
 
             <div class="table-responsive">
@@ -173,7 +207,8 @@
                         <th>Project Step</th>
                         <th>작업명</th>
                         <th>작업시작일</th>
-                        <th>마감일<button id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')"><img  src="/images/sort.png" width="15px" height="15px" alt="정렬"></button></th>
+                        <th> 마감일 <button value="내" class="btn btn-outline-primary" id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')"> <img style ="width: 15px; height: 15px;" src="images/sort_icon.png"></button></th>
+
                         <th>우선순위</th>
                         <th>작업상태</th>
                     </tr>
@@ -185,8 +220,8 @@
                             <td>${task.user_name}</td>
                             <td>${task.project_s_name}</td>
                             <td><a href='task_detail?task_id=${task.task_id}&project_id=${task.project_id}'>${task.task_subject}</a></td>
-                            <td>${task.task_stat_time}</td>
-                            <td>${task.task_end_itme}</td>
+                            <td>${task.task_start_time}</td>
+                            <td>${task.task_end_time}</td>
                             <td>
                                 <c:choose>
                                     <c:when test="${task.task_priority == '0'}">낮음</c:when>

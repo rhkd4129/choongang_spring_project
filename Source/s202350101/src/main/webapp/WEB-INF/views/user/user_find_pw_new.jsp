@@ -37,6 +37,24 @@ select {
 </style>
 
 <script type="text/javascript">
+
+	/* 비밀번호 확인 */
+	$(document).ready(function(){
+		$("#user_pw2").blur(function(){
+			if($("#user_pw2").val() != "" && $("#user_pw1").val() != ""){
+				if($("#user_pw2").val() == $("#user_pw1").val()){
+					$(".successPwChk").text("비밀번호가 일치합니다.");
+					$(".successPwChk").css("color", "green");
+					$("#pwDoubleChk").val("true");
+				}else{
+					$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
+					$(".successPwChk").css("color", "red");
+					$("#pwDoubleChk").val("false");
+				}
+			}
+		});
+	});
+	
 	function updatePw() {
 	//	alert("클릭했음");
 		var user_pw = $('#user_pw1').val();
@@ -47,7 +65,7 @@ select {
 		console.log(user_id + " / " + user_pw);
 		
 		if (user_pw != user_pw2) {
-			alert("틀렸습니다");
+			$(".successPwChk").text("비밀번호를 확인해 주세요.");
 		} else {
 			alert("수정되었습니다");
 			location.href = sendurl;
@@ -64,6 +82,8 @@ select {
         <input type="hidden" name="user_id" id="user_id" value="${user_id }">
            새 비밀번호 : 	 <input type="password" name="user_pw1" id="user_pw1" required="required" placeholder="PW"><p>
            새 비밀번호 확인 : <input type="password" name="user_pw2" id="user_pw2" required="required" placeholder="PW2"><p>
+        <span class="point successPwChk"></span>
+        <input type="hidden" id="pwDoubleChk"/>
         <button type="button" onclick="updatePw()">확인</button>
   		</form>
         

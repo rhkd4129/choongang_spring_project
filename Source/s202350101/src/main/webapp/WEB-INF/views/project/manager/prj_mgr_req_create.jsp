@@ -58,58 +58,98 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
- 		<c:if test="${userInfoDTO.user_auth != 'manager' }">
-			<script type="text/javascript">
-				alert("팀장 권한이 없습니다. 관리자에게 문의하세요");
-				location.href = "/main";
-			</script>
-		</c:if>
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">프로젝트 생성</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:15px;height:45px">
+					<span class="apptitle">프로젝트 생성</span>
+				</div>
+			</div>
+			
+			<c:if test="${userInfoDTO.user_auth != 'manager' }">
+				<script type="text/javascript">
+					alert("팀장 권한이 없습니다. 관리자에게 문의하세요");
+					location.href = "/main";
+				</script>
+			</c:if> 
 		  
 			<form action="req_create" method="post">
 				<input type="hidden" name="project_id" value="${prjInfo.project_id }">
 				<input type="hidden" name="project_approve" value="1">
 				<input type="hidden" name="project_status" value="0">
-					<div class="container">
-					<p>
-					<h1 align="center">프로젝트 생성</h1><p>
+				
+				<div class="container" style="margin-left:0px">
 
-							<div class="input-group mb-3">
-					 			 <span class="input-group-text" id="basic-addon1">프로젝트명</span>
-					  			 <input type="text" name="project_name" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-							</div>
-							<div class="input-group mb-3">
-					 			 <span class="input-group-text" id="basic-addon1">프로젝트 기간</span>
-					  			 <input type="date" name="project_startdate" class="form-control" aria-label="project_startdate" aria-describedby="basic-addon1">
-					  			  ~ 
-					  			 <input type="date" name="project_enddate" class="form-control" aria-label="project_enddate" aria-describedby="basic-addon1">
-							</div>
-							<div class="input-group mb-3">
-					 			 <span class="input-group-text" id="basic-addon1">프로젝트 팀장</span>
-					 			 <input type="hidden" name="project_manager_id" value="${userInfo.user_id }">
-								 <input type="text" name="project_manager_name" value="${userInfo.user_name }" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-							</div>
-							<div class="input-group mb-3">
-					 			 <span class="input-group-text" id="basic-addon1">프로젝트 참여 멤버</span>
-					 			 <div style="display:block">
-						 			 <c:set var="num" value="0"></c:set>
-									 <c:forEach var="List" items="${listName }">
-									 	<c:if test="${userInfoDTO.user_id != List.user_id}">
-									 	 	<input type="checkbox" name="member_user_id" value="${List.user_id}"><label >${List.user_name}</label>	
-									 	</c:if>
-									 	<c:if test="${num % 8==0}"><p></c:if>
-									 	<c:set var="num" value="${num+1}"></c:set>			  			 	
-						  			 </c:forEach>
-					  			 </div> 
-							</div>
-							<div class="input-group mb-3">
-					 			 <span class="input-group-text">프로젝트 소개</span>
-					 			 <textarea class="form-control" name="project_intro" aria-label="With textarea" rows="10"></textarea>
-							</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend col-2">
+							<span class="input-group-text col-12" style="width:224px;height:35px;">프로젝트명</span>
+						</div>
+						<input type="text" name="project_name" class="form-control" aria-label="Username" >
+					</div>
+					
+					<div class="input-group mb-3">
+						<div class="input-group-prepend col-2">
+							<span class="input-group-text col-12" style="width:224px;height:35px;">프로젝트 기간</span>
+						</div>
+						<input type="date" name="project_startdate" class="form-control" aria-label="project_startdate" >
+						<input type="date" name="project_enddate" class="form-control" aria-label="project_enddate" >
+					</div>
+					
+					<div class="input-group mb-3">
+						<div class="input-group-prepend col-2">
+							<span class="input-group-text col-12" style="width:224px;height:35px;">프로젝트 팀장</span>
+						</div>
+						<input type="hidden" name="project_manager_id" value="${userInfo.user_id }">
+						<input type="text" name="project_manager_name" value="${userInfo.user_name }" class="form-control" aria-label="Username" readonly>
 					</div>
 	
-						<div align="right">
-							<button type="submit" class="btn btn-secondary">프로젝트 생성</button>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend col-2">
+							<span class="input-group-text col-12" style="width:224px;height:180px" >프로젝트 멤버</span>
 						</div>
+						<div class="form-control p-3" style="display:block;">
+							<div style="width:100%;line-height:40px;">
+								<c:set var="num" value="1"></c:set>
+								<c:forEach var="List" items="${listName }">
+									<c:if test="${userInfoDTO.user_id != List.user_id}">
+										<input type="checkbox" name="member_user_id" value="${List.user_id}"><label >${List.user_name}</label>
+										<c:if test="${num % 10==0}"><br></c:if>
+										<c:set var="num" value="${num+1}"></c:set>
+									</c:if>
+								</c:forEach>
+							</div>
+						</div>
+					</div>
+	
+					<div class="input-group mb-3">
+						<div class="input-group-prepend col-2">
+							<span class="input-group-text col-12" style="width:224px;height:224px" >프로젝트 소개</span>
+						</div>
+						<textarea class="form-control h-25" name="project_intro" aria-label="With textarea" rows="10"></textarea>
+					</div>
+	
+					<div align="right">
+						<button type="submit" class="btn btn-secondary">프로젝트 생성</button>
+					</div>
+					
+				</div>
 			</form>
 						
 
