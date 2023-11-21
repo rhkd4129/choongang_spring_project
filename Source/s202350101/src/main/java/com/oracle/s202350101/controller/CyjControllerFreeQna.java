@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -91,7 +92,16 @@ public class CyjControllerFreeQna {
 		System.out.println("CyjControllerQna freeContent-> " + freeContent);
 		model.addAttribute("freeContent", freeContent);
 		
-		// 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		
+		if(userInfoDTO.getUser_id().equals(freeContent.getUser_id())) {
+			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(freeContent);
+		}	
+//		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
+
+		
+		// 게시글의 접속자와 작성자 비교 --> 같으면 1, 다르면 0
 		int result = 0;
 		if (loginId.equals(freeContent.getUser_id())) {
 			result = 1;
@@ -105,29 +115,50 @@ public class CyjControllerFreeQna {
 		System.out.println("CyjControllerQna freeCount-> " + freeCount);
 		model.addAttribute("freeContent", freeContent);
 		
-		// 자유_댓글리스트
-		List<BdFree> freeComtList = cs.freeComtList(doc_no);
-		System.out.println("CyjControllerQna freeComtList-> " + freeComtList);
+		// 자유_댓글리스트 보여주기 위해 
+		List<BdFreeComt> freeComtList = cs.freeComtList(doc_no);
+		System.out.println("CyjControllerQna freeComtList.size()-> " + freeComtList.size());
 		model.addAttribute("freeComtList", freeComtList);
 		
 		return "board/board_free/board_free_content";
 	}
 	
-	// 자유_댓글
+	// 자유_댓글 입력
+	@PostMapping(value = "comtFreeComt") 
+	public String comtFreeComt(HttpServletRequest request, BdFreeComt bdFreeComt){
+		System.out.println("CyjControllerQna comtFreeComt Start----------------------");
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// loginId : 댓글 입력 작성자
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("댓글 입력 작성자 loginId-> " + loginId);
+		bdFreeComt.setUser_id(loginId);
+		
+		// 댓글 입력  (이벤트도 사용) 
+		int comtFreeComtInsert = cs.comtInsert(bdFreeComt);
+		System.out.println("CyjControllerQna comtFreeComtInsert-> " + comtFreeComtInsert);
+		
+		return "redirect:/free_content?doc_no="+bdFreeComt.getDoc_no();
+	}
+	
+// ------------------------------------------------------------------
+
+	// 자유_댓글 삭제 
 	@ResponseBody
-	@RequestMapping(value = "ajaxFreeComt")
-	public List<BdFreeComt> ajaxfreeComt(BdFreeComt bdFreeComt){
-		System.out.println("CyjControllerQna ajaxFreeComt Start----------------------");
+	@RequestMapping(value = "free_comt_delete", method = RequestMethod.POST)
+	public int freeComtDelete(int doc_no, int comment_doc_no) {
+		System.out.println("CyjControllerQna free_comt_delete Start----------------------");
 		
-		// 댓글 입력
-		int ajaxComtInsert = cs.ajaxFreeComt(bdFreeComt);
-		System.out.println("CyjControllerQna ajaxComtInsert-> " + ajaxComtInsert);
+		BdFreeComt bdFreeComt = new BdFreeComt();
+		bdFreeComt.setDoc_no(doc_no);
+		bdFreeComt.setComment_doc_no(comment_doc_no);
 		
-		// 입력한 댓글 갖고 옴
-		List<BdFreeComt> freeComtList = cs.freeComtList(bdFreeComt);
-		System.out.println("CyjControllerQna freeComtList-> " + freeComtList);
+		int comtDelete = cs.freeComtDelete(bdFreeComt);   // 이벤트와 같이 쓰임
+		System.out.println("CyjControllerQna comtDelete-> " + comtDelete);
 		
-		return freeComtList;
+		return comtDelete;
 	}
 	
 // ------------------------------------------------------------------
@@ -218,7 +249,6 @@ public class CyjControllerFreeQna {
 		
 		String saveName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);  // 저장되는 파일명 
 		log.info("saveName: " + saveName);
-			
 		
 		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -295,7 +325,7 @@ public class CyjControllerFreeQna {
 		
 // ------------------------------------------------------------------
 
-	// 자유_삭제 
+	// 자유_게시글 삭제 
 	@ResponseBody
 	@RequestMapping(value = "freeDelete")
 	public int ajaxFreeDelete(int doc_no) {
@@ -306,7 +336,57 @@ public class CyjControllerFreeQna {
 		
 		return ajaxFreeDelete;
 	}
-	
+
+// ------------------------------------------------------------------
+
+	// 자유_read : 알림 조회용
+	@RequestMapping(value = "free_read")
+	public String freeRead(HttpServletRequest request, int doc_no, Model model) {
+		System.out.println("CyjControllerQna free_content Start----------------------");
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("상세페이지 접속자 loginId-> " + loginId);
+		
+		// 자유_상세
+		BdFree freeContent = cs.freeContent(doc_no);
+		System.out.println("CyjControllerQna freeContent-> " + freeContent);
+		model.addAttribute("freeContent", freeContent);
+		
+		
+		if(userInfoDTO.getUser_id().equals(freeContent.getUser_id())) {
+			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(freeContent);
+		}	
+//		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
+
+		
+		// 게시글의 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		int result = 0;
+		if (loginId.equals(freeContent.getUser_id())) {
+			result = 1;
+		} else {
+			result = 0;
+		}
+		model.addAttribute("result", result);
+		
+		// 자유_조회수
+		int freeCount = cs.freeCount(doc_no);
+		System.out.println("CyjControllerQna freeCount-> " + freeCount);
+		model.addAttribute("freeContent", freeContent);
+		
+		// 자유_댓글리스트 보여주기 위해 
+		List<BdFreeComt> freeComtList = cs.freeComtList(doc_no);
+		System.out.println("CyjControllerQna freeComtList.size()-> " + freeComtList.size());
+		model.addAttribute("freeComtList", freeComtList);
+		
+		return "board/board_free/board_free_read";
+	}
+
 // ----------------------------------------------------------------------		
 // ------------------------- qna 게시판 ------------------------------------
 	
@@ -335,6 +415,7 @@ public class CyjControllerFreeQna {
 		List<BdQna> qnaList = cs.qnaList(bdQna);
 		System.out.println("CyjControllerQna qnaList.size()-> " + qnaList.size());
 		model.addAttribute("qnaList", qnaList);
+		model.addAttribute("doc_group_list", bdQna.getDoc_group_list()); //답변글만 표시경우(알림)
 		
 		// 검색 분류 코드 가져오기
 		Code code = new Code();
@@ -343,7 +424,7 @@ public class CyjControllerFreeQna {
 		 
 		// qna_검색 분류 코드 가져오기
 		List<Code> codeList = cs.codeList(code); 
-		System.out.println("CyjControllerQna codeList-> " + codeList);
+		System.out.println("CyjControllerQna codeList.size()-> " + codeList.size());
 		model.addAttribute("codeList", codeList);
 		
 		return "board/board_qna/board_qna_list";
@@ -420,6 +501,7 @@ public class CyjControllerFreeQna {
 		}	
 		
 		// 새 글 입력 (원글)
+		bdQna.setAlarm_flag("");
 		int qnaInsert = cs.qnaInsert(bdQna);
 		System.out.println("CyjControllerQna qnaInsert-> " + qnaInsert);
 		model.addAttribute("qnaInsert", qnaInsert);
@@ -446,6 +528,13 @@ public class CyjControllerFreeQna {
 		BdQna qnaContent = cs.qnaContent(doc_no);
 		System.out.println("CyjControllerQna qnaContent-> " + qnaContent);
 		model.addAttribute("qnaContent", qnaContent);
+		
+		if(userInfoDTO.getUser_id().equals(qnaContent.getParent_doc_user_id())) {
+			// 현재 로그인 사용자가 답글의 부모글 작성자인 경우 답글 조회시 alarm_flag='Y'로 변경처리
+			System.out.println("부모글작성자가 답글조회시 alarm_flag='Y'로 변경처리");
+			int cyUpdateReplyAlarmCount = cs.cyUpdateReplyAlarmFlag(qnaContent);
+		}
+//		model.addAttribute("userInfoDTO", userInfoDTO); //로그인사용자 정보
 		
 		// 접속자와 작성자 비교 --> 같으면 1, 다르면 0
 		int result = 0;
@@ -481,6 +570,7 @@ public class CyjControllerFreeQna {
 		}
 		
 		// 새 글 작성 (답글)
+		bdQna.setAlarm_flag("N");
 		int qnaInsert = cs.qnaInsert(bdQna);
 		System.out.println("CyjControllerQna qnaInsert-> " + qnaInsert);
 		model.addAttribute("qnaInsert", qnaInsert);
@@ -569,10 +659,18 @@ public class CyjControllerFreeQna {
 	
 // ----------------------------------------------------------------------		
 		
-	// qna_삭제
+	// qna_게시글 삭제 : 일단 답글 없는 것만 가능
+	@ResponseBody
+	@RequestMapping(value = "ajax_qna_delete")
+	public int qnaDelete(int doc_no) {
+		System.out.println("CyjControllerQna qnaDelete Start");
+		
+		int qnaBoardDelete = cs.qnaDelete(doc_no);
+		System.out.println("qna 삭제-> " + qnaBoardDelete);
+		
+		return qnaBoardDelete;
+	} 
 	
-	
-
 	
 	
 	

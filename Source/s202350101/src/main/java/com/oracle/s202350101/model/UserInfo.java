@@ -48,6 +48,8 @@ public class UserInfo {
 	private int		del_status;
 	private String 	chat_room_ses;
 	
+
+	
 	// 조회용
 	private String  class_area;
 	private String  project_name;

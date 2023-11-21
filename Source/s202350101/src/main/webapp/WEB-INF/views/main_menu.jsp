@@ -33,7 +33,7 @@
 		내 글 모음
         </button>
         <div class="collapse show" id="mypost-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
             <li><a href="mypost_board_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded">내가 쓴 게시글</a></li>
             <li><a href="mypost_comment_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded">내가 쓴 댓글</a></li>
             <li><a href="mypost_good_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded">내가 추천한 게시글</a></li>
@@ -50,12 +50,12 @@
 		프로젝트
         </button>
         <div class="collapse show" id="project-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
             <li><a href="prj_mgr_req_create" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 생성</a></li>
             <li><a href="prj_mgr_step_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 단계 프로파일</a></li>
-            <li><a href="dashboard" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>프로젝트 Home</a></li>
+            <li><a href="prj_home" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>프로젝트 Home</a></li>
             <li><a href="task_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><img src="/common/images/icon_board.png" width="16" height="14" style="margin-top:2px;margin-right:8px">작업 목록</a></li>
-            <li><a href="task_board" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>작업 보드</a></li>
+            <li><a href="dashboard" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>작업 보드</a></li>
             <li><a href="task_timeline" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>타임 라인</a></li>
             <li><a href="prj_calendar" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>프로젝트 캘린더</a></li>
             <li><a href="prj_board_data_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>공지/자료</a></li>
@@ -74,7 +74,7 @@
 		전체 게시판
         </button>
         <div class="collapse show" id="board-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
             <li><a href="board_notify" class="link-body-emphasis d-inline-flex text-decoration-none rounded">전체 공지사항</a></li>
             <li><a href="board_event" class="link-body-emphasis d-inline-flex text-decoration-none rounded">이벤트</a></li>
             <li><a href="board_qna" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Q&A 게시판</a></li>
@@ -88,7 +88,7 @@
 		관리자 설정
         </button>
         <div class="collapse show" id="admin-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
             <li><a href="admin_projectmanager" class="link-body-emphasis d-inline-flex text-decoration-none rounded">팀장 권한 설정</a></li>
             <li><a href="admin_board" class="link-body-emphasis d-inline-flex text-decoration-none rounded">게시판 관리</a></li>
             <li><a href="admin_approval" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 관리</a></li>

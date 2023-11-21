@@ -29,5 +29,33 @@
 		insert into class_room
 		values ((SELECT COUNT(class_id) + 1 FROM class_room), #{class_room_num}, #{class_start_date}, #{class_end_date}, #{class_master}, #{class_name}, #{class_area})
 	</insert>
+<!--강의실 id를 기준으로 삭제-->
+	<delete id="deletebyId" parameterType="ClassRoom">
+		delete class_room
+		where class_id = #{class_id}
+	</delete>
+
+	<delete id="deleteUsInfobyUsClassId" parameterType="ClassRoom">
+		delete user_info
+		where class_id = #{class_id}
+	</delete>
+	<delete id="deleteTodobyClassId" parameterType="ClassRoom">
+		DELETE FROM todo T
+		WHERE T.user_id in  (
+			SELECT ui.user_id
+			FROM user_info ui
+			WHERE ui.class_id = #{class_id}
+		)
+	</delete>
+	<delete id="deleteUsEnvbyClassId" parameterType="ClassRoom">
+		delete from USER_ENV ue
+		where ue.user_id in
+			  (
+				  SELECT ui.user_id
+				  FROM user_info ui
+				  WHERE ui.class_id = #{class_id}
+			  )
+	</delete>
+
 </mapper>
 	 

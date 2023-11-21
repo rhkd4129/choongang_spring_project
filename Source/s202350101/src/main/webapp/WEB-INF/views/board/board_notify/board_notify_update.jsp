@@ -68,22 +68,21 @@
 				String strDateUpdate = simpleDateFormat.format(date);
 			%>
 			
-			<h3>수정</h3>
+			<h4 class ="pt-4">수정</h4>
 			
 			<form action="board_update2" method="post">
 			
 				<input type="hidden" name="doc_no" value="${free.doc_no}">  
 				  
-				<table border="1">
+				<table class="table table-sm">
 					<tr> <th>수정일</th> <td><%=strDateUpdate%></td> </tr>
 					<tr> <th>글 번호</th> <td>${free.doc_no}</td> </tr>
 					<tr> <th>제목</th> <td> <textarea  cols="50"  rows="1"    name="subject">${free.subject}</textarea> </td> </tr>
 					<tr> <th>본문</th> <td> <textarea  cols="50"  rows="10"   name="doc_body">${free.doc_body}</textarea> </td> </tr>
-					<tr> <th>첨부파일명</th> <td><input  id="file"  type="file" name="file"></td> </tr>
-					<tr> <td colspan="2"> <input type="submit" value="수정완료"></td> </tr>
+					<tr> <th>첨부파일</th> <td><input  id="file"  type="file" name="file"></td> </tr>
+					<tr> <td colspan="2"> <input type="submit" value="등록"></td> </tr>
 				</table>
 			</form>
-
 
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

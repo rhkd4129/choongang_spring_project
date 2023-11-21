@@ -27,7 +27,8 @@ public interface CyjDao {
 	int             	boardDelete(int doc_no);
 	List<BdFree>    	goodList(BdFree bdFree);
 	
-	// event 
+	// event
+	int 			   cyUpdateCommentAlarmFlag(BdFree eventContent);  // 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 	int                eventTotal();
 	List<BdFree>       listEvent(BdFree bdFree);
 	BdFree             eventContent(int doc_no);
@@ -35,11 +36,10 @@ public interface CyjDao {
 	int                eventInsert(BdFree bdFree);
 	int                eventUpdate(BdFree bdFree);
 	int                eventDelete(int doc_no);
-	List<BdFreeComt>   eventComt(int doc_no);
-	int                ajaxComt(BdFreeComt bdFreeComt);
+	List<BdFreeComt>   eventComt(BdFreeComt bdFreeComt);  // 페이징 작업땜에 객체로 바꿈 
+	int                comtInsert(BdFreeComt bdFreeComt);  
 	List<BdFree>       eventGood(BdFree bdFree);
-	List<BdFreeComt>   eventSelect(BdFreeComt bdFreeComt);
-//	List<BdFreeComt>   comtEventList(int doc_no);
+	int 			   eventComtCount(int doc_no);  // 해당 게시글에 대한 댓글 총 갯수
 	
 	// free
 	int                freeTotal();
@@ -47,14 +47,14 @@ public interface CyjDao {
 	List<BdFree>       freeTotalList(BdFree bdFree);
 	BdFree             freeContent(int doc_no);
 	int                freeCount(int doc_no);
-	List<BdFree>       freeComtList(int doc_no);
+	List<BdFreeComt>       freeComtList(int doc_no);
 	int                freeInsert(BdFree bdFree);
-	int                ajaxFreeComt(BdFreeComt bdFreeComt);
-	List<BdFreeComt>   freeSelect(BdFreeComt bdFreeComt);
 	int                bdFreeUpdate(BdFree bdFree);
 	int                freeDelete(int doc_no);
+	int				   freeComtDelete(BdFreeComt bdFreeComt);
 	
 	// qna
+	int 			   cyUpdateReplyAlarmFlag(BdQna qnaContent);  // 현재 로그인 사용자가 답글의 부모글 작성자인 경우 답글 조회시 alarm_flag='Y'로 변경처리
 	int                qnaSelectCount(BdQna bdQna);
 	List<BdQna>        qnaList();
 	List<BdQna>        qnaTotalList(BdQna bdQna);
@@ -69,10 +69,18 @@ public interface CyjDao {
 	int 			   searchCount(BdQna bdQna);   // select 한 검색 건수 
 	
 	// qna 추천
+	List<BdQna> 	   alarmList(BdQna bdQna);   // 알림 목록
+	int                alarmCount(BdQna bdQna);  // 답글 목록 열때 count
 	int				   qnaConfrim(BdQnaGood bdQnaGood);
 	int                qnaGoodInsert(BdQnaGood bdQnaGood);
 	int                qnaGoodUpdate(BdQnaGood bdQnaGood);
 	int                qnaGoodSelect(BdQna bdQna);
+	int                qnaDelete(int doc_no);
+
+	
+
+	
+
 	
 
 	

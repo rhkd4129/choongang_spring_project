@@ -72,5 +72,11 @@
             and user_info.user_id != #{user_id}
             and ue.env_chat = 'Y'
     </select>
+
+    <!--어드민 제외 모든 사용자 조회-->
+    <select id="findAllUserWithAdmin" resultType="UserInfo">
+        select *
+        from user_info
+    </select>
 </mapper>
 

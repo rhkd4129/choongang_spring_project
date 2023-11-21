@@ -9,7 +9,7 @@ public interface UserInfoDao {
 
 //<!--사용자 ID로 사용자 조회-->
 	UserInfo findbyuserId(UserInfo ui);
-//	특정 강의실 전체 학생 조회
+//<!--특정 강의실 내 어드민 제외 사용자 조회-->
 	List<UserInfo> findbyclassuser(UserInfo ui);
 //	특정 강의실 내 전체 학생 및 참여 프로젝트 조회
 	List<UserInfo> findbyClassUserProject(int cl_id);
@@ -22,4 +22,6 @@ public interface UserInfoDao {
 
 //<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
 	List<UserInfo> findbyClassUserAndChatEnv(UserInfo userInfo);
+//	어드민의 모든 학생 조회
+	List<UserInfo> findAllUser();
 }

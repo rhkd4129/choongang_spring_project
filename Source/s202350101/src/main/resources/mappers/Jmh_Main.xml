@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.oracle.s202350101.MainMapper">
+
+	<!-- 전체/이벤트/자유 문서 목록 -->
+	<select id="jmhMainBdFreeList" parameterType="BdFree" resultType="BdFree">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT b.*, u.user_name
+					  FROM BD_FREE b, USER_INFO u 
+					  WHERE b.user_id = u.user_id
+					  AND b.bd_category = #{bd_category} ) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
+	<!-- Q&A 문서 목록 -->
+	<select id="jmhMainBdQnaList" parameterType="BdQna" resultType="BdQna">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					 ( SELECT b.*, u.user_name, 
+					 	(SELECT cate_name 
+					 	 FROM CODE 
+					 	 WHERE UPPER(table_name) = 'BD_QNA' 
+					 	 AND UPPER(field_name) = 'BD_CATEGORY'
+					 	 AND cate_code = b.bd_category) bd_category_name
+					  FROM BD_QNA b, USER_INFO u
+					  WHERE b.user_id = u.user_id ) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+</mapper>

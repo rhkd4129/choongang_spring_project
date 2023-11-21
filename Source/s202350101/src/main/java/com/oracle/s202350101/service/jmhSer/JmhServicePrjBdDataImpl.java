@@ -2,13 +2,12 @@ package com.oracle.s202350101.service.jmhSer;
 
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjBdDataImpl;
+import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjBdData;
 import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdDataGood;
 import com.oracle.s202350101.model.Code;
@@ -21,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 
-	private final JmhDaoPrjBdDataImpl jmhDataDao;
+	private final JmhDaoPrjBdData jmhDataDao;
 
 	//총건수
 	@Override

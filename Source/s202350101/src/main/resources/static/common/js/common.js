@@ -54,11 +54,21 @@ function gotoPage(currentPage) {
 //변경전: 2023-11-09T01:44:25.000+00:00
 //변경후: 2023-11-09 01:44:25
 function formatDateTime(d) {
-	d = d.substring(0, d.indexOf('.'));
-	d = d.replace('T', ' ');
+	if(d.indexOf('.') != -1) {
+		d = d.substring(0, d.indexOf('.'));
+		d = d.replace('T', ' ');
+	}
 	return d; 
 }
 
+//변경전: 2023-11-09T01:44:25.000+00:00
+//변경후: 2023-11-09
+function formatDate(d) {
+	if(d.indexOf('T') != -1) {
+		d = d.substring(0, d.indexOf('T'));
+	}
+	return d;
+}
 
 /*
 // getUrlParams() 함수를 사용하여 쿼리 매개변수 추출

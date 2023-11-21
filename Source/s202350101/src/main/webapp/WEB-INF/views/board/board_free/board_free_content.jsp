@@ -9,7 +9,7 @@
 
 <!--CSS START -->
 <style type="text/css">
-	td, th {padding: 15px;}
+	td, th {margin: 80px;}
 </style>
 <!-- CSS END -->
 
@@ -37,15 +37,12 @@
 		   }
 		});
 	}
+
 	
-	
-	
-	
-	// 삭제
+	// 게시글 삭제
 	function freeDelete(doc_no, user_id) {
-//		alert("free 삭제 !!");
-		var result = 0;
-		var inputUserId = prompt('회원아이디를 입력하세요');
+//		alert("free 게시글 삭제 !!");
+		var inputUserId = prompt('회원 아이디를 입력하세요');
 		if (inputUserId != user_id) {
 			alert('회원ID가 올바르지 않습니다');
 			return;
@@ -68,6 +65,32 @@
 		   }
 		});
 	}
+	
+	// 댓글 삭제
+	function freeComtDelete(doc_no, comment_doc_no, user_id){
+		alert('free 댓글 삭제 doc_no: ' + doc_no);
+		alert('free 댓글 삭제 user_id: ' + user_id);
+		
+		var inputUserId = prompt('회원 아이디를 입력하세요');
+		if (inputUserId != user_id) {
+			alert("회원ID가 올바르지 않습니다");
+			return;
+		}
+		
+		$.ajax({
+			url 		: 'free_comt_delete',
+			type 		: 'POST',
+			dataType 	: 'text',
+			data 		: {'doc_no':doc_no, 'comment_doc_no':comment_doc_no},
+			success 	: function(data){
+				if(data == 1){
+					alert('삭제되었습니다');	
+					 window.location.href = "free_content?doc_no="+doc_no;		
+				}
+			}
+		});
+	}
+	
 
 	$(function() {	
 	    $.ajax({
@@ -93,28 +116,9 @@
 	            $('#footer').html(data);
 	        }
 	    });
+
 	    
-	    // 자유_댓글
-	    $("#comment-free").submit(function(e) {
-	    	e.preventDefault();  	
-	    	var freeComt = $(this).serialize();  // this = #comment-free
-	    	console.log(freeComt);
-	    	alert(freeComt);
-	    	$.ajax({
-	    		url      : 'ajaxFreeComt'
-	    	   ,type     : 'POST'
-	    	   ,dataType : 'json'
-	    	   ,data     : bdFreeComt
-	    	   ,success  : function(data) {
-	    		   console.log(data);
-	    	   }	    
-	    	});
-	    });
-	    
-	    
-	    
-	    
-	 
+
 	});
 
 </script>
@@ -136,20 +140,19 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 
-			<h3>상세 페이지</h3>
+			<h4 class ="pt-4">문서 조회</h4>
 			
-			<table border="1">
+			<table class="table table-hover">
 				<tr> <th>글 번호</th>       <td>${freeContent.doc_no}</td> </tr>
 				<tr> <th>이름</th>         <td>${freeContent.user_name}</td> </tr>
-				<tr> <th>작성일시</th>      <td>${freeContent.create_date}</td> </tr>
-				<tr> <th>수정일시</th>      <td>${freeContent.modify_date}</td> </tr>
+				<tr> <th>작성일</th>      <td>${freeContent.create_date}</td> </tr>
+				<tr> <th>수정일</th>      <td>${freeContent.modify_date}</td> </tr>
 				<tr> <th>게시종류</th>      <td>${freeContent.bd_category}</td> </tr>
 				<tr> <th>제목</th>        <td>${freeContent.subject}</td> </tr>
 				<tr> <th>본문</th>        <td>${freeContent.doc_body}</td> </tr>
 				<tr> <th>조회수</th>       <td>${freeContent.bd_count}</td> </tr>
 				<tr> <th>추천</th>        <td>${freeContent.good_count}</td> </tr>
-				<tr> <th>첨부파일명</th>    <td>${freeContent.attach_name}</td> </tr>	
-				<tr> <th>첨부파일명</th>     <td>${freeContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${freeContent.attach_path}/${freeContent.attach_name}"></td> </tr>	
+				<tr> <th>첨부파일</th>     <td>${freeContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${freeContent.attach_path}/${freeContent.attach_name}"></td> </tr>	
 				
 				
 				<tr>
@@ -169,28 +172,29 @@
 			
 			
 			<!-- 추천 -->
-			<button type="button" id="free_btn" onclick="freeGood(${freeContent.doc_no})">추천 ${freeContent.good_count}</button>
+			<button class="mb-4" type="button" id="free_btn" onclick="freeGood(${freeContent.doc_no})">추천 ${freeContent.good_count}</button>
 
 
-			<!-- 댓글 -->
-			<form id="comment-free">
+			<!-- 댓글 등록 -->
+			<div>댓글</div>
+			<form action="comtFreeComt" method="post">
 				<input type="hidden" id="doc_no"  name="doc_no"  value="${freeContent.doc_no }">
 				<input type="hidden" id="user_id" name="user_id" value="${freeContent.user_id }">
 				
-				<input type="text"   name="free_context">
+				<input type="text"   name="comment_context">
 				<input type="submit" value="댓글 등록">
 			</form>
 				
-			<table border="1">
+			<table class="table table-sm">
 				<tr>
-					<th>이름</th> <th>작성일시</th> <th>내용</th>
+					<th>이름</th> <th>작성일</th> <th>내용</th>
 				</tr>
-				
-				<c:forEach var="comt" items="${freeComtList }">
+				<c:forEach var="comt" items="${freeComtList}">
 					<tr>
 						<td>${comt.user_name}</td>
 						<td>${comt.create_date}</td>
 						<td>${comt.comment_context}</td>
+						<td><input type="button" value="댓글 삭제" onclick="freeComtDelete(${comt.doc_no}, ${comt.comment_doc_no}, '${comt.user_id}' )"></td>
 					</tr>
 				</c:forEach>
 			</table>

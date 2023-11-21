@@ -85,7 +85,7 @@ $(function() {
 								<td>제목</td>
 								<td><input type="text" class="form-control" name="subject" value="${subject}" required="required"></td>
 							</tr>
-							<c:if test="${parent_doc_no eq ''}">
+							<c:if test="${parent_doc_no eq '0'}">
 							<tr>
 								<td>공지여부</td>
 								<td>

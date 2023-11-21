@@ -31,6 +31,7 @@ public interface CyjService {
 	List<BdFree>      goodRow(BdFree bdFree);
 	
 	// event
+	int 			  cyUpdateCommentAlarmFlag(BdFree eventContent);  // 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 	int               eventCount();
 	List<BdFree>      eventList(BdFree bdFree);
 	BdFree            eventContent(int doc_no);
@@ -38,11 +39,10 @@ public interface CyjService {
 	int               eventInsert(BdFree bdFree);
 	int               eventUpdate(BdFree bdFree);
 	int               eventDelete(int doc_no);
-	List<BdFreeComt>  eventComt(int doc_no);
-	int               ajaxComt(BdFreeComt bdFreeComt);
+	List<BdFreeComt>  eventComt(BdFreeComt bdFreeComt);  // 페이징 작업땜에 객체로 바꿈 
+ 	int               comtInsert(BdFreeComt bdFreeComt);  
 	List<BdFree>      eventCount(BdFree bdFree);
-	List<BdFreeComt>  eventSelect(BdFreeComt bdFreeComt);
-//	List<BdFreeComt> 	  ajaxComtListEvent(int doc_no);
+	int 			  eventComtCount(int doc_no);  // 해당 게시글에 대한 댓글 총 갯수
 	
 	// 자유
 	int               freeTotal();
@@ -50,14 +50,15 @@ public interface CyjService {
 	List<BdFree>      freeList(BdFree bdFree);
 	BdFree            freeContent(int doc_no);
 	int               freeCount(int doc_no);
-	List<BdFree>      freeComtList(int doc_no);
+	List<BdFreeComt>      freeComtList(int doc_no);
 	int               freeInsert(BdFree bdFree);
-	int               ajaxFreeComt(BdFreeComt bdFreeComt);
-	List<BdFreeComt>  freeComtList(BdFreeComt bdFreeComt);
 	int               freeUpdate(BdFree bdFree);
 	int               freeDelete(int doc_no);
+	int 			  freeComtDelete(BdFreeComt bdFreeComt);
 	
 	// qna
+	int 			  cyUpdateReplyAlarmFlag(BdQna qnaContent); // 현재 로그인 사용자가 답글의 부모글 작성자인 경우 답글 조회시 alarm_flag='Y'로 변경처리
+
 	int				  qnaCount(int doc_no);
 	List<BdQna>       qnaRow();
 	List<BdQna>       qnaList(BdQna bdQna);
@@ -74,6 +75,10 @@ public interface CyjService {
 	int               qnaGoodInsert(BdQnaGood bdQnaGood);
 	int               qnaGoodUpdate(BdQnaGood bdQnaGood);
 	int               qnaGoodSelect(BdQna bdQna);
+	int               qnaDelete(int doc_no);
+	
+	
+	
 	
 
 	

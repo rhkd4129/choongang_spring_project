@@ -11,6 +11,7 @@
 <!-- CSS END -->
 
 <!-- JS START -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -34,6 +35,7 @@
 		
 		$.ajax({
 			url			: '/main_center',
+			async		: false, //동기식 호출
 			dataType 	: 'text',
 			success		: function(data) {
 				$('#center').html(data);
@@ -47,6 +49,20 @@
 				$('#footer').html(data);
 			}
 		});
+		
+	});
+	
+	document.addEventListener('DOMContentLoaded', function() {
+	    var calendarEl = document.getElementById('calendar');
+	 	
+	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	       initialView : 'dayGridMonth'
+	    });
+	    
+	    calendar.render();
+
+		$(".fc-scrollgrid-sync-table").css("width", $(".fc-col-header").css("width"));
+	    $(".fc-scrollgrid-sync-table").css("height","290px");
 	});
 </script>
 </head>

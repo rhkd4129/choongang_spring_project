@@ -6,10 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjBdRepImpl;
+import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjBdRep;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
-import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 
-	private final JmhDaoPrjBdRepImpl jmhRepDao;
+	private final JmhDaoPrjBdRep jmhRepDao;
 
 	//총건수
 	@Override

@@ -1,6 +1,5 @@
 package com.oracle.s202350101.controller;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -9,19 +8,24 @@ import java.util.stream.Collectors;
 import com.oracle.s202350101.model.*;
 import com.oracle.s202350101.service.kjoSer.*;
 import lombok.Data;
+import org.hibernate.TypeMismatchException;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -46,17 +50,42 @@ public class KjoController {
     private final ChatMsgService CMser;            //	메시지
     private final PrjBdDataService PBDser;
 
+    private final MessageSource ms;
+
     //	반 생성 페이지 Get
     @GetMapping("/admin_add_class")
-    public String admin_add_class() {
+    public String admin_add_class(HttpServletRequest request) {
+
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
         log.info("admin_add_class GET");
         return "admin/admin_add_class";
     }
 
+    //	반 제거
+    @GetMapping("/admin_del_class")
+    public String admin_del_class(ClassRoom cr) {
+        log.info("admin_del_class POST");
+        int result = CRser.deletebyId(cr);
+        return "redirect:/admin_class_list";
+    }
     //	반 생성 Post
     @PostMapping("/admin_add_class")
-    public String admin_add_class(ClassRoom cr, BindingResult bindingResult) {
+    public String admin_add_class(@Validated @ModelAttribute("cr")
+                                  ClassRoom cr, BindingResult bindingResult, Model model) {
         log.info("admin_add_class POST");
+
+        if (bindingResult.hasErrors()) {
+            log.info("admin_add_class POST .ERROR : {}", bindingResult);
+            model.addAttribute("cr", cr);
+            log.info(bindingResult.getFieldError().toString());
+//            bindingResult.reject("typeMismatch.java.lang.Integer", "알맞은 숫자를 입력하세요" );
+            log.info("admin_add_class POST .ERROR Return");
+            return "admin/admin_add_class";
+        }
+
         int result = CRser.saveClassRoom(cr);            // 강의실 생성
         log.info("반 생성 개수: " + result);
         return "redirect:/admin_class_list";
@@ -64,16 +93,36 @@ public class KjoController {
 
     //	반 목록 페이지	GET
     @GetMapping("/admin_class_list")
-    public String admin_class_list(Model model) {
+    public String admin_class_list(HttpServletRequest request, Model model) {
+
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
+
         log.info("admin_class_list");
         List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
+
+        //  날짜처리
+        SimpleDateFormat newDtFormat = new SimpleDateFormat("yy-MM-dd");
+        for (int i = 0; i < CRList.size(); i++) {
+            Date startDate = CRList.get(i).getClass_start_date();
+            Date endDate = CRList.get(i).getClass_end_date();
+            CRList.get(i).setStartDate(newDtFormat.format(startDate));
+            CRList.get(i).setEndDate(newDtFormat.format(endDate));
+        }
+
         model.addAttribute("CRList", CRList);
         return "admin/admin_class_list";
     }
 
     //	게시판 관리 페이지	GET
     @GetMapping("/admin_board")
-    public String admin_board(@RequestParam(defaultValue = "1") String currentPage, ClassRoom cr, Model model) {
+    public String admin_board(@RequestParam(defaultValue = "1") String currentPage, ClassRoom cr, Model model, HttpServletRequest request) {
+        UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
 
         log.info("admin_board");
         /*------------------비즈니스 로직--------------------*/
@@ -134,9 +183,6 @@ public class KjoController {
     @ResponseBody
     @GetMapping("/admin_board_pbd_ajax")
     public KjoResponse admin_board_pbd_ajax(PrjBdData prjBdData, String currentpage) {
-//        PrjBdData pbd = new PrjBdData();
-//        pbd.setProject_id(prjBdData.getProject_id());
-//        pbd.setClass_id(prjBdData.getClass_id());
         KjoResponse res = new KjoResponse();
         int totcnt = PBDser.findByClassProjectId(prjBdData).size();
 //		페이징	글 개수 : 5		이벤트 수	현재 페이지	목록 노출 수
@@ -217,6 +263,9 @@ public class KjoController {
         //	로그인 사용자DTO
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 
+//        if (!userInfoDTO.getUser_id().equals("admin")) {
+//            return "/main";
+//        }
         /*------------------비즈니스 로직--------------------*/
         //	채팅할 대상자와 로그인 사용자의 채팅방 조회
         ChatRoom cr = new ChatRoom();
@@ -298,7 +347,6 @@ public class KjoController {
         res.setSecobj(user.getUser_id());
 //	요청의 피주체
         res.setTrdobj(cr.getReceiver_id());
-
         return res;
     }
 
@@ -310,6 +358,10 @@ public class KjoController {
         log.info("captainManage");
         //	로그인 사용자DTO
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+//        if (!userInfo.getUser_id().equals("admin")) {
+//            log.info("admin아님.");
+//            return "/main";
+//        }
         /*------------------비즈니스 로직--------------------*/
 // 모든 강의실 조회
         List<ClassRoom> CRList = CRser.findAllClassRoom();
@@ -365,6 +417,7 @@ public class KjoController {
     public ResponseEntity<?> auth_mod(@RequestBody KjoRequestDto kjorequest) {
         //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
         int result = UIser.auth_modify(kjorequest);
+        //  HTTP 200과 db 업데이트 수 반환 result == 15가 정상.
         return ResponseEntity.ok(result);
     }
 
@@ -382,7 +435,7 @@ public class KjoController {
     @ResponseBody
     public ResponseEntity<?> admin_pbd_del(@RequestBody KjoRequestDto kjorequest) {
 //	firList: prj_delbox , secList:doc_delbox
-        //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
+    //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
         int result = PBDser.delpbd(kjorequest);
 
         return ResponseEntity.ok(result);

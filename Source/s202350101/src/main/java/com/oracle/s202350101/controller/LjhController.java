@@ -120,7 +120,7 @@ public class LjhController {
 		
 		int total = meetingList.size();
 		
-		Paging paging = new Paging(total, currentPage, 6);
+		Paging paging = new Paging(total, currentPage, 7);
 		meeting.setStart(paging.getStart());
 		meeting.setEnd(paging.getEnd());
 		
@@ -202,7 +202,7 @@ public class LjhController {
 		
 		int meeting_id = meeting.getMeeting_id();
 		model.addAttribute("meeting_id", meeting_id);
-
+		
 		return "redirect:prj_meeting_report_read?meeting_id="+meeting.getMeeting_id()+"&project_id="+meeting.getProject_id();
 	}
 	
@@ -400,73 +400,99 @@ public class LjhController {
 	// 회의일정 알림
 	@MessageMapping("/meet")
 	@SendTo("/noti/meeting")
-	public List<Meeting> selMeetingList(HashMap<String, String> map) {
+	public LjhResponse selMeetingList(HashMap<String, String> map) {
 		System.out.println("LjhController selMeetingList Start");	
 		
- 		int loginUserPrj = Integer.parseInt(map.get("project_id"));		// 세션에 저장된 userinfo의 project_id
- 		String loginUserId = map.get("user_id");
+		LjhResponse ljhResponse = new LjhResponse();
 		
-		System.out.println("loginUserPrj : " + loginUserPrj);
-		System.out.println("loginUserId : " + loginUserId);
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUser_id(map.get("user_id"));
 		
 		List<Meeting> meetingList = new ArrayList<Meeting>();
-		
 		// 알림 - 접속한 회원 별 회의일정 select
 		meetingList = ljhs.getUserMeeting(map);
-		
 		// meetingList = ljhs.getMeetingList(loginUserPrj);
 		System.out.println("meetingList.size() -> " + meetingList.size());
 		
-		return meetingList;
+		ljhResponse.setFirList(meetingList);
+		ljhResponse.setObj(userInfo);
+		
+		return ljhResponse;
 	}
 	
 	// 게시판 답글 알림 (프로젝트 업무보고 + 질문 게시판 통합)
 	@MessageMapping("/rep")
 	@SendTo("/noti/boardRep")
-	public List<PrjBdData> getBoardRep(HashMap<String, String> map) {
+	public LjhResponse getBoardRep(HashMap<String, String> map) {
 		System.out.println("LjhController getBoardRep Start");
+		
+		LjhResponse ljhResponse = new LjhResponse();
 		
 		List<PrjBdData> boardRep = new ArrayList<PrjBdData>();
 		boardRep = ljhs.getBoardRep(map);
 		
 		System.out.println("boardRep.size() -> " + boardRep.size());
 		
-		return boardRep;
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUser_id(map.get("user_id"));
+		
+		ljhResponse.setFirList(boardRep);
+		ljhResponse.setObj(userInfo);
+		
+		return ljhResponse;
 	}
 	
 	// 게시판 댓글 알림 (공용게시판 + 프로젝트 업무보고 + 프로젝트 공지/자료 통합)
 	@MessageMapping("/comt")
 	@SendTo("/noti/boardComt")
-	public List<PrjBdData> getBoardComt(HashMap<String, String> map) {
+	public LjhResponse getBoardComt(HashMap<String, String> map) {
 		System.out.println("LjhController getBoardComt Start");
+		
+		LjhResponse ljhResponse = new LjhResponse();
 		
 		List<PrjBdData> boardComt = new ArrayList<PrjBdData>();
 		boardComt = ljhs.getBoardComt(map);
 		
 		System.out.println("boardComt.size() -> " + boardComt.size());
 		
-		return boardComt;
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUser_id(map.get("user_id"));
+		
+		ljhResponse.setFirList(boardComt);
+		ljhResponse.setObj(userInfo);
+		
+		return ljhResponse;
 	}
 	
 	// 프로젝트 생성 승인 알림 (팀장)
 	@MessageMapping("/approve")
 	@SendTo("/noti/prjapprove")
-	public List<PrjInfo> getPrjApprove(HashMap<String, String> map) {
+	public LjhResponse getPrjApprove(HashMap<String, String> map) {
 		System.out.println("LjhController getPrjApprove Start");
+		
+		LjhResponse ljhResponse = new LjhResponse();
 		
 		List<PrjInfo> prjApprove = new ArrayList<PrjInfo>();
 		prjApprove = ljhs.getPrjApprove(map);
 		
 		System.out.println("prjApprove.size() -> " + prjApprove.size());
 		
-		return prjApprove;
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUser_id(map.get("user_id"));
+		
+		ljhResponse.setFirList(prjApprove);
+		ljhResponse.setObj(userInfo);
+		
+		return ljhResponse;
 	}
 	
 	// 프로젝트 생성 신청 - admin 계정만 해당
 	@MessageMapping("/prj")
 	@SendTo("/noti/newprj")
-	public List<PrjInfo> getNewPrj(HashMap<String, String> map) {
+	public LjhResponse getNewPrj(HashMap<String, String> map) {
 		System.out.println("LjhController getNewPrj Start");
+		
+		LjhResponse ljhResponse = new LjhResponse();
 		
 		List<PrjInfo> newPrjList = new ArrayList<PrjInfo>();
 		
@@ -478,8 +504,14 @@ public class LjhController {
 			
 			System.out.println("newPrjList.size() -> " + newPrjList.size());
 		}
+
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUser_id(map.get("user_id"));
 		
-		return newPrjList;
+		ljhResponse.setFirList(newPrjList);
+		ljhResponse.setObj(userInfo);
+		
+		return ljhResponse;
 	}
 	
 	

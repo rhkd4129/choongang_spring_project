@@ -79,7 +79,7 @@
 			    </ol>
 			</nav>
 			<div class="container-fluid">
-				<div style="margin-top:20px;height:45px">
+				<div style="margin-top:15px;height:45px">
 					<span class="apptitle">완료 프로젝트 목록</span>
 				</div>
 			</div>

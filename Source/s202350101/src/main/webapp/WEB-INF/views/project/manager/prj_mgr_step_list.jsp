@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header_main.jsp" %>
 <!DOCTYPE html>
@@ -207,125 +207,153 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-
-  	<c:if test="${userInfoDTO.user_auth != 'manager' }">
-			<script type="text/javascript">
-				alert("팀장 권한이 없습니다. 관리자에게 문의하세요");
-				location.href = "/main";
-			</script>
-	</c:if>
-	
-	<c:if test="${ProjectNotFound == 'TRUE'}">
-			<script type="text/javascript">
-				alert("프로젝트가 존재하지 않습니다");
-				location.href = "/main";
-			</script>
-	</c:if>
-	
-	
-		<div id="divPrjInfo">
-			<h2>프로젝트 정보</h2>
-			<hr>
-			<input type="hidden" name="project_id" value="${prjInfo.project_id }">
-			<input type="hidden" name="project_approve" value="${prjInfo.project_approve}" >
-			<table class="table">
-			<colgroup>
-			<col width="150">
-			<col width="*">
-			</colgroup> 
-				<tr>
-					<th>프로젝트명</th>
-					<td>${prjInfo.project_name}</td>
-				</tr>
-				<tr>
-					<th>프로젝트 기간</th>
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${prjInfo.project_startdate}"/> ~ 
-						<fmt:formatDate pattern="yyyy-MM-dd" value="${prjInfo.project_enddate}"/></td>
-				</tr>
-				<tr>
-					<th>프로젝트 팀장</th>
-					<td>${prjInfo.project_manager_name}</td>
-				</tr>
-				<tr>
-					<th>프로젝트 팀원</th>
-					<td><c:forEach var = "member" items="${listMember}" >
-							<c:if test="${userInfoDTO.user_id != member.user_id}">
-							${member.user_name }
-							</c:if>
-			      		</c:forEach></td>
-				</tr>					
-				<tr>
-					<th>프로젝트 소개</th>
-					<td>${prjInfo.project_intro}</td>
-				</tr>
-				<tr>
-					<th>승인상태</th>
-					<td>${prjInfo.project_approve_name}</td>
-				</tr>		
-				<tr>
-					<th>진행상태</th>
-					<td>
-						<span id="idPrjStauts">
-							<c:if test="${prjInfo.project_status == 0}">예정</c:if>
-							<c:if test="${prjInfo.project_status == 1}">진행중</c:if>
-							<c:if test="${prjInfo.project_status == 2}">완료</c:if>
-						</span>
-					</td>
-				</tr>
-				<tr>	
-					<th>첨부파일</th>
-					<td><a href="javascript:popup('/upload/${prjInfo.attach_path}',800,600)">${prjInfo.attach_name}</a></td>
-				</tr>					
-			</table>
-			
-
-				<div align="right">
-						 	<button type="button" id="startBtn" style="display:none;" class="btn btn-secondary" onclick="prj_start()">프로젝트 시작</button>
-						 	<button type="button" id="endBtn" style="display:none;" class="btn btn-secondary" onclick="prj_end()">프로젝트 종료</button>
-							<button type="button" class="btn btn-secondary" onclick="list_up()">수정</button>
-						</div>
+			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">프로젝트 정보</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:15px;height:45px">
+					<span class="apptitle">프로젝트 정보</span>
 				</div>
-			<br>
-			<hr>
-			
-			<c:if test="${prjInfo.project_approve eq 2}">
-			<h2>프로젝트 단계 추가</h2>
-			<hr>
-
-			<div align="right">
-				<button type="button" class="btn btn-secondary" onclick="prj_order()">단계설정</button>
-			 	<button type="button" class="btn btn-secondary" onclick="location.href='prj_mgr_step_insert?project_id=${prjInfo.project_id}'">추가</button><p>
 			</div>
 			
-			<c:forEach var="Step" items="${titleList }" varStatus="status">
-				<span style="display: none;" id="Step_${status.count}">${Step.project_step_seq}</span>
-				<div class="input-group mb-3" id="PrjStep">
-		 			 <span class="input-group-text">
-		 			 	<select id="project_order" name="project_order_${status.count}" class="form-select">
-		 			 		<c:forEach var="order" begin="1" end="${titleListCount}">
-		 			 			<option  value="${order}" 
-		 			 				<c:if test="${order == Step.project_order}">selected</c:if>
-		 			 			>단계${order}</option>
-		 			 		</c:forEach>	
-		 			 	</select>
-		 			 </span>
-					 <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="prjStep" value="${Step.project_s_name }">
-					 	<div class="d-grid gap-2 d-md-block" id="buttons">
-	  						<button class="btn btn-outline-secondary" type="button" onclick="location.href='prj_mgr_step_edit?project_id=${Step.project_id}&project_step_seq=${Step.project_step_seq}'">수정</button>
-	  						<button class="btn btn-outline-secondary" type="button" onclick="location.href='deleteStep?project_id=${Step.project_id}&project_step_seq=${Step.project_step_seq}'">삭제</button>
-						</div>
-				 </div>	
-			</c:forEach>
-
-				<div align="right">
-					 <button type="button" class="btn btn-secondary" onclick="location.href='prj_mgr_step_read?project_id=${prjInfo.project_id}'">포트폴리오 생성</button><p>
-				</div>
-		</c:if>		
-
-
-
+		   	<c:if test="${userInfoDTO.user_auth != 'manager' }">
+					<script type="text/javascript">
+						alert("팀장 권한이 없습니다. 관리자에게 문의하세요");
+						location.href = "/main";
+					</script>
+			</c:if>
 		
-
+			<c:if test="${ProjectNotFound == 'TRUE'}">
+					<script type="text/javascript">
+						alert("프로젝트가 존재하지 않습니다");
+						location.href = "/main";
+					</script>
+			</c:if>
+	
+			<div class="container" style="margin-left:0px">
+				<div id="divPrjInfo">
+					<hr>
+					<input type="hidden" name="project_id" value="${prjInfo.project_id }">
+					<input type="hidden" name="project_approve" value="${prjInfo.project_approve}" >
+					<table class="table">
+						<colgroup>
+						<col width="150">
+						<col width="*">
+						</colgroup> 
+						<tr>
+							<th>프로젝트명</th>
+							<td>${prjInfo.project_name}</td>
+						</tr>
+						<tr>
+							<th>프로젝트 기간</th>
+							<td><fmt:formatDate pattern="yyyy-MM-dd" value="${prjInfo.project_startdate}"/> ~ 
+								<fmt:formatDate pattern="yyyy-MM-dd" value="${prjInfo.project_enddate}"/></td>
+						</tr>
+						<tr>
+							<th>프로젝트 팀장</th>
+							<td>${prjInfo.project_manager_name}</td>
+						</tr>
+						<tr>
+							<th>프로젝트 팀원</th>
+							<td><c:forEach var = "member" items="${listMember}" >
+									<c:if test="${userInfoDTO.user_id != member.user_id}">
+									<input type="hidden" value="${member.user_id}"> 
+									<label>${member.user_name }</label>
+									</c:if>
+					      		</c:forEach></td>
+						</tr>					
+						<tr>
+							<th>프로젝트 소개</th>
+							<td>${prjInfo.project_intro}</td>
+						</tr>
+						<tr>
+							<th>승인상태</th>
+							<td>${prjInfo.project_approve_name}</td>
+						</tr>		
+						<tr>
+							<th>진행상태</th>
+							<td>
+								<span id="idPrjStauts">
+									<c:if test="${prjInfo.project_status == 0}">예정</c:if>
+									<c:if test="${prjInfo.project_status == 1}">진행중</c:if>
+									<c:if test="${prjInfo.project_status == 2}">완료</c:if>
+								</span>
+							</td>
+						</tr>
+						<tr>	
+							<th>첨부파일</th>
+							<td><a href="javascript:popup('/upload/${prjInfo.attach_path}',800,600)">${prjInfo.attach_name}</a></td>
+						</tr>					
+					</table>
+					
+		
+					<div align="right">
+					 	<button type="button" id="startBtn" style="display:none;" class="btn btn-secondary" onclick="prj_start()">프로젝트 시작</button>
+					 	<button type="button" id="endBtn" style="display:none;" class="btn btn-secondary" onclick="prj_end()">프로젝트 종료</button>
+						<button type="button" class="btn btn-secondary" onclick="list_up()">수정</button>
+					</div>
+				</div>
+	
+				<hr>
+				
+				<c:if test="${prjInfo.project_approve eq 2}">
+					<h2>프로젝트 단계 추가</h2>
+					<hr>
+		
+					<div class="form-group row">
+						<div class="col-lg-12">
+							<button class="btn btn-secondary float-left "  style="width:130px;height:35px" onclick="prj_order()">단계설정</button>
+		
+							<button class="btn btn-secondary float-lg-end"  style="width:130px;height:35px" onclick="location.href='prj_mgr_step_insert?project_id=${prjInfo.project_id}'">추가</button><P>
+						</div>
+					</div>
+		
+		<%--				<div align="right">--%>
+		<%--				<button type="button"  class="btn btn-secondary" onclick="prj_order()">단계설정</button>--%>
+		<%--			 	<button type="button"  class="btn btn-secondary" onclick="location.href='prj_mgr_step_insert?project_id=${prjInfo.project_id}'">추가</button><p>--%>
+		<%--			</div>--%>
+		<%--			--%>
+					<c:forEach var="Step" items="${titleList }" varStatus="status">
+						<span style="display: none;" id="Step_${status.count}">${Step.project_step_seq}</span>
+						<div class="input-group mb-3" id="PrjStep">
+				 			 <span class="input-group-text">
+				 			 	<select id="project_order" name="project_order_${status.count}" class="form-select">
+				 			 		<c:forEach var="order" begin="1" end="${titleListCount}">
+				 			 			<option  value="${order}" 
+				 			 				<c:if test="${order == Step.project_order}">selected</c:if>
+				 			 			>단계${order}</option>
+				 			 		</c:forEach>	
+				 			 	</select>
+				 			 </span>
+							 <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="prjStep" value="${Step.project_s_name }">
+							 	<div class="d-grid gap-2 d-md-block" id="buttons">
+			  						<button class="btn btn-outline-secondary" style="width:54px;height:54px" type="button" onclick="location.href='prj_mgr_step_edit?project_id=${Step.project_id}&project_step_seq=${Step.project_step_seq}'">수정</button>
+			  						<button class="btn btn-outline-secondary" style="width:54px;height:54px" type="button" onclick="location.href='deleteStep?project_id=${Step.project_id}&project_step_seq=${Step.project_step_seq}'">삭제</button>
+								</div>
+						 </div>	
+					</c:forEach>
+		
+					<div align="right">
+						 <button type="button" class="btn btn-secondary" style="width:130px;height:35px" onclick="location.href='prj_mgr_step_read?project_id=${prjInfo.project_id}'">포트폴리오 생성</button><p>
+					</div>
+				</c:if>		
+			</div>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
 		

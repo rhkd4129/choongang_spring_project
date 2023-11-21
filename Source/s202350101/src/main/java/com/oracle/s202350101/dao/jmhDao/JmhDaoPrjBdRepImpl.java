@@ -289,7 +289,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 		int resultCount = 0;	
 		try {
 			//----------------------------------------------------------------------------
-			resultCount = session.insert("jmhPrjBdRepUpdateCommentAlarmFlag", prjBdRep);
+			resultCount = session.update("jmhPrjBdRepUpdateCommentAlarmFlag", prjBdRep);
 			//----------------------------------------------------------------------------
 			System.out.println("resultCount->"+resultCount);
 			if(resultCount > 0) {

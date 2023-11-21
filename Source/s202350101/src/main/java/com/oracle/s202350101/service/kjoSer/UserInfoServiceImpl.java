@@ -29,7 +29,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfo findbyuserId(UserInfo userInfo) {
-        log.info("findbyuserId start ID : " + userInfo.getUser_id());
+//        log.info("findbyuserId start ID : " + userInfo.getUser_id());
         userInfo = UIdao.findbyuserId(userInfo);
         return userInfo;
     }
@@ -59,6 +59,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfo> findbyClassUserAndChatEnv(UserInfo userInfo) {
         log.info("findbyclassuser start");
         List<UserInfo> UIList = UIdao.findbyClassUserAndChatEnv(userInfo);
+        return UIList;
+    }
+//	어드민의 모든 학생 조회
+    @Override
+    public List<UserInfo> findAllUser() {
+        log.info("findAllUser start");
+        List<UserInfo> UIList = UIdao.findAllUser();
         return UIList;
     }
 

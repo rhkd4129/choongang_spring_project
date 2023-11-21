@@ -103,7 +103,7 @@
 			</table>
 			
 				<div align="right">
-					 <button type="submit" class="btn btn-secondary" >저장</button>
+					 <button type="submit" class="btn btn-secondary" style="width:130px;height:35px" >저장</button>
 				</div>
 
 </form>

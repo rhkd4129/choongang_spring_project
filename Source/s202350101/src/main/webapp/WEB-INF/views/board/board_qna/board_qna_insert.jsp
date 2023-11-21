@@ -12,7 +12,7 @@
 
 <!--CSS START -->
 <style type="text/css">
-		.error {color: red}
+	.error {color: red}
 </style>
 <!-- CSS END -->
 
@@ -72,76 +72,75 @@
 				String strDate = simpleDateFormat.format(date);
 			%>
 			
-			<h3>Q&A 작성</h3>
+			<h4 class ="pt-4">작성</h4>
 
 				<form:form action="qna_insert" method="post" modelAttribute="bdQna" class="mt-3" enctype="multipart/form-data">
-				<input type="hidden" name="parent_doc_user_id" value="${parent_doc_user_id}">
 				
-				<table class="table table-bordered">
-			        <tr>
-			            <th>작성일</th>
-			            <td><%=strDate %></td>
-			        </tr>
-			
-					<tr>
-			            <th>작성자</th>
-			            <td>
-			               ${userInfoDTO.user_name }
-			            </td>
-			        </tr>
-			        
-			        <tr>
-			            <th>질문 종류</th>
-			            <td>
-			            	<select id="bd_category" name="bd_category" size="1">
-			            		<option value="JAVA">JAVA</option>
-			            		<option value="JavaScript">JavaScript</option>
-			            		<option value="HTML/CSS">HTML/CSS</option>
-			            		<option value="ORACLE">ORACLE</option>
-			            		<option value="Spring">Spring</option>
-			            	</select>
-			            </td>
-			        </tr>
-			
+					<input type="hidden" name="parent_doc_user_id" value="${parent_doc_user_id}">
 					
-			        <tr>
-			            <th>제목</th>
-			            <td>
-			                <input type="text" name="subject" class="form-control">
-			                <form:errors path="subject" class="error"/>
-			            </td>
-			        </tr>
-			    
-			
-			        <tr>
-			            <th>본문</th>
-			            <td>
-			                <input type="text" name="doc_body" class="form-control">
-			                <form:errors path="doc_body" class="error"/>
-			            </td>
-			        </tr>
-			
-			        <tr>
-			            <th>파일첨부</th>
-			            <td>
-			                <div class="custom-file">
-			                    <input type="file" class="custom-file-input" id="file" name="file1">
-			                    <label class="custom-file-label" for="file"></label>
-			                </div>
-			            </td>
-			        </tr>
-			
-			        <tr>
-			            <td colspan="2">
-			                <input type="submit" value="등록" class="btn btn-primary">
-			            </td>
-			        </tr>
-			    </table>
+					<table class="table table-bordered">
+				        <tr>
+				            <th>작성일</th>
+				            <td><%=strDate %></td>
+				        </tr>
+				
+						<tr>
+				            <th>작성자</th>
+				            <td>
+				               ${userInfoDTO.user_name}
+				            </td>
+				        </tr>
+				        
+				        <tr>
+				            <th>질문 종류</th>
+				            <td>
+				            	<select id="bd_category" name="bd_category" size="1">
+				            		<option value="1">JAVA</option>
+				            		<option value="2">ORACLE</option>
+				            		<option value="3">JSP</option>
+				            		<option value="4">HTML/CSS</option>
+				            		<option value="5">JavaScript</option>
+				            		<option value="6">Spring</option>
+				            	</select>
+				            </td>
+				        </tr>
+				
+						
+				        <tr>
+				            <th>제목</th>
+				            <td>
+				                <input type="text" name="subject" class="form-control">
+				                <form:errors path="subject" class="error"/>
+				            </td>
+				        </tr>
+				    
+				
+				        <tr>
+				            <th>본문</th>
+				            <td>
+				            	<textarea  cols="50"  rows="10"    name="doc_body" class="form-control"></textarea>
+				                <form:errors path="doc_body" class="error"/>
+				            </td>
+				        </tr>
+				
+				        <tr>
+				            <th>파일첨부</th>
+				            <td>
+				                <div class="custom-file">
+				                    <input type="file" class="custom-file-input" id="file" name="file1">
+				                    <label class="custom-file-label" for="file"></label>
+				                </div>
+				            </td>
+				        </tr>
+				
+				        <tr>
+				            <td colspan="2">
+				                <input type="submit" value="등록">
+				            </td>
+				        </tr>
+				    </table>
 				</form:form>
-				
-			
-				
-	
+		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
 		

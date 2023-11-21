@@ -183,11 +183,27 @@
 	</update>
 	
 	
+	<!-- event_해당 게시글에 대한 댓글 총 갯수(free도 같이 쓰임) -->
+	<select id="cyEventComtCount" parameterType="int" resultType="int">
+		select count(*)
+		from   bd_free_comt
+		where  doc_no = #{doc_no}
+	</select>
+	
+	
+	<!-- 댓글 알림플래그 Y처리 -->
+	<update id="cyPrjBdDataUpdateCommentAlarmFlag" parameterType="BdFreeComt">
+		UPDATE 	bd_free_comt
+		SET 	ALARM_FLAG='Y' 
+		WHERE 	doc_no = #{doc_no}
+	</update>
+	
+	
 	<!-- event_새 글 입력 -->
 	<insert id="cyEventInsert" parameterType="BdFree">
 		insert into bd_free (doc_no,                      user_id,   app_id,   create_date,  bd_category,     subject,       doc_body,     bd_count,  good_count,    attach_name,     attach_path)
                      values (seq_bd_free_doc_no.nextval, #{user_id},    1    ,   sysdate,     '이벤트',      #{subject} ,   #{doc_body},     0     ,     0   ,       #{attach_name},   #{attach_path} )
-	</insert>
+	</insert>	
 	
 	
 	<!-- event_수정  -->
@@ -198,53 +214,45 @@
 	</update>
 	
 	
-	<!-- event_삭제 -->
+	<!-- event_삭제 (qna 같이 사용) -->
 	<delete id="cyEventDelete" parameterType="BdFree">
 		delete from bd_free where doc_no = #{doc_no}
 	</delete>
 	
 	
-	<!-- event_댓글 리스트 -->
-	<select id="cyEventComt" parameterType="int" resultType="BdFreeComt">
-		select   u.user_name, c.*
-		from     user_info u, bd_free b, bd_free_comt c
-		where    u.user_id = b.user_id
-		and      b.doc_no  = c.doc_no
-		and      bd_category like '이%'
-		and      b.doc_no  = #{doc_no}
+	<!-- event_댓글 리스트  ~~~~~객체로 수정함 -->
+	<select id="cyEventComt" parameterType="BdFreeComt" resultType="BdFreeComt">
+		<![CDATA[
+			select *
+					from ( 
+					        select rownum rn, a.*
+					        from (
+	                                select    u.user_name, b.*
+	                                from      user_info u, bd_free_comt b
+	                                where     u.user_id = b.user_id
+	                                and       b.doc_no  = #{doc_no}
+	                                order by  b.comment_doc_no desc
+					            ) a
+						 )
+			where   rn >= #{start}
+			and     rn <= #{end}
+		]]>
 	</select>
 	
 	
-	<!-- event_댓글 입력 -->
-	<insert id="cyAjaxInsert" parameterType="BdFreeComt">
+	<!-- event_댓글 입력 (free 같이 사용) -->
+	<insert id="cyComtInsert" parameterType="BdFreeComt">
 		INSERT INTO bd_free_comt   (doc_no, comment_doc_no, user_id, create_date, comment_context, alarm_flag)
 						VALUES     (
 									   #{doc_no},
-									   NVL((SELECT MAX(comment_doc_no) + 1 FROM bd_free_comt), 0),
+									   NVL((SELECT MAX(comment_doc_no)  FROM bd_free_comt where doc_no=#{doc_no})+1, 1),
 									   #{user_id},
 									   sysdate,
 									   #{comment_context},
 								 	   'N'
 									)
 	</insert>
-	
-	
-	<!-- event_입력한 댓글 갖고 오기 -->
-	<select id="cyComtSelect" parameterType="BdFreeComt" resultType="BdFreeComt">
-		select u.user_name, b.*
-		from   bd_free_comt b, user_info u 
-		where  b.user_id = u.user_id  
-		and    doc_no = #{doc_no}
-	</select>
-	
-	
-	<!-- 댓글 리스트 보여줌 -->
- 	<select id="cyComtEventList" parameterType="int">
-		select  *
-		from    bd_free_comt
-		where   doc_no = #{doc_no}
-	</select>  
-	
+
 	
 	<!--                          free                            -->
 	
@@ -311,13 +319,12 @@
 	
 	
 	<!-- free_댓글리스트 -->
-	<select id="cyFreeComtList" parameterType="int" resultType="BdFree">
-		select   u.user_name, c.*
-		from     user_info u, bd_free b, bd_free_comt c
-		where    u.user_id = b.user_id
-		and      b.doc_no  = c.doc_no
-		and      bd_category like '자%'
-		and      b.doc_no = #{doc_no}
+	<select id="cyFreeComtList" parameterType="int" resultType="BdFreeComt">
+		 select    u.user_name, u.user_id, b.*
+      	 from      user_info u, bd_free_comt b
+         where     u.user_id = b.user_id
+		 and       b.doc_no = #{doc_no}
+		 order by  comment_doc_no desc
 	</select>
 	
 	
@@ -335,14 +342,11 @@
 	</insert>
 	
 	
-	<!-- free_입력한 댓글 갖고 옴 -->
-	<select id="cyAjaxComtSelect" parameterType="BdFreeComt" resultType="BdFreeComt">
-		select   c.*, u.user_name
-		from     bd_free_comt c, user_info u
-		where    c.user_id = u.user_id
-		and      doc_no = #{doc_no}
-	</select>
-	
+	<!-- free_댓글 삭제 (event 함께 사용) -->
+	<delete id="cyFreeComtDelete" parameterType="BdFreeComt">
+		delete from bd_free_comt where doc_no = #{doc_no} and comment_doc_no = #{comment_doc_no}
+	</delete>
+
 	
 	<!-- free_새 글 입력 -->
 	<insert id="cyFreeInsert" parameterType="BdFree">
@@ -359,7 +363,7 @@
 	</update>
 	
 	
-	<!-- free_삭제 -->
+	<!-- free_게시글 삭제 -->
 	<delete id="cyFreeDelete" parameterType="BdFree">
 		delete from bd_free where doc_no = #{doc_no}            
 	</delete>
@@ -443,6 +447,14 @@
 	</update>
 	
 	
+	<!-- qna_답글 알림플래그 Y처리 -->
+	<update id="cyPrjBdDataUpdateReplyAlarmFlag" parameterType="BdQna">
+		UPDATE 	bd_qna 
+		SET 	ALARM_FLAG='Y' 
+		WHERE 	doc_no = #{doc_no} 
+	</update>
+	
+	
 	<!-- qna_수정 -->
 	<update id="cyQnaUpdate" parameterType="BdQna">
 		update  bd_qna
@@ -511,7 +523,8 @@
 		        doc_group,
 		        doc_step, doc_indent,
 		        parent_doc_user_id,
-		        parent_doc_no
+		        parent_doc_no,
+		        alarm_flag
 		    ) values (
 		        SEQ_BD_QNA_DOC_NO.nextval, 2, #{user_id},
 		        #{subject}, #{doc_body}, sysdate, #{bd_category},
@@ -525,7 +538,8 @@
 		        <choose>
 		            <when test="parent_doc_user_id != ''">#{parent_doc_no}</when>
 		            <otherwise>null</otherwise>
-		        </choose>
+		        </choose>,
+		        #{alarm_flag}
 		    )
 	</insert>
 	 
@@ -538,6 +552,26 @@
 		and    upper(field_name) = #{field_name}
 	</select> 
 	
+	<!-- 알림 목록 -->
+	<select id="cyQnaAlarmList" parameterType="BdQna" resultType="BdQna">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT p.*, u.user_name, 
+							(SELECT cate_name 
+							 FROM CODE 
+							 WHERE UPPER(table_name)='BD_QNA' 
+							 AND UPPER(field_name)='BD_CATEGORY' 
+							 AND cate_code=p.bd_category) bd_category_name
+					  FROM   BD_QNA p, USER_INFO u 
+					  WHERE  p.user_id = u.user_id 
+					  AND    p.doc_group = #{doc_group}
+					  ORDER BY p.doc_group DESC, p.doc_step) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
 	
 	<!-- qna_검색 목록  -->
 	<select id="cyQnaSearchList" parameterType="BdQna" resultType="BdQna">
@@ -561,10 +595,18 @@
 	</select>
 	
 	
+	<!-- qna_게시글 삭제 -->
+	<delete id="cyQnaDelete" parameterType="int">
+		delete from bd_qna where doc_no = #{doc_no}
+	</delete>
 	
 	
-	
-	
+	<!-- 답글 목록 열때 count -->
+	<select id="cyPrjBdDataListAlarmCount" parameterType="BdQna" resultType="int">
+		SELECT Count(*) 
+		FROM   bd_qna 
+		WHERE  doc_group = #{doc_group}
+	</select>
 	
 	
 	

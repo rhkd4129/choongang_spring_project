@@ -161,9 +161,8 @@ public class CyjController {
 		return savedName;
 	}
 
-	// -----------------------------------------------------------------------	
+// -----------------------------------------------------------------------	
 
-	
 	// 전체 공지사항 상세 페이지  
 	@GetMapping(value = "board_content")
 	public String boardContent(HttpServletRequest request, int doc_no, Model model) {
@@ -178,7 +177,6 @@ public class CyjController {
 		// 상세 
 		BdFree bdFreeContent = cs.bdFreeContent(doc_no);
 		System.out.println("CyjController board_content boardContent-> " + bdFreeContent);
-		System.out.println("-----------------------------");
 		System.out.println(loginId);
 		System.out.println(bdFreeContent.getUser_id());
 		
@@ -333,7 +331,7 @@ public class CyjController {
 	
 	// 이벤트_상세 페이지 
 	@GetMapping(value = "event_content")
-	public String eventContent(HttpServletRequest request, int doc_no, Model model) {
+	public String eventContent(HttpServletRequest request, String currentPage, int doc_no, Model model) {
 		System.out.println("CyjController eventContent Start--------------------------");
 		
 		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
@@ -346,10 +344,16 @@ public class CyjController {
 		// 이벤트_상세
 		BdFree eventContent = cs.eventContent(doc_no);
 		System.out.println("CyjController eventContent-> " + eventContent);
-		System.out.println("상세페이지의 작성자 user_Id-> " + eventContent.getUser_id());
 		model.addAttribute("eventContent", eventContent);
 		
-		// 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		if(userInfoDTO.getUser_id().equals(eventContent.getUser_id())) {
+			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(eventContent);
+		}	
+//		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
+		
+		// 게시글의 접속자와 작성자 비교 --> 같으면 1, 다르면 0
 		int result = 0;
 		if (loginId.equals(eventContent.getUser_id())) {
 			result = 1;
@@ -364,31 +368,64 @@ public class CyjController {
 		System.out.println("CyjController eventCount-> " + eventCount);
 		model.addAttribute("eventCount", eventCount);
 		
-		// 이벤트_댓글리스트
-		List<BdFreeComt> commentList = cs.eventComt(doc_no);
-		System.out.println("상세페이지 댓글 commentList-> " + commentList);
-		model.addAttribute("commentList", commentList);
+		// 이벤트_해당 게시글에 대한 댓글 총 갯수
+		int eventComtCount = cs.eventComtCount(doc_no);
+		System.out.println("CyjController eventComtCount-> " + eventComtCount);
+		model.addAttribute("eventComtCount", eventComtCount);
 		
+		BdFreeComt bdFreeComt = new BdFreeComt();
+		bdFreeComt.setDoc_no(doc_no);
+		
+		// 이벤트_댓글 paging 작업
+		Paging page = new Paging(eventComtCount, currentPage);   
+		bdFreeComt.setStart(page.getStart());
+		bdFreeComt.setEnd(page.getEnd());
+		model.addAttribute("page", page);
+		
+		// 이벤트_댓글리스트 보여주기 위해 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
+		System.out.println("CyjController commentList.size()-> " + commentList.size());
+		model.addAttribute("commentList", commentList);
+
 		return "board/board_event/board_event_content";
+	}
+	
+	// 이벤트_댓글 입력
+	@PostMapping(value = "comtInsert")
+	public String eventComtInsert(HttpServletRequest request, BdFreeComt bdFreeComt) {
+		System.out.println("CyjController comtInsert Start--------------------------");	
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// loginId : 댓글 입력 작성자
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("댓글 입력 작성자 loginId-> " + loginId);
+		bdFreeComt.setUser_id(loginId);
+		
+		// 댓글 입력 (free도 사용)
+		int comt = cs.comtInsert(bdFreeComt);
+		System.out.println("CyjController comt-> " + comt);  
+		
+		return "redirect:/event_content?doc_no="+bdFreeComt.getDoc_no();
 	}
 	
 // ------------------------------------------------------------------------	
 	
-	// 이벤트_댓글 (아작스였던 거 쓰는 거라 이름 수정하기)
-	@PostMapping(value = "comtInsert")
-	public String eventComtInsert(BdFreeComt bdFreeComt, Model model) {
-		System.out.println("CyjController comtInsert Start--------------------------");
+	// 이벤트_댓글 삭제
+	@ResponseBody
+	@PostMapping(value = "event_comt_delete")
+	public int eventComtDelete(int doc_no, int comment_doc_no) {
+		System.out.println("CyjController event_comt_delete Start----------------------");
 		
-		// 댓글입력
-		int comt = cs.ajaxComt(bdFreeComt);
-		System.out.println("CyjController comt-> " + comt);
+		BdFreeComt bdFreeComt = new BdFreeComt();
+		bdFreeComt.setDoc_no(doc_no);
+		bdFreeComt.setComment_doc_no(comment_doc_no);
 		
-		// 입력한 댓글 가져옴
-		List<BdFreeComt> comtSelect = cs.eventSelect(bdFreeComt); 
-		System.out.println("CyjController comtSelect-> " + comt);
-		model.addAttribute("comtSelect", comtSelect);
+		int comtDelete = cs.freeComtDelete(bdFreeComt);  // 자유와 같이 쓰임
+		System.out.println("CyjController comtDelete-> " + comtDelete);
 		
-		return "redirect:/event_content?doc_no="+bdFreeComt.getDoc_no();
+		return comtDelete;
 	}
 
 // ------------------------------------------------------------------------	
@@ -498,7 +535,6 @@ public class CyjController {
 		
 		int eventInsert = cs.eventInsert(bdFree);
 		System.out.println("event 새 글 입력-> " + eventInsert);
-		
 		model.addAttribute("eventInsert", eventInsert);
 		
 		return "redirect:/board_event";
@@ -548,6 +584,68 @@ public class CyjController {
 		return delete;
 	}
 	
+// ------------------------------------------------------------------------	
+
+	// 이벤트_read : 알림 조회용
+	@RequestMapping(value = "event_read")
+	public String eventRead(HttpServletRequest request, String currentPage, int doc_no, Model model) {
+		System.out.println("CyjController eventContent Start--------------------------");
+		
+		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo"));
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
+		String loginId = userInfoDTO.getUser_id();
+		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
+		
+		// 이벤트_상세
+		BdFree eventContent = cs.eventContent(doc_no);
+		System.out.println("CyjController eventContent-> " + eventContent);
+		model.addAttribute("eventContent", eventContent);
+		
+		if(userInfoDTO.getUser_id().equals(eventContent.getUser_id())) {
+			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
+			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(eventContent);
+		}	
+//		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
+		
+		// 게시글의 접속자와 작성자 비교 --> 같으면 1, 다르면 0
+		int result = 0;
+		if (loginId.equals(eventContent.getUser_id())) {
+			result = 1;
+			System.out.println("접속자와 작성자 같다");
+		} else {
+			result = 0;
+		}
+		model.addAttribute("result", result);
+		
+		// 이벤트_조회수 
+		int eventCount = cs.eventBdCount(doc_no);
+		System.out.println("CyjController eventCount-> " + eventCount);
+		model.addAttribute("eventCount", eventCount);
+		
+		// 이벤트_해당 게시글에 대한 댓글 총 갯수
+		int eventComtCount = cs.eventComtCount(doc_no);
+		System.out.println("CyjController eventComtCount-> " + eventComtCount);
+		model.addAttribute("eventComtCount", eventComtCount);
+		
+		BdFreeComt bdFreeComt = new BdFreeComt();
+		bdFreeComt.setDoc_no(doc_no);
+		
+		// 이벤트_댓글 paging 작업
+		Paging page = new Paging(eventComtCount, currentPage);   
+		bdFreeComt.setStart(page.getStart());
+		bdFreeComt.setEnd(page.getEnd());
+		model.addAttribute("page", page);
+		
+		// 이벤트_댓글리스트 보여주기 위해 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
+		System.out.println("CyjController commentList.size()-> " + commentList.size());
+		model.addAttribute("commentList", commentList);
+
+		return "board/board_event/board_event_read";
+	}
 	
 	
 	

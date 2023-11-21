@@ -12,7 +12,6 @@
 
 <!--CSS START -->
 <style type="text/css">
-	td, th {padding: 15px;}
 	.error {color: red}
 </style>
 <!-- CSS END -->
@@ -76,7 +75,7 @@
 				String strDate = simpleDateFormat.format(date);
 			%>
 			
-			<h3>새 글 작성</h3><p>
+			<h4 class ="pt-4">작성</h4>
 		
 				<form:form action="free_insert" method="post" modelAttribute="bdFree" class="mt-3" enctype="multipart/form-data">
 				<table class="table table-bordered">
@@ -87,7 +86,7 @@
 			
 			        <tr>
 			            <th>게시종류</th>
-			            <td>공지</td>
+			            <td>자유</td>
 			        </tr>
 			
 			        <tr>
@@ -101,13 +100,13 @@
 			        <tr>
 			            <th>본문</th>
 			            <td>
-			                <input type="text" name="doc_body" class="form-control">
+			            	<textarea  cols="50"  rows="10"    name="doc_body" class="form-control"></textarea>
 			                <form:errors path="doc_body" class="error"/>
 			            </td>
 			        </tr>
 			
 			        <tr>
-			            <th>첨부파일명</th>
+			            <th>첨부파일</th>
 			            <td>
 			                <div class="custom-file">
 			                    <input type="file" class="custom-file-input" id="file" name="file1">

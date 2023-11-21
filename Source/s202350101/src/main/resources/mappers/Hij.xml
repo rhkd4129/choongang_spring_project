@@ -43,7 +43,7 @@
 	
 	<!-- 멤버목록 가져오기 -->
  	<select id="ijAppOkGetUser" parameterType="HijRequestPrjDto" resultType="PrjMemList">
-		SELECT * FROM prj_mem_list WHERE project_id=#{project_id} 
+		SELECT * FROM prj_mem_list WHERE project_id=#{project_id}
 	</select>
 
 	<!-- user_info에 project_id 해당 id로 넣어줌 -->
@@ -105,7 +105,7 @@
 		WHERE class_id = (SELECT class_id 
 	                 	  FROM user_info
 	                  	  WHERE User_id =#{User_id})	    
-	    ORDER BY user_id
+	    ORDER BY user_name
 	</select>
 
 	<!-- 프로젝트 생성 -->
@@ -131,6 +131,7 @@
 		FROM user_info u, prj_info p
 		WHERE u.project_id = p.project_id
 		AND p.project_id =#{project_id}
+		ORDER BY u.user_name
 	</select>
 
 	<!-- 프로젝트 조회  -->

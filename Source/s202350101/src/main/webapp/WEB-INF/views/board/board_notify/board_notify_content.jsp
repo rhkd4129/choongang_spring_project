@@ -40,8 +40,7 @@
 	
 	// 삭제 
 	function ajaxDelete(doc_no, user_id) {
-/* 		alert("삭제 !!!!!");
- 		alert("글 번호 : " + doc_no);
+/* 		alert("글 번호 : " + doc_no);
 		alert("회원ID : " + user_id);  */
 	
 		var inputUserId = prompt('회원 아이디를 입력하세요');
@@ -113,10 +112,9 @@
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 			
-			<h3>상세 페이지</h3>
-			<input type="hidden" name="doc_no" value="${content.doc_no}">
+			<h4 class ="pt-4">문서 조회</h4>
 			
-			<table border="1">
+			<table class="table table-hover">
 				<tr> <th>글 번호</th>       <td>${content.doc_no}</td> </tr>
 				<tr> <th>이름</th>         <td>${content.user_name}</td> </tr>
 				<tr> <th>작성일시</th>      <td>${content.create_date}</td> </tr>
@@ -126,7 +124,7 @@
 				<tr> <th>본문</th>         <td>${content.doc_body}</td> </tr>
 				<tr> <th>조회수</th>        <td>${content.bd_count}</td> </tr>
 				<tr> <th>추천</th>         <td>${content.good_count}</td> </tr>
-				<tr> <th>첨부파일명</th>     <td>${content.attach_name}<img alt="" src="${pageContext.request.contextPath}/${content.attach_path}/${content.attach_name}"></td> </tr>	
+				<tr> <th>첨부파일</th>      <td>${content.attach_name}<img alt="" src="${pageContext.request.contextPath}/${content.attach_path}/${content.attach_name}"></td> </tr>	
 				
 				
 				<tr>

@@ -12,4 +12,7 @@ public interface ClassRoomService {
 
 //	ClassRoom	생성
 	int saveClassRoom(ClassRoom cr);
+
+//	강의실 id를 기준으로 삭제
+	int deletebyId(ClassRoom cr);
 }

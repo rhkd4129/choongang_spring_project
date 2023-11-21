@@ -5,6 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<%--    <c:if test="${userInfo.user_auth != 'admin' }">--%>
+<%--        <script type="text/javascript">--%>
+<%--            alert("관리자 권한이 없습니다. 관리자에게 문의하세요");--%>
+<%--            location.href = "/main";--%>
+<%--        </script>--%>
+<%--    </c:if>--%>
+
     <meta charset="UTF-8">
 
     <style text="text/css">
@@ -100,7 +108,12 @@
 
                         tr.append('<input type="hidden" name="hid_us_id" value="'+ user.user_id+ '"/>');
                         tr.append('<td>' + user.user_name + '</td>');
-                        tr.append('<td>' + user.project_name + '</td>');
+                        if (user.project_name == null) {
+                            tr.append('<td>' + "프로젝트 없음" + '</td>');
+                        } else {
+                            tr.append('<td>' + user.project_name + '</td>');
+                        }
+
 
                         var authCheckbox = $('<input type="checkbox" name="user_auth">'); // 체크박스 생성
 
@@ -184,7 +197,7 @@
 			    </ol>
 			</nav>
 			<div class="container-fluid">
-				<div style="margin-top:20px;height:45px">
+				<div style="margin-top:15px;height:45px">
 					<span class="apptitle">관리자 설정</span>
 				</div>
 			</div>
@@ -232,12 +245,14 @@
                         </tr>
                         </thead>
                         <tbody id="user_list">
-                        <c:forEach items="${UIList }" var="user">
+                        <c:forEach items="${UIList}" var="user">
                             <tr>
                                 <input type="hidden" name="hid_us_id" value="${user.user_id}"/>
                                 <td>${user.user_name}</td>
-                                <td>${user.project_name}</td>
+                                <c:if test="${user.project_name eq null}"> <td>프로젝트 없음</td></c:if>
+                                <c:if test="${user.project_name ne null}"> <td>${user.project_name}</td></c:if>
                                 <c:choose>
+
                                     <c:when test="${user.user_auth eq 'manager'}">
                                         <td><input type="checkbox" name="user_auth" checked></td>
                                     </c:when>

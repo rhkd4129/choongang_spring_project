@@ -60,14 +60,32 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
+	  		<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">내 글 모음</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">내가 쓴 댓글</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:15px;height:45px">
+					<span class="apptitle">내가 쓴 댓글</span>
+				</div>
+			</div>
+	  		
 	  		<div class="container-fluid">
-					<p>
-					<h3>내가 쓴 댓글 </h3>
-					<%-- <h3>내가 쓴 Q&A 게시글 : ${totalComt } 개</h3>
-					<h3>내가 쓴 공용 게시글 : ${totalBdFree } 개</h3>
-					<h3>내가 쓴 PJ& 공지자료 게시글 : ${totalDtPrj } 개</h3>
-					<h3>내가 쓴 업무보고 게시글 : ${totalRepPrj } 개</h3> --%>
-					<p>
 					<table width="100%" style="margin-top:20px;height:45px">
 						<tr>
 							<td align="right">
@@ -120,21 +138,22 @@
 											<c:if test="${allComt.bd_category == '공지'}">
 												<tr>
 													<td>${allComt.bd_category }</td>
-													<td><a href="board_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}">${allComt.comment_context }</a></td>
+													<td><a href="javascript:popup('board_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 													<td>${allComt.create_date }</td>
 												</tr>
 											</c:if>
 											<c:if test="${allComt.bd_category == '자유'}">
 												<tr>
 													<td>${allComt.bd_category }</td>
-													<td><a href="free_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}">${allComt.comment_context }</a></td>
+													<td><a href="javascript:popup('free_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 													<td>${allComt.create_date }</td>
 												</tr>
 											</c:if>
 											<c:if test="${allComt.bd_category == '이벤트'}">
 												<tr>
 													<td>${allComt.bd_category }</td>
-													<td><a href="event_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}">${allComt.comment_context }</a></td>
+													
+													<td><a href="javascript:popup('event_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 													<td>${allComt.create_date }</td>
 												</tr>
 											</c:if>
@@ -142,7 +161,7 @@
 										<c:when test="${allComt.app_id == 2}">
 											<tr>
 												<td>${allComt.app_name }</td>
-												<td><a href="bdQnaContent?doc_no=${allComt.doc_no }#${allComt.comment_doc_no}&comment_doc_no=${allComt.comment_doc_no}">${allComt.comment_context }</a></td>
+												<td><a href="javascript:popup('bdQnaContent?doc_no=${allComt.doc_no }#${allComt.comment_doc_no}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 												<td>${allComt.create_date }</td>
 											</tr>
 										</c:when>
@@ -156,7 +175,7 @@
 										<c:when test="${allComt.app_id == 4}">
 											<tr>
 												<td>${allComt.app_name }</td>
-												<td><a href="prj_board_report_read?doc_no=${allComt.doc_no }&project_id=${allComt.project_id}&comment_doc_no=${allComt.comment_doc_no}">${allComt.comment_context }</a></td>
+												<td><a href="javascript:popup('prj_board_report_read?doc_no=${allComt.doc_no }&project_id=${allComt.project_id}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 												<td>${allComt.create_date }</td>
 											</tr>
 										</c:when>
@@ -167,31 +186,24 @@
 					</table>
 					
 					<!-- 페이징 작업 -->
-					<%-- <c:if test="${page.startPage > page.pageBlock }">
-						<a href="mypost_comment_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
-					</c:if>
 					
-					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-						<a href="mypost_comment_list?currentPage=${a }">[${a }]</a>
-					</c:forEach>
-					
-					<c:if test="${page.endPage < page.totalPage }">
-						<a href="mypost_comment_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
-					</c:if> --%>
-					
-					<c:if test="${page.startPage > page.pageBlock}">
-					   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
-					</c:if>
-				    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-						<c:choose>
-							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
-							<c:otherwise><li class="page-item"></c:otherwise>
-						</c:choose>
-						<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
-					</c:forEach>						
-				    <c:if test="${page.endPage > page.totalPage}">
-				    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
-				    </c:if>
+					<nav aria-label="Page navigation example">
+					  <ul class="pagination justify-content-center">
+						<c:if test="${page.startPage > page.pageBlock}">
+						   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
+						</c:if>
+					    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+							<c:choose>
+								<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+								<c:otherwise><li class="page-item"></c:otherwise>
+							</c:choose>
+							<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
+						</c:forEach>						
+					    <c:if test="${page.endPage > page.totalPage}">
+					    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
+					    </c:if>
+				      </ul>
+					</nav>
 
 				</div>
 	  		
