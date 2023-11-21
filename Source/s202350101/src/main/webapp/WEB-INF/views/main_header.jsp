@@ -576,6 +576,9 @@ $(
         let ws;             //  웹소캣
         let chatstompClient;    //  stomp
         let user = '${userInfo.user_id}';
+        let usName = '${userInfo.user_name}';
+        console.log("FDFSDDFS");
+        console.log(usName);
         let wsUri = "/chat";
         ws = new SockJS(wsUri);                    //   websocket 연결
         chatstompClient = Stomp.over(ws);
@@ -630,7 +633,13 @@ $(
                         console.log(ChatRoom.attach_name);
                         chatroom_con += '<img className='+'"uploadFile"'+'style='+'"width:30px; height: 30px; border-radius: 70%;"'+' src='+'"'+'${pageContext.request.contextPath}'+ChatRoom.attach_path+'/'+ChatRoom.attach_name+'"></div>';
                         chatroom_con += '<div id="chat_ch_center">';
-                        chatroom_con += '<p>' + ChatRoom.user_name + '</p>';
+
+                        if (ChatRoom.user_name == usName) {
+                            chatroom_con += '<p>' + usName + '</p>';
+                        } else {
+                            chatroom_con += '<p>' +  ChatRoom.user_name + '</p>';
+                        }
+
                         chatroom_con += '<p>'+"'"+ msg_con+"'"+'</p></div>';
                         chatroom_con += '<div id="chat_ch_right"><p>' + show_time + '</p></div>';
                         chatroom_con += '<div id="readCnt"> <p>'+"'"+read_cnt + "'" +'</p></div></div>';
