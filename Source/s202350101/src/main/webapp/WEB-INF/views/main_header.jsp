@@ -587,7 +587,6 @@ $(
                 sender_id: user,
                 user_name: usName
             };
-            chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(option));     //  여기도 중괄호 왜?
 
             chatstompClient.subscribe("/app/cnttotmsg", function (message) {
                 console.log("getMessage");
@@ -654,6 +653,8 @@ $(
                     chat_chats.append(chatroom_con);
                 }
             })
+
+            chatstompClient.send("/queue/chat/cnt", {}, JSON.stringify(option));
         })
     }
 )
