@@ -112,6 +112,13 @@ public class CyjControllerTodo {
 
 		return mapData;
 	}
+  //<c:forEach var="code" items="${codeList}">
+    //                    <input type="radio" id="todo_priority" name="todo_priority" value="${code.cate_code}"
+      //                  <c:if test="${code.cate_code eq '1'}">checked="checked"</c:if>
+		//	>${code.cate_name}
+        //            </c:forEach>
+
+
 
 
 	// 리스트 입력

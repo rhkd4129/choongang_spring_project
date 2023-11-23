@@ -60,6 +60,14 @@
 				'style': 'height:354px'
 			});
 			var form = $('<form>').addClass('p-2 mb-2 bg-body-tertiary border-bottom');
+
+			var todo_priority_check = $('<input>').attr({
+				'type':'radio',
+				'id': 'todo_priority',
+				'name': 'todo_priority',
+				'class': 'form-control',
+			})
+
 			var todoInput = $('<input>').attr({
 				'type': 'text',
 				'id': 'todo_list',
@@ -67,7 +75,13 @@
 				'class': 'form-control',
 				'autocomplete': 'false',
 				'placeholder': '오늘 할 일을 메모합니다...'
+
 			});
+
+			form.append(todo_priority_check);
+
+
+
 			form.append(todoInput);
 			var listGroup = $('<div>').addClass('list-group').attr('id', 'idToDoList');
 			dropdownMenu.append(form, listGroup);
