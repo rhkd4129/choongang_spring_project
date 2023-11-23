@@ -16,6 +16,23 @@ import java.util.stream.Collectors;
 public class BdFreeDaoImpl implements BdFreeDao {
 
     private final SqlSession session;
+//<!--카테고리별 BdFree, 작성자 정보 조회-->
+    @Override
+    public List<BdFree> findBdFreeByCategory(BdFree bf) {
+        log.info("findBdFreeByCategory start");
+        List<BdFree> BFList = null;
+        try {
+            log.info("findBdFreeByCategory" + bf.getBd_category());
+            BFList = session.selectList("findBdFreeByCategory",bf);
+            //	결과	출력
+            System.out.println(BFList.stream().collect(Collectors.toList()));
+
+        }catch (Exception e) {
+            System.out.println("findBdFreeByCategory Error -->>" + e.getMessage());
+        }
+
+        return BFList;
+    }
 //<!--모든 BdFree조회-->
     @Override
     public List<BdFree> findAllBdFree() {
@@ -33,23 +50,6 @@ public class BdFreeDaoImpl implements BdFreeDao {
         return BFList;
     }
 
-    //<!--카테고리별 BdFree, 작성자 정보 조회-->
-    @Override
-    public List<BdFree> findBdFreeByCategory(BdFree bf) {
-        log.info("findBdFreeByCategory start");
-        List<BdFree> BFList = null;
-        try {
-            log.info("findBdFreeByCategory" + bf.getBd_category());
-            BFList = session.selectList("findBdFreeByCategory",bf);
-            //	결과	출력
-            System.out.println(BFList.stream().collect(Collectors.toList()));
-
-        }catch (Exception e) {
-            System.out.println("findBdFreeByCategory Error -->>" + e.getMessage());
-        }
-
-        return BFList;
-    }
 
     //<!--카테고리별 BdFree, 작성자 정보 조회 및 페이징-->
     @Override

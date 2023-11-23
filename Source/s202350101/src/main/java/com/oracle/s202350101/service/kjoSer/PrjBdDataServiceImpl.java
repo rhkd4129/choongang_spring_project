@@ -26,7 +26,6 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
         log.info("totalCount : {}", totalCnt);
         return totalCnt;
     }
-
 //<!--pbd 게시글 페이징 조회-->
     @Override
     public List<PrjBdData> boardList(PrjBdData prjBdData) {
@@ -35,6 +34,7 @@ public class PrjBdDataServiceImpl implements PrjBdDataService {
         log.info("boardList END");
         return prjBdDataList;
     }
+
 
 //<!--강의실, 프로젝트 별 모든 prj_bd_data-->
     @Override

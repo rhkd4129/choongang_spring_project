@@ -8,10 +8,6 @@
 
 <mapper namespace="com.oracle.s202350101.model.BdFreeMapper">
     <!-- BdFree -->
-<!--모든 BdFree조회-->
-    <select id="findAllBdFree" resultType="BdFree">
-        select * from Bd_Free
-    </select>
 <!--카테고리별 BdFree, 작성자 정보 조회-->
     <select id="findBdFreeByCategory" parameterType="BdFree" resultType="BdFree">
         select b.*, u.*
@@ -25,10 +21,15 @@
         select ev.*, u.user_name
         from (select rownum rn, e.*
               from (select * from BD_FREE where BD_CATEGORY = #{bd_category} order by Doc_no desc)  e) ev  left join user_info u
-        on ev.user_id = u.user_id
+                                                                                                                     on ev.user_id = u.user_id
         where rn between #{start} and #{end}
         order by Doc_no desc
     </select>
+<!--모든 BdFree조회-->
+    <select id="findAllBdFree" resultType="BdFree">
+        select * from Bd_Free
+    </select>
+
 <!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
     <select id="findByCategorySearchAndPage" parameterType="BdFree" resultType="BdFree">
         select ev.*, u.user_name,rn

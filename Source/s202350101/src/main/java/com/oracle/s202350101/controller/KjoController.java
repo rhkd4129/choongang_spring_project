@@ -42,28 +42,24 @@ import static org.apache.ibatis.session.LocalCacheScope.SESSION;
 public class KjoController {
 //	비즈니스 로직	=>	서비스로 코드 간소화 예정
 
-    private final ClassRoomService CRser;        //	강의실
-    private final UserInfoService UIser;        //	유저정보
-    private final PrjInfoService PIser;            //	프로젝트 정보
-    private final BdFreeService BFser;            //	공용게시판
-    private final ChatRoomService CHser;        //	채팅방
-    private final ChatMsgService CMser;            //	메시지
-    private final PrjBdDataService PBDser;
+    private final ClassRoomService CRser;           //	강의실
+    private final UserInfoService UIser;            //	유저정보
+    private final PrjInfoService PIser;             //	프로젝트 정보
+    private final BdFreeService BFser;              //	공용게시판
+    private final ChatRoomService CHser;            //	채팅방
+    private final ChatMsgService CMser;             //	메시지
+    private final PrjBdDataService PBDser;          //  PdFreeService
 
-    private final MessageSource ms;
-
+//----------------------------------------------------------------------------------------------------
     //	반 생성 페이지 Get
     @GetMapping("/admin_add_class")
     public String admin_add_class(HttpServletRequest request) {
 
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-//        if (!userInfoDTO.getUser_id().equals("admin")) {
-//            return "/main";
-//        }
         log.info("admin_add_class GET");
         return "admin/admin_add_class";
     }
-
+//----------------------------------------------------------------------------------------------------
     //	반 제거
     @GetMapping("/admin_del_class")
     public String admin_del_class(ClassRoom cr) {
@@ -71,17 +67,16 @@ public class KjoController {
         int result = CRser.deletebyId(cr);
         return "redirect:/admin_class_list";
     }
+//----------------------------------------------------------------------------------------------------
     //	반 생성 Post
     @PostMapping("/admin_add_class")
     public String admin_add_class(@Validated @ModelAttribute("cr")
-                                  ClassRoom cr, BindingResult bindingResult, Model model) {
+              ClassRoom cr, BindingResult bindingResult, Model model) {
         log.info("admin_add_class POST");
 
         if (bindingResult.hasErrors()) {
             log.info("admin_add_class POST .ERROR : {}", bindingResult);
             model.addAttribute("cr", cr);
-            log.info(bindingResult.getFieldError().toString());
-//            bindingResult.reject("typeMismatch.java.lang.Integer", "알맞은 숫자를 입력하세요" );
             log.info("admin_add_class POST .ERROR Return");
             return "admin/admin_add_class";
         }
@@ -90,15 +85,12 @@ public class KjoController {
         log.info("반 생성 개수: " + result);
         return "redirect:/admin_class_list";
     }
-
+//----------------------------------------------------------------------------------------------------
     //	반 목록 페이지	GET
     @GetMapping("/admin_class_list")
     public String admin_class_list(HttpServletRequest request, Model model) {
 
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-//        if (!userInfoDTO.getUser_id().equals("admin")) {
-//            return "/main";
-//        }
 
         log.info("admin_class_list");
         List<ClassRoom> CRList = CRser.findAllClassRoom();            // 모든 강의실 조회
@@ -115,14 +107,11 @@ public class KjoController {
         model.addAttribute("CRList", CRList);
         return "admin/admin_class_list";
     }
-
+//----------------------------------------------------------------------------------------------------
     //	게시판 관리 페이지	GET
     @GetMapping("/admin_board")
     public String admin_board(@RequestParam(defaultValue = "1") String currentPage, ClassRoom cr, Model model, HttpServletRequest request) {
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-//        if (!userInfoDTO.getUser_id().equals("admin")) {
-//            return "/main";
-//        }
 
         log.info("admin_board");
         /*------------------비즈니스 로직--------------------*/
@@ -134,7 +123,8 @@ public class KjoController {
         if (cr.getClass_id() != 0) {
             //	강의실별 프로젝트 목록
             PIList = PIser.findbyClassId(cr);
-        } else {
+        }
+        else {
             // 첫 접근 시 1번 강의실 조회
             cr.setClass_id(1);
             PIList = PIser.findbyClassId(cr);
@@ -152,6 +142,7 @@ public class KjoController {
         prjBdData.setProject_id(1);
         /*		페이징 		*/
 
+//<!--pbd 게시글 페이징 조회-->
         List<PrjBdData> prjBdDataList = PBDser.boardList(prjBdData);
         /*		프로젝트 목록		*/
         /*		이벤트 게시글		*/
@@ -178,25 +169,26 @@ public class KjoController {
 
         return "admin/admin_board";
     }
-
+//----------------------------------------------------------------------------------------------------
     //	PrjBdData ajax처리
     @ResponseBody
     @GetMapping("/admin_board_pbd_ajax")
     public KjoResponse admin_board_pbd_ajax(PrjBdData prjBdData, String currentpage) {
         KjoResponse res = new KjoResponse();
+//<!--강의실, 프로젝트 별 모든 prj_bd_data-->
         int totcnt = PBDser.findByClassProjectId(prjBdData).size();
 //		페이징	글 개수 : 5		이벤트 수	현재 페이지	목록 노출 수
         Paging page = new Paging(totcnt, currentpage, 5);
         prjBdData.setStart(page.getStart());
         prjBdData.setEnd(page.getEnd());
 
+//<!--pbd 게시글 페이징 조회-->
         List<PrjBdData> prjBdDataList = PBDser.boardList(prjBdData);
         res.setFirList(prjBdDataList);
         res.setObj(page);
         return res;
     }
-
-
+//----------------------------------------------------------------------------------------------------
     //	AJAX_학원전체_이벤트_페이징_검색
     //	게시판 관리 페이지	GET
     @ResponseBody
@@ -226,7 +218,7 @@ public class KjoController {
 //		정상 작동 시 HttpResponse status 200과 함께 KjoResponse 객체 전달
         return ResponseEntity.ok(res);
     }
-
+//----------------------------------------------------------------------------------------------------
     //	AJAX	강의실 조회
     @ResponseBody
     @GetMapping("/admin_board_ajax")
@@ -254,18 +246,13 @@ public class KjoController {
         res.setFirList(CRList);
         return res;
     }
-
-
+//----------------------------------------------------------------------------------------------------
     //	채팅방 팝업
     @GetMapping("/chat_room")                        //	상대방
     public String chat_room(HttpServletRequest request, UserInfo ui, Model model) {
         log.info("chat_room");
         //	로그인 사용자DTO
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-
-//        if (!userInfoDTO.getUser_id().equals("admin")) {
-//            return "/main";
-//        }
         /*------------------비즈니스 로직--------------------*/
         //	채팅할 대상자와 로그인 사용자의 채팅방 조회
         ChatRoom cr = new ChatRoom();
@@ -284,7 +271,6 @@ public class KjoController {
         List<ChatMsg> CMList_2 = CMser.todatelist(nowChatRoom);
 
         /*------------------비즈니스 로직--------------------*/
-//		log.info("CMList: " + CMList_2.toString());
         //	로그인 사용자DTO
         model.addAttribute("userInfo", userInfoDTO);
         //	채팅할 대상자와 로그인 사용자의 채팅방
@@ -294,7 +280,7 @@ public class KjoController {
 
         return "chat/chat_room";
     }
-
+//----------------------------------------------------------------------------------------------------
     //	채팅방 입장 시 메세지들 조회 및 읽음 업데이트
     @MessageMapping("/chat/receive")
     @SendTo("/app/great")
@@ -317,14 +303,12 @@ public class KjoController {
     @SendTo("/app/chatreceive")
     public ChatMsg sendMsg(ChatMsg message) {        //	json을 왜 parse 안했는지.
 //		STOMP 메시지를 JSON으로 변환하거나 JSON을 STOMP 메시지로 변환하는 기능을 자동으로 제공
-        /*------------------비즈니스 로직--------------------*/
 //		전송 받은 메시지 저장 후 반환
         ChatMsg findmsg = CMser.findsaveMsg(message);
         log.info("Sending message to /app/chatreceive: {}", findmsg);
-        /*------------------비즈니스 로직--------------------*/
         return findmsg;
     }                                        //	WebSocketConfig에서 prefix "/app"을하여 생략
-
+//----------------------------------------------------------------------------------------------------
     @MessageMapping("/chat/cnt")        //	소켓 메시지를 객체로 변환
     @SendTo("/app/cnttotmsg")
     public KjoResponse showMsg(ChatRoom cr) {
@@ -349,6 +333,7 @@ public class KjoController {
         res.setTrdobj(cr.getReceiver_id());
         return res;
     }
+//----------------------------------------------------------------------------------------------------
 
 
     //	<팀장 권한 설정>	버튼	클릭 시
@@ -358,10 +343,6 @@ public class KjoController {
         log.info("captainManage");
         //	로그인 사용자DTO
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-//        if (!userInfo.getUser_id().equals("admin")) {
-//            log.info("admin아님.");
-//            return "/main";
-//        }
         /*------------------비즈니스 로직--------------------*/
 // 모든 강의실 조회
         List<ClassRoom> CRList = CRser.findAllClassRoom();
@@ -383,6 +364,7 @@ public class KjoController {
 
         return "admin/admin_projectmanager";
     }
+//----------------------------------------------------------------------------------------------------
 
     //	페이징하기
     //	지역, 강의실 선택 시 작동.	EX_ 이대 501
@@ -393,7 +375,7 @@ public class KjoController {
         log.info("admin_projectmanagerRest");
         UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 
-        /*------------------비즈니스 로직--------------------*/
+    /*------------------비즈니스 로직--------------------*/
         //	선택한 강의실 id => userInfoDTO에 저장.
         userInfo.setClass_id(cl_id);
         userInfo.setUser_id(userInfoDTO.getUser_id());
@@ -404,10 +386,11 @@ public class KjoController {
         log.info("userInfo: {}", userInfo);
         // 반 학생의 이름 + 참여 프로젝트 명 + 권한여부 + 페이징
         KjoResponse res = UIser.pageUserInfov2(userInfo, currentPage);
-        /*------------------비즈니스 로직--------------------*/
+    /*------------------비즈니스 로직--------------------*/
 
         return res;
     }
+//----------------------------------------------------------------------------------------------------
 
     //	팀장 권한 수정	Rest
 //	private List<String> user_id;
@@ -420,6 +403,7 @@ public class KjoController {
         //  HTTP 200과 db 업데이트 수 반환 result == 15가 정상.
         return ResponseEntity.ok(result);
     }
+//----------------------------------------------------------------------------------------------------
 
     //	게시글 삭제
     @PostMapping("/admin_board_del")
@@ -429,6 +413,7 @@ public class KjoController {
         int result = BFser.del_bdf(kjorequest);
         return ResponseEntity.ok(result);
     }
+//----------------------------------------------------------------------------------------------------
 
     //	공지/자료 삭제
     @PostMapping("/admin_pbd_del")
@@ -437,7 +422,7 @@ public class KjoController {
 //	firList: prj_delbox , secList:doc_delbox
     //	RequestDto를 통해 불필요한 데이터 처리를 하지 않아도 된다.
         int result = PBDser.delpbd(kjorequest);
-
         return ResponseEntity.ok(result);
     }
+//----------------------------------------------------------------------------------------------------
 }

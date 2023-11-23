@@ -18,6 +18,33 @@ import java.util.stream.Collectors;
 public class ChatRoomDaoImpl implements ChatRoomDao {
     private final SqlSession session;
     @Override
+    public ChatRoom findByYouAndMe(ChatRoom cr) {
+//<!--상대방과의 채팅방 조회-->
+        log.info("findByYouAndMe start");
+        try {
+            cr = session.selectOne("findByYouAndMe",cr);
+
+        }catch (Exception e) {
+            System.out.println("findByYouAndMe Error -->>" + e.getMessage());
+        }
+
+        return cr;
+    }
+    @Override
+    public List<ChatRoom> findByUserId(UserInfo ui) {
+//<!--개인별 채팅방 조회-->
+        log.info("findByUserId start");
+        List<ChatRoom> CRList = null;
+        try {
+
+            CRList = session.selectList("findByUserId",ui);
+            //	결과	출력
+        }catch (Exception e) {
+            System.out.println("findByUserId Error -->>" + e.getMessage());
+        }
+        return CRList;
+}
+    @Override
     public List<ChatRoom> findAll() {
 //<!--모든 채팅방 조회-->
 
@@ -35,20 +62,6 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
         return CRList;
     }
 
-    @Override
-    public List<ChatRoom> findByUserId(UserInfo ui) {
-//<!--개인별 채팅방 조회-->
-        log.info("findByUserId start");
-        List<ChatRoom> CRList = null;
-        try {
-
-            CRList = session.selectList("findByUserId",ui);
-            //	결과	출력
-        }catch (Exception e) {
-            System.out.println("findByUserId Error -->>" + e.getMessage());
-        }
-        return CRList;
-    }
 
     @Override
     public ChatRoom findById(ChatRoom cr) {
@@ -67,19 +80,6 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
         return CRList;
     }
 
-    @Override
-    public ChatRoom findByYouAndMe(ChatRoom cr) {
-//<!--상대방과의 채팅방 조회-->
-        log.info("findByYouAndMe start");
-        try {
-            cr = session.selectOne("findByYouAndMe",cr);
-
-        }catch (Exception e) {
-            System.out.println("findByYouAndMe Error -->>" + e.getMessage());
-        }
-
-        return cr;
-    }
 
     @Override
     public int addChatRoom(ChatRoom cr) {

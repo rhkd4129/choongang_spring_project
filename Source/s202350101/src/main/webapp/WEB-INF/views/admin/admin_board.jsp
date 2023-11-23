@@ -144,7 +144,8 @@
             }
             console.log(keyword);
             console.log(currentPage);
-            console.log(category);
+			console.log("category");
+			console.log(category);
 
             var sendData = {
                 keyword: keyword,
