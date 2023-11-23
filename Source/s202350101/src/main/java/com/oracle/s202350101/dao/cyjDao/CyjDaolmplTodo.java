@@ -13,15 +13,15 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class CyjDaolmplTodo implements CyjDaoTodo {
-	
+
 	private final SqlSession session;
 
-	
+
 	// 리스트 입력
 	@Override
 	public int todoInsert(Todo todo) {
 		System.out.println("CyjDaolmplTodo todoInsert Start..");
-		
+
 		int todoInsert = 0;
 		try {
 			todoInsert = session.insert("cyTodoListInsert", todo);
@@ -35,7 +35,7 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 	@Override
 	public List<Todo> todoTotalSelect(Todo todo) {
 		System.out.println("CyjDaolmplTodo todoTotalSelect Start..");
-		
+
 		List<Todo> totalSelect = new ArrayList<Todo>();
 		try {
 			totalSelect = session.selectList("cyTodoTotalSelect", todo);
@@ -50,7 +50,7 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 	@Override
 	public int todoListDelete(Todo todo) {
 		System.out.println("CyjDaolmplTodo todoListDelete Start..");
-		
+
 		int todoListDelete = 0;
 		try {
 			todoListDelete = session.delete("cyTodoListDelete", todo);
@@ -61,26 +61,76 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 		return todoListDelete;
 	}
 
-	
-	
-	
-	// select
-//	@Override
-//	public List<Todo> listTodo(String loginId) {
-//		System.out.println("CyjDaolmplTodo listTodo Start..");
-//		
-//		List<Todo> listTodo = null;
-//		try {
-//			listTodo = session.selectList("cyTodoListSelect", loginId);
-//			System.out.println("CyjDaolmplTodo listTodo.size()-> " + listTodo.size());
-//		} catch (Exception e) {
-//			System.out.println("CyjDaolmplTodo listTodo Exception-> " + e.getMessage());
-//		}
-//		return listTodo;
-//	}
-	
-	
-	
-	
-	
+	// 각각의 todoList 갖고 옴
+	@Override
+	public Todo oneRowTodoList(Todo todo) {
+		System.out.println("CyjDaolmplTodo oneRowTodoList Start..");
+
+		Todo oneRowTodoList = null;
+		try {
+			oneRowTodoList = session.selectOne("cyRowTodoList", todo);
+			System.out.println("CyjDaolmplTodo oneRowTodoList-> " + oneRowTodoList);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo oneRowTodoList Exception-> " + e.getMessage());
+		}
+		return oneRowTodoList;
+	}
+
+
+
+	// 할 일 완료 -> Y로 변경
+	@Override
+	public int todoListTodoCheckY(Todo todo) {
+		System.out.println("CyjDaolmplTodo todoListTodoCheckY Start..");
+
+		int todoListTodoCheckY = 0;
+		try {
+			todoListTodoCheckY = session.update("cyTodoListTodoCheckY", todo);
+			System.out.println("CyjDaolmplTodo todoListTodoCheckY-> " + todoListTodoCheckY);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoListTodoCheckY Exception-> " + e.getMessage());
+		}
+		return todoListTodoCheckY;
+	}
+
+	// N으로 변경
+	@Override
+	public int todoListTodoCheckN(Todo todo) {
+		System.out.println("CyjDaolmplTodo todoListTodoCheckN Start..");
+
+		int todoListTodoCheckN = 0;
+		try {
+			todoListTodoCheckN = session.update("cyTodoListTodoCheckN", todo);
+			System.out.println("CyjDaolmplTodo todoListTodoCheckN-> " + todoListTodoCheckN);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoListTodoCheckN Exception-> " + e.getMessage());
+		}
+		return todoListTodoCheckN;
+	}
+
+
+
+
+
+	@Override
+	public List<Todo> todoDate(Todo todo) {
+
+		List<Todo> todoDateList = null;
+		try {
+			todoDateList = session.selectList("todoDatecount", todo);
+			System.out.println("CyjDaolmplTodo todoDate-> " + todo);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoDate Exception-> " + e.getMessage());
+		}
+		return todoDateList;
+	}
+
+
+
+
+
+
+
+
+
 }
