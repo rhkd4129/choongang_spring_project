@@ -1,12 +1,13 @@
 package com.oracle.s202350101.model;
 
-import java.util.Date;
+import java.sql.Date;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-//@Date 
+// @Data 
 @Getter
 @Setter
 @ToString

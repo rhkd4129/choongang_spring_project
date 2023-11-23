@@ -304,9 +304,9 @@
 					
 		
 					<div align="right">
-					 	<button type="button" id="startBtn" style="display:none;" class="btn btn-secondary" onclick="prj_start()">프로젝트 시작</button>
-					 	<button type="button" id="endBtn" style="display:none;" class="btn btn-secondary" onclick="prj_end()">프로젝트 종료</button>
-						<button type="button" class="btn btn-secondary" onclick="list_up()">수정</button>
+					 	<button type="button" id="startBtn" style="display:none;" class="btn btn-dark btn-sm" onclick="prj_start()">프로젝트 시작</button>
+					 	<button type="button" id="endBtn" style="display:none;" class="btn btn-dark btn-sm" onclick="prj_end()">프로젝트 종료</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="list_up()">수정</button>
 					</div>
 				</div>
 	
@@ -318,9 +318,9 @@
 		
 					<div class="form-group row">
 						<div class="col-lg-12">
-							<button class="btn btn-secondary float-left "  style="width:130px;height:35px" onclick="prj_order()">단계설정</button>
+							<button class="btn btn-dark btn-sm float-left "  style="width:130px;height:35px" onclick="prj_order()">단계설정</button>
 		
-							<button class="btn btn-secondary float-lg-end"  style="width:130px;height:35px" onclick="location.href='prj_mgr_step_insert?project_id=${prjInfo.project_id}'">추가</button><P>
+							<button class="btn btn-dark btn-sm float-lg-end"  style="width:130px;height:35px" onclick="location.href='prj_mgr_step_insert?project_id=${prjInfo.project_id}'">추가</button><P>
 						</div>
 					</div>
 		
@@ -350,7 +350,7 @@
 					</c:forEach>
 		
 					<div align="right">
-						 <button type="button" class="btn btn-secondary" style="width:130px;height:35px" onclick="location.href='prj_mgr_step_read?project_id=${prjInfo.project_id}'">포트폴리오 생성</button><p>
+						 <button type="button" class="btn btn-dark btn-sm" style="width:130px;height:35px" onclick="location.href='prj_mgr_step_read?project_id=${prjInfo.project_id}'">포트폴리오 생성</button><p>
 					</div>
 				</c:if>		
 			</div>

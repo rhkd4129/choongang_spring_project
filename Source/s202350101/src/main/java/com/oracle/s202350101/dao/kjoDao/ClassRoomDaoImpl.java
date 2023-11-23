@@ -109,7 +109,7 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		log.info("updateUsInfobyUsClassId START");
 		int result = 0;
 		try {
-			result = session.delete("updateUsInfobyUsClassId", cr);
+			result = session.update("updateUsInfobyUsClassId", cr);
 			log.info("updateUsInfobyUsClassId {}",result);
 		} catch (Exception e) {
 			log.info("updateUsInfobyUsClassId ERROR : {}",e.getMessage());

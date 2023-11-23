@@ -244,14 +244,13 @@
                    <div class="project_chart">
                        <canvas id="project_chart"></canvas>
                        <p id="project_time"></p>
-                       <div class="controller">
-                               <!-------------- 디자인 수정 예정---------------------->
+                       <!-- <div class="controller">
                                <a type="button" class="btn btn btn-outline-primary" href="task_list">작업 목록</a>
                                <a type="button" class="btn btn btn-outline-primary" href="garbage_list">휴지통</a>
                                <a type="button" class="btn btn-outline-primary" href="task_timeline">타임 라인</a>
                                <a type="button" class="btn btn-outline-primary" href="task_create_form"> 새작업 </a>
 
-                       </div>
+                       </div> -->
 
                    </div>
 

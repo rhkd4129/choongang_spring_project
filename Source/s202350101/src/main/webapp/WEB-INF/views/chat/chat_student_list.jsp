@@ -68,15 +68,15 @@
                 }
             });
         });
-
-        function chat_button() {
-            var con = document.getElementById("chatbox");
-            if (con.style.display == 'none') {
-                con.style.display = 'flex';
-            } else {
-                con.style.display = 'none';
-            }
-        }
+        //
+        // function chat_button() {
+        //     var con = document.getElementById("chatbox");
+        //     if (con.style.display == 'none') {
+        //         con.style.display = 'flex';
+        //     } else {
+        //         con.style.display = 'none';
+        //     }
+        // }
 
     </script>
 </head>

@@ -384,7 +384,7 @@
 		                        </select>
 	                		</td>
 	                		<td style="padding-left:10px">
-		                		<input type="button" id="pbdBoard_del" class="btn btn-primary" value="삭제" onclick="pbdBoard_del()"/>
+		                		<input type="button" id="pbdBoard_del" class="btn btn-danger btn-sm" value="삭제" onclick="pbdBoard_del()"/>
 	                		</td>
 	                	</tr>
                     </table>                    
@@ -422,32 +422,33 @@
 	                        </tr>
 	                        <c:set var="num" value="${num-1}"></c:set>
 	                    </c:forEach>
-	                    <div id="d_p" class="pagination justify-content-center">
-	                        <c:if test="${page2.startPage > page2.pageBlock}">
-	                            <div onclick="pr_info(${page2.startPage-page2.pageBlock})">
-	                                <p>[이전]</p>
-	                            </div>
-	                        </c:if>
-	                        <c:forEach var="i" begin="${page2.startPage}" end="${page2.endPage}">
-	                            <div class="page-item" onclick="pr_info(${i})">
-	                                <div class="page-link">${i}</div>
-	                            </div>
-	
-	                        </c:forEach>
-	
-	                        <c:if test="${page2.endPage > page2.pageBlock}">
-	                            <div onclick="pr_info(${page2.startPage+page2.pageBlock})">
-	                                <p>[다음]</p>
-	                            </div>
-	                        </c:if>
-	                    </div>
                     </tbody>
                 </table>
+                <div id="d_p" class="pagination justify-content-center">
+                    <c:if test="${page2.startPage > page2.pageBlock}">
+                        <div onclick="pr_info(${page2.startPage-page2.pageBlock})">
+                            <p>[이전]</p>
+                        </div>
+                    </c:if>
+                    <c:forEach var="i" begin="${page2.startPage}" end="${page2.endPage}">
+                        <div class="page-item" onclick="pr_info(${i})">
+                            <div class="page-link">${i}</div>
+                        </div>
+
+                    </c:forEach>
+
+                    <c:if test="${page2.endPage > page2.pageBlock}">
+                        <div onclick="pr_info(${page2.startPage+page2.pageBlock})">
+                            <p>[다음]</p>
+                        </div>
+                    </c:if>
+                </div>
+                
+				<div  style="margin-bottom:40px"></div>
             
 	            <div id="ev">
 					<table style="margin-bottom:5px">
                     	<tr>
-                    		<td><div class="btn btn-success">작성자</div></td>
                     		<td>
 			                    <select id="bd_CTG" class="form-select">
 			                        <option name="bd_ctg_li" value="공지">공지</option>
@@ -456,14 +457,19 @@
 			                        <option name="bd_ctg_li" value="전체">전체</option>
 			                    </select>
 	                		</td>
-	                		<td style="padding-left:10px">
-				                <input type="text" id="search_text" class="form-control"/>
+	                		<td>
+	                			<select class="form-select">
+			                        <option name="bd_ctg_li" value="공지">작성자</option>
+			                    </select>
+	                		</td>
+                    		<td style="padding-left:5px">
+				                <input type="text" id="search_text" class="form-control me-2" style="font-size:0.8rem" placeholder="작성자 이름을 입력하세요">
 							</td>
 							<td>
-				                <input type="button" id="search_button" class="btn btn-info" value="검색" onclick="event_search(1)"/>
+				                <input type="button" id="search_button" class="btn btn-dark btn-sm" value="검색" onclick="event_search(1)"/>
 							</td>
 							<td>
-				                <input type="button" id="del_button" class="btn btn-primary" value="삭제" onclick="bdfree_del()"/>
+				                <input type="button" id="del_button" class="btn btn-danger btn-sm" value="삭제" onclick="bdfree_del()"/>
 	                		</td>
 	                	</tr>
                     </table>
@@ -496,28 +502,27 @@
 	                                <td><input type="checkbox" name="del_chkbox" />
 	                            </tr>
 	                        </c:forEach>
-		                    <div id="e_p" class="pagination justify-content-center">
-		                        <c:if test="${page.startPage > page.pageBlock}">
-		                            <div onclick="event_search(${page.startPage-page.pageBlock})">
-		                                <p>[이전]</p>
-		                            </div>
-		                        </c:if>
-		                        <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-		                            <div class="page-item" onclick="event_search(${i})">
-		                                <div class="page-link" style="cursor:pointer">${i}</div>
-		                            </div>
-		
-		                        </c:forEach>
-		
-		                        <c:if test="${page.endPage > page.pageBlock}">
-		                            <div onclick="event_search(${page.startPage+page.pageBlock})">
-		                                <p>[다음]</p>
-		                            </div>
-		                        </c:if>
-		                    </div>
 	                    </tbody>
- 					</table>
- 					
+ 					</table> 					
+                    <div id="e_p" class="pagination justify-content-center">
+                        <c:if test="${page.startPage > page.pageBlock}">
+                            <div onclick="event_search(${page.startPage-page.pageBlock})">
+                                <p>[이전]</p>
+                            </div>
+                        </c:if>
+                        <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+                            <div class="page-item" onclick="event_search(${i})">
+                                <div class="page-link" style="cursor:pointer">${i}</div>
+                            </div>
+
+                        </c:forEach>
+
+                        <c:if test="${page.endPage > page.pageBlock}">
+                            <div onclick="event_search(${page.startPage+page.pageBlock})">
+                                <p>[다음]</p>
+                            </div>
+                        </c:if>
+                    </div>
 				</div>
 			</div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

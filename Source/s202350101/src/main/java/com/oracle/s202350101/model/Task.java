@@ -20,14 +20,14 @@ public class Task {
 		private String	user_id;
 
 		@NotEmpty(message = "이 항목은 필수입니다")
-		@Length(min = 1, max = 15, message = "길이는 1에서 15 사이여야 합니다.")
+		@Length(min = 1, max = 150, message = "길이는 1에서 150 사이여야 합니다.")
 		private String	task_subject;
 		@NotEmpty(message = "이 항목은 필수입니다")
 		private String	task_content;
 
 		private java.sql.Date task_start_time;
 		private java.sql.Date task_end_time;
-		private java.sql.Date create_time;
+		private java.sql.Date create_date;
 		@NotNull(message = "이 항목은 필수입니다")
 		private String	task_priority;
 		@NotNull(message = "이 항목은 필수입니다")
@@ -47,12 +47,11 @@ public class Task {
 		private int start;
 		private int end;
 		private int rn;
-
+		
 
 	// 다중 테이블 insert
 	private List<String> workerIdList;
 	private int		attach_no;
 	private String	attach_name;
-	private String	attach_path;
-
+	private String	attach_path;	
 }

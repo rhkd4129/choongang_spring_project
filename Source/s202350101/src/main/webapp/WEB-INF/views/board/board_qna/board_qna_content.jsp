@@ -23,7 +23,7 @@
 
 	// 추천
 	function qnaGoodCount(doc_no) {
-		alert("qna 추천 doc_no: " + doc_no);
+		//alert("qna 추천 doc_no: " + doc_no);
 		$.ajax({
 			 url       : 'ajaxQnaGoodCount'
 			,dataType  : 'text'
@@ -35,7 +35,7 @@
 					alert("error");
 				} else {
 					alert("추천되었습니다");
-					$('#qna_count_btn').text("추천수 " + data);
+					$('#count_btn').text(data);
 				}
 			}
 		});
@@ -120,39 +120,40 @@
 			
 			<input type="hidden" name="doc_no" value="${qnaContent.doc_no}"> 
 			
-			<table class="table table-hover">
+			<table width="100%" style="margin-top:7px">
+				<tr>
+					<td style="text-align:right">
+						<input type="button" class="btn btn-dark btn-sm" value="목록" onclick="location.href='board_qna'"> 
+						
+					    <c:if test="${result == 1}">
+						    <input type="button" class="btn btn-dark btn-sm" value="수정" onclick="location.href='qna_update?doc_no=${qnaContent.doc_no}'"> 
+						</c:if>
+						
+						<c:if test="${result == 1}">
+							<input type="button" class="btn btn-dark btn-sm" value="삭제" onclick="ajaxQnaDelete(${qnaContent.doc_no}, '${qnaContent.user_id}' )">
+						</c:if>
+						<button type="button" class="btn btn-dark btn-sm" id="count_btn" onclick="qnaGoodCount(${qnaContent.doc_no})">추천</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
+					</td>
+				</tr>
+			</table>
+			<table class="table">
+				<colgroup>
+					<col width="15%"></col>
+					<col width="85%"></col>
+				</colgroup>
 				<tr> <th>글 번호</th>       <td>${qnaContent.doc_no}</td> </tr>
 				<tr> <th>이름</th>         <td>${qnaContent.user_name}</td> </tr>
 				<tr> <th>작성일</th>       <td>${qnaContent.create_date}</td> </tr>
 				<tr> <th>수정일</th>       <td>${qnaContent.modify_date}</td> </tr>
-				<tr> <th>게시종류</th>      <td>${qnaContent.bd_category}</td> </tr>
+				<tr> <th>게시종류</th>      <td>${qnaContent.bd_category_name}</td> </tr>
 				<tr> <th>제목</th>         <td>${qnaContent.subject}</td> </tr>
-				<tr> <th>본문</th>         <td>${qnaContent.doc_body}</td> </tr>
+				<tr> <th>본문</th>         <td><pre>${qnaContent.doc_body}</pre></td> </tr>
 				<tr> <th>조회수</th>        <td>${qnaContent.bd_count}</td> </tr>
-				<tr> <th>추천</th>         <td>${qnaContent.good_count}</td> </tr>
+				<tr> <th>추천</th>         <td id="count_btn">${qnaContent.good_count}</td> </tr>
 				<tr> <th>첨부파일</th>      <td>${qnaContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${qnaContent.attach_path}/${qnaContent.attach_name}"></td> </tr>	
-				
-				
-				<tr>
-					<td colspan="2">
-						<input type="button" value="목록" onclick="location.href='board_qna'"> 
-						
-					    <c:if test="${result == 1}">
-						    <input type="button" value="수정" onclick="location.href='qna_update?doc_no=${qnaContent.doc_no}'"> 
-						</c:if>
-						
-						<c:if test="${result == 1}">
-							<input type="button" value="삭제" onclick="ajaxQnaDelete(${qnaContent.doc_no}, '${qnaContent.user_id}' )">
-						</c:if> 
-					</td>	
-				</tr>
 			</table>
-			
-			
-			<!-- 추천 -->
-			<button class="mb-4" type="button" id="qna_count_btn" onclick="qnaGoodCount(${qnaContent.doc_no})">추천수  ${qnaContent.good_count}</button><p>
-			
-			
+						
 			<!-- 답글 작성 -->
 			<%
 				Date date = new Date();
@@ -176,11 +177,24 @@
 				<input type="hidden" name="parent_doc_no" 	   value="${qnaContent.doc_no}">
 				<input type="hidden" name="parent_doc_user_id" value="${qnaContent.user_id}">
 			
-				<div>답변 작성</div>
-				<table class="table table-bordered">
+				<div class="bd-example m-0 border-0">
+					<nav>
+						<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+							<button style="color:#5588FF;font-weight:bold;" class="nav-link active" id="nav-reply-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="true">
+							답변 작성</button>
+						</div>
+					</nav>
+				</div>
+				<table class="table">
+					<colgroup>
+						<col width="15%"></col>
+						<col width="65%"></col>
+						<col width="15%"></col>
+					</colgroup>
 					<tr>
 			            <th>작성일</th>
-			            <td><%=strDate%></td> 
+			            <td><%=strDate%></td>
+			            <td></td>
 			        </tr>
 			
 					<tr>
@@ -188,6 +202,7 @@
 			            <td>
 			               ${userInfoDTO.user_name}
 			            </td>
+			            <td></td>
 			        </tr>
 			        
 			        <tr>
@@ -196,22 +211,17 @@
 			                <input type="text" name="subject" class="form-control" value="[답변] ${qnaContent.subject}">
 			                <form:errors path="subject" class="error"/>
 			            </td>
+			            <td></td>
 			        </tr>
 			
 			        <tr>
 			            <th>본문</th>
 			            <td>
-			                <input type="text" name="doc_body" class="form-control">
+			                <textarea  cols="50"  rows="5"    name="doc_body" class="form-control"></textarea>
 			                <form:errors path="doc_body" class="error"/>
 			            </td>
+			            <td style="vertical-align:bottom"><input type="submit" value="답변 등록" class="btn btn-dark btn-sm"></td>
 			        </tr>
-			        
-		         	<tr>
-			            <td colspan="2">
-			                <input type="submit" value="등록">
-			            </td>
-			        </tr>
-			        
 				</table>
 			</form> 
 			

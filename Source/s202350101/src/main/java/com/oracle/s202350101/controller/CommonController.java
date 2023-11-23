@@ -29,7 +29,7 @@ public class CommonController {
 	private final UserInfoService uis;
 	private final ChatRoomService chs;
 	private final MkhService mkhService;
-	
+
 	@RequestMapping(value = "/main")
 	public String mainPage(HttpServletRequest request,UserInfo userInfoDTO, Model model) {
 		return "main";
@@ -58,15 +58,15 @@ public class CommonController {
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		log.info("userInfo: {}",userInfoDTO);
+		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
 		List<UserInfo> chatUIList = null;
 		if (userInfoDTO.getUser_id().equals("admin")) {
 			chatUIList = uis.findAllUser();
-		} else {
-			chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
-		}
+	  } else {
+	     chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
+	  }
 		//	사용자가 참여중인 채팅방 조회
 		List<ChatRoom> chatRooms = chs.findByUserId(userInfoDTO);
-
 
 
 
@@ -100,5 +100,10 @@ public class CommonController {
 	@RequestMapping(value = "/main_footer")
 	public String mainFooterPage(Model model) {
 		return "main_footer";
+	}
+	
+	@RequestMapping(value = "/user_find_pw2")
+	public String userlogin2(Model model) {
+		return "/user/user_find_pw2";
 	}
 }

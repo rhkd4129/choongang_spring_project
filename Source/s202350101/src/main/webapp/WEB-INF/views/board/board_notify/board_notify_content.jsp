@@ -20,7 +20,7 @@
 
 	// 추천
 	function goodCount(doc_no) {
-		alert("공지 추천 doc_no: "  + doc_no);
+		//alert("공지 추천 doc_no: "  + doc_no);
 		$.ajax({
 			url      : 'ajaxGoodCount',
 			dataType : 'text',                     // 받아올 데이터의 자료형 지정 
@@ -32,7 +32,7 @@
 					alert("error");
 				} else {
 					alert("추천되었습니다");
-					$('#count_btn').text("추천수 " + data);
+					$('#count_btn').text(data);
 				} 
 			}
 		});
@@ -43,11 +43,13 @@
 /* 		alert("글 번호 : " + doc_no);
 		alert("회원ID : " + user_id);  */
 	
-		var inputUserId = prompt('회원 아이디를 입력하세요');
+ 		var inputUserId = prompt('회원 아이디를 입력하세요');
 		if (inputUserId != user_id) {
 			alert("회원ID가 올바르지 않습니다");
 			return;
 		}
+		
+		
 		
 		// 아이디 같으므로 삭제 
 		$.ajax({
@@ -114,36 +116,40 @@
 			
 			<h4 class ="pt-4">문서 조회</h4>
 			
-			<table class="table table-hover">
+			<table width="100%" style="margin-top:7px">
+				<tr>
+					<td style="text-align:right">
+						<input type="button" class="btn btn-dark btn-sm" value="목록" onclick="location.href='board_notify'"> 
+						
+					    <c:if test="${result == 1}">
+						    <input type="button" class="btn btn-dark btn-sm" value="수정" id="updateButton" onclick="location.href='board_update?doc_no=${content.doc_no}'"> 
+						</c:if>
+						
+						<c:if test="${result == 1}">
+							<input type="button" class="btn btn-dark btn-sm" value="삭제" id="delete" onclick="ajaxDelete(${content.doc_no}, '${content.user_id}'  )">
+						</c:if> 
+						<button type="button" class="btn btn-dark btn-sm" onclick="goodCount(${content.doc_no})">추천</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
+					</td>
+				</tr>
+			</table>
+			<table class="table">
+				<colgroup>
+					<col width="15%"></col>
+					<col width="85%"></col>
+				</colgroup>
 				<tr> <th>글 번호</th>       <td>${content.doc_no}</td> </tr>
 				<tr> <th>이름</th>         <td>${content.user_name}</td> </tr>
 				<tr> <th>작성일시</th>      <td>${content.create_date}</td> </tr>
 				<tr> <th>수정일시</th>      <td>${content.modify_date}</td> </tr>
 				<tr> <th>게시종류</th>      <td>${content.bd_category}</td> </tr>
 				<tr> <th>제목</th>         <td>${content.subject}</td> </tr>
-				<tr> <th>본문</th>         <td>${content.doc_body}</td> </tr>
+				<tr> <th>본문</th>         <td><pre>${content.doc_body}</pre></td> </tr>
 				<tr> <th>조회수</th>        <td>${content.bd_count}</td> </tr>
-				<tr> <th>추천</th>         <td>${content.good_count}</td> </tr>
+				<tr> <th>추천</th>         <td id="count_btn">${content.good_count}</td> </tr>
 				<tr> <th>첨부파일</th>      <td>${content.attach_name}<img alt="" src="${pageContext.request.contextPath}/${content.attach_path}/${content.attach_name}"></td> </tr>	
-				
-				
-				<tr>
-					<td colspan="2">
-						<input type="button" value="목록" onclick="location.href='board_notify'"> 
-						
-					    <c:if test="${result == 1}">
-						    <input type="button" value="수정" id="updateButton" onclick="location.href='board_update?doc_no=${content.doc_no}'"> 
-						</c:if>
-						
-						<c:if test="${result == 1}">
-							<input type="button" value="삭제" id="delete" onclick="ajaxDelete(${content.doc_no}, '${content.user_id}'  )">
-						</c:if> 
-					</td>	
-				</tr>
 			</table>
 			
-			<!-- 추천 -->
-			<button type="button" id="count_btn" onclick="goodCount(${content.doc_no})">추천수  ${content.good_count}</button>
 			
 			
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

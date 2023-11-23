@@ -54,9 +54,17 @@
             <li><a href="prj_mgr_req_create" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 생성</a></li>
             <li><a href="prj_mgr_step_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 단계 프로파일</a></li>
             <li><a href="prj_home" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>프로젝트 Home</a></li>
-            <li><a href="task_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><img src="/common/images/icon_board.png" width="16" height="14" style="margin-top:2px;margin-right:8px">작업 목록</a></li>
+            <li>
+            	<a href="task_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><img src="/common/images/icon_board.png" width="16" height="14" style="margin-top:2px;margin-right:8px">작업 목록</a>
+            	<span style="margin-left:10px;cursor:pointer" onclick="goto('garbage_list')">
+            		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+					  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"></path>
+					  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"></path>
+					</svg>
+            	</span>
+            </li>
             <li><a href="dashboard" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>작업 보드</a></li>
-            <li><a href="task_timeline" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>타임 라인</a></li>
+            <li><a href="task_timeline" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>작업 타임 라인</a></li>
             <li><a href="prj_calendar" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>프로젝트 캘린더</a></li>
             <li><a href="prj_board_data_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>공지/자료</a></li>
             <li><a href="prj_meeting_calendar" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>회의록</a></li>

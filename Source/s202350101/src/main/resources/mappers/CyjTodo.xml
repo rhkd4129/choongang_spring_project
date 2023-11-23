@@ -27,7 +27,7 @@
 	
 	<!-- 리스트 보여주기 -->
 	<select id="cyTodoTotalSelect" parameterType="Todo" resultType="Todo">
-		select * from todo where user_id = #{user_id}
+		select * from todo where user_id = #{user_id} order by todo_priority desc
 	</select>
 	
 	
@@ -40,15 +40,41 @@
 	</delete>
 	
 	
+	<!-- 각각의 todoList 갖고 옴 -->
+	<select id="cyRowTodoList" parameterType="Todo" resultType="Todo">
+		select  *
+		from    todo
+		where 	todo_no = #{todo_no} 
+		and 	user_id = #{user_id}
+	</select>
 	
-	<!-- select -->
-<!-- 	<select id="cyTodoListSelect" parameterType="Todo" resultType="Todo">
-		select     *
-		from       todo
-		where      user_id = #{user_id}
-		and        todo_date = #{todo_date}
-		order by   todo_priority desc
-	</select> -->
+	
+	<!-- Y로 변경 -->
+	<update id="cyTodoListTodoCheckY" parameterType="Todo">
+		update  
+			todo 
+		set     
+			todo_check = 'Y'
+		where   
+			todo_no = #{todo_no} and
+		    user_id = #{user_id}
+	</update>
+	
+	
+	<!-- N으로 변경  -->
+	<update id="cyTodoListTodoCheckN" parameterType="Todo">
+		update  todo 
+		set     todo_check = 'N'
+		where   todo_no = #{todo_no}
+		and     user_id = #{user_id}
+	</update>
+	
+
+
+
+
+
+
 
 
 

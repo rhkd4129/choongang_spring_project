@@ -1,14 +1,24 @@
 @charset "UTF-8";
 
+/*좌측메뉴*/
 .menubar {
 	min-width: 200px;
 	max-width: 250px;
 	position: fixed;
+	height: 100%;
 }
-
+/*메뉴 타이틀*/
 .apptitle {
 	font-size: 20px;
 	font-weight: bold;
+}
+
+.font-cate {
+	color: #0dcaf0;
+}
+
+.font-subject {
+	color: #0d6efd;
 }
 
 /* 프레임을 좌우 나누고 싶을때 */
@@ -35,4 +45,35 @@ a:hover { /* 마우스 오버한 상태 */
 a:active { /* 마우스 클릭한 상태 */
 }
 a:visited { /* 방문한 상태 */
+}
+
+.errors{color: red;}
+
+
+.dropdown-toggle::after{
+	color: white;
+}
+.pms-bg-dark {
+	background-color:#6c757d;/* #252b46 */
+}
+.pms-circle-header {
+	width:16px;
+	height:16px;
+	line-height:14px;
+	font-weight:bold;
+	background-color:#ffc107;
+	text-align:center;
+	color:#fff;
+	border-radius:50% !important;
+	flex-shrink:0 !important;
+	cursor:pointer;
+	font-size:0.75rem;
+}
+.pms-circle-header.bg-1 {
+	background-color:#ffc107;
+	color:#fff;
+}
+.pms-circle-header.bg-2 {
+	background-color:#88cc55;
+	color:#fff;
 }

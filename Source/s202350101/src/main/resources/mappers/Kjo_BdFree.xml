@@ -33,10 +33,10 @@
     <select id="findByCategorySearchAndPage" parameterType="BdFree" resultType="BdFree">
         select ev.*, u.user_name,rn
         from (select rownum rn, e.*
-              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
+              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} order by Doc_no desc) e) ev
                  left join user_info u
                            on ev.user_id = u.user_id
-        where rn between #{start} and #{end}
+        where rn between #{start} and #{end} and u.user_name like '%' || #{keyword} || '%'
         order by Doc_no desc
     </select>
 <!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->

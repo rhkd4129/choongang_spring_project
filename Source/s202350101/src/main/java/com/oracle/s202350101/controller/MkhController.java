@@ -100,6 +100,7 @@ public class MkhController {
 			return "forward:/user_login";
 		} else {
 			System.out.println("user_login_check userInfo exists");
+			session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
 			session.setAttribute("userInfo", userInfoDTO);
 			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
 			return "redirect:/main";

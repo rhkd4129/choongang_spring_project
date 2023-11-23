@@ -74,13 +74,37 @@
 			
 				<input type="hidden" name="doc_no" value="${content.doc_no}">  
 				  
-				<table class="table table-sm">
+				<table width="100%" style="margin-top:7px">
+					<tr>
+						<td style="text-align:right">
+							<input type="submit" class="btn btn-dark btn-sm" value="등록">
+							<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
+						</td>
+					</tr>
+				</table>
+				<table class="table">
+				<colgroup>
+					<col width="15%"></col>
+					<col width="85%"></col>
+				</colgroup>
 					<tr> <th>수정일</th> <td><%=strDateUpdate%></td> </tr>
 					<tr> <th>글 번호</th> <td>${content.doc_no}</td> </tr>
-					<tr> <th>제목</th> <td> <textarea  cols="50"  rows="1"    name="subject">${content.subject}</textarea> </td> </tr>
-					<tr> <th>내용</th> <td> <textarea  cols="50"  rows="10"   name="doc_body">${content.doc_body}</textarea> </td> </tr>
-					<tr> <th>첨부파일</th> <td><input  id="file"  type="file" name="file"></td> </tr>
-					<tr> <td colspan="2"> <input type="submit" value="등록"></td> </tr>
+					<tr>
+						<th>분류</th>
+						<td>
+							<input type="hidden" name="bd_category_name" value="">
+							<select class="form-select" name="bd_category" id="bd_category">
+								<c:forEach var="code" items="${bd_category_codelist}">
+									<option  
+									<c:if test="${board.bd_category eq code.cate_code}">selected</c:if> 
+									value="${code.cate_code}">${code.cate_name}</option>								
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
+					<tr> <th>제목</th> <td> <input type="text" name="subject" class="form-control" value="${content.subject}"> </td> </tr>
+					<tr> <th>내용</th> <td> <textarea  cols="50"  rows="10"   name="doc_body" class="form-control">${content.doc_body}</textarea> </td> </tr>
+					<tr> <th>첨부파일</th> <td><input  id="file"  type="file" name="file" class="form-control form-control-sm"></td> </tr>
 				</table>
 			</form>
 

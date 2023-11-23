@@ -11,16 +11,6 @@
 <!-- CSS END -->
 
 <!-- JS START -->	
-<script type="text/javascript">
-function closeDoc() {
-	   if(opener) {
-	      opener.location.reload();
-	      window.close();
-	   }else{
-	      location.reload();
-	   }
-	}
-</script>
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -54,45 +44,56 @@ function closeDoc() {
 </head>
 <body>
 <!------------------------------ //개발자 소스 입력 START ----------------------------->
-			<h4 class ="pt-4">문서 조회</h4>
-			
-			<table width="100%" style="margin-top:10px;">
-				<tr>
-					<td style="text-align:right">
-						<button type="button" class="btn btn-secondary btn-sm" onclick="closeDoc()">닫기</button>
-					</td>
-				</tr>
-			</table>
-			
-			
-			<table class="table table-hover">
-				<tr> <th>글 번호</th>       <td>${eventContent.doc_no}</td> </tr>
-				<tr> <th>이름</th>         <td>${eventContent.user_name}</td> </tr>
-				<tr> <th>작성일</th>       <td>${eventContent.create_date}</td> </tr>
-				<tr> <th>수정일</th>       <td>${eventContent.modify_date}</td> </tr>
-				<tr> <th>게시종류</th>      <td>${eventContent.bd_category}</td> </tr>
-				<tr> <th>제목</th>        <td>${eventContent.subject}</td> </tr>
-				<tr> <th>본문</th>        <td>${eventContent.doc_body}</td> </tr>
-				<tr> <th>조회수</th>       <td>${eventContent.bd_count}</td> </tr>
-				<tr> <th>추천</th>        <td>${eventContent.good_count}</td> </tr>
-				<!--  <tr> <th>첨부파일명</th>     <td>${eventContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${eventContent.attach_path}/${eventContent.attach_name}"></td> </tr>-->	
-			</table>
-			
-			<div>댓글</div>
-			<table class="table table-sm">
-				<tr>
-					<th>번호</th> <th>이름</th> <th>작성일</th> <th>내용</th>
-				</tr>
-				<c:forEach var="comment" items="${commentList}">	
-					<tr id="comment${comment.rn}">
-						<td>${comment.rn}</td>
-						<td>${comment.user_name}</td>
-						<td>${comment.create_date}</td>
-						<td>${comment.comment_context}</td>
-					</tr> 
-				</c:forEach>			
-			</table>
-
+	<div class="container-fluid">
+		<div style="height:34px">
+			<span class="apptitle">문서 조회</span>
+		</div>
+		<table width="100%" style="margin-top:10px">
+			<tr>
+				<td style="text-align:right">
+					<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
+				</td>
+			</tr>
+		</table>
+		<table class="table">
+			<colgroup>
+				<col width="15%"></col>
+				<col width="85%"></col>
+			</colgroup>
+			<tr> <th>글 번호</th>       <td>${eventContent.doc_no}</td> </tr>
+			<tr> <th>이름</th>         <td>${eventContent.user_name}</td> </tr>
+			<tr> <th>작성일</th>       <td>${eventContent.create_date}</td> </tr>
+			<tr> <th>수정일</th>       <td>${eventContent.modify_date}</td> </tr>
+			<tr> <th>게시종류</th>      <td>${eventContent.bd_category}</td> </tr>
+			<tr> <th>제목</th>        <td>${eventContent.subject}</td> </tr>
+			<tr> <th>본문</th>        <td>${eventContent.doc_body}</td> </tr>
+			<tr> <th>조회수</th>       <td>${eventContent.bd_count}</td> </tr>
+			<tr> <th>추천</th>        <td>${eventContent.good_count}</td> </tr>
+			<!--  <tr> <th>첨부파일명</th>     <td>${eventContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${eventContent.attach_path}/${eventContent.attach_name}"></td> </tr>-->	
+		</table>
+		
+		<div class="bd-example m-0 border-0">
+			<nav>
+				<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+					<button style="color:#5588FF;font-weight:bold;" class="nav-link active" id="nav-reply-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="true">
+					댓글</button>
+				</div>
+			</nav>
+		</div>
+		<table class="table table-sm">
+			<tr>
+				<th>번호</th> <th>이름</th> <th>작성일</th> <th>내용</th>
+			</tr>
+			<c:forEach var="comment" items="${commentList}">	
+				<tr id="comment${comment.rn}">
+					<td>${comment.rn}</td>
+					<td>${comment.user_name}</td>
+					<td>${comment.create_date}</td>
+					<td>${comment.comment_context}</td>
+				</tr> 
+			</c:forEach>			
+		</table>
+	</div>
 <!------------------------------ //개발자 소스 입력 END ------------------------------->
 </body>
 </html>

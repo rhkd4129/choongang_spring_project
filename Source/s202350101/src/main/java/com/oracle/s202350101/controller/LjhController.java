@@ -243,14 +243,14 @@ public class LjhController {
 		
 		int result = 0; 
 
-		// meeting_status = 1 등록
+		// meeting_status = 1 등록 (회의일정)
 		if (meeting.getMeeting_status() == 1) {
 			// 회의일정 등록 + 참석자 등록
 			result = ljhs.insertMeeting(meeting);
 		} 
 		
 		if (meeting.getMeeting_status() == 2) {
-			// meeting_status = 2 등록
+			// meeting_status = 2 등록 (회의록)
 			result = ljhs.insertReport(meeting);
 		}
 		

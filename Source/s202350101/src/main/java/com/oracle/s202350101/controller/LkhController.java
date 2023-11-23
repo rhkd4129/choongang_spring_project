@@ -1,7 +1,9 @@
 package com.oracle.s202350101.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -135,6 +137,14 @@ public class LkhController {
 	@GetMapping("task_create_form")
 	public String task_create_form(HttpServletRequest request, Model model) {
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfo", userInfo);
+		
+		//오늘날짜
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String todayDate = df.format(date);
+		model.addAttribute("todayDate", todayDate); //작성일
+		
 		int projectId = userInfo.getProject_id();
 		Task task = new Task();
 		log.info("task_create_view ctr projectId : {} userId: {}", projectId, userInfo.getUser_id());
@@ -162,6 +172,8 @@ public class LkhController {
 		// 1 .컨트롤러 시작
 		log.info("1. task_create ctr");
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfo", userInfo);
+		
 		int projectId = userInfo.getProject_id();
 		String userId = userInfo.getUser_id();
 		log.info("2. userId = {}  proejctId = {}", userId, projectId);

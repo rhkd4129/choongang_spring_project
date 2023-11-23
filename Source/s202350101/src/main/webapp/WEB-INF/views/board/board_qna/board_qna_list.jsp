@@ -47,6 +47,10 @@
 		});
 
 		
+		$("#bd_category_selectbox").on('change',function() {
+			document.frmQnaSearch.submit();
+		});
+		
 	});
 	
 	
@@ -94,52 +98,32 @@
 			</div>
 			
 			<div class="container-fluid">
-				<input type="button" class="btn btn-secondary btn-sm" value="작성" onclick="location.href='qna_insert_form'">
+				<input type="button" class="btn btn-dark btn-sm" value="작성" onclick="location.href='qna_insert_form'">
 		 		
 			 	<c:if test="${doc_group_list ne 'y'}">
 			 		
-			 		<!-- 검색 -->
-			 		<form name="frmQnaSearch" action="board_qna">
-				 		<table class="table table-sm">
-					 		<tr>
-					 			<td align="right">
-					 				<table>
-										<tr>
-											<td>
-												<select id="bd_category_selectbox" name="keyword" class="form-select">
-						 							<option value="ALL">전체</option>
-							 						<c:forEach var="code" items="${codeList}">
-							 							<option value="${code.cate_code}">${code.cate_name}</option>
-							 						</c:forEach>
-						 						</select>
-											</td>
-										</tr>
-									</table>
-					 			</td>
-					 		</tr>	
-				 		</table>
-			 		</form>
-			 		
-			 		
 			 		<!-- 추천수 가장 높은 row 3개 -->
-			 		<h5>Best</h5>
+			 		<div style="text-align:center;"><h6><b><추천 게시글></b></h6></div>
 			 		<table class="table">
+				 		<colgroup>
+							<col width="5%"></col><col width="10%"></col><col width="37%"></col><col width="12%"></col>
+							<col width="10%"></col><col width="12%"></col><col width="7%"></col><col width="7%"></col>
+						</colgroup>	
 			 			<thead class="table-light">
 			 				<tr>
-			 					<th>번호</th>      <th>이름</th>      <th>작성일</th> 
-								<th>수정일</th>     <th>질문종류</th>    <th>제목</th>        
-						        <th>조회수</th>     <th>추천</th>    
+			 					<th>번호</th><th>질문종류</th><th>제목</th><th>이름</th>       
+						        <th>작성일</th><th>수정일</th><th>조회수</th><th>추천</th>
 			 				</tr>
 			 			</thead>
 			 			<tbody>
 			 				<c:forEach var="qnaRow" items="${qnaRow }" varStatus="status">
 			 					<tr id="qnaRow${status.count }">
 			 						<td>${status.count }</td> 
+			 						<td>${qnaRow.bd_category_name }</td>
+			 						<td class="title"><a href="qna_content?doc_no=${qnaRow.doc_no}">${qnaRow.subject}</a></td>
 			 						<td>${qnaRow.user_name }</td>
 			 						<td>${qnaRow.create_date }</td>
 			 						<td>${qnaRow.modify_date }</td>
-			 						<td>${qnaRow.bd_category_name }</td>
-			 						<td class="title"><a href="qna_content?doc_no=${qnaRow.doc_no}">${qnaRow.subject}</a></td>
 			 						<td>${qnaRow.bd_count }</td>
 			 						<td>${qnaRow.good_count }</td>
 			 					</tr>
@@ -148,14 +132,41 @@
 			 		</table>
 				</c:if>
 		 	
-		 		<!-- 전체 리스트 -->
-		 		<h6 class="mt-5 pt-3" style="text-align:right">총 건수 : ${qnaTotalCount}</h6>
+		 		
+		 		<!-- 검색 / 건수 -->
+		 		<table width="100%">
+			 		<tr>
+			 			<td align="left">
+			 				<table>
+								<tr>
+									<td>
+										<!-- 검색 -->
+										<form name="frmQnaSearch" action="board_qna">
+										<select id="bd_category_selectbox" name="keyword" class="form-select">
+				 							<option value="">전체</option>
+					 						<c:forEach var="code" items="${codeList}">
+					 							<option value="${code.cate_code}" <c:if test="${keyword eq code.cate_code}">selected</c:if> >${code.cate_name}</option>
+					 						</c:forEach>
+				 						</select>
+				 						</form>
+									</td>
+								</tr>
+							</table>
+			 			</td>
+			 			<td align="right"><h6 style="text-align:right">총 건수 : ${qnaTotalCount}</h6></td>
+			 		</tr>	
+		 		</table>		 		
+
+		 		<!-- 전체 리스트 -->		 		
 				<table class="table">
+					<colgroup>
+						<col width="5%"></col><col width="10%"></col><col width="37%"></col><col width="12%"></col>
+							<col width="10%"></col><col width="12%"></col><col width="7%"></col><col width="7%"></col>
+					</colgroup>
 					<thead class="table-light">
 					<tr>
-						<th>번호</th>      <th>이름</th>       <th>작성일</th> 
-						<th>수정일</th>     <th>질문종류</th>    <th>제목</th>        
-				        <th>조회수</th>     <th>추천</th>    
+						<th>번호</th><th>질문종류</th><th>제목</th><th>이름</th>
+						<th>작성일</th><th>수정일</th><th>조회수</th><th>추천</th>
 					</tr> 
 					</thead>
 					<tbody>
@@ -163,14 +174,14 @@
 					<c:forEach var="qnaList" items="${qnaList}" varStatus="status">
 						<tr id="qnaList${qnaList.rn}"> 
 							<td>${qnaList.rn}</td> 
-							<td>${qnaList.user_name}</td>     
-						    <td>${qnaList.create_date}</td> 
-							<td>${qnaList.modify_date}</td>     
 							<td>${qnaList.bd_category_name}</td>     
 							<td class="title">
 								<c:forEach begin="1" end="${qnaList.doc_indent}">-</c:forEach>
 								<a href="qna_content?doc_no=${qnaList.doc_no}">${qnaList.subject}</a>
 							</td>
+						    <td>${qnaList.user_name}</td>     
+							<td>${qnaList.create_date}</td> 
+							<td>${qnaList.modify_date}</td>     
 							<td>${qnaList.bd_count}</td>        
 							<td>${qnaList.good_count}</td> 
 						</tr>

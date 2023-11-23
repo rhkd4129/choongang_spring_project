@@ -225,8 +225,8 @@
 						</tr>
 					</tbody>
                     </table>
-                    <button class="btn btn-secondary" type="submit">반 생성하기</button>
-                    <button class="btn btn-secondary" type="reset">초기화하기</button>
+                    <button class="btn btn-dark" type="submit">반 생성하기</button>
+                    <button class="btn btn-dark" type="reset">초기화하기</button>
                 </form:form>
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

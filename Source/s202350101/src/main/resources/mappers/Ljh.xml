@@ -104,7 +104,7 @@
 	<!-- 회의일정 등록 (meeting_status = 1) -->
 	<insert id="ljhMeetingInsert" parameterType="Meeting">
 		INSERT INTO meeting
-		VALUES ((SELECT max(meeting_id)+1 FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
+		VALUES ((SELECT NVL(max(meeting_id)+1, 1) FROM meeting), #{project_id}, #{meeting_date}, #{meeting_title}, 
 				#{meeting_place}, #{user_id}, #{meeting_category}, #{meeting_content}, 1, #{attach_name, jdbcType=VARCHAR}, 
 				#{attach_path, jdbcType=VARCHAR}, SYSDATE)
 	</insert>

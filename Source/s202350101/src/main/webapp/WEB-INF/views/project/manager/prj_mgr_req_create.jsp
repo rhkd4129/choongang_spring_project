@@ -122,7 +122,7 @@
 	
 					<div class="input-group mb-3">
 						<div class="input-group-prepend col-2">
-							<span class="input-group-text col-12" style="width:224px;height:180px" >프로젝트 멤버</span>
+							<span class="input-group-text col-12" style="width:224px;height:224px" >프로젝트 멤버</span>
 						</div>
 						<div class="form-control p-3" style="display:block;">
 							<div style="width:100%;line-height:40px;">
@@ -146,7 +146,7 @@
 					</div>
 	
 					<div align="right">
-						<button type="submit" class="btn btn-secondary">프로젝트 생성</button>
+						<button type="submit" class="btn btn-dark btn_sm">프로젝트 생성</button>
 					</div>
 					
 				</div>

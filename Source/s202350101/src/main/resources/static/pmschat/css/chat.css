@@ -1,11 +1,15 @@
 @charset "UTF-8";
 
+.iconChat{
+	cursor:pointer;
+}
+
     #chatbox {
         right: 0;
         position: absolute;
         z-index: 999;
         float: right;
-        width: 30%;
+        width: 20%;
         height: auto; /* 변경된 높이 값 */
         background-color: rgba(13, 110, 253, 0.25);
         /*display: none;*/
@@ -50,4 +54,10 @@
 
     #chat_ch_center {
         font-size: 0.7em;
+    }
+
+    #cntMsg {
+    	position:absolute;
+    	top:26px;
+    	right:381px;
     }

@@ -116,7 +116,15 @@
 													</select>
 												</td>
 												<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
-												<td><button type="submit" class="btn btn-primary btn-sm">검색</button></td>
+												<td>
+													<button type="submit" class="btn btn-dark btn-sm">검색</button>
+													<button type="button" class="btn btn-outline-secondary btn-sm" onclick="goto('prj_board_report_list')" style="cursor:pointer">
+									         			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+															<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+															<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+														</svg>
+													</button>
+												</td>
 											</tr>
 										</table>
 									</form>	
@@ -126,7 +134,7 @@
 						<table width="100%" style="margin-bottom:5px">
 							<tr>
 								<td width="100">
-									<button type="button" class="btn btn-secondary btn-sm" onclick="callAction('write','prj_board_report_write')">작성</button>
+									<button type="button" class="btn btn-dark btn-sm" onclick="callAction('write','prj_board_report_write')">작성</button>
 								</td>
 								<td width="200">
 									<div class="form-check form-switch">
@@ -148,12 +156,11 @@
 						<table class="table table-hover">
 							<colgroup>
 								<col width="5%"></col>
-								<col width="40%"></col>
+								<col width="50%"></col>
 								<col width="10%"></col>
 								<col width="12%"></col>
 								<col width="8%"></col>
 								<col width="15%"></col>
-								<col width="10%"></col>
 							</colgroup>
 							<thead class="table-light">
 								<tr>
@@ -163,7 +170,6 @@
 									<th>작성일</th>
 									<th>분류</th>
 									<th><img src="/common/images/attach/icon_document.png"></th>
-									<th>댓글</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -173,7 +179,7 @@
 									<td>${board.rn}</td>
 									<td>
 										<a href="javascript:callAction('read','prj_board_report_read?doc_no=${board.doc_no}&project_id=${board.project_id}')">
-										${board.subject}
+										${board.subject}<c:if test="${board.comment_count > 0}"> (${board.comment_count})</c:if>
 										</a>
 									</td>
 									<td>${board.user_name}</td>
@@ -187,7 +193,6 @@
 											<a href="javascript:popup('/upload/${board.attach_path}',800,600)"><img src="/common/images/attach/icon_${extension_name}.png" alt="${board.attach_name}"> ${board.attach_name}</a>
 										</c:if>		
 									</td>
-									<td>${board.comment_count}</td>
 								</tr>
 								<c:set var="num" value="${num-1}"></c:set>
 							</c:forEach>

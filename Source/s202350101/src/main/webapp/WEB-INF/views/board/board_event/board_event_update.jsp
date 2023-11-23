@@ -73,14 +73,25 @@
 			<form action="event_update2" method="post">
 			
 				<input type="hidden" name="doc_no" value="${event.doc_no}">  
-				  
-				<table class="table table-sm">
+				
+				<table width="100%" style="margin-top:7px">
+					<tr>
+						<td style="text-align:right">
+							<input type="submit" class="btn btn-dark btn-sm" value="등록">
+							<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
+						</td>
+					</tr>
+				</table>
+				<table class="table">
+				<colgroup>
+					<col width="15%"></col>
+					<col width="85%"></col>
+				</colgroup>
 					<tr> <th>수정일</th> <td><%=strDateUpdate%></td> </tr>
 					<tr> <th>글 번호</th> <td>${event.doc_no}</td> </tr>
-					<tr> <th>제목</th> <td> <textarea  cols="50"  rows="1"    name="subject">${event.subject}</textarea> </td> </tr>
-					<tr> <th>본문</th> <td> <textarea  cols="50"  rows="10"   name="doc_body">${event.doc_body}</textarea> </td> </tr>
-					<tr> <th>첨부파일</th>   <td><input  id="file"  type="file"  name="file"></td> </tr>
-					<tr> <td colspan="2"> <input type="submit" value="등록"></td> </tr>
+					<tr> <th>제목</th> <td> <input type="text" name="subject" class="form-control" value="${event.subject}"></td> </tr>
+					<tr> <th>본문</th> <td> <textarea  cols="50"  rows="10"   name="doc_body" class="form-control">${event.doc_body}</textarea> </td> </tr>
+					<tr> <th>첨부파일</th>   <td><input  id="file"  type="file"  name="file" class="form-control form-control-sm"></td> </tr>
 				</table>
 			</form>
 

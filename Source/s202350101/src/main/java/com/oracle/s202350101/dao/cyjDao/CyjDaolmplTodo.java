@@ -61,25 +61,55 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 		return todoListDelete;
 	}
 
+	// 각각의 todoList 갖고 옴
+	@Override
+	public Todo oneRowTodoList(Todo todo) {
+		System.out.println("CyjDaolmplTodo oneRowTodoList Start..");
+		
+		Todo oneRowTodoList = null;
+		try {
+			oneRowTodoList = session.selectOne("cyRowTodoList", todo);
+			System.out.println("CyjDaolmplTodo oneRowTodoList-> " + oneRowTodoList);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo oneRowTodoList Exception-> " + e.getMessage());
+		}
+		return oneRowTodoList;
+	}
 	
+	 // 할 일 완료 -> Y로 변경
+	@Override
+	public int todoListTodoCheckY(Todo todo) {
+		System.out.println("CyjDaolmplTodo todoListTodoCheckY Start..");
+		
+		int todoListTodoCheckY = 0;
+		try {
+			todoListTodoCheckY = session.update("cyTodoListTodoCheckY", todo);
+			System.out.println("CyjDaolmplTodo todoListTodoCheckY-> " + todoListTodoCheckY);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoListTodoCheckY Exception-> " + e.getMessage());
+		}
+		return todoListTodoCheckY;
+	}
+
+	// N으로 변경 
+	@Override
+	public int todoListTodoCheckN(Todo todo) {
+		System.out.println("CyjDaolmplTodo todoListTodoCheckN Start..");
+		
+		int todoListTodoCheckN = 0;
+		try {
+			todoListTodoCheckN = session.update("cyTodoListTodoCheckN", todo);
+			System.out.println("CyjDaolmplTodo todoListTodoCheckN-> " + todoListTodoCheckN);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoListTodoCheckN Exception-> " + e.getMessage());
+		}
+		return todoListTodoCheckN;
+	}
+
+
+
 	
-	
-	// select
-//	@Override
-//	public List<Todo> listTodo(String loginId) {
-//		System.out.println("CyjDaolmplTodo listTodo Start..");
-//		
-//		List<Todo> listTodo = null;
-//		try {
-//			listTodo = session.selectList("cyTodoListSelect", loginId);
-//			System.out.println("CyjDaolmplTodo listTodo.size()-> " + listTodo.size());
-//		} catch (Exception e) {
-//			System.out.println("CyjDaolmplTodo listTodo Exception-> " + e.getMessage());
-//		}
-//		return listTodo;
-//	}
-	
-	
+
 	
 	
 	

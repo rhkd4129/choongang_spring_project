@@ -46,17 +46,39 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 		
 		return todoListDelete;
 	}
-	
-	// select
-//	@Override
-//	public List<Todo> listTodoShow(String loginId) {
-//		System.out.println("CyjServicelmplTodo listTodoShow Start..");
-//		List<Todo> listTodo = cdt.listTodo(loginId);
-//		System.out.println("CyjServicelmplTodo listTodo-> " + listTodo);
-//		
-//		return listTodo;
-//	}
 
+	// 각각의 todoList 갖고 옴
+	@Override
+	public Todo oneRowTodoList(Todo todo) {
+		System.out.println("CyjServicelmplTodo oneRowTodoList Start..");
+		Todo oneRowTodoList = cdt.oneRowTodoList(todo);
+		System.out.println("CyjServicelmplTodo oneRowTodoList-> " + oneRowTodoList);
+		
+		return oneRowTodoList;
+	}
+	
+	// Y로 변경
+	@Override
+	public int todoListTodoCheckY(Todo todo) {
+		System.out.println("CyjServicelmplTodo todoListTodoCheckY Start..");
+		int todoListTodoCheckY = cdt.todoListTodoCheckY(todo);
+		System.out.println("CyjServicelmplTodo todoListTodoCheckY-> " + todoListTodoCheckY);
+		
+		return todoListTodoCheckY;
+	}
+
+	// N으로 변경 
+	@Override
+	public int todoListTodoCheckN(Todo todo) {
+		System.out.println("CyjServicelmplTodo todoListTodoCheckN Start..");
+		int todoListTodoCheckN = cdt.todoListTodoCheckN(todo);
+		System.out.println("CyjServicelmplTodo todoListTodoCheckN-> " + todoListTodoCheckN);
+		
+		return todoListTodoCheckN;
+	}
+
+
+	
 	
 	
 	

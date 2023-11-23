@@ -55,102 +55,130 @@
 
         <!-- 본문 -->
         <main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
-
-            <h3 style="margin: 2%;">작업 생성</h3>
-            <form:form action="task_create" method="post" modelAttribute='task' class="border border-dark p-4" enctype="multipart/form-data" >
-                <div class="container">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="order_by" class="fw-bold fs-6">프로젝트 단계</label>
-                                <select id="order_by" name="project_step_seq">
-                                    <c:forEach var="step" items="${prjStepList}">
-                                        <option  value="${step.project_step_seq}">${step.project_order}: ${step.project_s_name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-
-                            <div class="form-group fw-bold fs-6 mt-4">
-                                <label for="task_subject">작업명</label>
-                                <input type="text" id="task_subject" class="form-control" name="task_subject" id="task_subject">
-                                <form:errors path="task_subject" class="errors"/>
-                            </div>
-                            <div class="form-group fw-bold fs-6 mt-3">
-                                <label for="task_content">작업 내용:</label>
-                                <textarea  rows="5" class="form-control" name="task_content" id="task_content"></textarea>
-                                <form:errors path="task_content" class="errors" />
-                            </div>
-
-
-                            <div class="form-group fw-bold fs-6 mt-5">
-                                <label for="task_start_time">작업시작일</label>
-                                <input type="date" class="form-control" id="task_start_time" name="task_start_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
-                            </div>
-                            <div class="form-group fw-bold fs-6">
-                                <label for="task_end_time">작업 마감일</label>
-                                <input type="date" class="form-control" id="task_end_time" name="task_end_time" value="2023-11-22" min="2023-07-22" max="2030-12-31" />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group fw-bold fs-6">
-                                <label>작업상태</label>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="task_status" value="0" id="status0">
-                                    <label class="form-check-label" for="status0">예정된 작업</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="task_status" value="1" id="status1">
-                                    <label class="form-check-label" for="status1">진행중인 작업</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="task_status" value="2" id="status2">
-                                    <label class="form-check-label" for="status2">완료된 작업</label>
-                                </div>
-
-                                <form:errors path="task_status" class="errors" />
-                            </div>
-                            <div class="form-group fw-bold fs-6 mt-3">
-                                <label>우선순위</label>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="task_priority" value="0" id="priority0">
-                                    <label class="form-check-label" for="priority0">낮음</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="task_priority" value="1" id="priority1">
-                                    <label class="form-check-label" for="priority1">보통</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="task_priority" value="2" id="priority2">
-                                    <label class="form-check-label" for="priority2">높음</label>
-                                </div>
-
-                                <form:errors path="task_priority" class="errors" />
-                            </div>
-
-
-                            <div class="form-group fw-bold fs-6 mt-5">
-                                <label for="file1">파일첨부</label>
-                                <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
-                                <form:errors path="*" class="errors"/>
-                            </div>
-
-
-
-                            <div class="form-group mt-5">
-                                <label class="fw-bold fs-6">공동작업자</label><br>
-                                <c:forEach var="user" items="${task_create_form_worker_list}">
-                                    <input type="checkbox" name="workerIdList" value="${user.user_id}"> ${user.user_name}<br>
-                                </c:forEach>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">새 작업 생성</button>
-
-            </form:form>
+            <!------------------------------ //개발자 소스 입력 END ------------------------------->
+       		<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			  <symbol id="house-door-fill" viewBox="0 0 16 16">
+			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+			  </symbol>
+			</svg>		
+			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+			    <ol class="breadcrumb breadcrumb-chevron p-1">
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis" href="/main">
+			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+			          <span class="visually-hidden">Home</span>
+			        </a>
+			      </li>
+			      <li class="breadcrumb-item">
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+			      </li>
+			      <li class="breadcrumb-item active" aria-current="page">작업</li>
+			    </ol>
+			</nav>
+			<div class="container-fluid">
+				<div style="margin-top:15px;height:45px">
+					<span class="apptitle">작업 작성</span>
+				</div>
+			</div>
+                
+			<div class="container-fluid">
+				<form:form action="task_create" method="post" modelAttribute='task' enctype="multipart/form-data" >
+					<table width="100%" style="margin-top:7px">
+						<tr>
+							<td style="text-align:right">
+								<button type="submit" class="btn btn-dark btn-sm">저장</button>
+								<button type="button" class="btn btn-dark btn-sm" onclick="history.go(-1)">닫기</button>
+							</td>
+						</tr>
+					</table>
+					<table class="table" width="100%">
+						<colgroup>
+							<col width="10%"></col>
+							<col width="40%"></col>
+							<col width="10%"></col>
+							<col width="40%"></col>
+						</colgroup>
+						<tr>
+							<th>프로젝트 단계</th>
+							<td>
+								<select id="order_by" name="project_step_seq" class="form-select">
+	                                <c:forEach var="step" items="${prjStepList}">
+	                                    <option  value="${step.project_step_seq}">${step.project_order}: ${step.project_s_name}</option>
+	                                </c:forEach>
+	                            </select>
+							</td>
+							<th>작성일</th>
+							<td>${todayDate}</td>
+						</tr>
+						<tr>
+							<th>작업명</th>
+							<td>
+								<input type="text" id="task_subject" class="form-control" name="task_subject" id="task_subject">
+	                            <form:errors path="task_subject" class="errors"/>
+	                        </td>
+							<th rowspan="7">작업 내용</th>
+							<td rowspan="7">
+								<textarea  rows="20" class="form-control" name="task_content" id="task_content"></textarea>
+	                            <form:errors path="task_content" class="errors" />
+							</td>
+						</tr>
+						<tr>
+							<th>시작일 ~ 마감일</th>
+							<td>
+								<table>
+									<tr>
+										<td><input type="date" class="form-control" id="task_start_time" name="task_start_time" value="${todayDate}" min="2023-07-22" max="2030-12-31" /></td>
+										<td>~</td>
+										<td><input type="date" class="form-control" id="task_end_time" name="task_end_time" value="${todayDate}" min="2023-07-22" max="2030-12-31" /></td>
+									</tr>
+								</table>							
+							</td>
+						</tr>
+						<tr>
+							<th>우선 순위</th>
+							<td>
+								<input type="radio" class="form-check-input" name="task_priority" value="0" id="priority0">
+	                            <label class="form-check-label" for="priority0">낮음</label>
+	                            <input type="radio" class="form-check-input" name="task_priority" value="1" id="priority1" checked>
+	                            <label class="form-check-label" for="priority1">보통</label>
+	                            <input type="radio" class="form-check-input" name="task_priority" value="2" id="priority2">
+	                            <label class="form-check-label" for="priority2">높음</label>
+							</td>
+						</tr>
+						<tr>
+							<th>작업 상태</th>
+							<td>
+								<input type="radio" class="form-check-input" name="task_status" value="0" id="status0" checked>
+								<label class="form-check-label" for="status0">예정된 작업</label>
+								<input type="radio" class="form-check-input" name="task_status" value="1" id="status1">
+	                            <label class="form-check-label" for="status1">진행중인 작업</label>
+	                            <input type="radio" class="form-check-input" name="task_status" value="2" id="status2">
+	                            <label class="form-check-label" for="status2">완료된 작업</label>
+	                            <form:errors path="task_status" class="errors" />
+							</td>
+						</tr>
+						<tr>
+							<th>작성자</th>
+							<td>${userInfo.user_name}</td>
+						</tr>
+						<tr>
+							<th>공동 작업자</th>
+							<td style="line-height:25px">
+								<c:forEach var="user" items="${task_create_form_worker_list}">
+	                            	<input type="checkbox" name="workerIdList" value="${user.user_id}" class="form-check-input flex-shrink-0" style="font-size: 1.375em;"> ${user.user_name}<br>
+	                            </c:forEach>
+							</td>
+						</tr>
+						<tr>
+							<th>파일 첨부</th>
+							<td>
+	                            <input type="file" class="form-control" id="file1" name="file1" multiple="multiple" >
+							</td>
+						</tr>
+					</table>
+					<form:errors path="*" class="errors"/>
+	            </form:form>
+			</div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->
         </main>
 

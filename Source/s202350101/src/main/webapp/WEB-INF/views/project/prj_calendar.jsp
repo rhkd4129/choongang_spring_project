@@ -129,7 +129,7 @@
 				console.log("클릭한 곳의 배경색: " + backgroundColor);
 				
 				if (backgroundColor == "rgb(103, 153, 255)") {
-					var openurl = "/dashboard";
+					var openurl = "/prj_home";
 					
 					console.log("openurl: " + openurl);
 					

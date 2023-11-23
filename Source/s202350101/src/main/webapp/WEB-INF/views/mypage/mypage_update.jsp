@@ -298,7 +298,8 @@
 					<tr><th>소속</th><td>
 						<select name="class_id">
 							<c:forEach var="cList" items="${classList}">
-								<option value="${cList.class_id }">${cList.class_area }점 ${cList.class_room_num }반   ${cList.class_start_date } ~ ${cList.class_end_date }</option>
+								<option value="${cList.class_id }" 
+									<c:if test="${cList.class_id eq userInfoDTO.class_id}">selected</c:if>>${cList.class_area }점 ${cList.class_room_num }반   ${cList.class_start_date } ~ ${cList.class_end_date }</option>
 							</c:forEach>
 						</select><p>
 						</td></tr>

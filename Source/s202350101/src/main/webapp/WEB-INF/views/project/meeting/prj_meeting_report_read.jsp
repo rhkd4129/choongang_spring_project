@@ -169,7 +169,7 @@
 							<td><c:if test="${meeting.attach_name != null}"><a href="javascript:popup('${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}',800,600)">${meeting.attach_name}</a></c:if></td>
 						</tr>
 						<tr>
-							<th>회의내용</th><td>${meeting.meeting_content}</td>
+							<th>회의내용</th><td><pre>${meeting.meeting_content}</pre></td>
 						</tr>
 					</c:forEach>
 					<tr>
