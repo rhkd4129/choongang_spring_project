@@ -65,7 +65,6 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
     @Override
     public ChatRoom findById(ChatRoom cr) {
-//<!--강의실 개수 조회-->
         log.info("findById start");
         ChatRoom CRList = null;
         try {
@@ -83,7 +82,6 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
     @Override
     public int addChatRoom(ChatRoom cr) {
-//<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
         log.info("addChatRoom start");
         int result = 0;
         try {

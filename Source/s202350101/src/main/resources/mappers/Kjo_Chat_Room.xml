@@ -31,13 +31,7 @@
 		select * from chat_room where
 			receiver_id=#{sender_id} and sender_id = #{receiver_id}
 	</select>
-<!--강의실 개수 조회-->
-	<select id="findById" resultType="int">
-		select count(class_id)
-		from class_room
-	</select>
-
-<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
+<!--시퀀스 적용해 채팅방 저장, 시퀀스 값 반환-->
 	<insert id="addChatRoom" parameterType="ChatRoom" keyProperty="chat_room_id">
 		<selectKey keyProperty="chat_room_id" resultType="int" order="BEFORE">
 			SELECT NVL(seq_chat_room_id.NEXTVAL, 0) FROM DUAL

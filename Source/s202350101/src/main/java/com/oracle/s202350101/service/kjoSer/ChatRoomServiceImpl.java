@@ -55,27 +55,15 @@ public class ChatRoomServiceImpl implements ChatRoomService{
         return crList;
     }
 //<!--모든 채팅방 조회-->
-
     @Override
     public List<ChatRoom> findAll() {
         return CHdao.findAll();
     }
-
-
-//<!--강의실 개수 조회-->
-    @Override
-    public ChatRoom findById(ChatRoom cr) {
-        return CHdao.findById(cr);
-    }
-
 //<!--상대방과의 채팅방 조회-->
     @Override
     public ChatRoom findByYouAndMe(ChatRoom cr) {
         return CHdao.findByYouAndMe(cr);
     }
-
-
-
 //  사용자 별 메세지가 있는 채팅방
     @Override
     public Map<?, ?> findByUserIdV2(List<ChatMsg> findmsg, ChatRoom cr) {

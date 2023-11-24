@@ -27,12 +27,14 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     private final UserInfoDao UIdao;
 
+    //<!--사용자 ID로 사용자 조회-->
     @Override
     public UserInfo findbyuserId(UserInfo userInfo) {
         userInfo = UIdao.findbyuserId(userInfo);
         return userInfo;
     }
 
+    //	특정 강의실 전체 학생 조회
     @Override
     public List<UserInfo> findbyclassuser(UserInfo ui) {
         log.info("findbyclassuser start");
@@ -100,6 +102,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 //-----------------not Use-----------------
 
 
+    //	특정 강의실 내 전체 학생 및 참여 프로젝트 조회
     @Override
     public List<UserInfo> findbyClassUserProject(int cl_Id) {
         log.info("findbyClassUserProject start");
@@ -107,6 +110,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         return UIList;
     }
 
+    //<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
     @Override
     public List<UserInfo> pageUserInfo( UserInfo userInfo) {
         log.info("pageUserInfo start");

@@ -103,7 +103,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
 
 
 
-//  사용자 별 읽지 않은 메세지
+//  사용자와 연관된 모든 메시지
     public List<ChatMsg> findbyuseridnoRead(ChatRoom cr) {
         log.info("updateRead start");
         List<ChatMsg> result = null;

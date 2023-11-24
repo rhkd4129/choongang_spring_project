@@ -225,25 +225,14 @@ public class KjoController {
     public KjoResponse admin_board_ajax(ClassRoom cr) {
         log.info("admin_board_ajax");
         /*------------------비즈니스 로직--------------------*/
-        // 모든 강의실 조회
-        List<ClassRoom> CRList = CRser.findAllClassRoom();
-
         List<PrjInfo> PIList = null;
-        //	강의실을 선택하지 않았을 경우
-        if (cr.getClass_id() != 0) {
-            //	해당 강의실에 포함된 프로젝트 리스트
-            PIList = PIser.findbyClassId(cr);
-            log.info("cr:   " + cr.toString());
-        } else {
-            //	모든 프로젝트 리스트
-            PIList = PIser.findAll();
-        }
+        PIList = PIser.findbyClassId(cr);
+        log.info("cr:   " + cr.toString());
+        PIList = PIser.findAll();
         /*------------------비즈니스 로직--------------------*/
         KjoResponse res = new KjoResponse();
         //	해당 강의실에 포함된 프로젝트
         res.setSecList(PIList);
-        //	모든 강의실
-        res.setFirList(CRList);
         return res;
     }
 //----------------------------------------------------------------------------------------------------
@@ -258,17 +247,14 @@ public class KjoController {
         ChatRoom cr = new ChatRoom();
         cr.setSender_id(userInfoDTO.getUser_id());
         cr.setReceiver_id(ui.getUser_id());
+
         ChatRoom nowChatRoom = CHser.findByYouAndMeNotEmpty(cr);
         //	채팅방 상대방
         nowChatRoom.setReceiver_id(ui.getUser_id());
         //	채팅방 로그인 사용자
         nowChatRoom.setSender_id(userInfoDTO.getUser_id());
-
         //	상대방 이름 조회
         UserInfo youUser = UIser.findbyuserId(ui);
-
-        //	해당 채팅방 내 메세지 조회
-        List<ChatMsg> CMList_2 = CMser.todatelist(nowChatRoom);
 
         /*------------------비즈니스 로직--------------------*/
         //	로그인 사용자DTO
@@ -299,7 +285,7 @@ public class KjoController {
     }
 
     //	WebSocketConfig에서 prefix "/app"을하여 생략
-    @MessageMapping("/chat/send")        //	소켓 메시지를 객체로 변환
+    @MessageMapping("/chat/send")
     @SendTo("/app/chatreceive")
     public ChatMsg sendMsg(ChatMsg message) {        //	json을 왜 parse 안했는지.
 //		STOMP 메시지를 JSON으로 변환하거나 JSON을 STOMP 메시지로 변환하는 기능을 자동으로 제공
@@ -308,8 +294,10 @@ public class KjoController {
         log.info("Sending message to /app/chatreceive: {}", findmsg);
         return findmsg;
     }                                        //	WebSocketConfig에서 prefix "/app"을하여 생략
+
+
 //----------------------------------------------------------------------------------------------------
-    @MessageMapping("/chat/cnt")        //	소켓 메시지를 객체로 변환
+    @MessageMapping("/chat/cnt")
     @SendTo("/app/cnttotmsg")
     public KjoResponse showMsg(ChatRoom cr) {
 //		STOMP 메시지를 JSON으로 변환하거나 JSON을 STOMP 메시지로 변환하는 기능을 자동으로 제공
@@ -357,7 +345,6 @@ public class KjoController {
         kjoResponse = UIser.pageUserInfov2(userInfo, currentPage);
         /*------------------비즈니스 로직--------------------*/
 
-        model.addAttribute("cl_id", cl_id);
         model.addAttribute("CRList", CRList);
         model.addAttribute("UIList", kjoResponse.getFirList());
         model.addAttribute("page", kjoResponse.getObj());

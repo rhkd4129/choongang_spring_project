@@ -78,6 +78,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     @Override
     public KjoResponse cnttomsg(ChatRoom cr, UserInfo user, List<ChatRoom> chatRooms) {
         KjoResponse res = new KjoResponse();
+//		내가 읽지 않은 메시지 수
+        int noreadC =0;
 //		나의 모든 메시지           //  사용자와 관련된 모든 메시지 조회하는 쿼리
         List<ChatMsg> findmsg = cntnoreadMsg(cr);
 //		최신 메시지가 있는 채팅방
@@ -105,10 +107,13 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             chatR.setAttach_name(us.getAttach_name());
             chatR.setAttach_path(us.getAttach_path());
             chatR.setRead_cnt(noreadCnt);
+
+            noreadC += noreadCnt;
         }
-        int noreadC = findnoReadMsg(findmsg,cr);
+
 //		나의 채팅방
         res.setSecList(chatRooms);
+
 //		내가 읽지 않은 메시지 수
         res.setObj(noreadC);
 
@@ -164,6 +169,9 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     public int findbyChatRoomMsg(List<ChatMsg> cm,ChatRoom cr,UserInfo ui) {
         List<ChatMsg> noreadMsgs = new ArrayList<>();
         for (ChatMsg chatMsg : cm) {
+            //  1.  채팅방 id와 메시지의 채팅방id가 같고,
+            //  2.  메시지 전송자id와 접속자 id가 같지 않고,
+            //  3.  읽지 않은 메시지 일 때.
             if (cr.getChat_room_id() == chatMsg.getChat_room_id() && !chatMsg.getMsgsender().equals(ui.getUser_id()) && chatMsg.getRead_chk().equals("N")) {
                 noreadMsgs.add(chatMsg);
             }

@@ -14,8 +14,6 @@ public interface ChatRoomService {
     List<ChatRoom> findByUserId(UserInfo ui);
 //<!--모든 채팅방 조회-->
     List<ChatRoom> findAll();
-//<!--강의실 개수 조회-->
-    ChatRoom findById(ChatRoom cr);
 //<!--상대방과의 채팅방 조회-->
     ChatRoom findByYouAndMe(ChatRoom cr);
 
