@@ -228,11 +228,7 @@
                 receiver_id: yourID,         //  상대 id
                 msg_con: $("#send_message").val()
             }
-            var mainoption={
-                chat_room_id: nowchatroomid, //  현재 채팅방
-                receiver_id: myID,       //  본인 id
-                sender_id: yourID,         //  상대 id
-            }
+
             let value = option.msg_con;
             if( value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) ){
                 alert("메시지를 입력하세요");

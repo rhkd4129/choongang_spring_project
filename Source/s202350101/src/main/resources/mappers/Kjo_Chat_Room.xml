@@ -31,7 +31,13 @@
 		select * from chat_room where
 			receiver_id=#{sender_id} and sender_id = #{receiver_id}
 	</select>
-<!--시퀀스 적용해 채팅방 저장, 시퀀스 값 반환-->
+<!--강의실 개수 조회-->
+	<select id="findById" resultType="int">
+		select count(class_id)
+		from class_room
+	</select>
+
+<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
 	<insert id="addChatRoom" parameterType="ChatRoom" keyProperty="chat_room_id">
 		<selectKey keyProperty="chat_room_id" resultType="int" order="BEFORE">
 			SELECT NVL(seq_chat_room_id.NEXTVAL, 0) FROM DUAL
@@ -39,23 +45,6 @@
 		insert into chat_room values (#{chat_room_id}, #{sender_id}, #{receiver_id})
 	</insert>
 
-	<!--사용자가 접속중인 채팅방의 최신 메시지-->
-	<select id="findMyChatRoomCurrMsg" parameterType="ChatRoom" resultType="ChatRoom">
-		select * from
-					 chat_msg cm, (
-				select cr.chat_room_id, max(cm.msg_id) msg_id
-				from(
-						select * from chat_room
-						where sender_id = #{sender_id}
-						union
-						select * from chat_room
-						where receiver_id = #{sender_id}
-					) cr join chat_msg cm
-							  on cr.chat_room_id = cm.chat_room_id
-				group by cr.chat_room_id) ta
-		where cm.chat_room_id = ta.chat_room_id
-		  and cm.msg_id = ta.msg_id;
-	</select>
 
 
 </mapper>

@@ -283,8 +283,7 @@ public class LjhController {
 	// 회의일정 삭제
 	@ResponseBody
 	@RequestMapping(value = "prj_meeting_report_delete")
-	// 이상이 없으면 200 리턴
-	public ResponseEntity prjMeetingReportDelete(Meeting meeting, Model model, HttpServletRequest request) {
+	public int prjMeetingReportDelete(Meeting meeting, Model model, HttpServletRequest request) {
 		log.info("request : {}", request.getRequestURI());
 		
 		System.out.println("LjhController prjMeetingReportDelete Start");
@@ -293,7 +292,7 @@ public class LjhController {
 		
 		deleteResult = ljhs.deleteMeetingReport(meeting);
 		
-		return ResponseEntity.ok(deleteResult);
+		return deleteResult;
 	}
 	
 	// 회의일정 수정

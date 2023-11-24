@@ -26,7 +26,7 @@
 								AND cate_code=p.bd_category) bd_category_name
 					  FROM PRJ_BD_DATA p, USER_INFO u
 					  WHERE p.user_id = u.user_id
-						and p.project_id = #{project_id} and u.class_id = #{class_id}
+					  and p.project_id = #{project_id} and u.class_id = #{class_id}
 					  ORDER BY doc_group DESC, doc_step) a
 			)
 		WHERE rn BETWEEN #{start} AND #{end}
@@ -68,7 +68,6 @@
 			  and
 					project_id = #{project_id}
 	</delete>
-
 
 
 

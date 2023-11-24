@@ -26,6 +26,37 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     private final ChatRoomDao CHdao;
     private final ChatMsgDao CMdao;
+//<!--모든 채팅방 조회-->
+
+    @Override
+    public List<ChatRoom> findAll() {
+        return CHdao.findAll();
+    }
+
+//<!--개인별 채팅방 조회-->
+    @Override
+    public List<ChatRoom> findByUserId(UserInfo ui) {
+
+        List<ChatRoom> crList = CHdao.findByUserId(ui);
+
+
+
+        return crList;
+    }
+
+//<!--강의실 개수 조회-->
+    @Override
+    public ChatRoom findById(ChatRoom cr) {
+        return CHdao.findById(cr);
+    }
+
+//<!--상대방과의 채팅방 조회-->
+    @Override
+    public ChatRoom findByYouAndMe(ChatRoom cr) {
+        return CHdao.findByYouAndMe(cr);
+    }
+
+
 //<!--상대방과의 채팅방 조회 후 없으면 채팅방 생성-->
     @Override
     public ChatRoom findByYouAndMeNotEmpty(ChatRoom cr) {
@@ -47,23 +78,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
         }
         return findChatRoom;
     }
-//<!--개인별 채팅방 조회-->
-    @Override
-    public List<ChatRoom> findByUserId(UserInfo ui) {
 
-        List<ChatRoom> crList = CHdao.findByUserId(ui);
-        return crList;
-    }
-//<!--모든 채팅방 조회-->
-    @Override
-    public List<ChatRoom> findAll() {
-        return CHdao.findAll();
-    }
-//<!--상대방과의 채팅방 조회-->
-    @Override
-    public ChatRoom findByYouAndMe(ChatRoom cr) {
-        return CHdao.findByYouAndMe(cr);
-    }
 //  사용자 별 메세지가 있는 채팅방
     @Override
     public Map<?, ?> findByUserIdV2(List<ChatMsg> findmsg, ChatRoom cr) {

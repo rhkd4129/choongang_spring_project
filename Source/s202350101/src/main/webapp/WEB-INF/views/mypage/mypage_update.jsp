@@ -9,191 +9,209 @@
 <title>Insert title here</title>
 
 <!--CSS START -->
+<style type="text/css">
+
+    .form-mypage  {
+        background-color: rgba(var(--bs-tertiary-bg-rgb)) !important;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 15px;
+    }
+    .form-mypage img {
+        border-radius: 50%;
+        margin-bottom: 15px;
+        width: 200px;
+        height:200px;
+    }
+    
+    #mypage_msg {
+    	margin-left: 100px;
+    }
+</style>
 <!-- CSS END -->
 
 <!-- JS START -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 
-	/* 주소 API */
-	function sample6_execDaumPostcode() {
-	    new daum.Postcode({
-	        oncomplete: function(data) {
-	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+/* 주소 API */
+function sample6_execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = '(' + extraAddr + ')';
+                }
+                // 조합된 참고항목을 해당 필드에 넣는다.
+                document.getElementById("sample6_extraAddress").value = extraAddr;
+            
+            } else {
+                document.getElementById("sample6_extraAddress").value = '';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('sample6_postcode').value = data.zonecode;
+            document.getElementById("sample6_address").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("sample6_detailAddress").value = '';
+            document.getElementById("sample6_detailAddress").focus();
+        }
+    }).open();
+}
+
+/* 비밀번호 확인 */
+let pw_ver = 0;
+
+$(function(){
+	$("#userpasschk").blur(function(){
+		if($("#userpasschk").val() != "" && $("#userpass").val() != ""){
+			if($("#userpasschk").val() == $("#userpass").val()){
+				$(".successPwChk").text("비밀번호가 일치합니다.");
+				$(".successPwChk").css("color", "green");
+				$("#pwDoubleChk").val("true");
+				pw_ver = 1;
+				return true;
+			}else{
+				$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
+				$(".successPwChk").css("color", "red");
+				$("#pwDoubleChk").val("false");
+				return false;
+			}
+		}
+	});
+});
+
+/* 비밀번호 확인 2 */
+function update_user_info() {
+	let total_ver = pw_ver;
 	
-	            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-	            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-	            var addr = ''; // 주소 변수
-	            var extraAddr = ''; // 참고항목 변수
-	
-	            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-	            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-	                addr = data.roadAddress;
-	            } else { // 사용자가 지번 주소를 선택했을 경우(J)
-	                addr = data.jibunAddress;
-	            }
-	
-	            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-	            if(data.userSelectedType === 'R'){
-	                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-	                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-	                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-	                    extraAddr += data.bname;
-	                }
-	                // 건물명이 있고, 공동주택일 경우 추가한다.
-	                if(data.buildingName !== '' && data.apartment === 'Y'){
-	                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-	                }
-	                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-	                if(extraAddr !== ''){
-	                    extraAddr = '(' + extraAddr + ')';
-	                }
-	                // 조합된 참고항목을 해당 필드에 넣는다.
-	                document.getElementById("sample6_extraAddress").value = extraAddr;
-	            
-	            } else {
-	                document.getElementById("sample6_extraAddress").value = '';
-	            }
-	
-	            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-	            document.getElementById('sample6_postcode').value = data.zonecode;
-	            document.getElementById("sample6_address").value = addr;
-	            // 커서를 상세주소 필드로 이동한다.
-	            document.getElementById("sample6_detailAddress").value = '';
-	            document.getElementById("sample6_detailAddress").focus();
-	        }
-	    }).open();
+	if(total_ver == 1) {
+		return true;
+	} else if (pw_ver != 1) {
+		$(".successPwChk").text("비밀번호를 확인해주세요.");
+		return false;
 	}
-	
-	/* 비밀번호 확인 */
-	let pw_ver = 0;
-	
-	$(document).ready(function(){
-		$("#userpasschk").blur(function(){
-			if($("#userpasschk").val() != "" && $("#userpass").val() != ""){
-				if($("#userpasschk").val() == $("#userpass").val()){
-					$(".successPwChk").text("비밀번호가 일치합니다.");
-					$(".successPwChk").css("color", "green");
-					$("#pwDoubleChk").val("true");
-					pw_ver = 1;
-					return true;
-				}else{
-					$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
-					$(".successPwChk").css("color", "red");
-					$("#pwDoubleChk").val("false");
-					return false;
-				}
+}
+
+var mail_ver = 0;
+var timer = null;
+var isRunning = false;
+
+function send_save_mail() {
+
+	if($('#user_email').val() === "") {
+		alert("이메일을 입력해 주세요!");
+	} else {
+		$("#mail_number").css("display", "block");
+		
+		$.ajax({
+			url : 'send_save_mail',
+			type : 'POST',
+			dataType : 'text',
+			data : { auth_email : $('#user_email').val() },
+			success : function(data) {
+				$('#msg2').text("인증번호가 전송 되었습니다!");
+				$("#Confirm").attr("value", data);
 			}
 		});
-	});
-	
-	/* 비밀번호 확인 2 */
-	function update_user_info() {
-		let total_ver = pw_ver;
 		
-		if(total_ver == 1) {
-			return true;
-		} else if (pw_ver != 1) {
-			$(".successPwChk").text("비밀번호를 확인해주세요.");
-			return false;
-		}
+    	var display = $('#time');
+    	var leftSec = 30;
+    	// 남은 시간
+    	// 이미 타이머가 작동중이면 중지
+    	if (isRunning){
+    		clearInterval(timer);
+    		display.html("");
+    		$('#msg2').text("");
+    		startTimer(leftSec, display);
+    	}else{
+    		startTimer(leftSec, display);   		
+   		}
+    	
 	}
-	
-	function send_save_mail() {
-//		alert("클릭!");
-		
-		if($('#user_email').val() === "") {
-			alert("이메일을 입력해 주세요!");
-		} else {
-			$("#mail_number").css("display", "block");
-//			alert("이메일을 입력했음");
-			$.ajax({
-				url : 'send_save_mail',
-				type : 'POST',
-				dataType : 'text',
-				data : { auth_email : $('#user_email').val() },
-				success : function(data) {
-					alert("인증번호가 전송 되었습니다!");
-					$("#Confirm").attr("value", data);
-				}
-			});
-			
-			/* 메일 타이머 */
-			var timer = null;
-			var isRunning = false;
-			$(function(){
-				    $(".timerButton").click(function(e){
-				    	var display = $('.time');
-				    	var leftSec = 10;
-				    	// 남은 시간
-				    	// 이미 타이머가 작동중이면 중지
-				    	if (isRunning){
-				    		clearInterval(timer);
-				    		display.html("");
-				    		startTimer(leftSec, display);
-				    	}else{
-				    	startTimer(leftSec, display);
-			    		
-			    		}
-			    	});
-			})
-			    
-			function startTimer(count, display) {
-			            
-			    		var minutes, seconds;
-			            timer = setInterval(function () {
-			            minutes = parseInt(count / 60, 10);
-			            seconds = parseInt(count % 60, 10);
-			     
-			            minutes = minutes < 10 ? "0" + minutes : minutes;
-			            seconds = seconds < 10 ? "0" + seconds : seconds;
-			     
-			            display.html(minutes + ":" + seconds);
-			     
-			            // 타이머 끝
-			            if (--count < 0) {
-			    	     clearInterval(timer);
-			    	     display.html("다시 인증해 주세요");
-			    	     $('.confirmBtn').attr("disabled","disabled");
-			    	     isRunning = false;
-			            }
-			        }, 1000);
-			             isRunning = true;
-			}
-		}
-	}
-	
-	function confirm_authNumber() {
-		
-//		alert("클릭!");
-		var number1 = $("#number").val();
-		var number2 = $("#Confirm").val();
-		
-		if(number1 == "") {
-			$('#msg2').text("인증 번호를 입력해주세요.");
-			return false;
-		} else if(number1 != number2) {
-			$('#msg2').text("인증 번호가 다릅니다.");
-			return false;
-		} else {
-			$('#msg2').text("인증 되었습니다.");
-			mail_ver = 1;	// 이메일 인증되면 0 -> 1
-			return true;
-		}
-	}
-	
+}
 
+function startTimer(count, display) {
+    
+	if(mail_ver == 1) return false;
+	var minutes, seconds;
+    timer = setInterval(function () {
+        minutes = parseInt(count / 60, 10);
+        seconds = parseInt(count % 60, 10);
+ 
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+ 
+        display.html(minutes + ":" + seconds);
+ 
+        // 타이머 끝
+        if (--count < 0) {
+	     clearInterval(timer);
+	     display.html("다시 인증해 주세요");
+	     $('#msg2').text(""); //기존 메시지 삭제
+	     $('.confirmBtn').attr("disabled","disabled");
+	     isRunning = false;
+        }
+    }, 1000);
+	isRunning = true;
+}
+
+
+function confirm_authNumber() {
+	
+	var number1 = $("#number").val();
+	var number2 = $("#Confirm").val();
+	
+	if(number1 == "") {
+		$('#msg2').text("인증 번호를 입력해주세요.");
+		return false;
+	} else if(number1 != number2) {
+		$('#msg2').text("인증 번호가 다릅니다.");
+		return false;
+	} else {
+		$('#msg2').text("인증 되었습니다.");
+		$('#time').text("");
+		clearInterval(timer);
+		mail_ver = 1;	// 이메일 인증되면 0 -> 1
+		return true;
+	}
+}
 
 </script>
 
 <!-- JS END -->
 <script type="text/javascript">
-
 	$(function() {
 		
 		$.ajax({
 			url			: '/main_header',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
@@ -201,7 +219,7 @@
 		
 		$.ajax({
 			url			: '/main_menu',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
 			}
@@ -209,13 +227,21 @@
 	
 		$.ajax({
 			url			: '/main_footer',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#footer').html(data);
 			}
 		});
 		
+
+		var mypage_msg = "${msg}";
+		if(mypage_msg != "" && mypage_msg == "fail") {
+			$("#mypage_msg").html("<font color=green>수정 실패하였습니다. 관리자에 문의하세요.</font>");
+			//alert("수정 실패하였습니다. 관리자에 문의하세요.");
+		}
+
 	});
+	
 </script>
 </head>
 <body>
@@ -267,137 +293,136 @@
 					   onsubmit="return update_user_info()">
 				<input type="hidden" name="user_id" value="${userInfoDTO.user_id }">
 				<input type="hidden" name="project_id" value="${userInfoDTO.project_id }">
-				<table>
-					<tr>
-						<th>프로필 사진</th>
-						<td><img class="uploadFile" style="size: width: 250px; height: 250px;" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDTO.attach_path }/${userInfoDTO.attach_name}"><br>
-						<input type="file" class="form-control" name="file1" id="file1">
-						</td>
-						
-					</tr>
-					<tr><th>아이디</th><td>${userInfoDTO.user_id}</td></tr>
-					<tr><th>새 비밀번호(*)</th>
-						<td>
-							<input type="password" id="userpass" name="user_pw" placeholder="Password">
-							<small style="color: red"><form:errors path="user_pw"/></small><p>
-						</td>
-					</tr>
-						
-					<tr><th>새 비밀번호 확인(*)</th><td>
-						<input type="password" id="userpasschk" placeholder="Password">
-							<span class="point successPwChk"></span>
-							<input type="hidden" id="pwDoubleChk"/>
-						</td></tr>
-					<tr><th>이름(*)</th>
-						<td>
-							<input type="text" name="user_name" value="${userInfoDTO.user_name}">
-							<small style="color: red"><form:errors path="user_name"/></small><p>
-						</td>
-					</tr>
-				
-					<tr><th>소속</th><td>
-						<select name="class_id">
-							<c:forEach var="cList" items="${classList}">
-								<option value="${cList.class_id }" 
-									<c:if test="${cList.class_id eq userInfoDTO.class_id}">selected</c:if>>${cList.class_area }점 ${cList.class_room_num }반   ${cList.class_start_date } ~ ${cList.class_end_date }</option>
-							</c:forEach>
-						</select><p>
-						</td></tr>
-					<tr><th>핸드폰번호(*)</th>
-						<td>
-							<input type="text" name="user_number" required="required" value="${userInfoDTO.user_number }">
-							<small style="color: red"><form:errors path="user_number"/></small> 
-						</td>
-					</tr>
-					<tr><th>생년월일</th><td>
-						<input type="date" name="user_birth" value="${user_birth}"></td></tr>
-					<tr><th>성별 : </th><td>
-						남 <input type="radio" name="user_gender" value="M" ${userInfoDTO.user_gender == 'M' ? 'checked' : ''}>
-						여 <input type="radio" name="user_gender" value="F" ${userInfoDTO.user_gender == 'F' ? 'checked' : ''}>
-					</td></tr>			    
-				    <tr>
-				    	<th>이메일(*) : </th>
-					    <td>
-					    	<input type="email" name="user_email" id="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com">
-	           			  	<input class="timerButton" type="button" value="수정" onclick="return send_save_mail()">
-	           			  	<div id="mail_number" name="mail_number" style="display: none">
-							    <input type="text" name="number" id="number" placeholder="인증번호 입력">
-							    <button class="confirmBtn" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
-							    <small style="color: red"><div class="time"></div></small>
-					    		<small style="color: red"><div id="msg2"></div></small>
-					    		<small style="color: red"><form:errors path="user_email"/></small>
-					    		<input type="hidden" id="Confirm" value="">
-					    	</div>
-	           			</td>
-           			</tr>
-					<%-- <tr>
-						<th>주소</th>
-						<td>
-							<c:if test="${postcode != null}">
-								<input type="text" name="sample6_postcode" id="sample6_postcode" value="${postcode }" placeholder="우편번호">
-						    </c:if>
-						    <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-						    <c:if test="${address != null}">
-								<input type="text" name="sample6_address" id="sample6_address" value="${address }" placeholder="주소"><br>
-						    </c:if>
-						    <c:if test="${detailAddress != null}">
-						    	<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${detailAddress }" placeholder="상세주소">
-						    </c:if>
-						    <c:if test="${extraAddress != null}">
-								<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${extraAddress }" placeholder="참고항목">
-						    </c:if>
-						    <c:if test="${userInfo.user_address != null}">
-								<input type="hidden" name="user_address" value="${userInfo.user_address}"><p>
-						    </c:if>
-						    
-						</td>
-					</tr> --%>
-					<tr>
-					    <th>주소</th>
-					    <td>
-					       	<c:set var="sample6_postcode_value" value="${empty postcode ? '' : postcode}" />
-							<input type="text" name="sample6_postcode" id="sample6_postcode" value="${sample6_postcode_value}" placeholder="우편번호">
-					       	
-					        <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-					        
-					        <c:set var="sample6_address_value" value="${empty address ? '' : address}" />
-							<input type="text" name="sample6_address" id="sample6_address" value="${sample6_address_value}" placeholder="주소">
-					        
+
+				<div class="container-fluid">
+					<div class="form-mypage" style="width:800px">
+							
+							<div class="row g-3">
+					
+							<div class="col-12">
+								<img class="uploadFile" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDTO.attach_path }/${userInfoDTO.attach_name}"><span id="mypage_msg">${msg}</span><br>
+								<input type="file" class="form-control" name="file1" id="file1">
+							</div>
+							
+							<div class="col-12">
+								<label for="user_id" class="form-label">아이디</label>
+								<div class="input-group has-validation">
+								<span class="input-group-text" style="background-color:var(--bs-warning)">ID</span>
+								<input type="text" class="form-control" id="user_id" value="${userInfoDTO.user_id}" readonly style="margin-left:-5px;">
+								</div>
+							</div>
+							
+							<div class="col-sm-6">
+								<label for="userpass" class="form-label">새 비밀번호</label>
+								<input type="password" class="form-control" id="userpass" name="user_pw" placeholder="Password" required="required">
+								<div class="invalid-feedback"><form:errors path="user_pw"/></div>
+							</div>
+							
+							<div class="col-sm-6">
+								<label for="userpasschk" class="form-label">새 비밀번호 확인</label>
+								<input type="password" class="form-control" id="userpasschk" placeholder="Password" value="" required="required">
+								<span class="point successPwChk"></span>
+								<input type="hidden" id="pwDoubleChk"/>
+							</div>
+							
+							<div class="col-12">
+								<label for="user_name" class="form-label">이름</label>
+								<input type="text" class="form-control" id="user_name" name="user_name" value="${userInfoDTO.user_name}" required="required">
+								<div class="invalid-feedback"><form:errors path="user_name"/></div>
+							</div>
+							
+							<div class="col-12">
+								<label for="class_id" class="form-label">소속</label>
+								<select class="form-select" id="class_id" name="class_id">
+									<c:forEach var="cList" items="${classList}">
+										<option value="${cList.class_id }" 
+											<c:if test="${cList.class_id eq userInfoDTO.class_id}">selected</c:if>>${cList.class_area }점 ${cList.class_room_num }반   ${cList.class_start_date } ~ ${cList.class_end_date }</option>
+									</c:forEach>
+								</select>
+							</div>
+							
+							<div class="col-md-6">
+								<label for="user_number" class="form-label">핸드폰 번호</label>
+								<input type="text" class="form-control" id="user_number" name="user_number" placeholder="" value="${userInfoDTO.user_number }" required="required">				
+								<div class="invalid-feedback"><form:errors path="user_number"/></div>
+							</div>
+							
+							<div class="col-md-6">
+								<label for="user_birth" class="form-label">생년월일</label>
+								<input type="date" class="form-control" id="user_birth" name="user_birth" value="${user_birth}">
+							</div>
+							
+							<div class="col-12">
+								<label class="form-label" style="margin-right:30px">성별</label>
+								<input type="radio" name="user_gender" value="M" ${userInfoDTO.user_gender == 'M' ? 'checked' : ''}> 남
+								<input type="radio" name="user_gender" value="F" ${userInfoDTO.user_gender == 'F' ? 'checked' : ''}> 여
+							</div>
+							
+							<div class="col-12">
+								<label for="user_email" class="form-label">Email <span class="text-body-danger">*</span></label>
+								<div class="input-group has-validation">
+									<input type="email" class="form-control" id="user_email" name="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com" style="margin-right:5px;">
+									<span><button id="timerButton" type="button" class="btn btn-primary btn-lg" onclick="send_save_mail()">수정</button></span>
+								</div>
+								<br>
+								<div id="mail_number" name="mail_number" style="display:none; margin-tip:10px;">
+									<table>
+										<tr>
+											<td>
+									    		<input type="text" class="form-control" name="number" id="number" placeholder="인증번호 입력">
+									    	</td>
+									    	<td>
+									    		<button type="button" class="btn btn-danger btn-sm" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
+									    	</td>
+									    	<td style="padding-left:20px">
+												<small style="color: red"><div id="time"></div></small>
+												<small style="color: red"><div id="msg2"></div></small>
+										    	<small style="color: red"><form:errors path="user_email"/></small>
+										    	<input type="hidden" id="Confirm" value="">
+									    	</td>
+									    </tr>
+						    		</table>
+						    	</div>
+							</div>
+							
+							<c:set var="sample6_postcode_value" value="${empty postcode ? '' : postcode}" />
+							<div class="col-12">
+								<label for="sample6_postcode" class="form-label">우편번호</label>
+								<div class="input-group has-validation">
+									<input type="text" class="form-control" id="sample6_postcode" name="sample6_postcode" value="${sample6_postcode_value}" placeholder="우편번호" style="margin-right:5px;">
+									<span><button type="button" class="btn btn-dark btn-lg" onclick="sample6_execDaumPostcode()">우편번호 찾기</button></span>
+								</div>				
+							</div>
+							
+							<c:set var="sample6_address_value" value="${empty address ? '' : address}" />
+							<div class="col-md-5">				
+								<label for="sample6_address" class="form-label">주소</label>
+								<input type="text" class="form-control" id="sample6_address" name="sample6_address" value="${sample6_address_value}" placeholder="주소">
+							</div>
+							
 							<c:set var="sample6_detailAddress_value" value="${empty detailAddress ? '' : detailAddress}" />
-							<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${sample6_detailAddress_value}" placeholder="상세주소">
-					        
-					        <c:set var="sample6_extraAddress_value" value="${empty extraAddress ? '' : extraAddress}" />
-							<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${sample6_extraAddress_value}" placeholder="참고항목">
-					        
-					        <%-- <c:if test="${address != null}">
-					            <input type="text" name="sample6_address" id="sample6_address" value="${address }" placeholder="주소"><br>
-					        </c:if>
-								<input type="text" name="sample6_address" id="sample6_address" value="" placeholder="주소"><br>
-								
-					        <c:if test="${detailAddress != null}">
-					            <input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${detailAddress }" placeholder="상세주소">
-					        </c:if>
-								<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="" placeholder="상세주소">
-					
-					        <c:if test="${extraAddress != null}">
-					            <input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${extraAddress }" placeholder="참고항목">
-					        </c:if>
-								<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="" placeholder="참고항목"> --%>
-					
+							<div class="col-md-4">
+								<label for="sample6_detailAddress" class="form-label">상세주소</label>
+								<input type="text" class="form-control" id="sample6_detailAddress" name="sample6_detailAddress" value="${sample6_detailAddress_value}" placeholder="상세주소">
+							</div>
+							
+							<c:set var="sample6_extraAddress_value" value="${empty extraAddress ? '' : extraAddress}" />
+							<div class="col-md-3">
+								<label for="sample6_extraAddress" class="form-label">참고항목</label>
+								<input type="text" class="form-control" id="sample6_extraAddress" name="sample6_extraAddress" value="${sample6_extraAddress_value}" placeholder="참고항목">
+								</div>
+							</div>
 					        <c:if test="${userInfo.user_address != null}">
 					            <input type="hidden" name="user_address" value="${userInfo.user_address}">
-					        </c:if>
-					    </td>
-					</tr>
-					<tr><td colspan="2">
-						<input type="submit" value="수정">
-						<!-- <button type="button" onclick="editAction()">수정</button> -->
-						</td>
-					</tr>
-				</table>
-			
+					        </c:if>				
+				
+							<p class="my-4"></p>
+							
+							<button class="w-100 btn btn-success btn-lg" type="submit">내 정보 저장</button>
+					</div>	
+				</div>
+
 			</form:form>
-			
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
 		

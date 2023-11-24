@@ -17,21 +17,6 @@ import java.util.stream.Collectors;
 public class PrjInfoDaoImpl implements PrjInfoDao{
 
     private final SqlSession session;
-    //  강의실 별 프로젝트 조회
-    @Override
-    public List<PrjInfo> findbyClassId(ClassRoom cr) {
-        log.info("findbyClassId start");
-        List<PrjInfo> PIList = null;
-        try {
-            PIList = session.selectList("findbyClassIdPrjInfo", cr);
-//            System.out.println(PIList.stream().collect(Collectors.toList()));
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return PIList;
-    }
 
     //  모든 프로젝트 조회
     @Override
@@ -42,6 +27,21 @@ public class PrjInfoDaoImpl implements PrjInfoDao{
             PIList = session.selectList("findAllPrjInfo");
             //	결과	출력
             System.out.println(PIList.stream().collect(Collectors.toList()));
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return PIList;
+    }
+    //  강의실 별 프로젝트 조회
+    @Override
+    public List<PrjInfo> findbyClassId(ClassRoom cr) {
+        log.info("findbyClassId start");
+        List<PrjInfo> PIList = null;
+        try {
+            PIList = session.selectList("findbyClassIdPrjInfo", cr);
+//            System.out.println(PIList.stream().collect(Collectors.toList()));
 
         }catch (Exception e) {
             e.printStackTrace();

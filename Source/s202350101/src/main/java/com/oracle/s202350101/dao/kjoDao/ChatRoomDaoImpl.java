@@ -1,7 +1,6 @@
 package com.oracle.s202350101.dao.kjoDao;
 
 import com.oracle.s202350101.model.BdFree;
-import com.oracle.s202350101.model.ChatMsg;
 import com.oracle.s202350101.model.ChatRoom;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.kjoSer.ChatRoomService;
@@ -18,33 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ChatRoomDaoImpl implements ChatRoomDao {
     private final SqlSession session;
-    @Override
-    public ChatRoom findByYouAndMe(ChatRoom cr) {
-//<!--상대방과의 채팅방 조회-->
-        log.info("findByYouAndMe start");
-        try {
-            cr = session.selectOne("findByYouAndMe",cr);
-
-        }catch (Exception e) {
-            System.out.println("findByYouAndMe Error -->>" + e.getMessage());
-        }
-
-        return cr;
-    }
-    @Override
-    public List<ChatRoom> findByUserId(UserInfo ui) {
-//<!--개인별 채팅방 조회-->
-        log.info("findByUserId start");
-        List<ChatRoom> CRList = null;
-        try {
-
-            CRList = session.selectList("findByUserId",ui);
-            //	결과	출력
-        }catch (Exception e) {
-            System.out.println("findByUserId Error -->>" + e.getMessage());
-        }
-        return CRList;
-}
     @Override
     public List<ChatRoom> findAll() {
 //<!--모든 채팅방 조회-->
@@ -63,9 +35,24 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
         return CRList;
     }
 
+    @Override
+    public List<ChatRoom> findByUserId(UserInfo ui) {
+//<!--개인별 채팅방 조회-->
+        log.info("findByUserId start");
+        List<ChatRoom> CRList = null;
+        try {
+
+            CRList = session.selectList("findByUserId",ui);
+            //	결과	출력
+        }catch (Exception e) {
+            System.out.println("findByUserId Error -->>" + e.getMessage());
+        }
+        return CRList;
+    }
 
     @Override
     public ChatRoom findById(ChatRoom cr) {
+//<!--강의실 개수 조회-->
         log.info("findById start");
         ChatRoom CRList = null;
         try {
@@ -80,27 +67,28 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
         return CRList;
     }
 
+    @Override
+    public ChatRoom findByYouAndMe(ChatRoom cr) {
+//<!--상대방과의 채팅방 조회-->
+        log.info("findByYouAndMe start");
+        try {
+            cr = session.selectOne("findByYouAndMe",cr);
+
+        }catch (Exception e) {
+            System.out.println("findByYouAndMe Error -->>" + e.getMessage());
+        }
+
+        return cr;
+    }
 
     @Override
     public int addChatRoom(ChatRoom cr) {
+//<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
         log.info("addChatRoom start");
         int result = 0;
         try {
             result = session.insert("addChatRoom", cr);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-
-    //    <!--사용자가 접속중인 채팅방의 최신 메시지-->
-    public List<ChatRoom> findMyChatRoomCurrMsg(ChatRoom cr) {
-        log.info("updateRead start");
-        List<ChatRoom> result = null;
-        try {
-            result = session.selectList("findMyChatRoomCurrMsg", cr);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -27,14 +27,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     private final UserInfoDao UIdao;
 
-    //<!--사용자 ID로 사용자 조회-->
     @Override
     public UserInfo findbyuserId(UserInfo userInfo) {
+//        log.info("findbyuserId start ID : " + userInfo.getUser_id());
         userInfo = UIdao.findbyuserId(userInfo);
         return userInfo;
     }
 
-    //	특정 강의실 전체 학생 조회
     @Override
     public List<UserInfo> findbyclassuser(UserInfo ui) {
         log.info("findbyclassuser start");
@@ -69,11 +68,21 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<UserInfo> UIList = UIdao.findAllUser();
         return UIList;
     }
+
+
+    @Override
+    public List<UserInfo> findbyClassUserProject(int cl_Id) {
+        log.info("findbyClassUserProject start");
+        List<UserInfo> UIList = UIdao.findbyClassUserProject(cl_Id);
+        return UIList;
+
+    }
+
     //  팀장 권한 수정
     @Override
     public int auth_modify(KjoRequestDto kjorequest) {
         List<String> user_ids = kjorequest.getUser_id();    //  userid 리스트 저장
-
+        
         List<String> user_auths = kjorequest.getUser_auth();    //  user_auth 리스트 저장
 
         //  팀장, 학생으로    나눠서 저장.
@@ -96,23 +105,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         return manager_cnt+student_cnt;
     }
 
-//-----------------not Use-----------------
-//-----------------not Use-----------------
-//-----------------not Use-----------------
-//-----------------not Use-----------------
-
-
-    //	특정 강의실 내 전체 학생 및 참여 프로젝트 조회
-    @Override
-    public List<UserInfo> findbyClassUserProject(int cl_Id) {
-        log.info("findbyClassUserProject start");
-        List<UserInfo> UIList = UIdao.findbyClassUserProject(cl_Id);
-        return UIList;
-    }
-
-    //<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
     @Override
     public List<UserInfo> pageUserInfo( UserInfo userInfo) {
+
         log.info("pageUserInfo start");
         List<UserInfo> UI1 = UIdao.pageUserInfo(userInfo);
         log.info("TOT cnt : => " + UI1.size());

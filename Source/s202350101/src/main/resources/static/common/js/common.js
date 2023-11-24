@@ -24,7 +24,9 @@ function goto(url) {
 //문서 버튼 >> 닫기
 function closeDoc() {
 	if(opener) {
-		opener.location.reload();
+		if(opener.location.href.indexOf("_list") != -1) {
+			opener.location.reload();
+		}
 		window.close();
 	}else{
 		history.go(-1);

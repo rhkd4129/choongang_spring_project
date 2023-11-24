@@ -193,7 +193,7 @@
 						</tr>
 						<tr>
 							<th>작성자</th>
-							<td>${userInfo.user_name}</td>
+							<td>${task.user_name}</td>
 						</tr>
 						<tr>
 							<th>공동 작업자</th>
@@ -211,7 +211,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>파일 첨부</th>
+							<th>파일 첨부<small>(최대:6개까지)</small></th>
 							<td>                                
                                 <c:choose>
                                     <c:when test="${not empty taskAttachList}">

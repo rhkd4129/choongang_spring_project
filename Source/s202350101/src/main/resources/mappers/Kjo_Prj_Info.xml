@@ -8,23 +8,22 @@
 
 <mapper namespace="com.oracle.s202350101.PrjInfoMapper">
 	<!-- PrjInfo -->
-<!--강의실 별 프로젝트 조회-->
-    <select id="findbyClassIdPrjInfo" parameterType="ClassRoom" resultType="PrjInfo">
-        select p.*
-        from (select u.user_id
-              from class_room c
-                       join user_info u
-                            on u.class_id = c.class_id
-              where u.user_auth = 'manager'
-                and c.class_id = #{class_id}) mn --여기서 강의실 조정
-                 join prj_info p
-                      on mn.user_id = p.project_manager_id
-    </select>
 <!--모든 프로젝트 조회-->
 	<select id="findAllPrjInfo" resultType="PrjInfo">
 		select * from Prj_Info
 	</select>
 
-
+<!--강의실 별 프로젝트 조회-->
+	<select id="findbyClassIdPrjInfo" parameterType="ClassRoom" resultType="PrjInfo">
+        select p.*
+        from (select u.user_id
+            from class_room c
+                join user_info u
+                    on u.class_id = c.class_id
+            where u.user_auth = 'manager'
+                and c.class_id = #{class_id}) mn --여기서 강의실 조정
+        join prj_info p
+        on mn.user_id = p.project_manager_id
+    </select>
 </mapper>
 	 

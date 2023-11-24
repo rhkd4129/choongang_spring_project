@@ -143,14 +143,14 @@
 												<tr>
 													<td>${allComt.bd_category }</td>
 													<td><a href="javascript:popup('board_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
-													<td>${allComt.create_date }</td>
+													<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 												</tr>
 											</c:if>
 											<c:if test="${allComt.bd_category == '자유'}">
 												<tr>
 													<td>${allComt.bd_category }</td>
 													<td><a href="javascript:popup('free_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
-													<td>${allComt.create_date }</td>
+													<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 												</tr>
 											</c:if>
 											<c:if test="${allComt.bd_category == '이벤트'}">
@@ -158,7 +158,7 @@
 													<td>${allComt.bd_category }</td>
 													
 													<td><a href="javascript:popup('event_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
-													<td>${allComt.create_date }</td>
+													<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 												</tr>
 											</c:if>
 										</c:when>
@@ -166,21 +166,21 @@
 											<tr>
 												<td>${allComt.app_name }</td>
 												<td><a href="javascript:popup('bdQnaContent?doc_no=${allComt.doc_no }#${allComt.comment_doc_no}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
-												<td>${allComt.create_date }</td>
+												<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 											</tr>
 										</c:when>
 										<c:when test="${allComt.app_id == 3}">
 											<tr>
 												<td>${allComt.app_name }</td>
 												<td><a href="javascript:popup('prj_board_data_read?doc_no=${allComt.doc_no}&project_id=${allComt.project_id}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
-												<td>${allComt.create_date }</td>
+												<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 											</tr>
 										</c:when>
 										<c:when test="${allComt.app_id == 4}">
 											<tr>
 												<td>${allComt.app_name }</td>
 												<td><a href="javascript:popup('prj_board_report_read?doc_no=${allComt.doc_no }&project_id=${allComt.project_id}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
-												<td>${allComt.create_date }</td>
+												<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 											</tr>
 										</c:when>
 									</c:choose>
