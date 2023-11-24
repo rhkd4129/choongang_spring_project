@@ -1,6 +1,7 @@
 package com.oracle.s202350101.dao.kjoDao;
 
 import com.oracle.s202350101.model.BdFree;
+import com.oracle.s202350101.model.ChatMsg;
 import com.oracle.s202350101.model.ChatRoom;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.kjoSer.ChatRoomService;
@@ -87,6 +88,19 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
         try {
             result = session.insert("addChatRoom", cr);
 
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+
+    //    <!--사용자가 접속중인 채팅방의 최신 메시지-->
+    public List<ChatRoom> findMyChatRoomCurrMsg(ChatRoom cr) {
+        log.info("updateRead start");
+        List<ChatRoom> result = null;
+        try {
+            result = session.selectList("findMyChatRoomCurrMsg", cr);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

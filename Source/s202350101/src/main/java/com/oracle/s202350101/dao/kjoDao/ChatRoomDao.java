@@ -1,5 +1,6 @@
 package com.oracle.s202350101.dao.kjoDao;
 
+import com.oracle.s202350101.model.ChatMsg;
 import com.oracle.s202350101.model.ChatRoom;
 import com.oracle.s202350101.model.UserInfo;
 
@@ -22,4 +23,6 @@ public interface ChatRoomDao {
 
 //<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
     int addChatRoom(ChatRoom cr);
+//    <!--사용자가 접속중인 채팅방의 최신 메시지-->
+    List<ChatRoom> findMyChatRoomCurrMsg(ChatRoom cr);
 }

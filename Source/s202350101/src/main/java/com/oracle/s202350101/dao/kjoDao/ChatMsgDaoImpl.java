@@ -99,11 +99,7 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         return CMList;
     }
 
-
-
-
-
-//  사용자와 연관된 모든 메시지
+    //  사용자와 연관된 모든 메시지
     public List<ChatMsg> findbyuseridnoRead(ChatRoom cr) {
         log.info("updateRead start");
         List<ChatMsg> result = null;
@@ -114,4 +110,6 @@ public class ChatMsgDaoImpl implements ChatMsgDao{
         }
         return result;
     }
+
+
 }

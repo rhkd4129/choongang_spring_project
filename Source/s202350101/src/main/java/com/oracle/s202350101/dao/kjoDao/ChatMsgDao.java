@@ -19,4 +19,6 @@ public interface ChatMsgDao {
     List<ChatMsg> findAll();
     //  사용자 별 읽지 않은 메세지
     List<ChatMsg> findbyuseridnoRead(ChatRoom cr);
+
+
 }

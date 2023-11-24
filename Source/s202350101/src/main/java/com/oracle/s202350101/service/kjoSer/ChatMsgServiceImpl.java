@@ -1,6 +1,7 @@
 package com.oracle.s202350101.service.kjoSer;
 
 import com.oracle.s202350101.dao.kjoDao.ChatMsgDao;
+import com.oracle.s202350101.dao.kjoDao.ChatRoomDao;
 import com.oracle.s202350101.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class ChatMsgServiceImpl implements ChatMsgService {
     private final ChatMsgDao CMdao;
     private final UserInfoService UIser;
+    private final ChatRoomDao CRdao;
 //  조회용 날짜로 변경하여 반환
     @Override
     public List<ChatMsg> todatelist(ChatRoom chatRoom) {
@@ -82,8 +84,25 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         int noreadC =0;
 //		나의 모든 메시지           //  사용자와 관련된 모든 메시지 조회하는 쿼리
         List<ChatMsg> findmsg = cntnoreadMsg(cr);
-//		최신 메시지가 있는 채팅방
+
+    // 최신 메시지가 있는 채팅방 v2
+//        List<ChatRoom> msgchats = CRdao.findMyChatRoomCurrMsg(cr);
+    //		최신 메시지가 있는 채팅방
         Map<Integer,ChatMsg> msgchats = nowMsgs(findmsg);
+    // 최신 메시지가 있는 채팅방 v2
+
+/*
+        for (int i = 0; i < msgchats.size(); i++) {
+            int cmID = msgchats.get(i).getChat_room_id();
+            for (int j = 0; j < chatRooms.size(); j++) {
+                int crID = chatRooms.get(i).getChat_room_id();
+                if (crID == cmID) {
+                    chatRooms.get(j).setMsg_con(msgchats.get(i).getMsg_con());
+                }
+            }
+        }
+ */
+
 //		나의 채팅방에 최근 메시지 및 시간 추가
 //      하나의 속성으로 반환하기 위함.
         for(Integer key : msgchats.keySet()){

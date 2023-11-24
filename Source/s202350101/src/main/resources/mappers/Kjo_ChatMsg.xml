@@ -68,18 +68,19 @@
     </select>
 
 
-<!--나와 연관된 모든 메시지-->
+    <!--나와 연관된 모든 메시지-->
     <select id="findMyAllMessage" parameterType="ChatRoom" resultType="ChatMsg">
         select cr.*, msg_id,cm.msg_con, send_time,read_chk, cm.sender_id msgsender
         from(
-        select * from chat_room
-        where sender_id = #{sender_id}
-        union
-        select * from chat_room
-        where receiver_id = #{sender_id}
+                select * from chat_room
+                where sender_id = #{sender_id}
+                union
+                select * from chat_room
+                where receiver_id = #{sender_id}
             ) cr join chat_msg cm
-        on cr.chat_room_id = cm.chat_room_id
+                      on cr.chat_room_id = cm.chat_room_id
     </select>
+
 
 </mapper>
 
