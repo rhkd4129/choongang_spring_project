@@ -21,6 +21,7 @@
 		SELECT * 
 		FROM CODE 
 		WHERE UPPER(table_name)=#{table_name} AND UPPER(field_name)=#{field_name}
+		ORDER BY table_name, field_name, cate_code
 	</select>
 	
 	<!-- 내가 쓴 게시글 count -->
@@ -62,10 +63,10 @@
 	        AND bdq.user_id = #{user_id}
 	        AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -81,10 +82,10 @@
 	        AND bdf.user_id = #{user_id}
 	        AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -100,10 +101,10 @@
 	        AND pbd.user_id = #{user_id}
 	        AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -119,10 +120,10 @@
 	        AND pbr.user_id = #{user_id}
 	        AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -144,10 +145,10 @@
 			And   bdfg.user_id = #{user_id}
 	        AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -164,10 +165,10 @@
 			And   bdqg.user_id = #{user_id}
 	        AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -184,10 +185,10 @@
 			And   bddg.user_id = #{user_id}
 			AND
 	        <choose>
-	            <when test="search == 's_subject'">
+	            <when test="search == '1_subject'">
 	                subject like '%' || #{keyword} || '%'
 	            </when>
-	            <when test="search == 's_user_id'">
+	            <when test="search == '2_user_id'">
 	                user_id like '%' || #{keyword} || '%'
 	            </when>
 	            <otherwise>
@@ -268,10 +269,10 @@
 		            AND bdq.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>
@@ -287,10 +288,10 @@
 		            AND bdf.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>
@@ -306,10 +307,10 @@
 		            AND pbd.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>
@@ -325,10 +326,10 @@
 		            AND pbr.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>
@@ -419,10 +420,10 @@
 					And   bdfg.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>
@@ -439,10 +440,10 @@
 					And   bdqg.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>
@@ -459,10 +460,10 @@
 					And   bddg.user_id = #{user_id}
 		            AND
 		            <choose>
-		                <when test="search == 's_subject'">
+		                <when test="search == '1_subject'">
 		                    subject like '%' || #{keyword} || '%'
 		                </when>
-		                <when test="search == 's_user_id'">
+		                <when test="search == '2_user_id'">
 		                    user_id like '%' || #{keyword} || '%'
 		                </when>
 		                <otherwise>

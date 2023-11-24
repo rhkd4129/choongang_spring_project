@@ -411,6 +411,8 @@ public class CyjControllerFreeQna {
 		bdQna.setEnd(page.getEnd());
 		model.addAttribute("page", page);
 		
+		model.addAttribute("keyword", bdQna.getKeyword());
+		
 		// 리스트 (전체 or 분류검색)
 		List<BdQna> qnaList = cs.qnaList(bdQna);
 		System.out.println("CyjControllerQna qnaList.size()-> " + qnaList.size());
@@ -439,6 +441,16 @@ public class CyjControllerFreeQna {
 		
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		// 분류 코드 가져오기
+		Code code = new Code();
+		code.setTable_name("BD_QNA");
+		code.setField_name("BD_CATEGORY");
+		 
+		// qna_분류 코드 가져오기
+		List<Code> bd_category_codelist = cs.codeList(code); 
+		System.out.println("CyjControllerQna codeList.size()-> " + bd_category_codelist.size());
+		model.addAttribute("bd_category_codelist", bd_category_codelist);
 		
 		BdQna bdQna = new BdQna();		
 		model.addAttribute("doc_group", "0");
@@ -635,6 +647,16 @@ public class CyjControllerFreeQna {
 	@GetMapping(value = "qna_update")
 	public String qnaUpdate(int doc_no, Model model) {
 		System.out.println("CyjControllerQna qna_update Start");
+		
+		// 분류 코드 가져오기
+		Code code = new Code();
+		code.setTable_name("BD_QNA");
+		code.setField_name("BD_CATEGORY");
+		 
+		// qna_분류 코드 가져오기
+		List<Code> bd_category_codelist = cs.codeList(code); 
+		System.out.println("CyjControllerQna codeList.size()-> " + bd_category_codelist.size());
+		model.addAttribute("bd_category_codelist", bd_category_codelist);
 		
 		BdQna content = cs.qnaContent(doc_no);
 		System.out.println("CyjControllerQna content-> " + content);

@@ -1,10 +1,76 @@
 @charset "UTF-8";
 
-#notify {
-    position: absolute;
-    width: 300px;
-    height: 400px;
-    background-color: skyblue;
-    right: 300px;
-    z-index: 999;
-}
+	body{
+	 -ms-overflow-style: none;
+	 }
+	#notify {
+	    position: absolute;
+	    width: 350px;
+	    height: 450px;
+	    right: 400px;
+	    z-index: 999;
+	    padding: 0px 10px 10px 10px;
+	    background-color: rgba(13, 110, 253, 0.25);
+	    overflow-y: scroll;
+		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+	}
+	#notify::-webkit-scrollbar {
+	  display: none;
+	}
+	#prjApproveNotify {
+		background-color: white;
+	    padding: 15px 5px 5px 5px;
+	    margin-top: 3px;
+	    border-radius: 10px;
+	    font-size: 9pt;
+	}
+	#meetingNotify {
+		background-color: white;
+	    padding: 15px 5px 5px 5px;
+	    margin-top: 3px;
+	    border-radius: 10px;
+	    font-size: 9pt;
+	}
+	#repNotify {
+		background-color: white;
+	    padding: 15px 5px 5px 5px;
+	    margin-top: 3px;
+	    border-radius: 10px;
+	    font-size: 9pt;
+	}
+	#comtNotify {
+		background-color: white;
+	    padding: 15px 5px 5px 5px;
+	    margin-top: 3px;
+	    border-radius: 10px;
+	    font-size: 9pt;
+	}
+	#adminNotify {
+		background-color: white;
+	    padding: 15px 5px 5px 5px;
+	    margin-top: 3px;
+	    border-radius: 10px;
+	    font-size: 9pt;
+	}
+	.noticate {
+		font-size: 8pt;
+    	margin: 13px 0px 0px 5px;
+    	color: black;
+    	font-weight: bold;
+	}
+	#notify_box {
+		padding-top: 5px;
+	}
+	#notify_close{
+        margin: 8px 0px 8px 0px;
+        float: right;
+    }
+    #notify_close_btn{
+/* 		margin: 0 0 0 94%; */
+    }
+    
+    #cntNotify {
+    	position:absolute;
+    	top:26px;
+    	right:427px;
+    }

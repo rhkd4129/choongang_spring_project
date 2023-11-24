@@ -27,14 +27,14 @@
 						<input type="hidden" name="user_id" value="${userInfoDTO.user_id}">
 						<input type="hidden" name="attach_name" value="">
 						<input type="hidden" name="attach_path" value="">
-						<div style="margin-top:20px;height:34px">
+						<div style="height:34px">
 							<span class="apptitle">문서 작성</span>
 						</div>
 						<table width="100%"  style="margin-top:7px">
 							<tr>
 								<td style="text-align:right">
-									<button type="submit" class="btn btn-secondary btn-sm">저장</button>
-									<button type="button" class="btn btn-secondary btn-sm" onclick="closeDoc()">닫기</button>
+									<button type="submit" class="btn btn-dark btn-sm">저장</button>
+									<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
 								</td>
 							</tr>
 						</table>
@@ -44,19 +44,19 @@
 								<col width="80%"></col>
 							</colgroup>
 							<tr>
-								<td>작성자</td>
+								<th>작성자</th>
 								<td><input type="text" class="form-control" name="user_name" value="${userInfoDTO.user_name}" readonly></td>
 							</tr>
 							<tr>
-								<td>작성일</td>
-								<td><input type="text" class="form-control" name="create_date_str" value="${todayDate}" readonly></td>
+								<th>작성일</th>
+								<td><input type="date" class="form-control" name="create_date_str" value="${todayDate}" readonly></td>
 							</tr>
 							<tr>
-								<td>제목</td>
+								<th>제목</th>
 								<td><input type="text" class="form-control" name="subject" value="" required="required"></td>
 							</tr>
 							<tr>
-								<td>분류</td>
+								<th>분류</th>
 								<td>
 									<input type="hidden" name="bd_category_name" value="">
 									<select class="form-select" name="bd_category" id="bd_category">
@@ -67,11 +67,11 @@
 								</td>
 							</tr>							
 							<tr>
-								<td>파일첨부</td>
+								<th>파일첨부</th>
 								<td><input type="file" class="form-control form-control-sm" name="file1"></td>
 							</tr>
 							<tr>
-								<td>본문</td>
+								<th>본문</th>
 								<td>							
 									<div class="input-group">
 										<textarea class="form-control" aria-label="With textarea" name="doc_body" rows="15"></textarea>

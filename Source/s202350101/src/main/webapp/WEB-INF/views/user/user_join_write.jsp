@@ -209,6 +209,7 @@
 		let total_ver = id_ver + mail_ver + pw_ver;
 		
 		if(total_ver == 3) {
+			alert("축하합니다 가입완료되었습니다!")
 			return true;
 		} else if (id_ver != 1) {
 			$('#msg').text("ID 중복확인을 해주세요.");

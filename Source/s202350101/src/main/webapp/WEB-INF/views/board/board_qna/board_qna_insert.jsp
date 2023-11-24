@@ -78,7 +78,19 @@
 				
 					<input type="hidden" name="parent_doc_user_id" value="${parent_doc_user_id}">
 					
-					<table class="table table-bordered">
+					<table width="100%" style="margin-top:7px">
+						<tr>
+							<td style="text-align:right">
+								<button type="submit" class="btn btn-dark btn-sm">등록</button>
+								<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
+							</td>
+						</tr>
+					</table>
+					<table class="table">
+					<colgroup>
+						<col width="15%"></col>
+						<col width="85%"></col>
+					</colgroup>
 				        <tr>
 				            <th>작성일</th>
 				            <td><%=strDate %></td>
@@ -94,14 +106,18 @@
 				        <tr>
 				            <th>질문 종류</th>
 				            <td>
-				            	<select id="bd_category" name="bd_category" size="1">
-				            		<option value="1">JAVA</option>
-				            		<option value="2">ORACLE</option>
-				            		<option value="3">JSP</option>
-				            		<option value="4">HTML/CSS</option>
-				            		<option value="5">JavaScript</option>
-				            		<option value="6">Spring</option>
-				            	</select>
+				            	<table>
+				            		<tr>
+				            			<td>
+							            	<input type="hidden" name="bd_category_name" value="">
+											<select class="form-select" name="bd_category" id="bd_category">
+												<c:forEach var="code" items="${bd_category_codelist}">
+													<option value="${code.cate_code}">${code.cate_name}</option>
+												</c:forEach>
+											</select>
+				            			</td>
+				            		</tr>
+				            	</table>
 				            </td>
 				        </tr>
 				
@@ -127,15 +143,9 @@
 				            <th>파일첨부</th>
 				            <td>
 				                <div class="custom-file">
-				                    <input type="file" class="custom-file-input" id="file" name="file1">
+				                    <input type="file" class="form-control form-control-sm" id="file" name="file1">
 				                    <label class="custom-file-label" for="file"></label>
 				                </div>
-				            </td>
-				        </tr>
-				
-				        <tr>
-				            <td colspan="2">
-				                <input type="submit" value="등록">
 				            </td>
 				        </tr>
 				    </table>

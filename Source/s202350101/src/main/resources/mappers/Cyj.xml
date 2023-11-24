@@ -313,18 +313,28 @@
 	<!-- free_조회수 -->
 	<update id="cyFreeCount" parameterType="BdFree">
 		update   bd_free  
-		set      bd_count = + 1
+		set      bd_count = bd_count + 1
 		where    doc_no = #{doc_no}
 	</update>
 	
 	
 	<!-- free_댓글리스트 -->
-	<select id="cyFreeComtList" parameterType="int" resultType="BdFreeComt">
-		 select    u.user_name, u.user_id, b.*
-      	 from      user_info u, bd_free_comt b
-         where     u.user_id = b.user_id
-		 and       b.doc_no = #{doc_no}
-		 order by  comment_doc_no desc
+	<select id="cyFreeComtList" parameterType="BdFreeComt" resultType="BdFreeComt">
+		<![CDATA[	
+			select *
+					from ( 
+					        select rownum rn, a.*
+					        from (
+	                                 select    u.user_name, b.*
+	                                 from      user_info u, bd_free_comt b
+	                                 where     u.user_id = b.user_id
+	                                 and       b.doc_no = #{doc_no}
+	                                 order by  comment_doc_no desc
+	                            ) a
+						 )
+			where   rn >= #{start}
+			and     rn <= #{end}
+		]]>
 	</select>
 	
 	
@@ -432,7 +442,12 @@
 	
 	<!-- qna_상세  -->
 	<select id="cyQnaContent" parameterType="java.lang.Integer" resultType="BdQna">
-		select  u.user_name, b.*
+		select  u.user_name, b.*,
+				(SELECT cate_name 
+					 FROM CODE 
+					 WHERE UPPER(table_name)='BD_QNA' 
+					 AND UPPER(field_name)='BD_CATEGORY' 
+					 AND cate_code=b.bd_category) bd_category_name
 		from    user_info u, bd_qna b 
 		where   u.user_id = b.user_id
 		and     doc_no = #{doc_no}
@@ -458,7 +473,7 @@
 	<!-- qna_수정 -->
 	<update id="cyQnaUpdate" parameterType="BdQna">
 		update  bd_qna
-		set     subject = #{subject}, doc_body = #{doc_body}, modify_date = sysdate
+		set     subject = #{subject}, doc_body = #{doc_body}, modify_date = sysdate, bd_category = #{bd_category}
 		where   doc_no  = #{doc_no}
 	</update>
 	
@@ -552,6 +567,7 @@
 		and    upper(field_name) = #{field_name}
 	</select> 
 	
+	
 	<!-- 알림 목록 -->
 	<select id="cyQnaAlarmList" parameterType="BdQna" resultType="BdQna">
 		SELECT *
@@ -573,15 +589,16 @@
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
 	
-	<!-- qna_검색 목록  -->
+	
+	<!-- qna_분류별 검색 리스트  -->
 	<select id="cyQnaSearchList" parameterType="BdQna" resultType="BdQna">
 			select * 
 			from (  
 			           select rownum rn, a.*,
 			                ( SELECT cate_name 
 							  FROM CODE 
-							  WHERE UPPER(table_name)='BD_QNA' 
-							  AND UPPER(field_name)='BD_CATEGORY' 
+							  WHERE UPPER(table_name)= 'BD_QNA' 
+							  AND UPPER(field_name)= 'BD_CATEGORY' 
 							  AND cate_code = a.bd_category ) bd_category_name
 			           from 
 			                ( select      u.user_name, b.*

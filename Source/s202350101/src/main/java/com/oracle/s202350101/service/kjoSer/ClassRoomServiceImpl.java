@@ -39,14 +39,16 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 		int result = 0;
 
 		try{
-//	강의실 id를 기준으로 삭제_USENV
-			result += CRdao.deleteUsEnvbyClassId(cr);
-//	강의실 id를 기준으로 삭제_TODO
-			result += CRdao.deleteTodobyClassId(cr);
+////	강의실 id를 기준으로 삭제_USENV
+//			result += CRdao.deleteUsEnvbyClassId(cr);
+////	강의실 id를 기준으로 삭제_TODO
+//			result += CRdao.deleteTodobyClassId(cr);
 //	강의실 id를 기준으로 삭제_UserInfo
-			result += CRdao.deleteUsInfobyUsClassId(cr);
+//			result += CRdao.deleteUsInfobyUsClassId(cr);
+//	강의실 id를 기준으로 delstatus 변경 _UserInfo
+			result += CRdao.updateUsInfobyUsClassId(cr);
 //	강의실 id를 기준으로 삭제_Class
-			result += CRdao.deletebyId(cr);
+//			result += CRdao.deletebyId(cr);
 		} catch (Exception e) {
             log.info("deletebyId ERROR : {}",e.getMessage());
         }

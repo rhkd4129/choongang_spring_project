@@ -196,7 +196,6 @@ public class LkhServicveImpl implements LkhService {
 
 
 				List<TaskAttach> taskAttachList = new ArrayList<>();
-				String attach_path = "upload";
 				int i  = 1;
 				for (MultipartFile file : multipartFileList) {
 					TaskAttach taskAttach = new TaskAttach();
@@ -205,8 +204,8 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setAttach_no(maxId+i);
 					// 파일리스트에 3개가 들어모면 i+1을 더하는 형식으로 현재 max값에 +1 , +2  , +3 으로 pk생성하는방식
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
-					taskAttach.setAttach_name(fileName);
-					taskAttach.setAttach_path(attach_path);
+					taskAttach.setAttach_name(file.getOriginalFilename());
+					taskAttach.setAttach_path(fileName);
 					taskAttachList.add(taskAttach);
 					i+=1;
 					log.info("현재 저장될 taskAttach의 attach_no의 값은 ? -> {}",taskAttach.getAttach_no());
@@ -299,7 +298,7 @@ public class LkhServicveImpl implements LkhService {
 				int maxId =lkhDao.task_attach_max(task.getTask_id());
 				log.info("현재 작업에 대한 taskAttach의 max값은?  : {}",maxId);
 				int i=1;
-				String attach_path = "upload";
+
 				for (MultipartFile file : multipartFileList) {
 					TaskAttach taskAttach = new TaskAttach();
 					taskAttach.setTask_id(task.getTask_id());
@@ -307,8 +306,8 @@ public class LkhServicveImpl implements LkhService {
 					taskAttach.setAttach_no(maxId+i);
 					i+=1;
 					String fileName = upload_file(file.getOriginalFilename(), file.getBytes(), uploadPath);
-					taskAttach.setAttach_name(fileName);
-					taskAttach.setAttach_path(attach_path);
+					taskAttach.setAttach_name(file.getOriginalFilename());
+					taskAttach.setAttach_path(fileName);
 					log.info("저장될 파일의정보 TaskID : {}   attachPk: {}",taskAttach.getTask_id(), taskAttach.getAttach_no());
 					taskAttachList.add(taskAttach);
 				}

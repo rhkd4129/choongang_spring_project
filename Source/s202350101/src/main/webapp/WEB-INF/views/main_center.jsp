@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <style>
-.bg-yellow {
-  background-color: #ffc107; /*#ffc107; #fdb933 9ad0f5*/
+.bg-title {
+  background-color: #2C3E50; /*#ffc107; #fdb933 9ad0f5*/
 }
 /*프로젝트 소개란*/
 .pms-nav-step {
@@ -236,9 +236,12 @@
 	<tr>
 		<td width="70%" style="vertical-align:top">
 
-			<div class="d-flex align-items-center p-3 my-3 text-white bg-yellow rounded shadow-sm">
-				<img class="me-3" src="/bootstrap-5.3.2-examples/assets/brand/bootstrap-logo-white.svg" alt="" width="48" height="38">
-				<div class="lh-1">
+			<div class="d-flex align-items-center p-3 my-3 text-white bg-title rounded shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-p-square-fill" viewBox="0 0 16 16">
+					<path d="M8.27 8.074c.893 0 1.419-.545 1.419-1.488s-.526-1.482-1.42-1.482H6.778v2.97H8.27Z"/>
+					<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Zm3.5 4.002h2.962C10.045 4.002 11 5.104 11 6.586c0 1.494-.967 2.578-2.55 2.578H6.784V12H5.5V4.002Z"/>
+				</svg>
+				<div class="lh-1" style="margin-left:15px">
 					<h1 class="h5 mb-0 text-white lh-1">PMS (Project Management System)</h1>
 					<span>Since 2023</span>
 				</div>

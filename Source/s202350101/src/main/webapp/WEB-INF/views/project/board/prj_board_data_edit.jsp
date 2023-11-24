@@ -46,8 +46,8 @@ $(function() {
 						<table width="100%" style="margin-top:7px">
 							<tr>
 								<td style="text-align:right">
-									<button type="submit" class="btn btn-secondary btn-sm">저장</button>
-									<button type="button" class="btn btn-secondary btn-sm" onclick="closeDoc()">닫기</button>
+									<button type="submit" class="btn btn-dark btn-sm">저장</button>
+									<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
 								</td>
 							</tr>
 						</table>
@@ -57,27 +57,27 @@ $(function() {
 								<col width="80%"></col>
 							</colgroup>
 							<tr>
-								<td>작성자</td>
+								<th>작성자</th>
 								<td><input type="text" class="form-control" name="user_name" value="${board.user_name}" readonly></td>
 							</tr>
 							<tr>
-								<td>작성일</td>
+								<th>작성일</th>
 								
 								<td><input type="text" class="form-control" name="create_date_str" value="<fmt:formatDate value="${board.create_date}" type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" readonly></td>
 							</tr>
 							<c:if test="${board.parent_doc_no ne ''}">
 							<tr>
-								<td>원글제목</td>											 
+								<th>원글제목</th>											 
 								<td><a href="javascript:callDocAjax('prj_board_data_read?doc_no=${board.parent_doc_no}&project_id=${board.project_id}')">${board.parent_doc_subject}</a></td>
 							</tr>
 							</c:if>
 							<tr>
-								<td>제목</td>
+								<th>제목</th>
 								<td><input type="text" class="form-control" name="subject" required="required" value="${board.subject}"></td>
 							</tr>
 							<c:if test="${board.parent_doc_no eq ''}">
 							<tr>
-								<td>공지여부</td>
+								<th>공지여부</th>
 								<td>
 									<input type="checkbox" class="form-check-label" name="notify_flag_chkbox" id="notify_flag_chkbox" 
 									<c:if test="${board.notify_flag eq 'Y'}">checked</c:if> 
@@ -87,7 +87,7 @@ $(function() {
 							</tr>
 							</c:if>
 							<tr>
-								<td>분류</td>
+								<th>분류</th>
 								<td>
 									<input type="hidden" name="bd_category_name" value="">
 									<select class="form-select" name="bd_category" id="bd_category">
@@ -100,7 +100,7 @@ $(function() {
 								</td>
 							</tr>							
 							<tr>
-								<td>파일첨부</td>
+								<th>파일첨부</th>
 								<td>
 									<table width="100%">
 										<tr>
@@ -124,7 +124,7 @@ $(function() {
 								</td>
 							</tr>
 							<tr>
-								<td>본문</td>
+								<th>본문</th>
 								<td>							
 									<div class="input-group">
 										<textarea class="form-control" aria-label="With textarea" name="doc_body" rows="15">${board.doc_body}</textarea>

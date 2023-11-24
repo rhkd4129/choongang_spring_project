@@ -2,37 +2,33 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-.login-wrapper{
-    width: 400px;
-    height: 450px;
-    padding: 40px;
-    box-sizing: border-box;
-    border: 2px solid lightgrey;
-    border-radius: 10px;
-    
-    /* 가로 중앙 정렬을 위한 추가된 스타일 */
-    margin: 0 auto; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+<meta charset="utf-8">
+<title>PMS Login</title>
+
+<link href="/bootstrap-5.3.2-examples/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="/bootstrap-5.3.2-examples/css/sign-in.css" rel="stylesheet">
+
+<style>
 .login-wrapper > h2{
+	font-weight: bold;
     font-size: 30px;
-    padding-bottom: 40px;
-    color: #A6A6A6;
-    margin-bottom: 40px;
-    margin-top: -30px;
+    color: #2C3E50;
+    margin-bottom: 10px;
 }
-select {
-    width: 250px; /* 원하는 가로 크기로 조정 (예: 200px) */
-    padding: 5px; /* 내용과 경계 사이의 간격을 조절 (옵션) */
+.form-signin input[name="user_id"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[type="email"] {
+    margin-top: -1px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: var(--bs-border-radius);
+    border-bottom-left-radius: var(--bs-border-radius);
 }
 
 </style>
@@ -56,6 +52,7 @@ select {
 	                $.ajax({
 	                    url: 'send_save_mail',
 	                    dataType: 'text',
+						async: false,
 	                    type: 'post',
 	                    data: {
 	                    	'user_id': $('#user_id').val(),
@@ -73,8 +70,8 @@ select {
 	            	var isRunning = false;
 	            	
 	                $(function(){
-			    		    	var display = $('.time');
-			    		    	var leftSec = 10;
+			    		    	var display = $('#time');
+			    		    	var leftSec = 30;
 			    		    	// 남은 시간
 			    		    	// 이미 타이머가 작동중이면 중지
 			    		    	if (isRunning){
@@ -146,7 +143,7 @@ select {
 	}
 	
 	/* 비밀번호 확인 */
-	$(document).ready(function(){
+	$(function(){
 		$("#userpasschk").blur(function(){
 			if($("#userpasschk").val() != "" && $("#userpass").val() != ""){
 				if($("#userpasschk").val() == $("#userpass").val()){
@@ -170,29 +167,47 @@ select {
 </script>
 
 </head>
-<body>
-	<div class="login-wrapper">
-        <h2>비밀번호 찾기</h2>
-        <form method="post" action="" id="login-form">
-            아이디 : <input type="text" id="user_id" name="user_id" required="required" placeholder="ID"><p>
-            이메일주소 : 
-            <div id="mail_input">
-	            <input type="text" name="auth_email" id="auth_email" required="required" placeholder="ID@gmail.com">
-	            <button class="timerButton" type="button" onclick="sendNumber()">인증번호 전송</button>
-            </div>
-            	<br>
-            <div id="mail_number" name="mail_number" style="display: none">
-	            <input type="text" name="number" id="number" placeholder="인증번호 입력">
-	            <small style="color: red"><div class="time"></div></small>
-	    		<button class="confirmBtn" type="button" onclick="confirmNumber()">확인</button>
-    		</div>
-    			<small style="color: red"><div id="msg2"></div></small>
-    		
-    		<br>
-    		<input type="hidden" id="Confirm" name="Confirm" value="">
-    		
-  		</form>
-        
-    </div>
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
+
+	<main class="form-signin w-100 m-auto">
+		<form action="" id="login-form" method="post">
+			<div class="login-wrapper">
+				<h2>PMS <span class="text-secondary">비밀번호 찾기</span></h2>
+				<h1 class="h6 mb-2 fw-normal">Project Management System</h1>
+				<p class="text-primary">프로젝트 관리 시스템</p>
+				
+				
+				<div class="form-floating">
+					<input type="text" class="form-control" name="user_id" id="user_id" placeholder="ID" value="${user_id}">
+					<label for="user_id">ID</label>
+				</div>
+				<div class="form-floating">
+					<input type="email" class="form-control" name="auth_email" id="auth_email" required="required" placeholder="ID@gmail.com">
+					<label for="auth_email">E-mail</label>
+				</div>
+	
+				<div class="invalid-feedback" style="display:block">
+					<div id="msg2" style="margin-top:10px"></div>
+				</div>
+				
+				<div style="margin-top:20px">
+					<button type="button" class="btn btn-primary w-100 py-2" onclick="sendNumber()">인증번호 전송</button>
+				</div>
+	
+				<div id="mail_number" name="mail_number" style="display:none; margin-top:20px;">
+					<input type="text" class="form-control" name="number" id="number" placeholder="인증번호 입력">
+					<div class="invalid-feedback" style="display:block">
+						<div id="time" style="margin-top:10px;margin-bottom:10px;"></div>
+					</div>
+					<button type="button" class="btn btn-secondary btn-sm" onclick="confirmNumber()">확인</button>
+				</div>
+				
+				<input type="hidden" id="Confirm" name="Confirm" value="">
+				
+				<p class="mt-5 mb-3 text-body-secondary">&copy; 2023. 중앙정보기술인재개발원 프로젝트</p>
+			</div>
+		</form>
+		
+	</main>
 </body>
 </html>

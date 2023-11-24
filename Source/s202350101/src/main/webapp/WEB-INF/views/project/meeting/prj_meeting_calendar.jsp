@@ -383,6 +383,8 @@
 			    				$.each(firList, function(index, meetingList) {
 			    					if (meetingList.meetuser_id == prjMemList.user_id) {
 			    						result += 1;
+			    						console.log("meetingList.meetuser_id : "+meetingList.meetuser_id );
+			    						console.log("prjMemList.user_id : "+prjMemList.user_id);
 			    					}
 			    				});
 			    				
@@ -594,7 +596,6 @@
 	    formData.append('meeting_title', meeting_title);
 	    formData.append('meeting_date', meeting_date);
 	    formData.append('meeting_place', meeting_place);
-	    formData.append('meetuser_id', meetuser_id);
 	    formData.append('meeting_category', meeting_category);
 	    formData.append('file1', file1); // 파일 업로드
 	    formData.append('meeting_content', meeting_content);
@@ -603,22 +604,23 @@
 
 		console.log('file1');
         
-		var delbox = '';        //  삭제 버튼에 체크된 게시글
+		var checkuser = '';        //  삭제 버튼에 체크된 게시글
         document.querySelectorAll("input[name=meetuser_id]:checked").forEach(function (checkbox) {
             //  체크된 게시글 id값들 리스트에 저장.
             
             var bf_noInput = checkbox.value;
             if (bf_noInput) {
                 var bf_no = bf_noInput + ',';
-                delbox += bf_no ;
+                checkuser += bf_no ;
             }
         });
         
-        delbox = delbox.slice(0,-1);
-        meetuser_id = delbox;
+        checkuser = checkuser.slice(0,-1);
+        meetuser_id = checkuser;
         
-        console.log("delbox");
-        console.log(delbox);
+        console.log("checkuser");
+        console.log(checkuser);
+	    formData.append('meetuser_id', checkuser);
 		
 //		var sendurl = "/prj_meeting_date_update/?meeting_id=" + meeting_id + "&project_id=" + project_id;
 		

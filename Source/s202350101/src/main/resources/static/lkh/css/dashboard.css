@@ -20,7 +20,7 @@
     margin: 1%;
     display: flex;
     flex-direction: row; /* 수평으로 배치 */
-    border: 1px solid #0b5ed7;
+    border: 0px solid #0b5ed7;
     border-radius: 10px;
 }
 .chart_1 > div ,.chart_2 > div{
@@ -49,7 +49,7 @@
     display: flex;
     justify-content: center;
     width: 60%;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 10px;
     flex-grow: 1; /* 내부 요소에 따라 유동적으로 크기 조절 */
 }
@@ -65,7 +65,7 @@
 .project_step_subject {
 
         background-color:rgba(75, 192, 192, 0.2);
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 10px;
     text-align: center;
     margin: 5%;

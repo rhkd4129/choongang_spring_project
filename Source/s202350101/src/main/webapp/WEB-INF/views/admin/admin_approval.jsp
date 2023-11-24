@@ -175,8 +175,8 @@
 					<table style="margin-bottom:5px">
                     	<tr>
                     		<td>
-			                    <button class="btn btn-primary" onclick="app_ok();"  type="button">생성 승인</button>
-			                    <button class="btn btn-primary" onclick="app_del();"  type="button">프로젝트 삭제</button>
+			                    <button class="btn btn-dark btn-sm" onclick="app_ok();"  type="button">생성 승인</button>
+			                    <button class="btn btn-danger btn-sm" onclick="app_del();"  type="button">프로젝트 삭제</button>
 			                </td>
 	                	</tr>
                     </table>

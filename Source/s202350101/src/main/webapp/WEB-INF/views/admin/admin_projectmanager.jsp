@@ -228,7 +228,7 @@
 			                    </select>
 	                		</td>
 	                		<td style="padding-left:10px">
-		                		<button class="btn btn-primary" onclick="auth_mod();"
+		                		<button class="btn btn-dark btn-sm" onclick="auth_mod();"
 	                            type="button">권한 수정
 	    						</button>
 	                		</td>

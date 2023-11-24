@@ -41,13 +41,13 @@
 		WHERE project_id = #{project_id} 
 		AND 
 		<choose>
-			<when test="search == 's_subject'">
+			<when test="search == '1_subject'">
 				 subject like '%' || #{keyword} || '%'
 			</when>
-			<when test="search == 's_user_name'">
+			<when test="search == '2_user_name'">
 				 user_name like '%' || #{keyword} || '%'
 			</when>
-			<when test="search == 's_category'">
+			<when test="search == '3_bd_category'">
 				 bd_category_name like '%' || #{keyword} || '%'
 			</when>
 			<otherwise>
@@ -122,13 +122,13 @@
 			a.project_id = #{project_id} 
 			AND 
 			<choose>
-				<when test="search == 's_subject'">
+				<when test="search == '1_subject'">
 					 a.subject like '%' || #{keyword} || '%'
 				</when>
-				<when test="search == 's_user_name'">
+				<when test="search == '2_user_name'">
 					 a.user_name like '%' || #{keyword} || '%'
 				</when>
-				<when test="search == 's_category'">
+				<when test="search == '3_bd_category'">
 					 a.bd_category_name like '%' || #{keyword} || '%'
 				</when>
 				<otherwise>
@@ -145,6 +145,7 @@
 		SELECT * 
 		FROM CODE 
 		WHERE UPPER(table_name)=#{table_name} AND UPPER(field_name)=#{field_name}
+		ORDER BY table_name, field_name, cate_code
 	</select>
 	
 	<!-- 문서 등록 -->

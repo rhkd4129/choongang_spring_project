@@ -48,11 +48,13 @@
 	</update>
 	            
 	<update id="userInfoUpdate" parameterType="UserInfo">
-    <![CDATA[
         UPDATE user_info
         SET
 	            class_id   = #{class_id}
-	            ,project_id = #{project_id}
+				<choose>
+					<when test="project_id == 0">,project_id = NULL</when>
+					<otherwise>,project_id = #{project_id}</otherwise>
+				</choose>
 	            ,user_pw    = #{user_pw}
 	            ,user_name  = #{user_name}
 		        ,user_gender = #{user_gender, jdbcType=VARCHAR}
@@ -63,7 +65,6 @@
 	            ,attach_name  = #{attach_name, jdbcType=VARCHAR}
 	            ,attach_path  = #{attach_path, jdbcType=VARCHAR}
         WHERE user_id = #{user_id}
-    ]]>
 	</update>
 
 	

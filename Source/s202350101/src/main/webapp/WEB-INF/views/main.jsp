@@ -11,7 +11,7 @@
 <!-- CSS END -->
 
 <!-- JS START -->
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -19,7 +19,8 @@
 		
 		$.ajax({
 			url			: '/main_header',
-			dataType 	: 'text',
+			async		: false, //동기식 호출
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
@@ -27,7 +28,7 @@
 		
 		$.ajax({
 			url			: '/main_menu',
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
 			}
@@ -36,7 +37,7 @@
 		$.ajax({
 			url			: '/main_center',
 			async		: false, //동기식 호출
-			dataType 	: 'text',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#center').html(data);
 			}

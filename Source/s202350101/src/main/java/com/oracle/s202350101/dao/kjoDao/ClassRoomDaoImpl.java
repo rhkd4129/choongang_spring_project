@@ -104,5 +104,18 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		return result;
 	}
 
+	@Override
+	public int updateUsInfobyUsClassId(ClassRoom cr) {
+		log.info("updateUsInfobyUsClassId START");
+		int result = 0;
+		try {
+			result = session.update("updateUsInfobyUsClassId", cr);
+			log.info("updateUsInfobyUsClassId {}",result);
+		} catch (Exception e) {
+			log.info("updateUsInfobyUsClassId ERROR : {}",e.getMessage());
+		}
+		return result;
+	}
+
 
 }

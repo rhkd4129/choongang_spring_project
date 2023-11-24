@@ -21,6 +21,18 @@ function goto(url) {
 	location.href = url;
 }
 
+//문서 버튼 >> 닫기
+function closeDoc() {
+	if(opener) {
+		if(opener.location.href.indexOf("_list") != -1) {
+			opener.location.reload();
+		}
+		window.close();
+	}else{
+		history.go(-1);
+	}
+}
+
 //게시판 페이지 이동
 function gotoPage(currentPage) {
 	//currentPage 경우의 수
