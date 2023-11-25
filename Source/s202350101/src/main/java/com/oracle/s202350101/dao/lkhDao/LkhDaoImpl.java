@@ -20,17 +20,35 @@ import org.springframework.util.FileCopyUtils;
 public class LkhDaoImpl implements LkhDao {
 	private final SqlSession sqlSession;
 
+
+
+	//#######################################################################
+	//############  	작업보드	그래프 그려주는 ajax  			     ############
+	//#######################################################################
 	// 도넛 그래프
 	@Override
 	public List<Integer> doughnut_chart(int project_id) {
 		List<Integer> taskStatusList = null;
 		try {
+			//---------------------------------------------------------------------------
 			taskStatusList = sqlSession.selectList("doughnut_chart", project_id);
 		} catch (Exception e) {
 			log.info("dao : doughnut_chart error Message -> {}", e.getMessage());
 		}
 		return taskStatusList;
 	}
+
+	@Override
+	public PrjInfo project_day(int project_id) {
+		PrjInfo prjInfo = null;
+		try {
+			prjInfo = sqlSession.selectOne("project_day", project_id);
+		} catch (Exception e) {
+			log.info("dao : project_day error Message -> {}", e.getMessage());
+		}
+		return prjInfo;
+	}
+
 
 	// 진척률 그래프
 	@Override
@@ -66,21 +84,32 @@ public class LkhDaoImpl implements LkhDao {
 		return projectStepList;
 	}
 
+
+	//#######################################################################
+	//############  	인원별 타임라온			 			     ############
+	//#######################################################################
+	//작업별 타임라인
 	@Override
-	public PrjInfo project_day(int project_id) {
-		PrjInfo prjInfo = null;
+	public List<Task> task_timeline(int project_id) {
+		List<Task> timelineTask = null;
 		try {
-			prjInfo = sqlSession.selectOne("project_day", project_id);
+			timelineTask = sqlSession.selectList("task_timeline",project_id);
+
 		} catch (Exception e) {
-			log.info("dao : project_day error Message -> {}", e.getMessage());
+			log.info("dao :task_timeline error Message -> {}", e.getMessage());
 		}
-		return prjInfo;
+		return timelineTask;
+
 	}
 
+
+	//#######################################################################
+	//############  	작업 목록  							     ############
+	//#######################################################################
 	public int task_count(Task task) {
 		int taskCount = 0;
 		try {
-				taskCount = sqlSession.selectOne("task_count", task);
+			taskCount = sqlSession.selectOne("task_count", task);
 		} catch (Exception e) {
 			log.info("dao : task_count error Message -> {}", e.getMessage());
 		}
@@ -102,17 +131,9 @@ public class LkhDaoImpl implements LkhDao {
 		return taskList;
 	}
 
-	@Override
-	public List<Task> task_search(Task task) {
-		List<Task> taskList = null;
-		try {
-			taskList = sqlSession.selectList("task_list", task);
-		} catch (Exception e) {
-			log.info("dao :task_list error Message -> {}", e.getMessage());
-		}
-		return taskList;
-	}
 
+
+	//작업 리스트에 시간 순으로 정렬(내림,올림)
 	@Override
 	public List<Task> task_time_decs(Task task) {
 		List<Task> taskList = null;
@@ -134,8 +155,14 @@ public class LkhDaoImpl implements LkhDao {
 		}
 		return taskList;
 	}
+	////////
 
-	// 작업 상세 화면
+
+
+
+	//#######################################################################
+	//############  	작업 상세화면				  			     ############
+	//#######################################################################
 	@Override
 	public Task task_detail(int task_id, int project_id) {
 		Task task = new Task();
@@ -149,6 +176,19 @@ public class LkhDaoImpl implements LkhDao {
 		}
 		return task;
 	}
+
+	// 작업 상세화면에서 공동작업자들 보여주기
+	public List<TaskSub> taskWorkerlist(TaskSub taskSub) {
+		List<TaskSub> taskSubList = null;
+		try {
+			taskSubList = sqlSession.selectList("taskWorkerlist", taskSub);
+
+		} catch (Exception e) {
+			log.info("dao :taskWorkerlist error Message -> {}", e.getMessage());
+		}
+		return taskSubList;
+	}
+
 	// 작업 상세화면에서 첨부파일 리스트
 	@Override
 	public List<TaskAttach> task_attach_list(int task_id,int project_id) {
@@ -167,22 +207,13 @@ public class LkhDaoImpl implements LkhDao {
 
 
 
-	//작업별 타임라인
-	@Override
-	public List<Task> task_timeline(int project_id) {
-		List<Task> timelineTask = null;
-		try {
-			timelineTask = sqlSession.selectList("task_timeline",project_id);
-
-		} catch (Exception e) {
-			log.info("dao :task_timeline error Message -> {}", e.getMessage());
-		}
-		return timelineTask;
-
-	}
 
 
-	// task create view에서 보여주기 get
+
+	//#######################################################################
+	//############  	// task create form 보여주기 get 			   ##########
+	//#######################################################################
+
 	@Override
 	public List<PrjStep> project_step_list(int project_id) {
 		List<PrjStep> prj_step_list = null;
@@ -211,7 +242,9 @@ public class LkhDaoImpl implements LkhDao {
 
 
 
-	///////////// 작업 생성 ///////////////////////
+	//#######################################################################
+	//############  	작업 버튼 눌럿을시 							   ##########
+	//#######################################################################
 
 	@Override
 	public int task_create(Task task) throws Exception {
@@ -240,6 +273,18 @@ public class LkhDaoImpl implements LkhDao {
 		return result;
 	}
 
+
+
+	public  int	task_attach_max(int task_id){
+		int result = 0;
+		try {
+			result = sqlSession.selectOne("taskAttach_max",task_id);
+		} catch (Exception e) {
+			log.info("dao :task_attach_max error Message -> {}", e.getMessage());
+		}
+		return result;
+	}
+
 	@Override
 	public int task_attach_create(@Param("list") List<TaskAttach> taskAttachList) throws Exception {
 		int result = 0;
@@ -255,18 +300,6 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 
-//
-
-
-	public  int	task_attach_max(int task_id){
-		int result = 0;
-		try {
-			result = sqlSession.selectOne("taskAttach_max",task_id);
-		} catch (Exception e) {
-			log.info("dao :task_attach_max error Message -> {}", e.getMessage());
-		}
-		return result;
-	}
 
 	@Override
 	public int task_update(Task task) throws Exception{
@@ -295,6 +328,22 @@ public class LkhDaoImpl implements LkhDao {
 		}
 		return result;
 	}
+
+
+
+	@Override
+	public int task_attach_update(List<TaskAttach> taskAttachList) throws Exception{
+		int reuslt =0;
+		try {				//update엿음
+			reuslt = sqlSession.insert("task_attach_update",taskAttachList);
+		}
+		catch (Exception e) {
+			log.info("dao :task_attach_update error Message -> {}", e.getMessage());
+			throw new Exception("dao :task_attach_update error Message ->", e);
+		}
+		return reuslt;
+	}
+
 
 	@Override
 	public int task_worker_update(List<TaskSub> taskSubList)  throws Exception{
@@ -336,20 +385,10 @@ public class LkhDaoImpl implements LkhDao {
 
 	}
 
-	@Override
-	public int task_attach_update(List<TaskAttach> taskAttachList) throws Exception{
-		int reuslt =0;
-		try {				//update엿음
-			reuslt = sqlSession.insert("task_attach_update",taskAttachList);
-		}
-		catch (Exception e) {
-			log.info("dao :task_attach_update error Message -> {}", e.getMessage());
-			throw new Exception("dao :task_attach_update error Message ->", e);
-		}
-		return reuslt;
-	}
 
-
+	//#######################################################################
+	//############  	휴지통 기능 (목록, 삭제 , 복구 , 영구삭제		##########
+	//#######################################################################
 	@Override
 	public List<Task> garbage_list(Task task) {
 		List<Task> garbageList = null;
@@ -365,17 +404,6 @@ public class LkhDaoImpl implements LkhDao {
 	}
 
 	@Override
-	public int task_garbage(Task task) {
-		int result = 0;
-		try {
-			result = sqlSession.update("task_garbage", task);
-		} catch (Exception e) {
-			log.info("dao :task_garbage error Message -> {}", e.getMessage());
-		}
-		return result;
-	}
-
-	@Override
 	public int garbage_count(int project_id) {
 		int result = 0;
 		try {
@@ -386,16 +414,18 @@ public class LkhDaoImpl implements LkhDao {
 		return result;
 	}
 
+
 	@Override
-	public int task_delete(Task task) {
+	public int task_garbage(Task task) {
 		int result = 0;
 		try {
-			result = sqlSession.update("task_delete", task);
-		}catch (Exception e){
-			log.info("dao :task_delete error Message -> {}", e.getMessage());
+			result = sqlSession.update("task_garbage", task);
+		} catch (Exception e) {
+			log.info("dao :task_garbage error Message -> {}", e.getMessage());
 		}
-		return  result;
+		return result;
 	}
+
 
 	@Override
 	public int task_restore(Task task) {
@@ -408,15 +438,19 @@ public class LkhDaoImpl implements LkhDao {
 		return  result;
 	}
 
-	public List<TaskSub> taskWorkerlist(TaskSub taskSub) {
-		List<TaskSub> taskSubList = null;
+
+	@Override
+	public int task_delete(Task task) {
+		int result = 0;
 		try {
-			taskSubList = sqlSession.selectList("taskWorkerlist", taskSub);
-		} catch (Exception e) {
-			log.info("dao :taskWorkerlist error Message -> {}", e.getMessage());
+			result = sqlSession.update("task_delete", task);
+		}catch (Exception e){
+			log.info("dao :task_delete error Message -> {}", e.getMessage());
 		}
-		return taskSubList;
+		return  result;
 	}
+
+
 
 
 }
