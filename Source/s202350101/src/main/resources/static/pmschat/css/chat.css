@@ -1,37 +1,31 @@
 @charset "UTF-8";
 
-.iconChat{
-	cursor:pointer;
-}
-#chat_close {
-	top:30px;
-	right:30px;
-	position: absolute;
-}
+	.iconChat{
+		cursor:pointer;
+	}
+	#chat_close {
+		top:13px;
+		right:13px;
+		position: absolute;
+	}
 
     #chatbox {
-        position: absolute;
+        position:fixed;
         top: 60px;
-        right: 10px;
+        right: 33px;
         z-index: 999;
         float: right;
         width: 20%;
-        padding: 30px;
+        padding: 0px;
         min-width: 380px;
         height: auto; /* 변경된 높이 값 */
-        /* background-color: rgba(13, 110, 253, 0.25); */
-        /* background-color: rgba(var(--bs-tertiary-bg-rgb)) !important; */
             
-        background-color: rgba(var(--bs-tertiary-bg-rgb)) !important;
-        /* background-color: #ffc107;  */
-        /* background-color: rgba(255, 193, 7, 0.8); */
+        background-color: #002c41 !important;
         
-        
-        /*display: none;*/
         flex-direction: column;
         align-items: center;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        border:1px solid #e5e5e5;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+        border:0px solid;
         border-radius:5px;
     }
 
@@ -39,16 +33,17 @@
         display: flex;
 
     }
-
-    #chat_top {
-        margin: 5px 0px 5px 0px;
-    }
-
+	#chat_top {
+		width: 100%;
+		margin: 10px;
+        color: #fff;
+	}
+    
     #chat_content {
         height: 400px;
         width: 100%;
-        background-color: #2C3E50;
-        color: #ffc107;
+        background-color: #002c41;
+        color: #fff;
         overflow-x: hidden;
     }
 
@@ -75,6 +70,7 @@
     }
     
     #chat_st_center{
+    	padding-top:5px;
     	line-height: 23px;
     }
 

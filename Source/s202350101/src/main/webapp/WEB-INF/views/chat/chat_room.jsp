@@ -5,89 +5,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <style text="text/css">
+<style text="text/css">
+.bg-body-tertiary {
+    --bs-bg-opacity: 1;
+    background-color: #002c41 !important;
+}
+/* 002c41 2C3E50
+383838 383838
+*/
+#chatbox {
+    width: 100%;
+    height: 100%; /* 변경된 높이 값 */
+    /* background-color: rgba(13, 110, 253, 0.25); */
+    background-color: #002c41;;
+    color: #fff;
+/*     display: flex;
+    flex-direction: column; */
+    align-items: center;
+}
 
-        #chatbox {
-            float: right;
-            width: 100%;
-            height: auto; /* 변경된 높이 값 */
-            background-color: rgba(13, 110, 253, 0.25);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+#chat_top {
+	width: 100%;
+	background-color: #002c41;
+	padding:10px;
+}
+#chat_top > table, th, td {
+	color: #fff;
+}
+#chat_content {
+    height: calc(100vh - 128px);;
+    width: 100%;
+    background-color: #002c41;
+    color:#fff;
+    overflow-x: hidden;
+}
+#chat_bottom {
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+    width: 100%;
+    height: 75px;
+    display: flex;
+    background-color: #383838;
+    justify-content: center;
+}
 
-        #chat_bottom {
-            width: 100%;
-            display: flex;
-            justify-content: center;
+.msg-table {
+	width: 100%;
+	margin: 10px 0px;
+}
 
-            height: 124px;
+#left_chat_msg{
+    /* display: flex;
+    flex-direction: row; 
+    align-items: baseline;
+    */
+    display: block;
+    width: fit-content;
+    max-width:300px;
+    background-color: #383838 ;
+    color:#fff;
+    border-radius:10px;
+    padding:10px;
+    margin:5px 0px;
+}
+#right_chat_msg{
+    /* display: flex;
+    flex-direction: row-reverse; 
+    align-items: baseline; */
+    display: block;
+    width: fit-content;
+    max-width:300px;   
+    background-color: #ffc107;
+    color:#000;
+    border-radius:10px;
+    padding:10px;
+    margin:5px 0px;
+}
 
-        }
+#chat_msg_con {
+    font-size: 15px;
+}
+#chat_msg_time {
+    font-size: 12px;
+    margin: 0 8px 0 8px;
+    color: #8299A6;
+}
+#chat_msg_read{
+    font-size: 12px;
+}
 
-        #chat_content {
-            height: 400px;
-            width: 90%;
-            background-color: yellow;
-            overflow-x: hidden;
-        }
-        #left_chat_msg{
-            display: flex;
-            flex-direction: row;
-            align-items: baseline;
+#send_message{
+    width: 100%;
+    background-color: #383838;
+    border: 0px solid;
+    border-radius: 0px;
+	color:#fff;
+	font-size:15px;
+}
+#send_button{
+	border-radius: 0px;
+}
 
-        }
-        #right_chat_msg{
-            display: flex;
-            flex-direction: row-reverse;
-            align-items: baseline;
-        }
-
-        #chat_msg_con {
-            font-size: 16px;
-        }
-        #chat_msg_time {
-            font-size: 12px;
-            margin: 0 8px 0 8px;
-        }
-        #chat_msg_read{
-            font-size: 12px;
-        }
-        #send_message{
-            width: 77%;
-        }
-
-    </style>
+</style>
 
     <script type="text/javascript">
         $(function () {
             $('#send_message').val('');
-            $.ajax({
-                url: '../main_header',
-                dataType: 'text',
-                success: function (data) {
-                    $('#header').html(data);
-                }
-            });
-
-            $.ajax({
-                url: '../main_menu',
-                dataType: 'text',
-                success: function (data) {
-                    $('#menubar').html(data);
-                }
-            });
-
-            $.ajax({
-                url: '../main_footer',
-                dataType: 'text',
-                success: function (data) {
-                    $('#footer').html(data);
-                }
-            });
         });
         let ws;             //  웹소캣
         let chatstompClient;    //  stomp
@@ -146,6 +172,7 @@
                             $.each(firlist, function (index, chatmsg) {
                                 console.log(chatmsg);
                                 var con = '';
+                                
                                 let read_chker = chatmsg.read_chk;
                                 if (read_chker == 'N') {
                                     read_chker = '안 읽음';
@@ -155,17 +182,21 @@
                                 console.log("chatmsg.sender_id"+chatmsg.sender_id);
                                 console.log("myID"+myID);
                                 if (chatmsg.sender_id == myID) { //  내가 보낸 메세지
-                                    con += '<div id="right_chat_msg" >';
-                                    con += '<p id="chat_msg_con">  ' + chatmsg.msg_con + '  </p>';
-                                    con += '<p id="chat_msg_time">  ' + chatmsg.show_time + '  </p>';
-                                    con += '<p id="chat_msg_read"> ' + read_chker + ' </p>';
-                                    con += '</div>';
+                                	con += '<table class="msg-table"><tr><td align="right">';
+                                    con += '<span id="right_chat_msg" >';
+                                    con += '<span id="chat_msg_con">  ' + chatmsg.msg_con + '  </span>';
+                                    con += '</span>';
+                                    con += '<span id="chat_msg_read"> ' + read_chker + ' </span>';
+                                    con += '<span id="chat_msg_time">  ' + chatmsg.show_time + '  </span>';
+                                    con += '</td></tr></table>';
                                 } else {                //  상대방이 보낸 메세지
-                                    con += '<div id="left_chat_msg" >';
-                                    con += '<p id="chat_msg_con">  ' + chatmsg.msg_con + '  </p>';
-                                    con += '<p id="chat_msg_time">  ' + chatmsg.show_time + '  </p>';
-                                    con += '<p id="chat_msg_read"> ' + read_chker + ' </p>';
-                                    con += '</div>';
+                                	con += '<table class="msg-table"><tr><td align="left">';
+                                    con += '<span id="left_chat_msg" >';
+                                    con += '<span id="chat_msg_con">  ' + chatmsg.msg_con + '  </span>';
+                                    con += '</span>';
+                                    con += '<span id="chat_msg_time">  ' + chatmsg.show_time + '  </span>';
+                                    con += '<span id="chat_msg_read"> ' + read_chker + ' </span>';
+                                    con += '</td></tr></table>';
                                 }
                                 chat_con.append(con);
                             });
@@ -260,14 +291,31 @@
 
 <div id="chatbox">
     <div id="chat_top">
-        <p>${your.user_name}</p>
+    	<table width="100%">
+    		<tr>
+	    		<td align="left">
+			        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" alt="UpLoad File" 
+			        src="${pageContext.request.contextPath}/${your.attach_path }/${your.attach_name}">
+			        <span style="margin-left:10px">${your.user_name}</span>
+	    		</td>
+	    		<td align="right">
+			        <span style="margin-right:10px">${userInfo.user_name}</span>
+			        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" alt="UpLoad File" 
+			        src="${pageContext.request.contextPath}/${userInfo.attach_path }/${userInfo.attach_name}">
+	    		</td>
+    		</tr>
+    	</table>
     </div>
     <div id="chat_content" class="bg-body-tertiary p-3 rounded-2">
         <input id="chat_room_id" type="hidden" value="${ChatRoom.chat_room_id}">
     </div>
     <div id="chat_bottom">
-        <input type="text" id="send_message" onkeyup="enterKey(event);">
-        <input type="button" class="btn btn-primary" value="작성완료" onclick="send()">
+        <input type="text" class="form-control" id="send_message" onkeyup="enterKey(event);">
+        <button type="button" id="send_button" class="btn btn-secondary" onclick="send()">
+        	<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-arrow-up-square" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z"/>
+			</svg><br>보내기
+		</button>
     </div>
 </div>
 <!------------------------------ //개발자 소스 입력 END ------------------------------->
