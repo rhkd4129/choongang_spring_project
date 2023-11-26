@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
 <mapper namespace="com.oracle.s202350101.model.Todo">
@@ -8,73 +8,90 @@
 
 	<!-- 리스트 입력 -->
 	<insert id="cyTodoListInsert" parameterType="Todo">
-		insert into todo 
-				(   user_id, 
-                    todo_no, 
-                    todo_list, 
-                    todo_check, 
-                    todo_date, 
-                    todo_priority )
-        values (    #{user_id},
-                  (SELECT NVL(MAX(todo_no) + 1, 1) FROM todo WHERE user_id = #{user_id}),
-                    #{todo_list},
-                    'N',
-                    sysdate,
-                    #{todo_priority}
-                    )
+		insert into todo
+		(   user_id,
+			todo_no,
+			todo_list,
+			todo_check,
+			todo_date,
+			todo_priority )
+		values (    #{user_id},
+					(SELECT NVL(MAX(todo_no) + 1, 1) FROM todo WHERE user_id = #{user_id}),
+					#{todo_list},
+					'N',
+					#{todo_date},
+					#{todo_priority}
+			   )
 	</insert>
 
-	
-	<!-- 리스트 보여주기 -->
+
+
 	<select id="cyTodoTotalSelect" parameterType="Todo" resultType="Todo">
-		select * from todo where user_id = #{user_id} order by todo_priority desc
+
+	 <![CDATA[
+		SELECT *
+		FROM todo
+		WHERE user_id = #{user_id} AND
+			todo_date > SYSDATE-9
+		ORDER BY todo_date DESC
+		]]>
+		</select>
+
+
+
+	<select id="todoDatecount" parameterType="Todo" resultType="Todo">
+
+		SELECT
+			TO_CHAR(TODO_DATE, 'YYYY-MM-DD') AS one_Day
+		FROM
+			Todo
+		where user_id = #{user_id}
+		GROUP BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD')
+		ORDER BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD') desc
 	</select>
-	
-	
+
+
+
+
+
 	<!-- 삭제 버튼 클릭하면 리스트 삭제 -->
 	<delete id="cyTodoListDelete" parameterType="Todo">
-		delete 	
-		from 	todo 
-		where 	todo_no = #{todo_no} 
-		and 	user_id = #{user_id}
+		delete
+		from 	todo
+		where 	todo_no = #{todo_no}
+		  and 	user_id = #{user_id}
 	</delete>
-	
-	
+
+
 	<!-- 각각의 todoList 갖고 옴 -->
 	<select id="cyRowTodoList" parameterType="Todo" resultType="Todo">
 		select  *
 		from    todo
-		where 	todo_no = #{todo_no} 
-		and 	user_id = #{user_id}
+		where 	todo_no = #{todo_no}
+		  and 	user_id = #{user_id}
 	</select>
-	
-	
+
+
+
 	<!-- Y로 변경 -->
 	<update id="cyTodoListTodoCheckY" parameterType="Todo">
-		update  
-			todo 
-		set     
+		update
+			todo
+		set
 			todo_check = 'Y'
-		where   
+		where
 			todo_no = #{todo_no} and
-		    user_id = #{user_id}
+			user_id = #{user_id}
 	</update>
-	
-	
+
+
 	<!-- N으로 변경  -->
 	<update id="cyTodoListTodoCheckN" parameterType="Todo">
-		update  todo 
+		update  todo
 		set     todo_check = 'N'
 		where   todo_no = #{todo_no}
-		and     user_id = #{user_id}
+		  and     user_id = #{user_id}
 	</update>
-	
-
-
-
-
-
-
 
 
 

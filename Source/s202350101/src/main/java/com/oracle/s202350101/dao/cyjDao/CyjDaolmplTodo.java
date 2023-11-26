@@ -104,13 +104,23 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 			System.out.println("CyjDaolmplTodo todoListTodoCheckN Exception-> " + e.getMessage());
 		}
 		return todoListTodoCheckN;
+
+
+
+	}
+
+	@Override
+	public List<Todo> todoDate(Todo todo) {
+
+		List<Todo> todoDateList = null;
+		try {
+			todoDateList = session.selectList("todoDatecount", todo);
+			System.out.println("CyjDaolmplTodo todoDate-> " + todo);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoDate Exception-> " + e.getMessage());
+		}
+		return todoDateList;
 	}
 
 
-
-	
-
-	
-	
-	
 }
