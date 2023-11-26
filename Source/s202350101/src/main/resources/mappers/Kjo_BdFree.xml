@@ -8,10 +8,6 @@
 
 <mapper namespace="com.oracle.s202350101.model.BdFreeMapper">
     <!-- BdFree -->
-<!--모든 BdFree조회-->
-    <select id="findAllBdFree" resultType="BdFree">
-        select * from Bd_Free
-    </select>
 <!--카테고리별 BdFree, 작성자 정보 조회-->
     <select id="findBdFreeByCategory" parameterType="BdFree" resultType="BdFree">
         select b.*, u.*
@@ -25,9 +21,17 @@
         select ev.*, u.user_name
         from (select rownum rn, e.*
               from (select * from BD_FREE where BD_CATEGORY = #{bd_category} order by Doc_no desc)  e) ev  left join user_info u
-        on ev.user_id = u.user_id
+                                                                                                                     on ev.user_id = u.user_id
         where rn between #{start} and #{end}
         order by Doc_no desc
+    </select>
+<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
+    <select id="findByCategorySearch" parameterType="BdFree" resultType="int">
+        select count(*)
+        from (select rownum rn, e.*
+              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
+                 left join user_info u
+                           on ev.user_id = u.user_id
     </select>
 <!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
     <select id="findByCategorySearchAndPage" parameterType="BdFree" resultType="BdFree">
@@ -39,23 +43,7 @@
         where rn between #{start} and #{end} and u.user_name like '%' || #{keyword} || '%'
         order by Doc_no desc
     </select>
-<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
-    <select id="findByCategorySearch" parameterType="BdFree" resultType="int">
-        select count(*)
-        from (select rownum rn, e.*
-              from (select * from BD_FREE where BD_CATEGORY like #{bd_category} and user_id like '%' || #{keyword} || '%' order by Doc_no desc) e) ev
-                 left join user_info u
-                           on ev.user_id = u.user_id
-    </select>
-    <!--게시글 id로 삭제-->
-    <delete id="del_bdf" parameterType="java.util.List">
-        delete bd_free
-        where doc_no IN
-        <foreach collection="list" item="item" open="(" close=")" separator=",">
-            #{item}
-        </foreach>
-    </delete>
-    <!--게시글 id로 삭제-->
+<!--게시글 id로 삭제-->
     <delete id="del_bdfg" parameterType="java.util.List">
         delete bd_free_good
         where doc_no IN
@@ -63,7 +51,7 @@
             #{item}
         </foreach>
     </delete>
-    <!--게시글 id로 삭제-->
+<!--게시글 id로 삭제-->
     <delete id="del_bdfc" parameterType="java.util.List">
         delete bd_free_comt
         where comment_doc_no IN
@@ -71,6 +59,19 @@
             #{item}
         </foreach>
     </delete>
+<!--게시글 id로 삭제-->
+    <delete id="del_bdf" parameterType="java.util.List">
+        delete bd_free
+        where doc_no IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+<!--모든 BdFree조회-->
+    <select id="findAllBdFree" resultType="BdFree">
+        select * from Bd_Free
+    </select>
+
 
 
 

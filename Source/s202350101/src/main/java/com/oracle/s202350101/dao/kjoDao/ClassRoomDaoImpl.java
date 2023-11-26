@@ -17,23 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ClassRoomDaoImpl implements ClassRoomDao{
 	
 	private final SqlSession session;
-
-	//	모든 ClassRoom 조회
-	@Override
-	public List<ClassRoom> findAllClassRoom() {
-		List<ClassRoom> CRList = null;
-		log.info("findAllClassRoom start");
-		try {
-			CRList = session.selectList("findAllClassRoom");
-			System.out.println(CRList.stream().collect(Collectors.toList()));
-			log.info("findAllClassRoom finish");
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return CRList;
-		
-	}
-
 	//	ClassRoom	생성
 	@Override
 	public int saveClassRoom(ClassRoom cr) {
@@ -42,10 +25,37 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		try {
 			result = session.insert("saveClassRoom",cr);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info("saveClassRoom ERROR : {}",e.getMessage());
 		}
 		return result;
 	}
+
+	//	모든 ClassRoom 조회
+	@Override
+	public List<ClassRoom> findAllClassRoom() {
+		List<ClassRoom> CRList = null;
+		log.info("findAllClassRoom start");
+		try {
+			CRList = session.selectList("findAllClassRoom");
+			log.info("findAllClassRoom finish");
+		}catch (Exception e) {
+			log.info("findAllClassRoom ERROR : {}",e.getMessage());
+		}
+		return CRList;
+	}
+	@Override
+	public int updateUsInfobyUsClassId(ClassRoom cr) {
+		log.info("updateUsInfobyUsClassId START");
+		int result = 0;
+		try {
+			result = session.update("updateUsInfobyUsClassId", cr);
+			log.info("updateUsInfobyUsClassId {}",result);
+		} catch (Exception e) {
+			log.info("updateUsInfobyUsClassId ERROR : {}",e.getMessage());
+		}
+		return result;
+	}
+
 
 //	강의실 id를 기준으로 삭제_Class
     @Override
@@ -104,18 +114,6 @@ public class ClassRoomDaoImpl implements ClassRoomDao{
 		return result;
 	}
 
-	@Override
-	public int updateUsInfobyUsClassId(ClassRoom cr) {
-		log.info("updateUsInfobyUsClassId START");
-		int result = 0;
-		try {
-			result = session.update("updateUsInfobyUsClassId", cr);
-			log.info("updateUsInfobyUsClassId {}",result);
-		} catch (Exception e) {
-			log.info("updateUsInfobyUsClassId ERROR : {}",e.getMessage());
-		}
-		return result;
-	}
 
 
 }

@@ -21,38 +21,42 @@ import java.util.stream.Collectors;
 public class ChatMsgServiceImpl implements ChatMsgService {
     private final ChatMsgDao CMdao;
     private final UserInfoService UIser;
-
-    //<!--모든 메시지 조회-->
+    //  메시지 읽음 처리 및 조회
     @Override
-    public List<ChatMsg> findAll() {
-        return CMdao.findAll();
+    public List<ChatMsg> inviteChatRoom(ChatRoom cr) {
+        List<ChatMsg> ChatList = null;
+        try {
+            //    상대방 메시지 읽음처리
+            updateRead(cr);
+            //  조회용 날짜로 변경하여 반환
+            ChatList = todatelist(cr);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ChatList;
     }
-
-    //<!--특정 채팅방 내 모든 메시지 조회-->
+//    상대방 메시지 읽음처리
     @Override
-    public List<ChatMsg> findByRoomId(ChatRoom cr) {
-        return CMdao.findByRoomId(cr);
-    }
-
-    //<!--메시지 저장-->
-    @Override
-    public int saveMsg(ChatMsg msg) {
-        return CMdao.saveMsg(msg);
-    }
-
-    //<!--채팅방 내 총 메시지 개수-->
-    @Override
-    public int cntMsg(ChatMsg msg) {
-        return CMdao.cntMsg(msg);
-    }
-
-    //  메시지 insert
-    @Override
-    public int cntsaveMsg(ChatMsg msg) {
+    public int updateRead(ChatRoom cr) {
         int result = 0;
-        msg.setMsg_id(CMdao.cntMsg(msg) + 1);
-        result = CMdao.saveMsg(msg);
+        try{
+            result = CMdao.updateRead(cr);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return result;
+    }
+//  조회용 날짜로 변경하여 반환
+    @Override
+    public List<ChatMsg> todatelist(ChatRoom chatRoom) {
+        List<ChatMsg> CMList =  CMdao.findByRoomId(chatRoom);
+
+        SimpleDateFormat newDtFormat = new SimpleDateFormat("yy.MM.dd a HH:mm");
+        for (int i = 0; i < CMList.size(); i++) {
+            Date time = CMList.get(i).getSend_time();
+            CMList.get(i).setShow_time(newDtFormat.format(time));
+        }
+        return CMList;
     }
 
 
@@ -69,107 +73,37 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         cm = CMdao.findbyCMid(msg);
         return cm;
     }
-
-//  조회용 날짜로 변경하여 반환
+    //<!--채팅방 내 총 메시지 개수-->
     @Override
-    public List<ChatMsg> todatelist(ChatRoom chatRoom) {
-        List<ChatMsg> CMList =  CMdao.findByRoomId(chatRoom);
-
-        SimpleDateFormat newDtFormat = new SimpleDateFormat("yy.MM.dd a HH:mm");
-        for (int i = 0; i < CMList.size(); i++) {
-            Date time = CMList.get(i).getSend_time();
-            CMList.get(i).setShow_time(newDtFormat.format(time));
-        }
-        return CMList;
+    public int cntMsg(ChatMsg msg) {
+        return CMdao.cntMsg(msg);
     }
-//    상대방 메시지 읽음처리
+    //<!--메시지 저장-->
     @Override
-    public int updateRead(ChatRoom cr) {
+    public int saveMsg(ChatMsg msg) {
+        return CMdao.saveMsg(msg);
+    }
+
+
+    //<!--모든 메시지 조회-->
+    @Override
+    public List<ChatMsg> findAll() {
+        return CMdao.findAll();
+    }
+    //<!--특정 채팅방 내 모든 메시지 조회-->
+    @Override
+    public List<ChatMsg> findByRoomId(ChatRoom cr) {
+        return CMdao.findByRoomId(cr);
+    }
+    //  메시지 insert
+    @Override
+    public int cntsaveMsg(ChatMsg msg) {
         int result = 0;
-        try{
-            result = CMdao.updateRead(cr);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        msg.setMsg_id(CMdao.cntMsg(msg) + 1);
+        result = CMdao.saveMsg(msg);
         return result;
     }
 
-//  메시지 읽음 처리 및 조회
-    @Override
-    public List<ChatMsg> inviteChatRoom(ChatRoom cr) {
-        List<ChatMsg> ChatList = null;
-        try {
-    //    상대방 메시지 읽음처리
-            updateRead(cr);
-    //  조회용 날짜로 변경하여 반환
-            ChatList = todatelist(cr);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return ChatList;
-    }
-
-
-//  사용자 별 읽지 않은 메세지
-    @Override
-    public List<ChatMsg> cntnoreadMsg(ChatRoom cr) {
-        List<ChatMsg> result = null;
-        try{
-            result = CMdao.findbyuseridnoRead(cr);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-//  내가 읽지 않은 메시지
-    @Override
-    public int findnoReadMsg(List<ChatMsg> findmsg, ChatRoom cr) {
-        int result = 0;
-        List<ChatMsg> noreadMsgs = new ArrayList<>();
-        for (ChatMsg cm : findmsg) {
-            if (!cm.getMsgsender().equals(cr.getSender_id()) && cm.getRead_chk().equals("N")) {
-//                log.info("TRUE: "+cm.getMsgsender());
-                noreadMsgs.add(cm);
-            }
-//            log.info("False: " + cm.getMsgsender());
-        }
-        return noreadMsgs.size();
-    }
-
-//  채팅방 별 읽지 않은 메시지
-    @Override
-    public int findbyChatRoomMsg(List<ChatMsg> cm,ChatRoom cr,UserInfo ui) {
-        List<ChatMsg> noreadMsgs = new ArrayList<>();
-        for (ChatMsg chatMsg : cm) {
-            if (cr.getChat_room_id() == chatMsg.getChat_room_id() && !chatMsg.getMsgsender().equals(ui.getUser_id()) && chatMsg.getRead_chk().equals("N")) {
-                noreadMsgs.add(chatMsg);
-            }
-//            log.info("False: " + chatMsg.getMsgsender());
-        }
-
-        return noreadMsgs.size();
-    }
-
-//		최신 메시지
-    @Override
-    public Map<Integer, ChatMsg> nowMsgs(List<ChatMsg> findmsg) {
-        Map<Integer, ChatMsg> msg = new HashMap<>();
-        Collections.reverse(findmsg);
-
-        for (ChatMsg cm : findmsg) {
-            if (msg.get(cm.getChat_room_id()) == null) {
-                SimpleDateFormat newDtFormat = new SimpleDateFormat("yy.MM.dd a HH:mm");
-                Date time = cm.getSend_time();
-                cm.setShow_time(newDtFormat.format(time));
-
-                msg.put(cm.getChat_room_id(), cm);
-            }
-
-        }
-        return msg;
-    }
 
     //  모든 메시지 조회 및 최신 메시지, 읽지 않은 메시지 수 반환
     @Override
@@ -211,6 +145,61 @@ public class ChatMsgServiceImpl implements ChatMsgService {
 
         return res;
     }
+
+
+//  사용자 별 읽지 않은 메세지
+    @Override
+    public List<ChatMsg> cntnoreadMsg(ChatRoom cr) {
+        List<ChatMsg> result = null;
+        try{
+            result = CMdao.findbyuseridnoRead(cr);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+//		최신 메시지
+    @Override
+    public Map<Integer, ChatMsg> nowMsgs(List<ChatMsg> findmsg) {
+        Map<Integer, ChatMsg> msg = new HashMap<>();
+        Collections.reverse(findmsg);
+
+        for (ChatMsg cm : findmsg) {
+            if (msg.get(cm.getChat_room_id()) == null) {
+                SimpleDateFormat newDtFormat = new SimpleDateFormat("yy.MM.dd a HH:mm");
+                Date time = cm.getSend_time();
+                cm.setShow_time(newDtFormat.format(time));
+
+                msg.put(cm.getChat_room_id(), cm);
+            }
+        }
+        return msg;
+    }
+    //  채팅방 별 읽지 않은 메시지
+    @Override
+    public int findbyChatRoomMsg(List<ChatMsg> cm,ChatRoom cr,UserInfo ui) {
+        List<ChatMsg> noreadMsgs = new ArrayList<>();
+        for (ChatMsg chatMsg : cm) {
+            if (cr.getChat_room_id() == chatMsg.getChat_room_id() && !chatMsg.getMsgsender().equals(ui.getUser_id()) && chatMsg.getRead_chk().equals("N")) {
+                noreadMsgs.add(chatMsg);
+            }
+        }
+        return noreadMsgs.size();
+    }
+//  내가 읽지 않은 메시지
+    @Override
+    public int findnoReadMsg(List<ChatMsg> findmsg, ChatRoom cr) {
+        List<ChatMsg> noreadMsgs = new ArrayList<>();
+        for (ChatMsg cm : findmsg) {
+            if (!cm.getMsgsender().equals(cr.getSender_id()) && cm.getRead_chk().equals("N")) {
+                noreadMsgs.add(cm);
+            }
+        }
+        return noreadMsgs.size();
+    }
+
+
+
 
 
 }

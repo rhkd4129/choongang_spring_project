@@ -18,19 +18,18 @@ import java.util.List;
 public class PrjInfoServiceImpl implements PrjInfoService {
     private final PrjInfoDao PIdao;
     @Override
+    public List<PrjInfo> findbyClassId(ClassRoom cr) {
+//  강의실 별 프로젝트 조회
+        log.info("findbyClassUserProject start");
+        List<PrjInfo> PIList = PIdao.findbyClassId(cr);
+        return PIList;
+    }
+    @Override
     public List<PrjInfo> findAll() {
 //  모든 프로젝트 조회
         log.info("findbyclassuser start");
         List<PrjInfo> PIList = PIdao.findAll();
         return PIList;
 
-    }
-
-    @Override
-    public List<PrjInfo> findbyClassId(ClassRoom cr) {
-//  강의실 별 프로젝트 조회
-        log.info("findbyClassUserProject start");
-        List<PrjInfo> PIList = PIdao.findbyClassId(cr);
-        return PIList;
     }
 }

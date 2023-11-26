@@ -16,24 +16,7 @@ import java.util.stream.Collectors;
 public class BdFreeDaoImpl implements BdFreeDao {
 
     private final SqlSession session;
-//<!--모든 BdFree조회-->
-    @Override
-    public List<BdFree> findAllBdFree() {
-        log.info("findAllBdFree start");
-        List<BdFree> BFList = null;
-        try {
-            BFList = session.selectList("findAllBdFree");
-            //	결과	출력
-            System.out.println(BFList.stream().collect(Collectors.toList()));
-
-        }catch (Exception e) {
-            System.out.println("findAllBdFree Error -->>" + e.getMessage());
-        }
-
-        return BFList;
-    }
-
-    //<!--카테고리별 BdFree, 작성자 정보 조회-->
+//<!--카테고리별 BdFree, 작성자 정보 조회-->
     @Override
     public List<BdFree> findBdFreeByCategory(BdFree bf) {
         log.info("findBdFreeByCategory start");
@@ -50,8 +33,7 @@ public class BdFreeDaoImpl implements BdFreeDao {
 
         return BFList;
     }
-
-    //<!--카테고리별 BdFree, 작성자 정보 조회 및 페이징-->
+//<!--카테고리별 BdFree, 작성자 정보 조회 및 페이징-->
     @Override
     public List<BdFree> pageBdFreeByCategoryAndPage(BdFree bf) {
         log.info("pageBdFreeByCategoryAndPage start");
@@ -69,8 +51,23 @@ public class BdFreeDaoImpl implements BdFreeDao {
         return BFList;
 
     }
+//<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
+    @Override
+    public int findByCategorySearch(BdFree bf) {
 
-    //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
+        log.info("findByCategorySearch start");
+        int BFList = 0;
+        try {
+            log.info("findByCategorySearch" + bf.getBd_category());
+            BFList = session.selectOne("findByCategorySearch",bf);
+        }catch (Exception e) {
+            System.out.println("findByCategorySearch Error -->>" + e.getMessage());
+        }
+
+        return BFList;
+
+    }
+//<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
     @Override
     public List<BdFree> findByCategorySearchAndPage(BdFree bf) {
 
@@ -88,25 +85,33 @@ public class BdFreeDaoImpl implements BdFreeDao {
 
         return BFList;
     }
-
-    //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
+//<!--게시글 id로 삭제-->
     @Override
-    public int findByCategorySearch(BdFree bf) {
-
-        log.info("findByCategorySearch start");
-        int BFList = 0;
+    public int del_bdfg(List<String> doc_nos) {
+        log.info("del_bdfg start");
+        int result = 0;
         try {
-            log.info("findByCategorySearch" + bf.getBd_category());
-            BFList = session.selectOne("findByCategorySearch",bf);
+            result= session.delete("del_bdfg", doc_nos);
         }catch (Exception e) {
-            System.out.println("findByCategorySearch Error -->>" + e.getMessage());
+            System.out.println("del_bdfg Error -->>" + e.getMessage());
+
         }
-
-        return BFList;
-
+        return result;
     }
+//<!--게시글 id로 삭제-->
+    @Override
+    public int del_bdfc(List<String> doc_nos) {
+        log.info("del_bdfc start");
+        int result = 0;
+        try {
+            result= session.delete("del_bdfc", doc_nos);
+        }catch (Exception e) {
+            System.out.println("del_bdfc Error -->>" + e.getMessage());
 
-    //<!--게시글 id로 삭제-->
+        }
+        return result;
+    }
+//<!--게시글 id로 삭제-->
     @Override
     public int del_bdf(List<String> doc_nos) {
         log.info("del_bdf start");
@@ -114,30 +119,30 @@ public class BdFreeDaoImpl implements BdFreeDao {
         try {
             result= session.delete("del_bdf", doc_nos);
         }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }//<!--게시글 id로 삭제-->
-    @Override
-    public int del_bdfg(List<String> doc_nos) {
-        log.info("del_bdf start");
-        int result = 0;
-        try {
-            result= session.delete("del_bdfg", doc_nos);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }//<!--게시글 id로 삭제-->
-    @Override
-    public int del_bdfc(List<String> doc_nos) {
-        log.info("del_bdf start");
-        int result = 0;
-        try {
-            result= session.delete("del_bdfc", doc_nos);
-        }catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("del_bdf Error -->>" + e.getMessage());
         }
         return result;
     }
+//<!--모든 BdFree조회-->
+    @Override
+    public List<BdFree> findAllBdFree() {
+        log.info("findAllBdFree start");
+        List<BdFree> BFList = null;
+        try {
+            BFList = session.selectList("findAllBdFree");
+            //	결과	출력
+            System.out.println(BFList.stream().collect(Collectors.toList()));
+
+        }catch (Exception e) {
+            System.out.println("findAllBdFree Error -->>" + e.getMessage());
+        }
+
+        return BFList;
+    }
+
+
+
+
+
+
 }

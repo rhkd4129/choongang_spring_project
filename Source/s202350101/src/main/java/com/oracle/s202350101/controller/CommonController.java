@@ -61,12 +61,20 @@ public class CommonController {
 		//	로그인 사용자와 같은 반 학생들 조회.(어드민제외)
 		List<UserInfo> chatUIList = null;
 		if (userInfoDTO.getUser_id().equals("admin")) {
+			//-------------------------------------------------
+			//	어드민의 모든 학생 조회
 			chatUIList = uis.findAllUser();
-	  } else {
-	     chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
-	  }
+			//-------------------------------------------------
+	  	} else {
+			//-------------------------------------------------
+			//<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
+	     	chatUIList = uis.findbyClassUserAndChatEnv(userInfoDTO);
+			//-------------------------------------------------
+	  	}
+		//-------------------------------------------------
 		//	사용자가 참여중인 채팅방 조회
 		List<ChatRoom> chatRooms = chs.findByUserId(userInfoDTO);
+		//-------------------------------------------------
 
 
 

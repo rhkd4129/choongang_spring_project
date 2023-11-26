@@ -26,21 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserInfoServiceImpl implements UserInfoService {
 
     private final UserInfoDao UIdao;
-
-    @Override
-    public UserInfo findbyuserId(UserInfo userInfo) {
-//        log.info("findbyuserId start ID : " + userInfo.getUser_id());
-        userInfo = UIdao.findbyuserId(userInfo);
-        return userInfo;
-    }
-
     @Override
     public List<UserInfo> findbyclassuser(UserInfo ui) {
         log.info("findbyclassuser start");
         List<UserInfo> UIList = UIdao.findbyclassuser(ui);
         return UIList;
     }
-
     //<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회  ++  페이징 추가-->
     public KjoResponse pageUserInfov2(UserInfo userInfo, String currentPage ) {
         KjoResponse kjo = new KjoResponse();
@@ -53,36 +44,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         return kjo;
     }
-
-    //<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
-    @Override
-    public List<UserInfo> findbyClassUserAndChatEnv(UserInfo userInfo) {
-        log.info("findbyclassuser start");
-        List<UserInfo> UIList = UIdao.findbyClassUserAndChatEnv(userInfo);
-        return UIList;
-    }
-//	어드민의 모든 학생 조회
-    @Override
-    public List<UserInfo> findAllUser() {
-        log.info("findAllUser start");
-        List<UserInfo> UIList = UIdao.findAllUser();
-        return UIList;
-    }
-
-
-    @Override
-    public List<UserInfo> findbyClassUserProject(int cl_Id) {
-        log.info("findbyClassUserProject start");
-        List<UserInfo> UIList = UIdao.findbyClassUserProject(cl_Id);
-        return UIList;
-
-    }
-
     //  팀장 권한 수정
     @Override
     public int auth_modify(KjoRequestDto kjorequest) {
         List<String> user_ids = kjorequest.getUser_id();    //  userid 리스트 저장
-        
+
         List<String> user_auths = kjorequest.getUser_auth();    //  user_auth 리스트 저장
 
         //  팀장, 학생으로    나눠서 저장.
@@ -104,7 +70,35 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         return manager_cnt+student_cnt;
     }
+    @Override
+    public UserInfo findbyuserId(UserInfo userInfo) {
+//        log.info("findbyuserId start ID : " + userInfo.getUser_id());
+        userInfo = UIdao.findbyuserId(userInfo);
+        return userInfo;
+    }
+    //	어드민의 모든 학생 조회
+    @Override
+    public List<UserInfo> findAllUser() {
+        log.info("findAllUser start");
+        List<UserInfo> UIList = UIdao.findAllUser();
+        return UIList;
+    }
+    //<!--특정 강의실 내 어드민 제외 사용자 조회 & 채팅 사용-->
+    @Override
+    public List<UserInfo> findbyClassUserAndChatEnv(UserInfo userInfo) {
+        log.info("findbyclassuser start");
+        List<UserInfo> UIList = UIdao.findbyClassUserAndChatEnv(userInfo);
+        return UIList;
+    }
 
+
+    @Override
+    public List<UserInfo> findbyClassUserProject(int cl_Id) {
+        log.info("findbyClassUserProject start");
+        List<UserInfo> UIList = UIdao.findbyClassUserProject(cl_Id);
+        return UIList;
+
+    }
     @Override
     public List<UserInfo> pageUserInfo( UserInfo userInfo) {
 
