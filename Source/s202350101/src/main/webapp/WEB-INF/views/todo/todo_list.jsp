@@ -4,6 +4,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+	<style>
+		/* 초기 스타일: 가운데 정렬, 밑줄 없음, 진하게 표시 */
+		.todo-label {
+			text-decoration: none;
+			font-weight: bold; /* 텍스트를 진하게 표시합니다. */
+		}
+
+		/* 체크박스가 선택되었을 때 인접한 텍스트에 밑줄이 그어지고, 연하게 표시됩니다. */
+		input[type="checkbox"]:checked + .todo-label {
+			text-decoration: underline;
+			font-weight: normal; /* 텍스트를 연하게 표시합니다. */
+		}
+
+		.dan{
+			color:red;
+
+		}
+		.nor{
+			 color: black;
+		}
+
+		.easy{
+			color: #264260;
+		}
+
+	</style>
+
+
 	<meta charset="UTF-8">
 	<title>To do List</title>
 	<script type="text/javascript">
@@ -31,51 +60,36 @@
 				}
 			});
 			showCommentList(); //댓글 조회
-			// todayTodoCreateCheck();
 		});
 
-		function todayTodoCreateCheck(){
-			var textArray = $('.abc').map(function() {
-				return $(this).text();
-			}).get();
-			alert(textArray);
-			textArray.forEach(function(element) {
-				alert(element);
-				alert(getCurrentDate);
-				if(element == getCurrentDate().replace(/-/g, '/')){
-					alert("있다");
-					var button = $('<button>', {
-						class: 'btn btn-bd-primary',
-						text: '오늘 할일 생성하기',
-						click: function() {
-							showTodoBox('', globalOnelist, true);
-						}
-					});
-					// 생성된 버튼을 HTML에 추가합니다.
-					$('.createBtn').append(button);
-				}
-			});
-		}
 
+		function todayTodoCreateCheck(){
+			var text = $('.fw-bold.too:first').text();
+			curDate = getCurrentDate().replace(/\//g, '-');
+			if(text != curDate) {
+				$('#btnBox .btn.btn-bd-primary').show();
+			}
+			else{
+				$('#btnBox .btn.btn-bd-primary').hide();
+			}
+		}
 
 		function showCommentList() {
 			$.ajax({
 				url			: 'todo_list_select',
 				contentType : 'application/json; charset:utf-8',
-				// type:'get',
 				dataType 	: 'json',
 				success		: function(data) {
 					globalOnelist = data.onelist;
 					var mapData = data.mapData;
-
-
 					var keys = Object.keys(mapData);
-
 					for (const key of keys) {
 						//key하나의 날짜가 들어있고 mapData[key]이건 해당 날짜에 잇는 todo들
 						// 결국 하나의 날짜에 해당하는 todoBox그려줌
 						showTodoBox(mapData[key],globalOnelist);
 					}
+
+					todayTodoCreateCheck();
 				},
 				error: function(xhr, status, error){
 					console.log("상태값 : " + xhr.status + "\tHttp 에러메시지 : " + xhr.responseText);
@@ -83,7 +97,7 @@
 			});
 		}
 
-
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//newTodoToday= false이면 새로운 생성이 아니라 그냥 원래잇던거 보여주는 개념
 		// 만약 true면 함수에 중간 로직이 달라짐
 		function showTodoBox(day_todo='',codeList=globalOnelist,newTodoToday=false) {
@@ -98,15 +112,17 @@
 			var aysnForm = $('<div>').addClass('p-2 mb-2 bg-body-tertiary border-bottom');
 			if (newTodoToday === false) {
 				// 이미 오늘날짜에 해당하는 todo가 있따면 원랭 잇는 날짜를 보여주고
-				var a = $('<span>').addClass('fw-bold').text(day_todo[0].todo_date);
+				var a = $('<span>').addClass('fw-bold too').text(day_todo[0].todo_date);
 			} else {
 				//  아니라면 새로운 생성이므로 생성시점 날짜보여주기
-				var a = $('<span>').addClass('fw-bold').text(getCurrentDate());
+				var a = $('<span>').addClass('fw-bold too').text(getCurrentDate());
 			}
 			aysnForm.append(a);
-			////////////////////  radio버튼 생성 /////////////////////
+
+
+			////////////////////  radio버튼 생성 //////////////////////////////
 			var radio = $('<div>');
-			$(codeList).each(function(index, code) {
+			$(codeList).each(function (index, code) {
 				var uniqueId = newTodoToday === false ? 'todo_priority_' + day_todo[0].todo_no : 'new_todo_priority';
 
 				var todo_priority_check = $('<input>').attr({
@@ -115,14 +131,12 @@
 					'name': 'todo_priority',
 					'value': code.cate_code
 				});
-
 				var label = $('<label>').attr({'for': uniqueId}).text(code.cate_name);
-
 				radio.append(todo_priority_check, label);
 			});
 
 			aysnForm.append(radio);
-			////////////////////  radio버튼 생성 /////////////////////
+			///////////////////////////////////////////////////////////
 			var todoInput = $('<input>').attr({
 				'type': 'text',
 				'id': 'todo_list',
@@ -145,20 +159,20 @@
 					}
 				}
 			});
-
 			aysnForm.append(todoInput);
-
+			///////////////////////////////////////////////////////////
 			var listGroup = $('<div>').addClass('list-group').attr({
 				'id': 'idToDoList',
 				'style': 'max-height: 250px; overflow-y: auto;'
 			});
 			//최종적으로 aysnForm안에 (라디오박스와 input이 있다)
 			dropdownMenu.append(aysnForm, listGroup);
-
 			mainContainer.append(dropdownMenu);
+
+			///////////////////////////////////////////////////////////
 			if (newTodoToday === false) {
 				// 하나의 todo 항목 순서대로 체크박스 작업 내용, 삭제 버튼
-				$(day_todo).each(function(index, todoItem) {
+				$(day_todo).each(function (index, todoItem) {
 					var newDiv = $('<div>').addClass('list-group-item d-flex justify-content-between align-items-center').attr({
 						id: 'todo'
 					});
@@ -169,7 +183,7 @@
 						name: 'todo_check',
 						value: todoItem.todo_priority
 					}).addClass('me-2');
-					checkboxElement.change(function(e) {
+					checkboxElement.change(function (e) {
 						if ($(this).prop('checked')) {
 							checkYN(todoItem.todo_no, todoItem.user_id, true);
 						} else {
@@ -177,16 +191,24 @@
 						}
 					});
 
+
 					var labelElement = $('<label>').attr({
 						for: 'todo_check',
 						id: 'todo_check' + todoItem.todo_no
-					}).text(todoItem.todo_list).addClass('flex-grow-1');
+					})
+					if (todoItem.todo_priority == 2) {
+						labelElement.text(todoItem.todo_list).addClass('flex-grow-1 todo-label text-danger');
+					} else if (todoItem.todo_priority == 1) {
+						labelElement.text(todoItem.todo_list).addClass('flex-grow-1 todo-label text-secondary');
+					} else {
+						labelElement.text(todoItem.todo_list).addClass('flex-grow-1 todo-label text-primary ');
+					}
 
 					var deleteButton = $('<button>').addClass('btn btn-danger').attr({
 						id: 'deleteButton',
 						'data-todo-no': todoItem.todo_no,
 						'data-user-id': todoItem.user_id
-					}).text('삭제').click(function() {
+					}).text('삭제').click(function () {
 						var todoNo = $(this).data('todo-no');
 						var userId = $(this).data('user-id');
 						deleteBtnClick(todoNo, userId);
@@ -197,17 +219,15 @@
 				});
 			}
 			//첫번째생성이 아닐경우 fasle 인 경우는 그냥 날짜 순서대로 추가해주고
-			if(newTodoToday === false){///생성시에만
+			if (newTodoToday === false) {///생성시에만
 				$('#box').append(mainContainer);
-			}else{
+			} else {
 				// 해당 날에 첫번재 생성이면 맨앞에 요소를 추가해준다
 				$('#box').prepend(mainContainer);
 			}
-
-
 		}
 
-
+		//////////////////////////현재 시간 가져오기  ////////////////////////////////////////////////
 		function getCurrentDate() {
 			var currentDate = new Date();
 			var year = currentDate.getFullYear().toString();
@@ -215,10 +235,12 @@
 			var day = currentDate.getDate().toString().padStart(2, '0');
 			return year + "/" + month + "/" + day;
 		}
+		/////////////////////////////////////////////////////////////////////////
 
 
+		///////////////////////// ///////////////////////////////////////////////////////
 		function insert_todoList(todo_list,todo_priority,create_date){
-			alert("할 일 목록: " + todo_list + "\n우선순위: " + todo_priority + "\n생성 날짜: " + create_date);
+			// alert("할 일 목록: " + todo_list + "\n우선순위: " + todo_priority + "\n생성 날짜: " + create_date);
 			$.ajax({
 				url			 : 'todo_list_insert',
 				type 		 : 'POST',
@@ -229,12 +251,13 @@
 				},	 		// 보낼 데이터
 				dataType 	 : 'text',  				 	 		// 받을 데이터
 				success 	 : function(data) {
-					alert(data);
+
 					$('#box').empty();
 					showCommentList();
 				}
 			});
 		}
+		///////////////////////// ///////////////////////////////////////////////////////
 		function deleteBtnClick(todoNo,userId){
 			$.ajax({
 				url			: 'todo_list_delete',
@@ -247,6 +270,7 @@
 				}
 			});
 		}
+		///////////////////////// ///////////////////////////////////////////////////////
 		function checkYN(todo_no, user_id ,check ) {
 			$.ajax({
 				url 		 : 'todo_list_todoCheck_y',
@@ -259,7 +283,6 @@
 				}
 			});
 		}
-
 	</script>
 </head>
 <body>
@@ -302,7 +325,7 @@
 					<span class="apptitle">ToDoList</span>
 				</div>
 				<div>
-					<div class="createBtn">
+					<div id="btnBox" class="createBtn">
 						<!-- 변수를 문자열로 감싸주고 JSON.stringify를 사용하여 객체를 문자열로 변환 -->
 						<button class="btn btn-bd-primary" onclick="showTodoBox('', globalOnelist, true)">오늘 할일 생성하기</button>
 					</div>

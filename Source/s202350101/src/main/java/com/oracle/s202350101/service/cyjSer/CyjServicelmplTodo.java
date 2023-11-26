@@ -47,25 +47,6 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 		return todoListDelete;
 	}
 
-	// 각각의 todoList 갖고 옴
-	@Override
-	public Todo oneRowTodoList(Todo todo) {
-		System.out.println("CyjServicelmplTodo oneRowTodoList Start..");
-		Todo oneRowTodoList = cdt.oneRowTodoList(todo);
-		System.out.println("CyjServicelmplTodo oneRowTodoList-> " + oneRowTodoList);
-
-		return oneRowTodoList;
-	}
-
-	// 달력에서 날짜 클릭하면 해당 날짜 리스트 나옴
-//	@Override
-//	public List<Todo> clickList(Todo todo) {
-//		System.out.println("CyjServicelmplTodo clickList Start..");
-//		List<Todo> clickList = cdt.clickList(todo);
-//		System.out.println("CyjServicelmplTodo clickList-> " + clickList);
-//
-//		return clickList;
-//	}
 
 	// Y로 변경
 	@Override

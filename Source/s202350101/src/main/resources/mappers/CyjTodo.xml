@@ -39,19 +39,6 @@
 
 
 
-	<select id="todoDatecount" parameterType="Todo" resultType="Todo">
-
-		SELECT
-			TO_CHAR(TODO_DATE, 'YYYY-MM-DD') AS one_Day
-		FROM
-			Todo
-		where user_id = #{user_id}
-		GROUP BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD')
-		ORDER BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD') desc
-	</select>
-
-
-
 
 
 	<!-- 삭제 버튼 클릭하면 리스트 삭제 -->
@@ -62,14 +49,6 @@
 		  and 	user_id = #{user_id}
 	</delete>
 
-
-	<!-- 각각의 todoList 갖고 옴 -->
-	<select id="cyRowTodoList" parameterType="Todo" resultType="Todo">
-		select  *
-		from    todo
-		where 	todo_no = #{todo_no}
-		  and 	user_id = #{user_id}
-	</select>
 
 
 
@@ -92,6 +71,19 @@
 		where   todo_no = #{todo_no}
 		  and     user_id = #{user_id}
 	</update>
+
+	<select id="todoDatecount" parameterType="Todo" resultType="Todo">
+
+		SELECT
+			TO_CHAR(TODO_DATE, 'YYYY-MM-DD') AS one_Day
+		FROM
+			Todo
+		where user_id = #{user_id}
+		GROUP BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD')
+		ORDER BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD') desc
+	</select>
+
+
 
 
 

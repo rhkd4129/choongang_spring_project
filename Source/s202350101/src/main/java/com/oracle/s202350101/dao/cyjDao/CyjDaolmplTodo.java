@@ -61,20 +61,7 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 		return todoListDelete;
 	}
 
-	// 각각의 todoList 갖고 옴
-	@Override
-	public Todo oneRowTodoList(Todo todo) {
-		System.out.println("CyjDaolmplTodo oneRowTodoList Start..");
-		
-		Todo oneRowTodoList = null;
-		try {
-			oneRowTodoList = session.selectOne("cyRowTodoList", todo);
-			System.out.println("CyjDaolmplTodo oneRowTodoList-> " + oneRowTodoList);
-		} catch (Exception e) {
-			System.out.println("CyjDaolmplTodo oneRowTodoList Exception-> " + e.getMessage());
-		}
-		return oneRowTodoList;
-	}
+
 	
 	 // 할 일 완료 -> Y로 변경
 	@Override

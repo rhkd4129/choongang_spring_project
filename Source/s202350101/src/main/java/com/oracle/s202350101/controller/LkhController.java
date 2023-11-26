@@ -193,8 +193,6 @@ public class LkhController {
 		List<UserInfo> filterWorkList = task_create_form_worker_list.stream().filter(user -> !user.getUser_id().equals(userInfo.getUser_id())).collect(Collectors.toList());
 		// - >  task_create_form_worker_list를 하나씩 순회하면서 지금 접속중인 id과 쿼리해온 결과에 같은 id 잇으면 뺀다 (접속자가 lkh123 현재 프로젝트 인원들 중에 lkh123 을 뺌
 
-
-
 		model.addAttribute("prjStepList", prjStepList);
 		model.addAttribute("task_create_form_worker_list", filterWorkList);
 		model.addAttribute("task", task);
