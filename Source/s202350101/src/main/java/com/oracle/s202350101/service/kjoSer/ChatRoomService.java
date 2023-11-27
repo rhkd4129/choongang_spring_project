@@ -9,19 +9,19 @@ import java.util.Map;
 
 public interface ChatRoomService {
     //<!--상대방과의 채팅방 조회 후 없으면 채팅방 생성-->
-    ChatRoom findByYouAndMeNotEmpty(ChatRoom cr);
+    ChatRoom                findByYouAndMeNotEmpty(ChatRoom cr);
     //<!--개인별 채팅방 조회-->
-    List<ChatRoom> findByUserId(UserInfo ui);
+    List<ChatRoom>          findByUserId(UserInfo ui);
 
 
 //<!--상대방과의 채팅방 조회-->
-    ChatRoom findByYouAndMe(ChatRoom cr);
+    ChatRoom                findByYouAndMe(ChatRoom cr);
 //<!--모든 채팅방 조회-->
-    List<ChatRoom> findAll();
+    List<ChatRoom>          findAll();
 //<!--강의실 개수 조회-->
-    ChatRoom findById(ChatRoom cr);
+    ChatRoom                findById(ChatRoom cr);
 //나의 채팅방 조회
-    Map<?, ?> findByUserIdV2(List<ChatMsg> findmsg, ChatRoom cr);
+    Map<?, ?>               findByUserIdV2(List<ChatMsg> findmsg, ChatRoom cr);
 
 
 }

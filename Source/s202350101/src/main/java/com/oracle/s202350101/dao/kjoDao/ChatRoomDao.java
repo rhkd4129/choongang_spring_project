@@ -9,15 +9,15 @@ public interface ChatRoomDao {
 
 
     //<!--시퀀스 적용해 메시지 저장, 시퀀스 값 반환-->
-    int addChatRoom(ChatRoom cr);
+    int                     addChatRoom(ChatRoom cr);
     //<!--상대방과의 채팅방 조회-->
-    ChatRoom findByYouAndMe(ChatRoom cr);
+    ChatRoom                findByYouAndMe(ChatRoom cr);
     //<!--개인별 채팅방 조회-->
-    List<ChatRoom> findByUserId(UserInfo ui);
+    List<ChatRoom>          findByUserId(UserInfo ui);
 
 
 //<!--모든 채팅방 조회-->
-    List<ChatRoom> findAll();
+    List<ChatRoom>          findAll();
 //<!--강의실 개수 조회-->
-    ChatRoom findById(ChatRoom cr);
+    ChatRoom                findById(ChatRoom cr);
 }

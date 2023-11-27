@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PrjInfoDao {
     //  강의실 별 프로젝트 조회
-    List<PrjInfo> findbyClassId(ClassRoom cr);
+    List<PrjInfo>                   findbyClassId(ClassRoom cr);
     //  모든 프로젝트 조회
-    List<PrjInfo> findAll();
+    List<PrjInfo>                   findAll();
 }

@@ -7,39 +7,39 @@ import java.util.Map;
 
 public interface ChatMsgService {
     //  메시지 읽음 처리 및 조회
-    List<ChatMsg> inviteChatRoom(ChatRoom cr);
+    List<ChatMsg>           inviteChatRoom(ChatRoom cr);
     //  메시지 읽음 처리
-    int updateRead(ChatRoom cr);
+    int                     updateRead(ChatRoom cr);
     //  조회용 날짜 변환
-    List<ChatMsg> todatelist(ChatRoom chatRoom);
+    List<ChatMsg>           todatelist(ChatRoom chatRoom);
 
 
     //  메세지 insert 후 메세지 반환
-    ChatMsg findsaveMsg(ChatMsg msg);
+    ChatMsg                 findsaveMsg(ChatMsg msg);
     //<!--채팅방 내 총 메시지 개수-->
-    int cntMsg(ChatMsg msg);
+    int                     cntMsg(ChatMsg msg);
     //<!--메시지 저장-->
-    int saveMsg(ChatMsg msg);
+    int                     saveMsg(ChatMsg msg);
 
 
 //<!--모든 메시지 조회-->
-    List<ChatMsg> findAll();
+    List<ChatMsg>           findAll();
 //<!--특정 채팅방 내 모든 메시지 조회-->
-    List<ChatMsg> findByRoomId(ChatRoom cr);
+    List<ChatMsg>           findByRoomId(ChatRoom cr);
 //  메시지 insert
-    int cntsaveMsg(ChatMsg msg);
+    int                     cntsaveMsg(ChatMsg msg);
 
 
     //  모든 메시지 조회 및 최신 메시지, 읽지 않은 메시지 수 반환
-    KjoResponse cnttomsg(ChatRoom cr, UserInfo user, List<ChatRoom> chatRooms);
+    KjoResponse             cnttomsg(ChatRoom cr, UserInfo user, List<ChatRoom> chatRooms);
 //  사용자 별 읽지 않은 메세지
-    List<ChatMsg> cntnoreadMsg(ChatRoom cr);
+    List<ChatMsg>           cntnoreadMsg(ChatRoom cr);
 //	최신 메시지가 있는 채팅방
-    Map<Integer,ChatMsg> nowMsgs(List<ChatMsg> findmsg);
+    Map<Integer,ChatMsg>    nowMsgs(List<ChatMsg> findmsg);
 //  채팅방 별 읽지 않은 메시지
-    int findbyChatRoomMsg(List<ChatMsg> cm,ChatRoom cr,UserInfo ui);
+    int                     findbyChatRoomMsg(List<ChatMsg> cm,ChatRoom cr,UserInfo ui);
 //  내가 읽지 않은 메시지
-    int findnoReadMsg(List<ChatMsg> findmsg, ChatRoom cr);
+    int                     findnoReadMsg(List<ChatMsg> findmsg, ChatRoom cr);
 
 
 
