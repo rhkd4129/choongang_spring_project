@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 	<style>
 		/* 초기 스타일: 가운데 정렬, 밑줄 없음, 진하게 표시 */
 		.todo-label {
@@ -17,19 +16,6 @@
 			text-decoration: underline;
 			font-weight: normal; /* 텍스트를 연하게 표시합니다. */
 		}
-
-		.dan{
-			color:red;
-
-		}
-		.nor{
-			 color: black;
-		}
-
-		.easy{
-			color: #264260;
-		}
-
 	</style>
 
 
@@ -48,7 +34,7 @@
 				url			: '/main_menu',
 				dataType 	: 'html',
 				success		: function(data) {
-					$('#menubar').html(data);
+					$('#menubar').html(data);z
 				}
 			});
 			$.ajax({

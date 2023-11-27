@@ -21,7 +21,9 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public int todoInsert(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoInsert Start..");
+		// ########################################################
 		int todoInsert = cdt.todoInsert(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoInsert-> " + todoInsert);
 
 		return todoInsert;
@@ -31,7 +33,9 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public List<Todo> todoTotalSelect(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoTotalSelect Start..");
+		// ########################################################
 		List<Todo> todoTotalSelect = cdt.todoTotalSelect(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoTotalSelect-> " + todoTotalSelect);
 
 		return todoTotalSelect;
@@ -41,7 +45,9 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public int todoListDelete(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoListDelete Start..");
+		// ########################################################
 		int todoListDelete = cdt.todoListDelete(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoListDelete-> " + todoListDelete);
 
 		return todoListDelete;
@@ -52,7 +58,9 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public int todoListTodoCheckY(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoListTodoCheckY Start..");
+		// ########################################################
 		int todoListTodoCheckY = cdt.todoListTodoCheckY(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoListTodoCheckY-> " + todoListTodoCheckY);
 
 		return todoListTodoCheckY;
@@ -62,7 +70,9 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public int todoListTodoCheckN(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoListTodoCheckN Start..");
+		// ########################################################
 		int todoListTodoCheckN = cdt.todoListTodoCheckN(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoListTodoCheckN-> " + todoListTodoCheckN);
 
 		return todoListTodoCheckN;
@@ -73,7 +83,9 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	public List<Todo> todoDate(Todo todo) {
 		List<Todo> todoDateList = null;
 		try {
+			// ########################################################
 			todoDateList = cdt.todoDate(todo);
+			// ########################################################
 			System.out.println("CyjDaolmplTodo todoDate-> " + todo);
 		} catch (Exception e) {
 			System.out.println("CyjDaolmplTodo todoDate Exception-> " + e.getMessage());

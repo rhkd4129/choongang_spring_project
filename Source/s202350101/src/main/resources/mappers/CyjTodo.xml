@@ -26,6 +26,7 @@
 
 
 
+	<!-- 작업  목록 불러오기 -->
 	<select id="cyTodoTotalSelect" parameterType="Todo" resultType="Todo">
 
 	 <![CDATA[
@@ -40,7 +41,6 @@
 
 
 
-
 	<!-- 삭제 버튼 클릭하면 리스트 삭제 -->
 	<delete id="cyTodoListDelete" parameterType="Todo">
 		delete
@@ -48,7 +48,6 @@
 		where 	todo_no = #{todo_no}
 		  and 	user_id = #{user_id}
 	</delete>
-
 
 
 
@@ -64,6 +63,8 @@
 	</update>
 
 
+
+
 	<!-- N으로 변경  -->
 	<update id="cyTodoListTodoCheckN" parameterType="Todo">
 		update  todo
@@ -72,6 +73,10 @@
 		  and     user_id = #{user_id}
 	</update>
 
+
+
+
+	<!-- 추가 설명 필요 ,, 글로하기 어려움 ..-->
 	<select id="todoDatecount" parameterType="Todo" resultType="Todo">
 
 		SELECT
@@ -82,9 +87,6 @@
 		GROUP BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD')
 		ORDER BY TO_CHAR(TODO_DATE, 'YYYY-MM-DD') desc
 	</select>
-
-
-
 
 
 </mapper>

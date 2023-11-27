@@ -1,4 +1,4 @@
-package com.oracle.s202350101.configuration;
+package com.oracle.s202350101.controller.configuration;
 
 //import com.oracle.s202350101.handler.SocketHandler;
 import lombok.extern.slf4j.Slf4j;

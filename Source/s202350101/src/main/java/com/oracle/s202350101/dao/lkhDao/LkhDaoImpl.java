@@ -150,6 +150,13 @@ public class LkhDaoImpl implements LkhDao {
 		List<Task> taskList = null;
 		try {
 			taskList = sqlSession.selectList("task_time_aces", task);
+
+			System.out.println("--=------------------------------------------");
+			for (Task t :taskList){
+				System.out.println(t.getTask_subject());
+			}
+
+
 		} catch (Exception e) {
 			log.info("dao :task_time_aces error Message -> {}", e.getMessage());
 		}

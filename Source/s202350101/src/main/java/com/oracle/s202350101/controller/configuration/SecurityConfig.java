@@ -1,4 +1,4 @@
-package com.oracle.s202350101.configuration;
+package com.oracle.s202350101.controller.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
