@@ -68,7 +68,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         //  채팅방 내 메세지 개수
         msg.setMsg_id(CMdao.cntMsg(msg) + 1);
         //  메세지 insert 후 메세지 pk 반환
-        CMdao.saveMsg(msg);
+        saveMsg(msg);
         //  해당 pk를 지닌 메세지 select
         cm = CMdao.findbyCMid(msg);
         return cm;
@@ -100,7 +100,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     public int cntsaveMsg(ChatMsg msg) {
         int result = 0;
         msg.setMsg_id(CMdao.cntMsg(msg) + 1);
-        result = CMdao.saveMsg(msg);
+        result = saveMsg(msg);
         return result;
     }
 
@@ -129,6 +129,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             int noreadCnt = findbyChatRoomMsg(findmsg, chatR,user);
             UserInfo us = new UserInfo();
             String usID = (Objects.equals(user.getUser_id(), chatR.getReceiver_id()))? chatR.getSender_id() : chatR.getReceiver_id();
+
             us.setUser_id(usID);
             us = UIser.findbyuserId(us);
 
@@ -176,26 +177,23 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         return msg;
     }
     //  채팅방 별 읽지 않은 메시지
+
     @Override
-    public int findbyChatRoomMsg(List<ChatMsg> cm,ChatRoom cr,UserInfo ui) {
-        List<ChatMsg> noreadMsgs = new ArrayList<>();
-        for (ChatMsg chatMsg : cm) {
-            if (cr.getChat_room_id() == chatMsg.getChat_room_id() && !chatMsg.getMsgsender().equals(ui.getUser_id()) && chatMsg.getRead_chk().equals("N")) {
-                noreadMsgs.add(chatMsg);
-            }
-        }
-        return noreadMsgs.size();
+    public int findbyChatRoomMsg(List<ChatMsg> cm, ChatRoom cr, UserInfo ui) {
+        return (int) cm.stream()
+                .filter(chatMsg -> cr.getChat_room_id() == chatMsg.getChat_room_id()
+                        && !chatMsg.getMsgsender().equals(ui.getUser_id())
+                        && "N".equals(chatMsg.getRead_chk()))
+                .count();
     }
-//  내가 읽지 않은 메시지
+
+
+    //  내가 읽지 않은 메시지
     @Override
     public int findnoReadMsg(List<ChatMsg> findmsg, ChatRoom cr) {
-        List<ChatMsg> noreadMsgs = new ArrayList<>();
-        for (ChatMsg cm : findmsg) {
-            if (!cm.getMsgsender().equals(cr.getSender_id()) && cm.getRead_chk().equals("N")) {
-                noreadMsgs.add(cm);
-            }
-        }
-        return noreadMsgs.size();
+        return (int) findmsg.stream()
+                .filter(cm -> !cm.getMsgsender().equals(cr.getSender_id()) && "N".equals(cm.getRead_chk()))
+                .count();
     }
 
 

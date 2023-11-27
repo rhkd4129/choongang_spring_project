@@ -71,7 +71,7 @@ public class LkhServicveImpl implements LkhService {
 
 		// 우선 map을 선언후 키로 각 프로젝트 단계 이름을 지정
 		// 값에는 빈리스트 지정
-		Map<String, List<String>> mapData = new HashMap<>();
+		Map<String, List<String>> mapData = new LinkedHashMap<>();
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
 
 
