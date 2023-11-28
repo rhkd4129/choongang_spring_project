@@ -3,6 +3,7 @@
 <style>
 .bg-title {
   background-color: #2C3E50; /*#ffc107; #fdb933 9ad0f5*/
+  /* background-color: rgba(44, 62, 80, 0.9); */
 }
 /*프로젝트 소개란*/
 .pms-nav-step {
@@ -13,27 +14,37 @@
 .pms-step {
 	line-height: 25px;
 }
+.pms-center-title{
+	margin-left:10px;
+	margin-right:10px;
+}
 .pms-circle {
+	display:block;
 	width:32px;
 	height:32px;
-	background-color:#5588ff;
+	background-color:#fff;
 	text-align:center;
-	color:#fff;
+	color:#2C3E50;
+	font-weight:bold;
 	line-height:32px;
 	border-radius:50% !important;
 	flex-shrink:0 !important;
 }
 .pms-circle.bg-1 {
-	background-color:#5588ff;
+	background-color:#007AFF;
+	color:#fff;
 }
 .pms-circle.bg-2 {
-	background-color:#ff8855;
+	background-color:#C77EE2;
+	color:#fff;
 }
 .pms-circle.bg-3 {
-	background-color:#88cc55;
+	background-color:#CFD973;
+	color:#fff;
 }
 .pms-circle.bg-4 {
-	background-color:#005588;
+	background-color:#3B5998;
+	color:#fff;
 }
 .pms-overflow {
 	display:block;
@@ -145,7 +156,7 @@
 
 	});
 	
-	//댓글목록 그려주기
+	//메인 게시물 그려주기
 	function drawMainList(boardList, cate_idx){
 		var list = '';
 		var divObj = $("#divMainList"+cate_idx);
@@ -236,6 +247,7 @@
 	<tr>
 		<td width="70%" style="vertical-align:top">
 
+			<!-- PMS 타이틀 -->
 			<div class="d-flex align-items-center p-3 my-3 text-white bg-title rounded shadow-sm">
 				<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-p-square-fill" viewBox="0 0 16 16">
 					<path d="M8.27 8.074c.893 0 1.419-.545 1.419-1.488s-.526-1.482-1.42-1.482H6.778v2.97H8.27Z"/>
@@ -245,8 +257,69 @@
 					<h1 class="h5 mb-0 text-white lh-1">PMS (Project Management System)</h1>
 					<span>Since 2023</span>
 				</div>
+					
+
+				<div style="margin-left:130px">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-walking" viewBox="0 0 16 16">
+					<path d="M9.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M6.44 3.752A.75.75 0 0 1 7 3.5h1.445c.742 0 1.32.643 1.243 1.38l-.43 4.083a1.75 1.75 0 0 1-.088.395l-.318.906.213.242a.75.75 0 0 1 .114.175l2 4.25a.75.75 0 1 1-1.357.638l-1.956-4.154-1.68-1.921A.75.75 0 0 1 6 8.96l.138-2.613-.435.489-.464 2.786a.75.75 0 1 1-1.48-.246l.5-3a.75.75 0 0 1 .18-.375l2-2.25Z"/>
+					<path d="M6.25 11.745v-1.418l1.204 1.375.261.524a.75.75 0 0 1-.12.231l-2.5 3.25a.75.75 0 1 1-1.19-.914zm4.22-4.215-.494-.494.205-1.843a1.93 1.93 0 0 0 .006-.067l1.124 1.124h1.44a.75.75 0 0 1 0 1.5H11a.75.75 0 0 1-.531-.22Z"/>
+					</svg>
+				</div>
+				<div class="pms-center-title"><span class="pms-circle">요구</span></div>
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+  					<path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
+					</svg>
+				</div>
+				<div class="pms-center-title"><span class="pms-circle">설계</span></div>
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+  					<path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
+					</svg>
+				</div>
+				<div class="pms-center-title"><span class="pms-circle">구현</span></div>
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+  					<path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
+					</svg>
+				</div>
+				<div class="pms-center-title"><span class="pms-circle">검증</span></div>
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+  					<path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
+					</svg>
+				</div>
+				<div class="pms-center-title"><span class="pms-circle">배포</span></div>
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-arms-up" viewBox="0 0 16 16">
+					<path d="M8 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+					<path d="m5.93 6.704-.846 8.451a.768.768 0 0 0 1.523.203l.81-4.865a.59.59 0 0 1 1.165 0l.81 4.865a.768.768 0 0 0 1.523-.203l-.845-8.451A1.492 1.492 0 0 1 10.5 5.5L13 2.284a.796.796 0 0 0-1.239-.998L9.634 3.84a.72.72 0 0 1-.33.235c-.23.074-.665.176-1.304.176-.64 0-1.074-.102-1.305-.176a.72.72 0 0 1-.329-.235L4.239 1.286a.796.796 0 0 0-1.24.998l2.5 3.216c.317.316.475.758.43 1.204Z"/>
+					</svg>
+				</div>
+
 			</div>
-		
+
+
+			<!-- 스크롤 이미지  carousel-fade-->
+<div id="carouselExampleInterval" class="carousel carousel-dark slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="10000">
+      <center><img src="/common/images/intro/project_cycle.png" class="d-block" alt="..."></center>
+    </div>
+    <div class="carousel-item" data-bs-interval="2000">
+      <center><img src="/common/images/intro/project_step.png" class="d-block" alt="..."></center>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
 			<!-- PMS소개란 -->
 			<div class="dropdown-menu position-static d-flex flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow mt-3" data-bs-theme="light">
 				<nav id="navPMS" class="col-lg-8">
@@ -300,11 +373,48 @@
 				</nav>
 				<nav id="navStepInfo" class="col-lg-8 pms-nav-step">
 					<ul class="list-unstyled d-flex flex-column gap-2">
-						<li id="step1" class="pms-step gap-2 py-1 px-3 text-start">프로젝트를 수행하기 위해 단계적으로 필요한 요구 사항을 분석합니다.<br>개발하고자 하는 소프트웨어를 구성하는 여러 기능을 체계적으로 정의하고 목표 사용자가 제공하는 요구 사항을 명확히 할 수 있습니다.</li>
-						<li id="step2" class="pms-step gap-2 py-1 px-3 text-start">개발하고자 하는 시스템의 기능 구조 및 사용가능한 데이터를 설계합니다.<br>설계는 기본적으로 시스템의 방식과 동작 데이터 저장 방식 및 사용되는 소프트웨어와 하드웨어 코드를 정의합니다.</li>
-						<li id="step3" class="pms-step gap-2 py-1 px-3 text-start">사용자는 어떤 프로그래밍 언어로 개발할 것이냐에 따라 구현이 달라집니다.<br>이 과정에서 기본 요구 사항을 프로그램 코드로 변환합니다.<br>관련 라이브러리와 데이터베이스를 사용하여 코드를 작성하며 기본 과정을 완료합니다.</li>
-						<li id="step4" class="pms-step gap-2 py-1 px-3 text-start">각 기능에 대한 유효성 검사가 필요한데 모든 일을 완료한 후 버그의 존재를 확인합니다.<br>각 기능이 적절한 방법으로 작동하고 명확하게 정의 된 사용자 스토리를 충족하는 지 확인합니다.</li>
-						<li id="step5" class="pms-step gap-2 py-1 px-3 text-start">테스트를 완료하면 버그를 발견하면 수정하고 테스트가 완료되면 애플리케이션을 배포합니다.<br>이 단계 또한 배포 방법에 따라 다를 수 있습니다.</li>
+						<li id="step1" class="pms-step gap-2 py-1 px-3 text-start">
+1. 요구사항 분석<br>
+다양한 분야에 이해관계자들의 사용자의 요구사항을 고려해 새로운 제품이나 변경된 제품에 대해 부합하는 요구와 조건을 결정하고,
+변경된 제품에 대해서는 기존 시스템의 문제점을 파악해 새로운 요구사항을 도출하여 수집<br>
+이를 정리하여 다이어그램으로 나타낸 후 요구 분석 명세서를 작성<br>
+ 1) 사용자 요구사항 : 단순 시스템이 제공해야 하는 서비스에 대한 추상적 서술 및 시스템 제약 사항<br>
+ 2) 시스템 요구사항 : 시스템 기능에 대한 상세하고 정형화된 정의
+						</li>
+						<li id="step2" class="pms-step gap-2 py-1 px-3 text-start">
+요구사항 분석 단계에서 산출된 요구사항들을 설계하는 과정이다.<br>
+시스템의 내부 프로그램 또는 모듈 간의 관계와 구조를 설계한다.<br>
+프로그램 내의 각 모듈에서의 처리 절차나 알고리즘을 설계한 후 설계 명세서를 작성<br>
+각 화면을 그리고 화면과 기능에 맞는 ERD를 작성한다.<br>
+각 인원별로 담당할 기능들에 대해 구현 방법을 생각하고, 그에 해당하는 자료를 조사하여 설계 내용을 수정<br>
+설계 방법을 생각했다면 버전 관리 방법도 생각해함<br>
+ 1) 시스템 설계 : 시스템을 여러 컴포넌트의 집합체로 보고 각 컴포넌트들이 요청한 결과를 <br>
+ 어떻게 상호작용하는지에 초점<br>
+ 2) 프로그램 설계(상세설계) : 각 모듈의 내부 논리 작성
+						</li>
+						<li id="step3" class="pms-step gap-2 py-1 px-3 text-start">
+설계 단계에서 논리적으로 결정한 문제 해결 방법을 토대로 프로그래밍 언어를 사용해 실제로 프로그램을 만드는 단계<br>
+많은 사람이 참여하여 작업하기 때문에 다양한 규칙이 존재하므로 결정된 규칙에 맞춰 진행<br>
+(개발에 사용할 프로그래밍 언어와 기법, 스타일, 순서 등을 결정)<br>
+구현 시에는 설계 내용을 바탕으로 개발 방법을 정해 모든 인원이 통일된 개발 방법을 사용할 수 있도록 해야함<br>
+다른 인원이 개발한 사항을 수정할 때에는 내용을 상대방이 이해할 수 있도록 명확하게 알려줘야 함<br>
+ 1) 읽기 쉽고 이해하기 쉬운(단순화/명확성)<br>
+ 2) 테스팅과 유지보수하기 쉬운 코드<br>
+ 3) 리팩토링
+						</li>
+						<li id="step4" class="pms-step gap-2 py-1 px-3 text-start">
+개발한 시스템이 요구사항과 부합하는지 실행 결과를 검사하고 평가함<br>
+테스트는 단위/통합/시스템/인수 테스트로 나뉘며 테스트 계획서 및 통합 테스트 결과 보고서를 작성<br>
+테스트를 하며 누락된 기능 및 항목이 있는지 확인함<br>
+ 1) 단위테스트<br>
+ 2) 통합테스트<br>
+ 3) 시스템테스트<br>
+ 4) 인수테스트
+						</li>
+						<li id="step5" class="pms-step gap-2 py-1 px-3 text-start">
+						테스트를 완료하면 버그를 발견하면 수정하고 테스트가 완료되면 애플리케이션을 배포합니다.<br>
+						이 단계 또한 배포 방법에 따라 다를 수 있습니다.
+						</li>
 					</ul>
 				</nav>
 				<div class="d-none d-lg-block vr mx-4 opacity-10">&nbsp;</div>
@@ -323,15 +433,15 @@
 				</div>
 			</div>
 			
-			<div class="d-flex flex-column flex-md-row gap-4 py-md-4 align-items-center justify-content-center"> <!-- p-4 -->
+
+ 			<div style="display:none" class="d-flex flex-column flex-md-row gap-4 py-md-4 align-items-center justify-content-center">
 			
-				<!-- TO-DO LIST -->
-				<div id="todolistMain" class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-100per" data-bs-theme="light">
+ 				<div id="todolistMain" class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-100per" data-bs-theme="light">
 					<form class="p-2 mb-2 bg-body-tertiary border-bottom">
 						<input type="search" class="form-control" autocomplete="false" placeholder="오늘 할 일을 메모합니다...">
 					</form>
 					    
-					<div class="list-group">
+ 					<div class="list-group">
 						<label class="list-group-item d-flex gap-3 bg-body-tertiary">
 						      <input class="form-check-input form-check-input-placeholder bg-body-tertiary flex-shrink-0 pe-none" disabled="" type="checkbox" value="" style="font-size: 1.375em;">
 						      <span class="pt-1 form-checked-content">
@@ -382,21 +492,15 @@
 								</span>
 							</span>
 						</label>
-						
 					</div>
 				</div>
-
-				<!-- 달력 -->
-				<div id="calendarMain" class="dropdown-menu d-block position-static p-3 mx-0 shadow rounded-3 w-100per" data-bs-theme="light" style="z-index:auto;"><!-- w-340px -->
-					<!-- <div class="d-grid gap-1"> -->
-								
+				
+				<div id="calendarMain" class="dropdown-menu d-block position-static p-3 mx-0 shadow rounded-3 w-100per" data-bs-theme="light" style="z-index:auto;">
 					<div id="calendar"></div>
-							
-					<!-- </div> -->
 				</div>
 				
 			</div>
-			
+
 		</td>
 		<td width="30%" style="vertical-align:top">
 		
@@ -408,16 +512,6 @@
 			
 			<div id="divMainList4" class="list-group pms-p-3 px-md-3"></div>
 			
-			<!-- <div id="divMainBdQna" class="list-group p-3 px-md-3">
-			    <label class="list-group-item d-flex gap-2">
-			      <input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="">
-			      <span>
-			        First checkbox
-			        <span class="d-block text-body-secondary">With support text underneath to add more detail</span>
-			      </span>
-			    </label>
-			</div>  -->
-  
 		</td>
 	</tr>
 </table>			

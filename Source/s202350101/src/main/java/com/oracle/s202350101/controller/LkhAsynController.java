@@ -168,17 +168,15 @@ public class LkhAsynController {
         int taskCount = lkhService.task_count(task);
         /****************************************************/
 
+        Paging   page = new Paging(taskCount, currentPage);
+        task.setStart(page.getStart());
+        task.setEnd(page.getEnd());
 
         /****************************************************/
         List<Task>  taskList =  lkhService.task_time_aces(task);
         /****************************************************/
         System.out.println("--=------------------------------------------");
         System.out.println(taskList);
-
-
-        Paging   page = new Paging(taskCount, currentPage);
-        task.setStart(page.getStart());
-        task.setEnd(page.getEnd());
 
         AjaxResponse data = new AjaxResponse();
         data.setOnelist(taskList);

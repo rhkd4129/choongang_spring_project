@@ -38,5 +38,72 @@
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
+
+	<!-- 프로젝트 공지/자료 목록 -->
+	<select id="jmhMainDataList" parameterType="PrjBdData" resultType="PrjBdData">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT b.*, u.user_name, 
+					 	(SELECT cate_name 
+					 	 FROM CODE 
+					 	 WHERE UPPER(table_name) = 'PRJ_BD_DATA' 
+					 	 AND UPPER(field_name) = 'BD_CATEGORY'
+					 	 AND cate_code = b.bd_category) bd_category_name
+					  FROM PRJ_BD_DATA b, USER_INFO u 
+					  WHERE b.user_id = u.user_id
+					  AND b.project_id = #{project_id} ) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
+	<!-- 프로젝트 업무보고 목록 -->
+	<select id="jmhMainReportList" parameterType="PrjBdRep" resultType="PrjBdRep">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT b.*, u.user_name
+					  FROM PRJ_BD_REP b, USER_INFO u 
+					  WHERE b.user_id = u.user_id
+					  AND b.project_id = #{project_id} ) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
 	
+	<!-- 프로젝트 회의일정(meeting_status=1) or 회의록(meeting_status=2) 목록 -->
+	<select id="jmhMainMeetingList" parameterType="Meeting" resultType="Meeting">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT b.*, u.user_name
+					  FROM MEETING b, USER_INFO u 
+					  WHERE b.user_id = u.user_id
+					  AND b.project_id = #{project_id} 
+					  AND 	meeting_status = #{meeting_status} ) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
+	<!-- 프로젝트 작업 : 예정(task_status=0) or 진행중(meeting_status=1) or 완료(meeting_status=2) 목록 -->
+	<select id="jmhMainTaskList" parameterType="Task" resultType="Task">
+		SELECT *
+		FROM
+		(
+			SELECT rownum rn, a.*
+			FROM
+					( SELECT b.*, u.user_name
+					  FROM TASK b, USER_INFO u 
+					  WHERE b.user_id = u.user_id
+					  AND b.project_id = #{project_id} 
+					  AND 	task_status = #{task_status} ) a
+		)
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+
 </mapper>

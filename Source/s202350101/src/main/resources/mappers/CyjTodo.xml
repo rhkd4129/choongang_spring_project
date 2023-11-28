@@ -34,7 +34,7 @@
 		FROM todo
 		WHERE user_id = #{user_id} AND
 			todo_date > SYSDATE-9
-		ORDER BY todo_date DESC
+		ORDER BY todo_date DESC , todo_priority  DESC
 		]]>
 		</select>
 

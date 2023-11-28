@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 //@ScriptAssert(lang="javascripte" script="", message="")
 public class Task {
+		private int		app_id;
 		private int		task_id;
 		private int		project_id;
 		private int		project_step_seq;
@@ -35,9 +36,11 @@ public class Task {
 		private int		garbage;
 		
 		//읽기 전용 
-		private int status_0_count;
-		private int status_1_count;
-		private int status_2_count;
+		private int status_progress; //진척률
+		private int status_all_count; //개인별 총 작업수
+		private int status_0_count; //개인별 예정
+		private int status_1_count; //개인별 진행중
+		private int status_2_count; //개인별 완료
 		private String project_s_name;
 		private String user_name;
 

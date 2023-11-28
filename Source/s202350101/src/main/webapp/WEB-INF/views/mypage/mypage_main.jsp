@@ -244,7 +244,8 @@
 										
 										<div class="col-12">
 											<label for="lastName" class="form-label">기간</label>
-											<input type="text" class="form-control" id="lastName" value="${classRoom.class_start_date } ~ ${classRoom.class_end_date }" readonly>
+											<input type="text" class="form-control" id="lastName" 
+											value="<fmt:formatDate value="${classRoom.class_start_date}" type="date" pattern="yyyy-MM-dd"/>~<fmt:formatDate value="${classRoom.class_end_date}" type="date" pattern="yyyy-MM-dd"/>" readonly>
 											<div class="invalid-feedback"></div>
 										</div>
 									

@@ -33,7 +33,9 @@ public class HijDaoImpl implements HijDao {
 		int totalCount = 0;
 		System.out.println("HijDaoImpl totalCount START"); 
 		try {
+			//-------------------------------------------------------
 			totalCount = session.selectOne("ijTotalCount");
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl totalCount Exception e : " + e.getMessage()); 
 		}
@@ -46,7 +48,9 @@ public class HijDaoImpl implements HijDao {
 		List<PrjInfo> approveList = null;
 		System.out.println("HijDaoImpl approveList START");
 		try {
+			//-------------------------------------------------------
 			approveList = session.selectList("ijApproveList", prjInfo);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl approveList Exception e : " + e.getMessage());
 		}
@@ -59,7 +63,9 @@ public class HijDaoImpl implements HijDao {
 		int resultCount = 0;
 		System.out.println("HijDaoImpl updatePrjInfoProjectApprove START");
 		try {
+			//-------------------------------------------------------
 			resultCount = session.update("ijAppOk", hijRequestPrjDto); //관리자 페이지 승인여부 : 승인완료 
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl updatePrjInfoProjectApprove Exception e : " + e.getMessage()); 
 		}
@@ -74,7 +80,9 @@ public class HijDaoImpl implements HijDao {
 		List<PrjMemList> delMemberList = null;
 		
 		try {
+			//-------------------------------------------------------
 			delMemberList = session.selectList("ijAppOkGetUser", hijRequestPrjDto); //멤버리스트 가져옴
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl selectPrjInfoMemberList Exception e : " + e.getMessage()); 
 		}
@@ -87,7 +95,9 @@ public class HijDaoImpl implements HijDao {
 		int resultCount=0;
 		System.out.println("HijDaoImpl updateUserInfoProjectId START");		
 		try {
+			//-------------------------------------------------------
 			resultCount = session.update("ijAppOkUpdateUser", okMemberList);	//user_info project_id 값 추가
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl updateUserInfoProjectId Exception e : " + e.getMessage()); 
 		}
@@ -99,7 +109,9 @@ public class HijDaoImpl implements HijDao {
 	public List<PrjStep> selectDefualtStep(List<PrjStep> defaultList) {
 		System.out.println("HijDaoImpl selectDefualtStep START");
 		try {
+			//-------------------------------------------------------
 			defaultList = session.selectList("ijDefaultList"); //단계 기본값 조회 (prj_step project_id=0)
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl selectDefualtStep Exception e : " + e.getMessage()); 
 		}
@@ -113,7 +125,9 @@ public class HijDaoImpl implements HijDao {
 		System.out.println("HijDaoImpl insertDefualtStep START");
 		
 		try {
+			//-------------------------------------------------------
 			 resultCount = session.insert("ijAppDefaultStep", defaultList); // 단계 기본값 조회한것을 새로운 project 단계 생성에 넣어줌
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl insertDefualtStep Exception e : " + e.getMessage()); 
 		}
@@ -128,7 +142,9 @@ public class HijDaoImpl implements HijDao {
 		int resultCount = 0;
 		
 		try {
+			//-------------------------------------------------------
 			resultCount = session.update("ijAppDelUpdateUser", delMemberList); // user_info의 project_id null로 바꿔줌
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl updateNullUserProjectId Exception e : " + e.getMessage()); 
 		}
@@ -143,7 +159,9 @@ public class HijDaoImpl implements HijDao {
 		int resultCount = 0;
 		
 		try {
+			//-------------------------------------------------------
 			resultCount = session.delete("ijAppDelUser", delMemberList); // 멤버리스트 삭제
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl deletePrjInfoMemberList Exception e : " + e.getMessage()); 
 		}
@@ -158,7 +176,9 @@ public class HijDaoImpl implements HijDao {
 		int resultCount = 0;
 		
 		try {
+			//-------------------------------------------------------
 			resultCount = session.update("ijAppDel", hijRequestPrjDto); // 프로젝트 관리의 삭제여부에 삭제 띄어줌
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl updatePrjInfoDelStatus Exception e : " + e.getMessage()); 
 		}
@@ -173,7 +193,9 @@ public class HijDaoImpl implements HijDao {
 		List<UserInfo> listName = null;
 		System.out.println("HijDaoImpl listName START");
 		try {
+			//-------------------------------------------------------
 			listName = session.selectList("ijlistName", user_id);
+			//-------------------------------------------------------
 			System.out.println("HijDaoImpl listName listName.size : " + listName.size());
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl listName Exception e : " + e.getMessage());
@@ -187,7 +209,9 @@ public class HijDaoImpl implements HijDao {
 		int reqCreate = 0;
 		System.out.println("HijDaoImpl reqCreate START");
 		try {
+			//-------------------------------------------------------
 			reqCreate = session.insert("ijReqCreate", prjInfo);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl listName Exception e : " + e.getMessage());
 		}
@@ -200,7 +224,9 @@ public class HijDaoImpl implements HijDao {
 		int memCreate = 0;
 		System.out.println("HijDaoImpl memCreate START");
 		try {
+			//-------------------------------------------------------
 			memCreate = session.insert("ijMemCreate", pi);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl memCreate Exception e : " + e.getMessage());
 		}
@@ -215,7 +241,9 @@ public class HijDaoImpl implements HijDao {
 		List<PrjMemList> memberList = null;
 		System.out.println("HijDaoImpl listMember START");
 		try {
+			//-------------------------------------------------------
 			memberList = session.selectList("ijMemberList", project_id );
+			//-------------------------------------------------------
 			System.out.println("HijDaoImpl listMember memberList.size():" + memberList.size());
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl listMember Exception e : " + e.getMessage());
@@ -230,13 +258,30 @@ public class HijDaoImpl implements HijDao {
 		System.out.println("HijDaoImpl stepList START");
 		try {
 			System.out.println("project id 확인 : " +project_id);
+			//-------------------------------------------------------
 			prjInfo = session.selectOne("ijstepList", project_id);
+			//-------------------------------------------------------
 			System.out.println("HijDaoImpl stepList prjInfo.getproject_id : " + prjInfo.getProject_id());
 			System.out.println("HijDaoImpl stepList prjInfo.getProject_approve_name : " + prjInfo.getProject_approve_name());
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl stepList Exception e : " + e.getMessage());
 		}
 		return prjInfo;
+	}
+//--------------------------------------------------------------------------------------		
+	// 알람
+	@Override
+	public int updateAlarmCount(PrjInfo prjInfo) {
+		int resultCount = 0;
+		System.out.println("HijDaoImpl updateAlarmCount START");
+		try {
+			//-------------------------------------------------------
+			resultCount = session.update("ijUpdateAlarm", prjInfo);
+			//-------------------------------------------------------
+		} catch (Exception e) {
+			System.out.println("HijDaoImpl searchAll Exception e : " + e.getMessage());
+		}
+		return resultCount;
 	}
 //--------------------------------------------------------------------------------------	
 	// 프로젝트 단계조회
@@ -245,7 +290,9 @@ public class HijDaoImpl implements HijDao {
 		List<PrjStep> titleList = null;
 		System.out.println("HijDaoImpl listTitle START");
 		try {
+			//-------------------------------------------------------
 			titleList = session.selectList("ijTitleList", project_id);
+			//-------------------------------------------------------
 			System.out.println("HijDaoImpl listTitle titleList.size : " + titleList.size());
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl listTitle Exception e : " + e.getMessage());
@@ -258,7 +305,9 @@ public class HijDaoImpl implements HijDao {
 	public int prjStatus(PrjInfo prjInfo) {
 		int result=0;
 		try {
+			//-------------------------------------------------------
 			result=session.update("ijPrjStatus", prjInfo);
+			//-------------------------------------------------------
 		}catch (Exception e) {
 			System.out.println("HijDaoImpl prjStatus Exception e : " + e.getMessage());
 		}
@@ -271,7 +320,9 @@ public class HijDaoImpl implements HijDao {
 		int resultCount = 0;
 		System.out.println("HijDaoImpl reqEdit START");
 		try {
+			//-------------------------------------------------------
 			resultCount = session.update("ijReqEdit", prjInfo);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl reqEdit Exception e : " + e.getMessage());
 		}
@@ -284,7 +335,9 @@ public class HijDaoImpl implements HijDao {
 		int reMemCreate = 0;
 		System.out.println("HijDaoImpl reMemCreate START");
 		try {
+			//-------------------------------------------------------
 			reMemCreate = session.insert("ijMemReCreate", pi);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl reMemCreate Exception e : " + e.getMessage());
 		}
@@ -297,7 +350,9 @@ public class HijDaoImpl implements HijDao {
 		int stepInsert = 0;
 		System.out.println("HijDaoImpl insertStep START");
 		try {
+			//-------------------------------------------------------
 			stepInsert = session.insert("ijInsertStep", prjStep);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl insertStep Exception e : " + e.getMessage());
 		}
@@ -311,7 +366,9 @@ public class HijDaoImpl implements HijDao {
 		int result =0;
 		System.out.println("HijDaoImpl prjOrder START");
 		try {
+			//-------------------------------------------------------
 			result = session.update("ijPrjOrder", hijPrjStepList);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl prjOrder Exception e : " + e.getMessage());
 		}
@@ -328,7 +385,9 @@ public class HijDaoImpl implements HijDao {
 			PrjStep paramPrjStep = new PrjStep();
 			paramPrjStep.setProject_id(project_id);
 			paramPrjStep.setProject_step_seq(project_step_seq);
+			//-------------------------------------------------------
 			prjStep = session.selectOne("ijDetailStep", paramPrjStep);
+			//-------------------------------------------------------
 			System.out.println("HijDaoImpl detailStep : " + prjStep.getProject_s_name() );
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl detailStep Exception e : " + e.getMessage());
@@ -347,7 +406,9 @@ public class HijDaoImpl implements HijDao {
 			System.out.println("project_id"+ prjStep.getProject_id());
 			System.out.println("project_step_seq()"+ prjStep.getProject_step_seq());
 			System.out.println("prjStep.getProject_order()"+prjStep.getProject_order());
+			//-------------------------------------------------------
 			updateCount = session.update("ijUpdateStep", prjStep);
+			//-------------------------------------------------------
 			System.out.println("dao updateCount" + updateCount);
 		}catch (Exception e) {
 			System.out.println("HijDaoImpl updateStep Exception e : " + e.getMessage());
@@ -366,7 +427,9 @@ public class HijDaoImpl implements HijDao {
 			PrjStep paramPrjStep = new PrjStep();
 			paramPrjStep.setProject_id(project_id);
 			paramPrjStep.setProject_step_seq(project_step_seq);
+			//-------------------------------------------------------
 			result = session.delete("ijDeleteStep", paramPrjStep);
+			//-------------------------------------------------------
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl deleteStep Exception e : " + e.getMessage());
 		}
@@ -380,26 +443,14 @@ public class HijDaoImpl implements HijDao {
 		System.out.println("HijDaoImpl searchAll START");
 		List<HijSearchResponseDto> hijSearchResponseDtoList = null;
 		try {
+			//-------------------------------------------------------
 			hijSearchResponseDtoList = session.selectList("ijSearchList", hijSearchRequestDto);
+			//-------------------------------------------------------
 			System.out.println("HijDaoImpl searchAll hijSearchResponseDtoList.size : " + hijSearchResponseDtoList.size());
 		} catch (Exception e) {
 			System.out.println("HijDaoImpl searchAll Exception e : " + e.getMessage());
 		}
 		return hijSearchResponseDtoList;
-	}
-	
-//--------------------------------------------------------------------------------------		
-	// 알람
-	@Override
-	public int updateAlarmCount(PrjInfo prjInfo) {
-		int resultCount = 0;
-		System.out.println("HijDaoImpl updateAlarmCount START");
-		try {
-			resultCount = session.update("ijUpdateAlarm", prjInfo);
-		} catch (Exception e) {
-			System.out.println("HijDaoImpl searchAll Exception e : " + e.getMessage());
-		}
-		return resultCount;
 	}
 
 }

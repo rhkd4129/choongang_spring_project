@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjInfoImpl;
+import com.oracle.s202350101.dao.jmhDao.JmhDaoPrjInfo;
 import com.oracle.s202350101.model.PrjInfo;
-import com.oracle.s202350101.model.PrjMemList;
+import com.oracle.s202350101.model.Task;
+import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,12 +17,27 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class JmhServicePrjInfoImpl implements JmhServicePrjInfo {
 
-	private final JmhDaoPrjInfoImpl jmhPrjInfoDao;
-	
+	private final JmhDaoPrjInfo jmhPrjInfoDao;
+
+	@Override
+	public PrjInfo selectOne(int project_id) {
+
+		System.out.println("JmhServicePrjInfoImpl selectOne START...");
+		
+		PrjInfo prjInfo = null;
+		
+		//-----------------------------------------------------
+		prjInfo = jmhPrjInfoDao.selectOne(project_id);
+		//-----------------------------------------------------
+		
+		System.out.println("JmhServicePrjInfoImpl selectOne END...");
+		return prjInfo;
+	}
+
 	@Override
 	public List<PrjInfo> selectList(int project_status) {
 	
-		System.out.println("JmhServiceImpl selectList START...");
+		System.out.println("JmhServicePrjInfoImpl selectList START...");
 		
 		List<PrjInfo> prjInfoList = null;
 		
@@ -29,23 +45,39 @@ public class JmhServicePrjInfoImpl implements JmhServicePrjInfo {
 		prjInfoList = jmhPrjInfoDao.selectList(project_status);
 		//-----------------------------------------------------
 		
-		System.out.println("JmhServiceImpl selectList END...");
+		System.out.println("JmhServicePrjInfoImpl selectList END...");
 		return prjInfoList;
 	}
 
 	@Override
-	public List<PrjMemList> selectMemList(int project_id) {
+	public List<UserInfo> selectMemList(int project_id) {
 		
-		System.out.println("JmhServiceImpl selectMemList START...");
+		System.out.println("JmhServicePrjInfoImpl selectMemList START...");
 		
-		List<PrjMemList> prjMemList = null;
+		List<UserInfo> prjMemList = null;
 		
 		//-----------------------------------------------------
 		prjMemList = jmhPrjInfoDao.selectMemList(project_id);
 		//-----------------------------------------------------
 		
-		System.out.println("JmhServiceImpl selectMemList END...");
+		System.out.println("JmhServicePrjInfoImpl selectMemList END...");
 		return prjMemList;
 	}
+
+	@Override
+	public List<Task> selectTaskProgress(int project_id) {
+
+		System.out.println("JmhServicePrjInfoImpl selectTaskProgress START...");
+		
+		List<Task> prjTaskProgressList = null;
+		
+		//-----------------------------------------------------------------
+		prjTaskProgressList = jmhPrjInfoDao.selectTaskProgress(project_id);
+		//-----------------------------------------------------------------
+		
+		System.out.println("JmhServicePrjInfoImpl selectTaskProgress END...");
+		return prjTaskProgressList;
+	}
+
 
 }

@@ -23,7 +23,7 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 	//총건수
 	@Override
 	public int totalCount(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl totalCount START...");
+		System.out.println("JmhServicePrjBdRepImpl totalCount START...");
 
 		int totalCnt = 0;
 		
@@ -35,23 +35,23 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 				//------------------------------------------
 				totalCnt = jmhRepDao.searchCount(prjBdRep);
 				//------------------------------------------
-				System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-				System.out.println("JmhServiceImpl totalCount END...");
+				System.out.println("JmhServicePrjBdRepImpl totalCount totalCnt->" + totalCnt);
+				System.out.println("JmhServicePrjBdRepImpl totalCount END...");
 				return totalCnt;
 			}
 		}
 		//-----------------------------------------
 		totalCnt = jmhRepDao.totalCount(prjBdRep);
 		//-----------------------------------------
-		System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-		System.out.println("JmhServiceImpl totalCount END...");
+		System.out.println("JmhServicePrjBdRepImpl totalCount totalCnt->" + totalCnt);
+		System.out.println("JmhServicePrjBdRepImpl totalCount END...");
 		return totalCnt;
 	}
 	
 	//목록
 	@Override
 	public List<PrjBdRep> boardList(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl boardList START...");
+		System.out.println("JmhServicePrjBdRepImpl boardList START...");
 		
 		List<PrjBdRep> prjBdRepList = null;
 		
@@ -60,73 +60,73 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 				//--------------------------------------------
 				prjBdRepList = jmhRepDao.searchList(prjBdRep);
 				//--------------------------------------------
-				System.out.println("JmhServiceImpl boardList > searchList END...");
+				System.out.println("JmhServicePrjBdRepImpl boardList > searchList END...");
 				return prjBdRepList;
 			}
 		}		
 		//-------------------------------------------
 		prjBdRepList = jmhRepDao.boardList(prjBdRep);
 		//-------------------------------------------		
-		System.out.println("JmhServiceImpl boardList END...");
+		System.out.println("JmhServicePrjBdRepImpl boardList END...");
 		return prjBdRepList;
 	}
 
 	//분류
 	@Override
 	public List<Code> codeList(Code code) {
-		System.out.println("JmhServiceImpl codeList START...");
+		System.out.println("JmhServicePrjBdRepImpl codeList START...");
 		List<Code> reCodeList = null;
 		//------------------------------------
 		reCodeList = jmhRepDao.codeList(code);
 		//------------------------------------
-		System.out.println("JmhServiceImpl codeList END...");
+		System.out.println("JmhServicePrjBdRepImpl codeList END...");
 		return reCodeList;
 	}
 
 	//등록
 	@Override
 	public int insertBoard(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl insertBoard START...");
+		System.out.println("JmhServicePrjBdRepImpl insertBoard START...");
 		int resultCount = 0;		
 		Date sysdate = new Date();
 		prjBdRep.setCreate_date(sysdate);		
 		//--------------------------------------------
 		resultCount = jmhRepDao.insertBoard(prjBdRep);
 		//--------------------------------------------
-		System.out.println("JmhServiceImpl insertBoard resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl insertBoard END...");
+		System.out.println("JmhServicePrjBdRepImpl insertBoard resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdRepImpl insertBoard END...");
 		return resultCount;
 	}
 
 	//조회
 	@Override
 	public PrjBdRep selectBoard(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl selectBoard START...");
+		System.out.println("JmhServicePrjBdRepImpl selectBoard START...");
 		PrjBdRep selectPrjBdRep = null;		
 		//-----------------------------------------------
 		selectPrjBdRep = jmhRepDao.selectBoard(prjBdRep);
 		//-----------------------------------------------
-		System.out.println("JmhServiceImpl selectBoard END...");
+		System.out.println("JmhServicePrjBdRepImpl selectBoard END...");
 		return selectPrjBdRep;
 	}
 
 	//수정
 	@Override
 	public int updateBoard(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl updateBoard START...");
+		System.out.println("JmhServicePrjBdRepImpl updateBoard START...");
 		int resultCount = 0;				
 		//--------------------------------------------
 		resultCount = jmhRepDao.updateBoard(prjBdRep);
 		//--------------------------------------------
-		System.out.println("JmhServiceImpl updateBoard resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateBoard END...");
+		System.out.println("JmhServicePrjBdRepImpl updateBoard resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdRepImpl updateBoard END...");
 		return resultCount;
 	}
 
 	//삭제
 	@Override
 	public int deleteBoard(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl deleteBoard START...");
+		System.out.println("JmhServicePrjBdRepImpl deleteBoard START...");
 		int resultCount = 0;				
 
 		//문서의 댓글들 모두 삭제
@@ -140,58 +140,58 @@ public class JmhServicePrjBdRepImpl implements JmhServicePrjBdRep {
 		//--------------------------------------------
 		if(resultCount > 0) {System.out.println("문서 삭제완료:"+resultCount);}
 		
-		System.out.println("JmhServiceImpl deleteBoard resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl deleteBoard END...");
+		System.out.println("JmhServicePrjBdRepImpl deleteBoard resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdRepImpl deleteBoard END...");
 		return resultCount;
 	}
 
 	//댓글 등록
 	@Override
 	public int insertComment(BdRepComt bdRepComt) {
-		System.out.println("JmhServiceImpl insertComment START...");
+		System.out.println("JmhServicePrjBdRepImpl insertComment START...");
 		int resultCount = 0;				
 		//-----------------------------------------------
 		resultCount = jmhRepDao.insertComment(bdRepComt);
 		//-----------------------------------------------
-		System.out.println("JmhServiceImpl insertComment resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl insertComment END...");
+		System.out.println("JmhServicePrjBdRepImpl insertComment resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdRepImpl insertComment END...");
 		return resultCount;
 	}
 
 	//댓글 조회
 	public List<BdRepComt> selectCommentList(BdRepComt bdRepComt) {
-		System.out.println("JmhServiceImpl selectCommentList START...");
+		System.out.println("JmhServicePrjBdRepImpl selectCommentList START...");
 		List<BdRepComt> resultBdRepComtList = null;				
 		//-----------------------------------------------------------
 		resultBdRepComtList = jmhRepDao.selectCommentList(bdRepComt);
 		//-----------------------------------------------------------
-		System.out.println("JmhServiceImpl selectCommentList resultBdRepComtList.size()->"+resultBdRepComtList.size());
-		System.out.println("JmhServiceImpl selectCommentList END...");
+		System.out.println("JmhServicePrjBdRepImpl selectCommentList resultBdRepComtList.size()->"+resultBdRepComtList.size());
+		System.out.println("JmhServicePrjBdRepImpl selectCommentList END...");
 		return resultBdRepComtList;
 	}
 
 	//댓글 삭제
 	public int deleteComment(BdRepComt bdRepComt) {
-		System.out.println("JmhServiceImpl deleteComment START...");
+		System.out.println("JmhServicePrjBdRepImpl deleteComment START...");
 		int resultCount = 0;				
 		//-----------------------------------------------
 		resultCount = jmhRepDao.deleteComment(bdRepComt);
 		//-----------------------------------------------
-		System.out.println("JmhServiceImpl deleteComment resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl deleteComment END...");
+		System.out.println("JmhServicePrjBdRepImpl deleteComment resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdRepImpl deleteComment END...");
 		return resultCount;
 	}
 
 	//댓글들 알림 플래그 일괄 업데이트(N개)
 	@Override
 	public int updateCommentAlarmFlag(PrjBdRep prjBdRep) {
-		System.out.println("JmhServiceImpl updateCommentAlarmFlag START...");
+		System.out.println("JmhServicePrjBdRepImpl updateCommentAlarmFlag START...");
 		int resultCount = 0;				
 		//-------------------------------------------------------
 		resultCount = jmhRepDao.updateCommentAlarmFlag(prjBdRep);
 		//-------------------------------------------------------
-		System.out.println("JmhServiceImpl updateCommentAlarmFlag resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateCommentAlarmFlag END...");
+		System.out.println("JmhServicePrjBdRepImpl updateCommentAlarmFlag resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdRepImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
 

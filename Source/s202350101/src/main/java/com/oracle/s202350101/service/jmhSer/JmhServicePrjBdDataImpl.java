@@ -25,7 +25,7 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 	//총건수
 	@Override
 	public int totalCount(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl totalCount START...");
+		System.out.println("JmhServicePrjBdDataImpl totalCount START...");
 
 		int totalCnt = 0;
 		
@@ -38,8 +38,8 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 				//------------------------------------------
 				totalCnt = jmhDataDao.alarmCount(prjBdData);
 				//------------------------------------------
-				System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-				System.out.println("JmhServiceImpl totalCount END...");
+				System.out.println("JmhServicePrjBdDataImpl totalCount totalCnt->" + totalCnt);
+				System.out.println("JmhServicePrjBdDataImpl totalCount END...");
 				return totalCnt;
 			} 
 		}
@@ -51,8 +51,8 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 				//------------------------------------------
 				totalCnt = jmhDataDao.searchCount(prjBdData);
 				//------------------------------------------
-				System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-				System.out.println("JmhServiceImpl totalCount END...");
+				System.out.println("JmhServicePrjBdDataImpl totalCount totalCnt->" + totalCnt);
+				System.out.println("JmhServicePrjBdDataImpl totalCount END...");
 				return totalCnt;
 			}
 		}
@@ -60,15 +60,15 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 		totalCnt = jmhDataDao.totalCount(prjBdData);
 		//------------------------------------------
 
-		System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-		System.out.println("JmhServiceImpl totalCount END...");
+		System.out.println("JmhServicePrjBdDataImpl totalCount totalCnt->" + totalCnt);
+		System.out.println("JmhServicePrjBdDataImpl totalCount END...");
 		return totalCnt;
 	}
 
 	//목록
 	@Override
 	public List<PrjBdData> boardList(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl boardList START...");
+		System.out.println("JmhServicePrjBdDataImpl boardList START...");
 		
 		List<PrjBdData> prjBdDataList = null;
 		
@@ -79,7 +79,7 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 				//----------------------------------------------
 				prjBdDataList = jmhDataDao.alarmList(prjBdData);
 				//----------------------------------------------
-				System.out.println("JmhServiceImpl boardList > alarmList END...");
+				System.out.println("JmhServicePrjBdDataImpl boardList > alarmList END...");
 				return prjBdDataList;
 			}
 		}
@@ -90,7 +90,7 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 				//-----------------------------------------------
 				prjBdDataList = jmhDataDao.searchList(prjBdData);
 				//-----------------------------------------------
-				System.out.println("JmhServiceImpl boardList > searchList END...");
+				System.out.println("JmhServicePrjBdDataImpl boardList > searchList END...");
 				return prjBdDataList;
 			}
 		}		
@@ -98,66 +98,66 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 		prjBdDataList = jmhDataDao.boardList(prjBdData);
 		//----------------------------------------------
 		
-		System.out.println("JmhServiceImpl boardList END...");
+		System.out.println("JmhServicePrjBdDataImpl boardList END...");
 		return prjBdDataList;
 	}
 
 	//분류
 	@Override
 	public List<Code> codeList(Code code) {
-		System.out.println("JmhServiceImpl codeList START...");
+		System.out.println("JmhServicePrjBdDataImpl codeList START...");
 		List<Code> reCodeList = null;
 		//-------------------------------------
 		reCodeList = jmhDataDao.codeList(code);
 		//-------------------------------------
-		System.out.println("JmhServiceImpl codeList END...");
+		System.out.println("JmhServicePrjBdDataImpl codeList END...");
 		return reCodeList;
 	}
 
 	//등록
 	@Override
 	public int insertBoard(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl insertBoard START...");
+		System.out.println("JmhServicePrjBdDataImpl insertBoard START...");
 		int resultCount = 0;		
 		Date sysdate = new Date();
 		prjBdData.setCreate_date(sysdate);		
 		//----------------------------------------------
 		resultCount = jmhDataDao.insertBoard(prjBdData);
 		//----------------------------------------------
-		System.out.println("JmhServiceImpl insertBoard resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl insertBoard END...");
+		System.out.println("JmhServicePrjBdDataImpl insertBoard resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl insertBoard END...");
 		return resultCount;
 	}
 
 	//조회
 	@Override
 	public PrjBdData selectBoard(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl selectBoard START...");
+		System.out.println("JmhServicePrjBdDataImpl selectBoard START...");
 		PrjBdData selectPrjBdData = null;		
 		//--------------------------------------------------
 		selectPrjBdData = jmhDataDao.selectBoard(prjBdData);
 		//--------------------------------------------------
-		System.out.println("JmhServiceImpl selectBoard END...");
+		System.out.println("JmhServicePrjBdDataImpl selectBoard END...");
 		return selectPrjBdData;
 	}
 
 	//수정
 	@Override
 	public int updateBoard(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl updateBoard START...");
+		System.out.println("JmhServicePrjBdDataImpl updateBoard START...");
 		int resultCount = 0;				
 		//----------------------------------------------
 		resultCount = jmhDataDao.updateBoard(prjBdData);
 		//----------------------------------------------
-		System.out.println("JmhServiceImpl updateBoard resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateBoard END...");
+		System.out.println("JmhServicePrjBdDataImpl updateBoard resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl updateBoard END...");
 		return resultCount;
 	}
 
 	//삭제
 	@Override
 	public int deleteBoard(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl deleteBoard START...");
+		System.out.println("JmhServicePrjBdDataImpl deleteBoard START...");
 		int resultCount = 0;
 		int resultReplyCount = 0;
 		int resultCommentCount = 0;
@@ -197,155 +197,155 @@ public class JmhServicePrjBdDataImpl implements JmhServicePrjBdData {
 		//----------------------------------------------
 		if(resultCount > 0) {System.out.println("문서 삭제완료:"+resultCount);}
 		
-		System.out.println("JmhServiceImpl deleteBoard resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl deleteBoard END...");
+		System.out.println("JmhServicePrjBdDataImpl deleteBoard resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl deleteBoard END...");
 		return resultCount;
 	}
 
 	//조회수
 	@Override
 	public int readCount(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl readCount START...");
+		System.out.println("JmhServicePrjBdDataImpl readCount START...");
 		int resultCount = 0;				
 		//--------------------------------------------
 		resultCount = jmhDataDao.readCount(prjBdData);
 		//--------------------------------------------
-		System.out.println("JmhServiceImpl readCount resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl readCount END...");
+		System.out.println("JmhServicePrjBdDataImpl readCount resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl readCount END...");
 		return resultCount;
 	}
 
 	//추천여부 확인
 	@Override
 	public BdDataGood checkGoodList(BdDataGood bdDataGood) {
-		System.out.println("JmhServiceImpl checkGoodList START...");
+		System.out.println("JmhServicePrjBdDataImpl checkGoodList START...");
 		BdDataGood resultBdDataGood = null;				
 		//------------------------------------------------------
 		resultBdDataGood = jmhDataDao.checkGoodList(bdDataGood);
 		//------------------------------------------------------
 		if(resultBdDataGood != null) {
-			System.out.println("JmhServiceImpl checkGoodList bdDataGood->"+resultBdDataGood.getUser_id());
+			System.out.println("JmhServicePrjBdDataImpl checkGoodList bdDataGood->"+resultBdDataGood.getUser_id());
 		}
-		System.out.println("JmhServiceImpl checkGoodList END...");
+		System.out.println("JmhServicePrjBdDataImpl checkGoodList END...");
 		return resultBdDataGood;
 	}
 
 	//추천목록에 추가
 	@Override
 	public int insertGoodList(BdDataGood bdDataGood) {
-		System.out.println("JmhServiceImpl insertGoodList START...");
+		System.out.println("JmhServicePrjBdDataImpl insertGoodList START...");
 		int resultCount = 0;				
 		//-------------------------------------------------
 		resultCount = jmhDataDao.insertGoodList(bdDataGood);
 		//-------------------------------------------------
-		System.out.println("JmhServiceImpl insertGoodList resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl insertGoodList END...");
+		System.out.println("JmhServicePrjBdDataImpl insertGoodList resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl insertGoodList END...");
 		return resultCount;
 	}
 
 	//추천목록 조회
 	@Override
 	public List<BdDataGood> selectGoodList(BdDataGood bdDataGood) {
-		System.out.println("JmhServiceImpl selectGoodList START...");
+		System.out.println("JmhServicePrjBdDataImpl selectGoodList START...");
 		List<BdDataGood> resultBdDataGoodList = null;				
 		//-----------------------------------------------------------
 		resultBdDataGoodList = jmhDataDao.selectGoodList(bdDataGood);
 		//-----------------------------------------------------------
 		if(resultBdDataGoodList.size() > 0) {
-			System.out.println("JmhServiceImpl selectGoodList bdDataGood->"+resultBdDataGoodList.get(0).getUser_id());
+			System.out.println("JmhServicePrjBdDataImpl selectGoodList bdDataGood->"+resultBdDataGoodList.get(0).getUser_id());
 		}
-		System.out.println("JmhServiceImpl selectGoodList END...");
+		System.out.println("JmhServicePrjBdDataImpl selectGoodList END...");
 		return resultBdDataGoodList;
 	}
 
 	//추천수 저장
 	@Override
 	public int updateGoodCount(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl updateGoodCount START...");
+		System.out.println("JmhServicePrjBdDataImpl updateGoodCount START...");
 		int resultCount = 0;				
 		//--------------------------------------------------
 		resultCount = jmhDataDao.updateGoodCount(prjBdData);
 		//--------------------------------------------------
-		System.out.println("JmhServiceImpl updateGoodCount resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateGoodCount END...");
+		System.out.println("JmhServicePrjBdDataImpl updateGoodCount resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl updateGoodCount END...");
 		return resultCount;
 	}
 
 	//답글 계층 처리
 	@Override
 	public int updateOtherReply(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl updateOtherReply START...");
+		System.out.println("JmhServicePrjBdDataImpl updateOtherReply START...");
 		int resultCount = 0;				
 		//---------------------------------------------------
 		resultCount = jmhDataDao.updateOtherReply(prjBdData);
 		//---------------------------------------------------
-		System.out.println("JmhServiceImpl updateOtherReply resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateOtherReply END...");
+		System.out.println("JmhServicePrjBdDataImpl updateOtherReply resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl updateOtherReply END...");
 		return resultCount;
 	}
 
 	//댓글 등록
 	@Override
 	public int insertComment(BdDataComt bdDataComt) {
-		System.out.println("JmhServiceImpl insertComment START...");
+		System.out.println("JmhServicePrjBdDataImpl insertComment START...");
 		int resultCount = 0;				
 		//---------------------------------------------------
 		resultCount = jmhDataDao.insertComment(bdDataComt);
 		//---------------------------------------------------
-		System.out.println("JmhServiceImpl insertComment resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl insertComment END...");
+		System.out.println("JmhServicePrjBdDataImpl insertComment resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl insertComment END...");
 		return resultCount;
 	}
 
 	//댓글 조회
 	@Override
 	public List<BdDataComt> selectCommentList(BdDataComt bdDataComt) {
-		System.out.println("JmhServiceImpl selectCommentList START...");
+		System.out.println("JmhServicePrjBdDataImpl selectCommentList START...");
 		List<BdDataComt> resultBdDataComtList = null;				
 		//--------------------------------------------------------
 		resultBdDataComtList = jmhDataDao.selectCommentList(bdDataComt);
 		//--------------------------------------------------------
-		System.out.println("JmhServiceImpl selectCommentList resultBdDataComtList.size()->"+resultBdDataComtList.size());
-		System.out.println("JmhServiceImpl selectCommentList END...");
+		System.out.println("JmhServicePrjBdDataImpl selectCommentList resultBdDataComtList.size()->"+resultBdDataComtList.size());
+		System.out.println("JmhServicePrjBdDataImpl selectCommentList END...");
 		return resultBdDataComtList;
 	}
 
 	//댓글 삭제
 	@Override
 	public int deleteComment(BdDataComt bdDataComt) {
-		System.out.println("JmhServiceImpl deleteComment START...");
+		System.out.println("JmhServicePrjBdDataImpl deleteComment START...");
 		int resultCount = 0;				
 		//---------------------------------------------------
 		resultCount = jmhDataDao.deleteComment(bdDataComt);
 		//---------------------------------------------------
-		System.out.println("JmhServiceImpl deleteComment resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl deleteComment END...");
+		System.out.println("JmhServicePrjBdDataImpl deleteComment resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl deleteComment END...");
 		return resultCount;
 	}
 
 	//답글 알림 플래그 업데이트(1개)
 	@Override
 	public int updateReplyAlarmFlag(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl updateReplyAlarmFlag START...");
+		System.out.println("JmhServicePrjBdDataImpl updateReplyAlarmFlag START...");
 		int resultCount = 0;				
 		//-------------------------------------------------------
 		resultCount = jmhDataDao.updateReplyAlarmFlag(prjBdData);
 		//-------------------------------------------------------
-		System.out.println("JmhServiceImpl updateReplyAlarmFlag resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateReplyAlarmFlag END...");
+		System.out.println("JmhServicePrjBdDataImpl updateReplyAlarmFlag resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl updateReplyAlarmFlag END...");
 		return resultCount;
 	}
 
 	//댓글들 알림 플래그 일괄 업데이트(N개)
 	@Override
 	public int updateCommentAlarmFlag(PrjBdData prjBdData) {
-		System.out.println("JmhServiceImpl updateCommentAlarmFlag START...");
+		System.out.println("JmhServicePrjBdDataImpl updateCommentAlarmFlag START...");
 		int resultCount = 0;				
 		//---------------------------------------------------------
 		resultCount = jmhDataDao.updateCommentAlarmFlag(prjBdData);
 		//---------------------------------------------------------
-		System.out.println("JmhServiceImpl updateCommentAlarmFlag resultCount->"+resultCount);
-		System.out.println("JmhServiceImpl updateCommentAlarmFlag END...");
+		System.out.println("JmhServicePrjBdDataImpl updateCommentAlarmFlag resultCount->"+resultCount);
+		System.out.println("JmhServicePrjBdDataImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
 

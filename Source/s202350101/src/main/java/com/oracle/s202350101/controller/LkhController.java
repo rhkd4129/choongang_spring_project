@@ -37,7 +37,16 @@ public class LkhController {
 	private final LkhService lkhService;
 	//git config --global core.autocrlf true
 
+	//#######################################################################
+	//############      통합검색 팝업 조회  /prj_task_read/         ############
+	//#######################################################################
 
+	@GetMapping("task_read")
+	public String prjTaskRead(HttpServletRequest request, Model model) {
+		log.info("prj_task_read Controller init");
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
+		return "project/task/task_read";
+	}
 
 	//#######################################################################
 	//############      프로젝트 작업 보드  /dashboard/         ############

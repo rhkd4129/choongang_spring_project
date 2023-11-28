@@ -78,7 +78,7 @@
 			      		</c:forEach> <p>
 	
 				프로젝트 소개 <p>
-					${prjInfo.project_intro}<p>
+					<pre>${prjInfo.project_intro}</pre><p>
 				
 				<br>
 			<hr>
@@ -89,7 +89,7 @@
 				<c:forEach var="Step" items="${titleList }">
 					<h4>[${Step.project_s_name }]</h4><p>
 					<div>
-					${Step.project_s_context }
+					<pre>${Step.project_s_context }</pre>
 					</div><p>
 				</c:forEach>
 			</div>

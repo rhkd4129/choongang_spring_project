@@ -38,10 +38,14 @@ function chat_chats_bt() {
 
 function chat_room(user_id) {
     console.log(user_id);
+    
+    var width = "500";
+	var height = Math.ceil((window.screen.height)*0.7);
+    
     window.open(
         "/chat_room?user_id=" + user_id,
         "" + user_id + "",      //  다중 채팅을 위해서 선언
-        "width=600, height=570, top=50, left=50, resizable=no"
+        "width="+width+", height="+height+", top=109, left=243, location=no, directories=no, resizable=yes, status=no, toolbar=no, menubar=no, scrollbars=auto"
     );
 }
 

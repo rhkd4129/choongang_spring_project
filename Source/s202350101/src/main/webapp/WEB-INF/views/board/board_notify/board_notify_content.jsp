@@ -147,7 +147,7 @@
 				<tr> <th>본문</th>         <td><pre>${content.doc_body}</pre></td> </tr>
 				<tr> <th>조회수</th>        <td>${content.bd_count}</td> </tr>
 				<tr> <th>추천</th>         <td id="count_btn">${content.good_count}</td> </tr>
-				<tr> <th>첨부파일</th>      <td>${content.attach_name}<img alt="" src="${pageContext.request.contextPath}/${content.attach_path}/${content.attach_name}"></td> </tr>	
+				<tr> <th>첨부파일</th>     <td><a href="javascript:popup('/upload/${content.attach_path}',800,600)">${content.attach_name}</a></td> </tr>	
 			</table>
 			
 			

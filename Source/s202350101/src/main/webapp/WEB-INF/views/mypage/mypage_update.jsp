@@ -142,7 +142,7 @@ function send_save_mail() {
 		});
 		
     	var display = $('#time');
-    	var leftSec = 30;
+    	var leftSec = 120;
     	// 남은 시간
     	// 이미 타이머가 작동중이면 중지
     	if (isRunning){
@@ -236,7 +236,7 @@ function confirm_authNumber() {
 
 		var mypage_msg = "${msg}";
 		if(mypage_msg != "" && mypage_msg == "fail") {
-			$("#mypage_msg").html("<font color=green>수정 실패하였습니다. 관리자에 문의하세요.</font>");
+			$("#mypage_msg").html("<font color=red>수정에 실패하였습니다. 아래 에러 문구를 확인하세요.</font>");
 			//alert("수정 실패하였습니다. 관리자에 문의하세요.");
 		}
 
@@ -307,7 +307,7 @@ function confirm_authNumber() {
 							<div class="col-12">
 								<label for="user_id" class="form-label">아이디</label>
 								<div class="input-group has-validation">
-								<span class="input-group-text" style="background-color:var(--bs-warning)">ID</span>
+								<span class="input-group-text">ID</span>
 								<input type="text" class="form-control" id="user_id" value="${userInfoDTO.user_id}" readonly style="margin-left:-5px;">
 								</div>
 							</div>
@@ -315,7 +315,7 @@ function confirm_authNumber() {
 							<div class="col-sm-6">
 								<label for="userpass" class="form-label">새 비밀번호</label>
 								<input type="password" class="form-control" id="userpass" name="user_pw" placeholder="Password" required="required">
-								<div class="invalid-feedback"><form:errors path="user_pw"/></div>
+								<div class="invalid-feedback" style="display:block"><form:errors path="user_pw"/></div>
 							</div>
 							
 							<div class="col-sm-6">
@@ -328,7 +328,7 @@ function confirm_authNumber() {
 							<div class="col-12">
 								<label for="user_name" class="form-label">이름</label>
 								<input type="text" class="form-control" id="user_name" name="user_name" value="${userInfoDTO.user_name}" required="required">
-								<div class="invalid-feedback"><form:errors path="user_name"/></div>
+								<div class="invalid-feedback" style="display:block"><form:errors path="user_name"/></div>
 							</div>
 							
 							<div class="col-12">
@@ -336,7 +336,11 @@ function confirm_authNumber() {
 								<select class="form-select" id="class_id" name="class_id">
 									<c:forEach var="cList" items="${classList}">
 										<option value="${cList.class_id }" 
-											<c:if test="${cList.class_id eq userInfoDTO.class_id}">selected</c:if>>${cList.class_area }점 ${cList.class_room_num }반   ${cList.class_start_date } ~ ${cList.class_end_date }</option>
+											<c:if test="${cList.class_id eq userInfoDTO.class_id}">selected</c:if>>${cList.class_area }점 ${cList.class_room_num }반   
+											<fmt:formatDate value="${cList.class_start_date}" type="date" pattern="yyyy-MM-dd"/>
+									 			~ 
+											<fmt:formatDate value="${cList.class_end_date}" type="date" pattern="yyyy-MM-dd"/>
+											</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -344,7 +348,7 @@ function confirm_authNumber() {
 							<div class="col-md-6">
 								<label for="user_number" class="form-label">핸드폰 번호</label>
 								<input type="text" class="form-control" id="user_number" name="user_number" placeholder="" value="${userInfoDTO.user_number }" required="required">				
-								<div class="invalid-feedback"><form:errors path="user_number"/></div>
+								<div class="invalid-feedback" style="display:block"><form:errors path="user_number"/></div>
 							</div>
 							
 							<div class="col-md-6">
@@ -362,7 +366,7 @@ function confirm_authNumber() {
 								<label for="user_email" class="form-label">Email <span class="text-body-danger">*</span></label>
 								<div class="input-group has-validation">
 									<input type="email" class="form-control" id="user_email" name="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com" style="margin-right:5px;">
-									<span><button id="timerButton" type="button" class="btn btn-primary btn-lg" onclick="send_save_mail()">수정</button></span>
+									<span><button id="timerButton" type="button" class="btn btn-dark btn-lg" onclick="send_save_mail()">수정</button></span>
 								</div>
 								<br>
 								<div id="mail_number" name="mail_number" style="display:none; margin-tip:10px;">

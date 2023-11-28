@@ -22,17 +22,17 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int totalCount(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl totalCount START...");
+		System.out.println("JmhDaoPrjBdRepImpl totalCount START...");
 		int totalCnt = 0;				
 		try {
 			//------------------------------------------------------------------
 			totalCnt = session.selectOne("jmhPrjBdRepListTotalCount", prjBdRep);
 			//------------------------------------------------------------------
-			System.out.println("JmhDaoImpl totalCount totalCnt->"+totalCnt);
+			System.out.println("JmhDaoPrjBdRepImpl totalCount totalCnt->"+totalCnt);
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl totalCount Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl totalCount Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl totalCount END...");
+		System.out.println("JmhDaoPrjBdRepImpl totalCount END...");
 		return totalCnt;
 	}
 
@@ -40,17 +40,17 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int searchCount(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl searchCount START...");
+		System.out.println("JmhDaoPrjBdRepImpl searchCount START...");
 		int searchCnt = 0;				
 		try {
 			//----------------------------------------------------------------------
 			searchCnt = session.selectOne("jmhPrjBdRepListSearchCount", prjBdRep);
 			//----------------------------------------------------------------------
-			System.out.println("JmhDaoImpl searchCount searchCnt->"+searchCnt);
+			System.out.println("JmhDaoPrjBdRepImpl searchCount searchCnt->"+searchCnt);
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl searchCount Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl searchCount Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl searchCount END...");
+		System.out.println("JmhDaoPrjBdRepImpl searchCount END...");
 		return searchCnt;
 	}
 
@@ -58,17 +58,17 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public List<PrjBdRep> boardList(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl boardList START...");
+		System.out.println("JmhDaoPrjBdRepImpl boardList START...");
 		List<PrjBdRep> prjBdRepList = null;		
 		try {
 			//----------------------------------------------------------------
 			prjBdRepList = session.selectList("jmhPrjBdRepList", prjBdRep);
 			//----------------------------------------------------------------
-			System.out.println("JmhDaoImpl boardList prjBdRepList.get(0).getSubject()->"+((PrjBdRep) prjBdRepList.get(0)).getSubject());
+			System.out.println("JmhDaoPrjBdRepImpl boardList prjBdRepList.get(0).getSubject()->"+((PrjBdRep) prjBdRepList.get(0)).getSubject());
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl boardList Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl boardList Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl boardList END...");
+		System.out.println("JmhDaoPrjBdRepImpl boardList END...");
 		return prjBdRepList;
 	}
 
@@ -76,21 +76,21 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public List<PrjBdRep> searchList(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl searchList START...");
+		System.out.println("JmhDaoPrjBdRepImpl searchList START...");
 		List<PrjBdRep> prjBdRepList = null;		
 		try {
 			//----------------------------------------------------------------------
 			prjBdRepList = session.selectList("jmhPrjBdRepSearchList", prjBdRep);
 			//----------------------------------------------------------------------
 			if(prjBdRepList != null) {
-				System.out.println("JmhDaoImpl searchList prjBdDataList.get(0).getSubject()->"+((PrjBdRep) prjBdRepList.get(0)).getSubject());
+				System.out.println("JmhDaoPrjBdRepImpl searchList prjBdDataList.get(0).getSubject()->"+((PrjBdRep) prjBdRepList.get(0)).getSubject());
 			}else {
 				System.out.println("SQL오류");
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl searchList Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl searchList Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl searchList END...");
+		System.out.println("JmhDaoPrjBdRepImpl searchList END...");
 		return prjBdRepList;
 	}
 
@@ -98,7 +98,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public List<Code> codeList(Code code) {
 		
-		System.out.println("JmhDaoImpl codeList START...");
+		System.out.println("JmhDaoPrjBdRepImpl codeList START...");
 		List<Code> reCodeList = null;		
 		try {
 			//------------------------------------------------------------
@@ -107,16 +107,16 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 			System.out.println("reCodeList.size()->"+reCodeList.size());
 			if(reCodeList.size() > 0) {
 				//성공
-				System.out.println("JmhDaoImpl codeList code->"+reCodeList.get(0).getCate_code());
-				System.out.println("JmhDaoImpl codeList name->"+reCodeList.get(0).getCate_name());
+				System.out.println("JmhDaoPrjBdRepImpl codeList code->"+reCodeList.get(0).getCate_code());
+				System.out.println("JmhDaoPrjBdRepImpl codeList name->"+reCodeList.get(0).getCate_name());
 			}else {
 				System.out.println("SQL오류");
 				return null;
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl codeList Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl codeList Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl codeList END...");
+		System.out.println("JmhDaoPrjBdRepImpl codeList END...");
 		return reCodeList;
 	}
 
@@ -124,7 +124,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int insertBoard(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl insertBoard START...");
+		System.out.println("JmhDaoPrjBdRepImpl insertBoard START...");
 		int resultCount = 0;		
 		try {
 			//-----------------------------------------------------------------
@@ -138,9 +138,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				return 0;
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl insertBoard Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl insertBoard Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl insertBoard END...");
+		System.out.println("JmhDaoPrjBdRepImpl insertBoard END...");
 		return resultCount;
 	}
 
@@ -148,7 +148,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public PrjBdRep selectBoard(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl selectBoard START...");
+		System.out.println("JmhDaoPrjBdRepImpl selectBoard START...");
 		PrjBdRep selectPrjBdRep = null;		
 		try {
 			//------------------------------------------------------------------------
@@ -162,9 +162,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				return null;
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl selectBoard Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl selectBoard Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl selectBoard END...");
+		System.out.println("JmhDaoPrjBdRepImpl selectBoard END...");
 		return selectPrjBdRep;
 	}
 
@@ -172,7 +172,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int updateBoard(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl updateBoard START...");
+		System.out.println("JmhDaoPrjBdRepImpl updateBoard START...");
 		int resultCount = 0;		
 		try {
 			//-----------------------------------------------------------------
@@ -186,9 +186,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				return 0;
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl updateBoard Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl updateBoard Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl updateBoard END...");
+		System.out.println("JmhDaoPrjBdRepImpl updateBoard END...");
 		return resultCount;
 	}
 
@@ -196,13 +196,13 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int deleteBoard(PrjBdRep prjBdRep) {
 
-		System.out.println("JmhDaoImpl deleteBoard START...");
+		System.out.println("JmhDaoPrjBdRepImpl deleteBoard START...");
 		int resultCount = 0;		
 		try {
 			//-----------------------------------------------------------------
 			resultCount = session.delete("jmhPrjBdRepDeleteBoard", prjBdRep);
 			//-----------------------------------------------------------------
-			System.out.println("JmhDaoImpl resultCount->"+resultCount);
+			System.out.println("JmhDaoPrjBdRepImpl resultCount->"+resultCount);
 			if(resultCount > 0) {
 				//성공
 			}else {
@@ -210,9 +210,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				return 0;
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl deleteBoard Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl deleteBoard Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl deleteBoard END...");
+		System.out.println("JmhDaoPrjBdRepImpl deleteBoard END...");
 		return resultCount;
 	}
 
@@ -220,7 +220,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int insertComment(BdRepComt bdRepComt) {
 		
-		System.out.println("JmhDaoImpl insertComment START...");
+		System.out.println("JmhDaoPrjBdRepImpl insertComment START...");
 		int resultCount = 0;	
 		try {
 			//--------------------------------------------------------------------
@@ -233,9 +233,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				System.out.println("SQL오류");
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl insertComment Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl insertComment Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl insertComment END...");
+		System.out.println("JmhDaoPrjBdRepImpl insertComment END...");
 		return resultCount;
 	}
 
@@ -243,7 +243,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public List<BdRepComt> selectCommentList(BdRepComt bdRepComt) {
 		
-		System.out.println("JmhDaoImpl selectCommentList START...");
+		System.out.println("JmhDaoPrjBdRepImpl selectCommentList START...");
 		List<BdRepComt> resultBdRepCommentList = null;		
 		try {
 			//----------------------------------------------------------------------------------------
@@ -251,9 +251,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 			//----------------------------------------------------------------------------------------
 			System.out.println("resultBdRepGoodList.size()->"+resultBdRepCommentList.size());
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl selectCommentList Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl selectCommentList Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl selectCommentList END...");
+		System.out.println("JmhDaoPrjBdRepImpl selectCommentList END...");
 		return resultBdRepCommentList;
 	}
 
@@ -261,7 +261,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int deleteComment(BdRepComt bdRepComt) {
 		
-		System.out.println("JmhDaoImpl deleteComment START...");
+		System.out.println("JmhDaoPrjBdRepImpl deleteComment START...");
 		int resultCount = 0;	
 		try {
 			//--------------------------------------------------------------------
@@ -274,9 +274,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				System.out.println("SQL오류");
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl deleteComment Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl deleteComment Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl deleteComment END...");
+		System.out.println("JmhDaoPrjBdRepImpl deleteComment END...");
 		return resultCount;
 	}
 	
@@ -285,7 +285,7 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int updateCommentAlarmFlag(PrjBdRep prjBdRep) {
 		
-		System.out.println("JmhDaoImpl updateCommentAlarmFlag START...");
+		System.out.println("JmhDaoPrjBdRepImpl updateCommentAlarmFlag START...");
 		int resultCount = 0;	
 		try {
 			//----------------------------------------------------------------------------
@@ -298,9 +298,9 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 				System.out.println("SQL오류");
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl updateCommentAlarmFlag Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl updateCommentAlarmFlag Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl updateCommentAlarmFlag END...");
+		System.out.println("JmhDaoPrjBdRepImpl updateCommentAlarmFlag END...");
 		return resultCount;
 	}
 
@@ -308,22 +308,22 @@ public class JmhDaoPrjBdRepImpl implements JmhDaoPrjBdRep {
 	@Override
 	public int deleteCommentBoard(PrjBdRep prjBdRep) {
 
-		System.out.println("JmhDaoImpl deleteCommentBoard START...");
+		System.out.println("JmhDaoPrjBdRepImpl deleteCommentBoard START...");
 		int resultCount = 0;		
 		try {
 			//----------------------------------------------------------------------
 			resultCount = session.delete("jmhPrjBdRepDeleteCommentBoard", prjBdRep);
 			//----------------------------------------------------------------------
-			System.out.println("JmhDaoImpl resultCount->"+resultCount);
+			System.out.println("JmhDaoPrjBdRepImpl resultCount->"+resultCount);
 			if(resultCount > 0) {
 				//성공
 			}else {
 				System.out.println("SQL오류");
 			}
 		} catch (Exception e) {
-			System.out.println("JmhDaoImpl deleteCommentBoard Exception->"+e.getMessage());
+			System.out.println("JmhDaoPrjBdRepImpl deleteCommentBoard Exception->"+e.getMessage());
 		}
-		System.out.println("JmhDaoImpl deleteCommentBoard END...");
+		System.out.println("JmhDaoPrjBdRepImpl deleteCommentBoard END...");
 		return resultCount;
 	}
 }

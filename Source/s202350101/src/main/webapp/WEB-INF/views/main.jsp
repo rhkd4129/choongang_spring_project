@@ -14,9 +14,14 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
 <!-- JS END -->
 
+<!-- 그래프 -->
+<link rel="stylesheet" type="text/css" href="/lkh/css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/lkh/js/chart_options.js"></script>
+
 <script type="text/javascript">
 	$(function() {
-		
+				
 		$.ajax({
 			url			: '/main_header',
 			async		: false, //동기식 호출
@@ -28,6 +33,7 @@
 		
 		$.ajax({
 			url			: '/main_menu',
+			async		: false, //동기식 호출
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
@@ -40,6 +46,7 @@
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#center').html(data);
+				loadCalendar();
 			}
 		});
 	
@@ -53,18 +60,6 @@
 		
 	});
 	
-	document.addEventListener('DOMContentLoaded', function() {
-	    var calendarEl = document.getElementById('calendar');
-	 	
-	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	       initialView : 'dayGridMonth'
-	    });
-	    
-	    calendar.render();
-
-		$(".fc-scrollgrid-sync-table").css("width", $(".fc-col-header").css("width"));
-	    $(".fc-scrollgrid-sync-table").css("height","290px");
-	});
 </script>
 </head>
 <body>

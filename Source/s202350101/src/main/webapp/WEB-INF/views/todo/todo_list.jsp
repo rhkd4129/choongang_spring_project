@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<style>
 		/* 초기 스타일: 가운데 정렬, 밑줄 없음, 진하게 표시 */
 		.todo-label {
@@ -16,6 +17,19 @@
 			text-decoration: underline;
 			font-weight: normal; /* 텍스트를 연하게 표시합니다. */
 		}
+
+		.dan{
+			color:red;
+
+		}
+		.nor{
+			 color: black;
+		}
+
+		.easy{
+			color: #264260;
+		}
+
 	</style>
 
 
@@ -34,7 +48,7 @@
 				url			: '/main_menu',
 				dataType 	: 'html',
 				success		: function(data) {
-					$('#menubar').html(data);z
+					$('#menubar').html(data);
 				}
 			});
 			$.ajax({
@@ -45,10 +59,10 @@
 					$('#footer').html(data);
 				}
 			});
-			showCommentList(); //댓글 조회
+			showCommentList(); //todo 조회
 		});
 
-
+	// 오늘 todo생성하기 버튼이 보여지는 지 안보여지는 체크 하는 거 
 		function todayTodoCreateCheck(){
 			var text = $('.fw-bold.too:first').text();
 			curDate = getCurrentDate().replace(/\//g, '-');
@@ -59,7 +73,8 @@
 				$('#btnBox .btn.btn-bd-primary').hide();
 			}
 		}
-
+		
+	
 		function showCommentList() {
 			$.ajax({
 				url			: 'todo_list_select',
@@ -67,6 +82,7 @@
 				dataType 	: 'json',
 				success		: function(data) {
 					globalOnelist = data.onelist;
+					
 					var mapData = data.mapData;
 					var keys = Object.keys(mapData);
 					for (const key of keys) {
@@ -131,7 +147,8 @@
 				'autocomplete': 'false',
 				'placeholder': '오늘 할 일을 메모합니다...'
 			});
-
+			
+			// 엔터키 누르면 
 			todoInput.keydown(function (e) {
 				if (e.keyCode == 13) {
 					var context = $(this).val();
@@ -157,18 +174,28 @@
 
 			///////////////////////////////////////////////////////////
 			if (newTodoToday === false) {
-				// 하나의 todo 항목 순서대로 체크박스 작업 내용, 삭제 버튼
-				$(day_todo).each(function (index, todoItem) {
+				// 하나의 날짜에 todo 항목 순서대로 체크박스, 작업 내용, 삭제 버튼 생성해주기 하나의 row
+				$(day_todo).each(function (index, todoItem) { 
 					var newDiv = $('<div>').addClass('list-group-item d-flex justify-content-between align-items-center').attr({
 						id: 'todo'
 					});
-
+						
+					// 완료된거 체크하는 체크박스 생성 
 					var checkboxElement = $('<input>').attr({
 						type: 'checkbox',
-						id: 'todo_check',
+						id: 'todo_check'+todoItem.todo_no,
 						name: 'todo_check',
 						value: todoItem.todo_priority
 					}).addClass('me-2');
+					
+					
+					if(todoItem.todo_check =='Y'){
+						checkboxElement.attr({
+							 checked: true
+						})
+					}
+					
+					// 체크박스에 체크될시에 따라 update가 됨	
 					checkboxElement.change(function (e) {
 						if ($(this).prop('checked')) {
 							checkYN(todoItem.todo_no, todoItem.user_id, true);
@@ -177,9 +204,9 @@
 						}
 					});
 
-
+					// todoList내용 Label생성
 					var labelElement = $('<label>').attr({
-						for: 'todo_check',
+						for: 'todo_check', 
 						id: 'todo_check' + todoItem.todo_no
 					})
 					if (todoItem.todo_priority == 2) {
@@ -189,8 +216,9 @@
 					} else {
 						labelElement.text(todoItem.todo_list).addClass('flex-grow-1 todo-label text-primary ');
 					}
-
-					var deleteButton = $('<button>').addClass('btn btn-danger').attr({
+					
+					//삭제 버튼 생성 
+					var deleteButton = $('<button>').addClass('btn btn-secondary').attr({
 						id: 'deleteButton',
 						'data-todo-no': todoItem.todo_no,
 						'data-user-id': todoItem.user_id
@@ -199,8 +227,9 @@
 						var userId = $(this).data('user-id');
 						deleteBtnClick(todoNo, userId);
 					});
-
+					//하나의 todo에 순서대로 체크박스 , 내용, 삭제 버튼이 추가된다.
 					newDiv.append(checkboxElement, labelElement, deleteButton);
+					//최종적으로 todoList box에 추가됨
 					listGroup.append(newDiv);
 				});
 			}
@@ -313,7 +342,7 @@
 				<div>
 					<div id="btnBox" class="createBtn">
 						<!-- 변수를 문자열로 감싸주고 JSON.stringify를 사용하여 객체를 문자열로 변환 -->
-						<button class="btn btn-bd-primary" onclick="showTodoBox('', globalOnelist, true)">오늘 할일 생성하기</button>
+						<button class="btn btn-bd-primary" onclick="showTodoBox('', globalOnelist, true)">오늘 할 일 생성하기</button>
 					</div>
 				</div>
 			</div>

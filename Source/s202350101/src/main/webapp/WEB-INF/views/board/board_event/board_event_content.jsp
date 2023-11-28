@@ -170,7 +170,7 @@
 				<tr> <th>본문</th>        <td><pre>${eventContent.doc_body}</pre></td> </tr>
 				<tr> <th>조회수</th>       <td>${eventContent.bd_count}</td> </tr>
 				<tr> <th>추천</th>        <td id="count_btn">${eventContent.good_count}</td> </tr>
-				<!--  <tr> <th>첨부파일명</th>     <td>${eventContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${eventContent.attach_path}/${eventContent.attach_name}"></td> </tr>-->	
+				<tr> <th>첨부파일</th>     <td><a href="javascript:popup('/upload/${eventContent.attach_path}',800,600)">${eventContent.attach_name}</a></td> </tr>	
 			</table>
 			
 			<!-- 댓글 등록 -->

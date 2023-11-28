@@ -132,7 +132,7 @@
 						<c:if test="${result == 1}">
 							<input type="button" class="btn btn-dark btn-sm" value="삭제" onclick="ajaxQnaDelete(${qnaContent.doc_no}, '${qnaContent.user_id}' )">
 						</c:if>
-						<button type="button" class="btn btn-dark btn-sm" id="count_btn" onclick="qnaGoodCount(${qnaContent.doc_no})">추천</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="qnaGoodCount(${qnaContent.doc_no})">추천</button>
 						<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
 					</td>
 				</tr>
@@ -151,7 +151,7 @@
 				<tr> <th>본문</th>         <td><pre>${qnaContent.doc_body}</pre></td> </tr>
 				<tr> <th>조회수</th>        <td>${qnaContent.bd_count}</td> </tr>
 				<tr> <th>추천</th>         <td id="count_btn">${qnaContent.good_count}</td> </tr>
-				<tr> <th>첨부파일</th>      <td>${qnaContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${qnaContent.attach_path}/${qnaContent.attach_name}"></td> </tr>	
+				<tr> <th>첨부파일</th>     <td><a href="javascript:popup('/upload/${qnaContent.attach_path}',800,600)">${qnaContent.attach_name}</a></td> </tr>	
 			</table>
 						
 			<!-- 답글 작성 -->

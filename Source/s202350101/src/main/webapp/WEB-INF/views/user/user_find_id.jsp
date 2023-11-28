@@ -1,54 +1,70 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-.login-wrapper{
-    width: 400px;
-    height: 450px;
-    padding: 40px;
-    box-sizing: border-box;
-    border: 2px solid lightgrey;
-    border-radius: 10px;
     
-    /* 가로 중앙 정렬을 위한 추가된 스타일 */
-    margin: 0 auto; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+<meta charset="utf-8">
+<title>PMS Login</title>
+
+<link href="/bootstrap-5.3.2-examples/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="/bootstrap-5.3.2-examples/css/sign-in.css" rel="stylesheet">
+
+<style>
 .login-wrapper > h2{
+	font-weight: bold;
     font-size: 30px;
-    padding-bottom: 40px;
-    color: #A6A6A6;
-    margin-bottom: 40px;
-    margin-top: -30px;
+    color: #2C3E50;
+    margin-bottom: 10px;
 }
-select {
-    width: 250px; /* 원하는 가로 크기로 조정 (예: 200px) */
-    padding: 5px; /* 내용과 경계 사이의 간격을 조절 (옵션) */
+.form-signin input[name="user_name"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[name="user_number"] {
+    margin-top: -1px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: var(--bs-border-radius);
+    border-bottom-left-radius: var(--bs-border-radius);
 }
 
 </style>
 
 </head>
-<body>
-	<div class="login-wrapper">
-        <h2>아이디 찾기</h2>
-        <form method="post" action="user_find_id_result" id="login-form">
-            이름 : <input type="text" name="user_name" placeholder="Name"><p>
-            핸드폰번호 : <input type="text" name="user_number" placeholder="010-xxxx-xxxx"><p>
-            <small style="color: red;"><c:if test="${msg != null}">${msg }</c:if></small><p>
-            <input type="submit" value="아이디 찾기">
-  		</form>
-        
-    </div>
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
 
-
+	<main class="form-signin w-100 m-auto">
+		<form method="post" action="user_find_id_result" id="login-form">
+			<div class="login-wrapper">
+				<h2>PMS <span class="text-secondary">아이디 찾기</span></h2>
+				<h1 class="h6 mb-2 fw-normal">Project Management System</h1>
+				<p class="text-primary">프로젝트 관리 시스템</p>
+				
+				
+				<div class="form-floating">
+					<input type="text" class="form-control" name="user_name" placeholder="Name" value="${user_id}">
+					<label for="user_id">이름</label>
+				</div>
+				<div class="form-floating">
+					<input type="text" class="form-control" name="user_number" placeholder="010-xxxx-xxxx">
+					<label for="auth_email">핸드폰 번호</label>
+				</div>
+	
+				<div class="invalid-feedback" style="display:block">
+					<small style="color: red;"><c:if test="${msg != null}">${msg }</c:if>
+				</div>
+				
+				<div style="margin-top:20px">
+					<button class="btn btn-primary w-100 py-2" type="submit">아이디 찾기</button>
+				</div>
+				
+				<p class="mt-5 mb-3 text-body-secondary">&copy; 2023. 중앙정보기술인재개발원 프로젝트</p>
+			</div>
+		</form>
+		
+	</main>
 </body>
-</html>
+</ht2ml>

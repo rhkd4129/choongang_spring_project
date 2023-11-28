@@ -69,10 +69,6 @@ public class LkhServicveImpl implements LkhService {
 		/*****************************************************************/
 		// 현재 프로젝트에 있는 단계 리스트
 		List<PrjStep> stepList = lkhDao.project_step_select(project_id);
-		for(PrjStep p :stepList){
-			System.out.println("-------------------------------------");
-			System.out.println(p.getProject_s_name());
-		}
 		/***************************************************************/
 
 		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
@@ -90,10 +86,9 @@ public class LkhServicveImpl implements LkhService {
 
 		// 우선 map을 선언후 키로 각 프로젝트 단계 이름을 지정
 		// 값에는 빈리스트 지정  map < 프로젝트 이름, 빈 리스트 형태>
-//		Map<String, List<String>> mapData = new HashMap<>();
-//		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
 		Map<String, List<String>> mapData = new LinkedHashMap<>();
-		stepNameList.forEach(m -> mapData.put(m, new ArrayList<>()));
+		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
+
 
 		// map의 키를 순회(프로젝트 단계이름)하면서 작업들도 같이 순회 ->
 		// 작업의 단계이름과 키의 단계이름이 같으면 해당 키의 값에 잇는 리스트에 추가함
@@ -110,7 +105,6 @@ public class LkhServicveImpl implements LkhService {
 				}
 			}
 		}
-		mapData.entrySet().stream().forEach(entry -> System.out.println("Key: " + entry.getKey() + ", Values: " + entry.getValue()));
 
 		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
 		AjaxResponse data = new AjaxResponse();

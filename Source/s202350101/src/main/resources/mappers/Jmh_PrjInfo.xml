@@ -5,6 +5,15 @@
 
 <mapper namespace="com.oracle.s202350101.JmhPrjInfoMapper">
 
+	<!-- 프로젝트 정보(1개) -->
+	<select id="jmhPrjInfoOne" parameterType="int" resultType="PrjInfo">
+		SELECT p.*, u.user_name project_manager_name 
+		FROM PRJ_INFO p, USER_INFO u 
+		WHERE p.project_manager_id = u.user_id  
+		AND p.project_id = #{project_id}
+	</select>
+
+	<!-- 프로젝트 정보(완료된것만 project_status=2) -->
 	<select id="jmhPrjInfoStatusList" parameterType="int" resultType="PrjInfo">
 		SELECT p.*, u.user_name project_manager_name 
 		FROM PRJ_INFO p, USER_INFO u 
@@ -12,11 +21,28 @@
 		AND p.project_status = #{project_status}
 	</select>
 
-	<select id="jmhPrjMemList" parameterType="int" resultType="PrjMemList">
-		SELECT p.*, u.user_name user_name 
+	<!-- 프로젝트 멤버 정보 가져오기 -->
+	<select id="jmhPrjMemList" parameterType="int" resultType="UserInfo">
+		SELECT p.*, u.*
 		FROM PRJ_MEM_LIST p, USER_INFO u 
 		WHERE p.user_id = u.user_id 
 		AND p.project_id = #{project_id}
+	</select>
+
+	<select id="jmhTaskProgress" parameterType="int" resultType="Task">
+    <![CDATA[
+        SELECT U.USER_ID,
+               SUM(CASE WHEN T.TASK_STATUS = 0 THEN 1 ELSE 0 END) AS STATUS_0_COUNT,
+               SUM(CASE WHEN T.TASK_STATUS = 1 THEN 1 ELSE 0 END) AS STATUS_1_COUNT,
+               SUM(CASE WHEN T.TASK_STATUS = 2 THEN 1 ELSE 0 END) AS STATUS_2_COUNT,
+               SUM(CASE WHEN T.TASK_STATUS = 0 OR T.TASK_STATUS = 1 OR T.TASK_STATUS = 2 THEN 1 ELSE 0 END) AS status_all_count,
+               TRUNC(SUM(CASE WHEN T.TASK_STATUS = 2 THEN 1 ELSE 0 END) / SUM(CASE WHEN T.TASK_STATUS = 0 OR T.TASK_STATUS = 1 OR T.TASK_STATUS = 2 THEN 1 ELSE 0 END)*100) AS status_progress
+        FROM
+            TASK T, USER_INFO U
+        WHERE
+            T.PROJECT_ID = #{project_id} AND T.USER_ID = U.USER_ID
+        GROUP BY U.USER_ID
+        ]]>
 	</select>
 
 </mapper>

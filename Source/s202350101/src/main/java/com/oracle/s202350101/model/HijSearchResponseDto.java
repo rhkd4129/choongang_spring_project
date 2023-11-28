@@ -21,6 +21,10 @@ public class HijSearchResponseDto {
 	private int		end;				//페이지 끝번호
 	private String	user_name;			//작성자명
 	private String	bd_category_name; 	//분류명
+	
 	private String  app_name;			//어플리케이션 이름
+	private String  app_path;			//어플리케이션 테이블명(통합검색에서 사용)
 
+	private String	task_subject;
+	private String	task_content;
 }

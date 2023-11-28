@@ -101,7 +101,7 @@
 			<tr> <th>본문</th>         <td>${qnaContent.doc_body}</td> </tr>
 			<tr> <th>조회수</th>        <td>${qnaContent.bd_count}</td> </tr>
 			<tr> <th>추천</th>         <td>${qnaContent.good_count}</td> </tr>
-			<tr> <th>첨부파일</th>      <td>${qnaContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${qnaContent.attach_path}/${qnaContent.attach_name}"></td> </tr>	
+			<tr> <th>첨부파일</th>     <td><a href="javascript:popup('/upload/${qnaContent.attach_path}',800,600)">${qnaContent.attach_name}</a></td> </tr>	
 		</table>
 	</div>	
 <!------------------------------ //개발자 소스 입력 END ------------------------------->

@@ -199,8 +199,6 @@
                         }
                         project_step_chart.append(newDiv);
                     });
-
-
                 }
             });
         });
@@ -269,12 +267,8 @@
                    </div>
 
                    <div class ="current_task">
-
-
                        <div class="current_name">현재 작업중인 작업</div>
                    </div>
-
-
 				</div>
 			</main>
 

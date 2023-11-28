@@ -146,8 +146,8 @@
 								<c:if test="${sAll.bd_category == '공지'}">
 									<tr>
 										<td>${sAll.bd_category }</td>
-										<td><a href="javascript:popup('board_content?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-										<td>${sAll.user_id }</td>
+										<td><a href="javascript:popup('board_notify_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+										<td>${sAll.user_name }</td>
 										<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 										<td>${sAll.bd_count }</td>
 										<td>${sAll.good_count }</td>
@@ -156,8 +156,8 @@
 								<c:if test="${sAll.bd_category == '자유'}">
 									<tr>
 										<td>${sAll.bd_category }</td>
-										<td><a href="javascript:popup('ree_content?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-										<td>${sAll.user_id }</td>
+										<td><a href="javascript:popup('board_free_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+										<td>${sAll.user_name }</td>
 										<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 										<td>${sAll.bd_count }</td>
 										<td>${sAll.good_count }</td>
@@ -166,8 +166,8 @@
 								<c:if test="${sAll.bd_category == '이벤트'}">
 									<tr>
 										<td>${sAll.bd_category }</td>
-										<td><a href="javascript:popup('event_content?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-										<td>${sAll.user_id }</td>
+										<td><a href="javascript:popup('board_event_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+										<td>${sAll.user_name }</td>
 										<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 										<td>${sAll.bd_count }</td>
 										<td>${sAll.good_count }</td>
@@ -177,9 +177,8 @@
 							<c:when test="${sAll.app_id == 2}">
 								<tr>
 									<td>${sAll.app_name }</td>
-									<td><a href="javascript:popup('bdQnaContent?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-									
-									<td>${sAll.user_id }</td>
+									<td><a href="javascript:popup('board_qna_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+									<td>${sAll.user_name }</td>
 									<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 									<td>${sAll.bd_count }</td>
 									<td>${sAll.good_count }</td>
@@ -189,7 +188,7 @@
 								<tr>
 									<td>${sAll.app_name }</td>
 									<td><a href="javascript:popup('prj_board_data_read?doc_no=${sAll.doc_no}&project_id=${sAll.project_id}')">${sAll.subject }</a></td>
-									<td>${sAll.user_id }</td>
+									<td>${sAll.user_name }</td>
 									<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 									<td>${sAll.bd_count }</td>
 									<td>${sAll.good_count }</td>
@@ -199,7 +198,7 @@
 								<tr>
 									<td>${sAll.app_name }</td>
 									<td><a href="javascript:popup('prj_board_report_read?doc_no=${sAll.doc_no }&project_id=${sAll.project_id}')">${sAll.subject }</a></td>
-									<td>${sAll.user_id }</td>
+									<td>${sAll.user_name }</td>
 									<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 									<td>${sAll.bd_count }</td>
 									<td>${sAll.good_count }</td>
