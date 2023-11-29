@@ -115,6 +115,10 @@
     .fc-event-title {
     	cursor:pointer;
     }
+    .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
+	    padding: 1px;
+	    font-size: 9pt;
+	}
 </style>
 
 
@@ -224,7 +228,8 @@
 				title : '${meeting.meeting_title}',
 				start : '${meeting.meeting_date}',
 				end : '${meeting.meeting_date}',
-				color : '#F2CB61',
+				color : '#FFE08C',
+				textColor : '#000000',
 				id : '${meeting.meeting_id}'
 			});
 		</c:forEach>
@@ -236,7 +241,8 @@
 				title : '${meeting.meeting_title}',
 				start : '${meeting.meeting_date}',
 				end : '${meeting.meeting_date}',
-				color : '#B5B2FF',
+				color : '#D1B2FF',
+				textColor : '#000000',
 				id : '${meeting.meeting_id}'
 			});
 		</c:forEach>
@@ -339,7 +345,7 @@
 				console.log("클릭한 곳의 id: " + eventId);
 			    
 				// 보라색 회의일정 클릭 시 해당 회의록 페이지로 이동
-				if (backgroundColor == "rgb(181, 178, 255)") {
+				if (backgroundColor == "rgb(209, 178, 255)") {
 					var project_id = ${project_id};
 					var openurl = "/prj_meeting_report_read?meeting_id=" + eventId + "&project_id=" + project_id;
 					
@@ -348,7 +354,7 @@
 				};
 				
 				// 노란색 회의일정 클릭 시 회의록 등록 모달창 표출
-			    if (backgroundColor == "rgb(242, 203, 97)") {
+			    if (backgroundColor == "rgb(255, 224, 140)") {
 			    	
 			    	var project_id = ${project_id};
 			    	var sendurl = "/prj_meeting_date_select/?meeting_id=" + eventId + "&project_id=" + project_id;

@@ -400,16 +400,15 @@ public class LkhController {
 		//--------------------------------------------------------------------------------------------
 		int taskCount = lkhService.garbage_count(userInfo.getProject_id());
 		//--------------------------------------------------------------------------------------------
-
+		
+		Paging page = new Paging(taskCount, currentPage);
+		task.setStart(page.getStart());
+		task.setEnd(page.getEnd());
 
 		// 휴지통 목록
 		//--------------------------------------------------------------------------------------------
 		List<Task> garbageList = lkhService.garbage_list(task);
 		//--------------------------------------------------------------------------------------------
-
-		Paging page = new Paging(taskCount, currentPage);
-		task.setStart(page.getStart());
-		task.setEnd(page.getEnd());
 
 		model.addAttribute("currentUserId", userInfo.getUser_id());
 		model.addAttribute("garbageList", garbageList);

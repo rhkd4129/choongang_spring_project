@@ -43,15 +43,14 @@
 	
 	// 삭제 
 	function ajaxQnaDelete(doc_no, user_id){
-		alert("qna 삭제 doc_no-> " + doc_no);
-		alert("qna 삭제 user_id-> " + user_id);
+//		alert("qna 삭제 doc_no-> " + doc_no);
+//		alert("qna 삭제 user_id-> " + user_id);
 		
-		var inputUserId = prompt('회원 아이디를 입력하세요');
-		if (inputUserId != user_id){
-			alert('회원 ID가 올바르지 않습니다');
-			return;
-		}
-		
+//		var inputUserId = prompt('회원 아이디를 입력하세요');
+//		if (inputUserId != user_id){
+//			alert('회원 ID가 올바르지 않습니다');
+//			return;
+//		}
 		// 아이디 같으므로 삭제
 		$.ajax({
 			url 		: 'ajax_qna_delete',

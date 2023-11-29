@@ -41,16 +41,12 @@
 	// 삭제 
 	function ajaxDelete(doc_no, user_id) {
 /* 		alert("글 번호 : " + doc_no);
-		alert("회원ID : " + user_id);  */
-	
- 		var inputUserId = prompt('회원 아이디를 입력하세요');
-		if (inputUserId != user_id) {
-			alert("회원ID가 올바르지 않습니다");
-			return;
-		}
-		
-		
-		
+		alert("회원ID : " + user_id);  */	
+//		var inputUserId = prompt('회원 아이디를 입력하세요');
+//		if (inputUserId != user_id) {
+//			alert("회원ID가 올바르지 않습니다");
+//			return;
+//		}
 		// 아이디 같으므로 삭제 
 		$.ajax({
 			 url      : 'delete'
