@@ -434,8 +434,8 @@
 			</div>
 			
 
- 			<div style="display:none" class="d-flex flex-column flex-md-row gap-4 py-md-4 align-items-center justify-content-center">
-			
+ 			<!-- <div class="d-flex flex-column flex-md-row gap-4 py-md-4 align-items-center justify-content-center">
+				<div></div>
  				<div id="todolistMain" class="dropdown-menu d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-100per" data-bs-theme="light">
 					<form class="p-2 mb-2 bg-body-tertiary border-bottom">
 						<input type="search" class="form-control" autocomplete="false" placeholder="오늘 할 일을 메모합니다...">
@@ -499,7 +499,7 @@
 					<div id="calendar"></div>
 				</div>
 				
-			</div>
+			</div> -->
 
 		</td>
 		<td width="30%" style="vertical-align:top">

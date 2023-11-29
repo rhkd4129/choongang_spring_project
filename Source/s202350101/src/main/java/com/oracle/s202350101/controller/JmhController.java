@@ -106,7 +106,7 @@ public class JmhController {
 	}
 
 	//프로젝트 Home
-	@PostMapping(value = "prj_home")
+	@GetMapping(value = "prj_home")
 	public String prjHome(String s_project_id, HttpServletRequest request, Model model) {
 
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
@@ -116,8 +116,9 @@ public class JmhController {
 		if(s_project_id.equals("")) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
 			project_id = userInfoDTO.getProject_id();
 		}else {
-			project_id = Integer.parseInt(s_project_id);
+				project_id = userInfoDTO.getProject_id();
 		}
+		System.out.println("project_id="+project_id);
 		
 		//프로젝트 기본정보 가져오기
 		//----------------------------------------------------------------------
@@ -147,7 +148,7 @@ public class JmhController {
 		
 		return "/project/prj_home";
 	}
-	
+
 	//프로젝트 Home : 일정
 	@GetMapping("/main_prj_meeting")
 	@ResponseBody
