@@ -151,8 +151,10 @@ $(function(){
 		<table width="100%" style="margin-top:10px">
 			<tr>
 				<td style="text-align:right">
-					<button type="button" class="btn btn-dark btn-sm" onclick="callAction('edit','prj_board_report_edit?doc_no=${board.doc_no}&project_id=${board.project_id}')">수정</button>
-					<button type="button" class="btn btn-dark btn-sm" onclick="callAction('delete','prj_board_report_delete?doc_no=${board.doc_no}&project_id=${board.project_id}&attach_path=${board.attach_path}')">삭제</button>
+					<c:if test="${(userInfo.user_id eq board.user_id) or (userInfo.user_id eq 'admin')}">
+						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('edit','prj_board_report_edit?doc_no=${board.doc_no}&project_id=${board.project_id}')">수정</button>
+						<button type="button" class="btn btn-dark btn-sm" onclick="callAction('delete','prj_board_report_delete?doc_no=${board.doc_no}&project_id=${board.project_id}&attach_path=${board.attach_path}')">삭제</button>
+					</c:if>
 					<button type="button" class="btn btn-dark btn-sm" onclick="closeDoc()">닫기</button>
 				</td>
 			</tr>

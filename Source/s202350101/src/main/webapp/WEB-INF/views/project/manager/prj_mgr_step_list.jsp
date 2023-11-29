@@ -280,7 +280,7 @@
 						</tr>					
 						<tr>
 							<th>프로젝트 소개</th>
-							<td>${prjInfo.project_intro}</td>
+							<td><pre>${prjInfo.project_intro}</pre></td>
 						</tr>
 						<tr>
 							<th>승인상태</th>

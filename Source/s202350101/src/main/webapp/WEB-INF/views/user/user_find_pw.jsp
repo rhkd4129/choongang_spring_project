@@ -71,7 +71,7 @@
 	            	
 	                $(function(){
 			    		    	var display = $('#time');
-			    		    	var leftSec = 30;
+			    		    	var leftSec = 120;
 			    		    	// 남은 시간
 			    		    	// 이미 타이머가 작동중이면 중지
 			    		    	if (isRunning){

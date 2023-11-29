@@ -166,7 +166,7 @@
 						</tr>
 						<tr>
 							<th>첨부파일</th>
-							<td><c:if test="${meeting.attach_name != null}"><a href="javascript:popup('${pageContext.request.contextPath}/${meeting.attach_path }/${meeting.attach_name}',800,600)">${meeting.attach_name}</a></c:if></td>
+							<td><c:if test="${meeting.attach_name != null}"><a href="javascript:popup('${pageContext.request.contextPath}/upload/${meeting.attach_path}',800,600)">${meeting.attach_name}</a></c:if></td>
 						</tr>
 						<tr>
 							<th>회의내용</th><td><pre>${meeting.meeting_content}</pre></td>

@@ -22,6 +22,7 @@ import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
 
 import lombok.RequiredArgsConstructor;
+import oracle.net.aso.c;
 
 @Service
 @RequiredArgsConstructor
@@ -348,9 +349,9 @@ public class CyjServiceImpl implements CyjService {
 
 	// 자유_댓글리스트
 	@Override
-	public List<BdFreeComt> freeComtList(int doc_no) {
+	public List<BdFreeComt> freeComtList(BdFreeComt bdFreeComt) {
 		System.out.println("CyjServiceImpl freeComtList start");
-		List<BdFreeComt> freeComtList = cd.freeComtList(doc_no);
+		List<BdFreeComt> freeComtList = cd.freeComtList(bdFreeComt);
 		System.out.println("CyjServiceImpl freeComtList-> " + freeComtList);
 		
 		return freeComtList;
@@ -418,8 +419,7 @@ public class CyjServiceImpl implements CyjService {
 			System.out.println("★doc_group---->"+bdQna.getDoc_group());
 			System.out.println("★doc_group_list---->"+bdQna.getDoc_group_list());
 			if(bdQna.getDoc_group_list().toUpperCase().equals("Y")) {
-				// 알림에서 원글+답글 목록 열때
-				// prj_board_data 조건에 해당하는 Count
+				// 알림에서 원글+답글 목록 열때 count
 				//------------------------------------------
 				totalCnt = cd.alarmCount(bdQna);
 				//------------------------------------------
@@ -461,8 +461,7 @@ public class CyjServiceImpl implements CyjService {
 		
 		if(bdQna.getDoc_group_list() != null) {
 			if(bdQna.getDoc_group_list().toUpperCase().equals("Y")) {
-				// 알림에서 원글+답글 목록 열때
-				// prj_board_data 조건에 해당하는 Count
+				// 알림에서 원글+답글 목록 열때 count
 				qnaSelectList = cd.alarmList(bdQna);
 				System.out.println("CyjServiceImpl boardList > alarmList END...");
 				return qnaSelectList;
@@ -517,10 +516,10 @@ public class CyjServiceImpl implements CyjService {
 	@Override
 	public int cyUpdateReplyAlarmFlag(BdQna qnaContent) {
 		System.out.println("CyjServiceImpl cyUpdateReplyAlarmFlag start");
+		
 		int resultCount = 0;	
 		resultCount = cd.cyUpdateReplyAlarmFlag(qnaContent);
 		System.out.println("CyjServiceImpl cyUpdateReplyAlarmFlag resultCount-> " + resultCount);
-		System.out.println("CyjServiceImpl cyUpdateReplyAlarmFlag END...");
 	
 		return resultCount;
 	}
@@ -590,7 +589,7 @@ public class CyjServiceImpl implements CyjService {
 		return selectBdQna;
 	}
 	
-	// qna_새 글 입력 
+	// qna_원글/답글 입력
 	@Override
 	public int qnaInsert(BdQna bdQna) {
 		System.out.println("CyjServiceImpl qnaInsert start");
@@ -614,7 +613,7 @@ public class CyjServiceImpl implements CyjService {
 
 // ------------------------------------------------------------------------	
 
-	// qna_삭제
+	// qna_게시글 삭제
 	@Override
 	public int qnaDelete(int doc_no) {
 		System.out.println("CyjServiceImpl qnaDelete start");

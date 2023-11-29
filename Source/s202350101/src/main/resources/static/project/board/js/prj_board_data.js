@@ -94,7 +94,9 @@ function callAction(action, mapping_name) {
 //문서 버튼 >> 닫기
 function closeDoc() {
 	if(opener) {
-		opener.location.reload();
+		if(opener.location.href.indexOf("_list") > 0) { //목록에서 뜬 경우만 새로고침
+			opener.location.reload();
+		}
 		window.close();
 	}else{
 		location.reload();

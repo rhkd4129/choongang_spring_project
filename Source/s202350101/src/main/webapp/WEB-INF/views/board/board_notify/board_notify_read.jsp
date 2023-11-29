@@ -69,7 +69,7 @@
 			<tr> <th>본문</th>        <td>${notifyContent.doc_body}</td> </tr>
 			<tr> <th>조회수</th>       <td>${notifyContent.bd_count}</td> </tr>
 			<tr> <th>추천</th>        <td>${notifyContent.good_count}</td> </tr>
-			<tr> <th>첨부파일</th>     <td>${notifyContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${notifyContent.attach_path}/${notifyContent.attach_name}"></td> </tr>	
+			<tr> <th>첨부파일</th>     <td><a href="javascript:popup('/upload/${notifyContent.attach_path}',800,600)">${notifyContent.attach_name}</a></td> </tr>	
 		</table>
 	</div>
 <!------------------------------ //개발자 소스 입력 END ------------------------------->

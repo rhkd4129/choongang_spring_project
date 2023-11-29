@@ -88,21 +88,22 @@ public class HijServiceImpl implements HijService {
 					okMemberList = hd.selectPrjInfoMemberList(hijRequestPrjDto); // 프로젝트 멤버 조회
 					//----------------------------------------------------------------------------------------
 					if(okMemberList.size() > 0) {
-						System.out.println("확인11 : " + okMemberList.size());
+						System.out.println("프로젝트 멤버 있는지 확인 : " + okMemberList.size());
 						//----------------------------------------------------------------------------------------
 						resultCount = hd.updateUserInfoProjectId(okMemberList);	//user_info project_id 값 추가
 						//----------------------------------------------------------------------------------------
-						System.out.println("resultCOunt 확인용!!! :" +resultCount );
+						System.out.println("resultCount :" +resultCount );
 						if(resultCount != 0) { 
-							System.out.println("확인 22 " + resultCount);
 							//----------------------------------------------------------------------------------------
 							defaultList = hd.selectDefualtStep(defaultList); //단계 기본값 조회 (prj_step project_id=0)
 							//----------------------------------------------------------------------------------------
 							System.out.println("defaultList 사이즈 : " + defaultList.size());
+							// 프로젝트 단계 기본값을 가져와 해당 project_id로 설정해줌
 							for(int j=0; j<defaultList.size(); j++) {
 								defaultList.get(j).setProject_id(hijRequestPrjDto.getProject_id());	// 현재 사용하고자 하는 project_id 가져옴
 								System.out.println("project_id 확인 : " +defaultList.get(j).getProject_id());
 							}
+							// 결과 값이 있으면 해당 내용을 넣어준 project_id의 prj_info에 추가
 							if(defaultList.size() > 0 ) {
 								//----------------------------------------------------------------------------------------
 								resultCount = hd.insertDefualtStep(defaultList); // 단계 기본값 조회한것을 새로운 project 단계 생성에 넣어줌 
@@ -131,6 +132,7 @@ public class HijServiceImpl implements HijService {
 		
 		HijRequestPrjDto hijRequestPrjDto = new HijRequestPrjDto();
 		
+		// project_id, del_status의 현재 값을 hijRequestPrjDto에 넣어줌
 		for(int i = 0; i < project_ids.size(); i++) {
 			
 			hijRequestPrjDto.setProject_id(Integer.parseInt(project_ids.get(i)));
@@ -148,6 +150,7 @@ public class HijServiceImpl implements HijService {
 					resultCount = hd.updateNullUserProjectId(delMemberList); // user_info의 project_id null로 바꿔줌
 					//-----------------------------------------------------------------------------------
 					System.out.println("확인 11 : " + resultCount );
+					// update, insert, delete의 결과 값이 0 제외한 값을 반환해서 0이 아닐때 수행함
 					if(resultCount != 0 ) {
 						//-----------------------------------------------------------------------------------
 						resultCount = hd.deletePrjInfoMemberList(delMemberList); // 멤버리스트 삭제
@@ -187,7 +190,8 @@ public class HijServiceImpl implements HijService {
 		
 		int createReq = 0;
 		int createMem = 0;
-			
+		
+		// 프로젝트 멤버들의 id를 콤마로 분리해서 배열로 저장
 		String[] prjMems = prjInfo.getMember_user_id().split(","); //체크된 멤버 배열로 저장
 		
 		TransactionStatus txStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -233,7 +237,7 @@ public class HijServiceImpl implements HijService {
 		//-----------------------------------------------------
 		System.out.println("HijServiceImple listMember memberList.size : " + memberList.size());
 		return memberList;
-	}
+	}	
 //------------------------------------------------------------------------------------------------------------------
 	// 프로젝트 조회 
 	@Override
@@ -245,7 +249,18 @@ public class HijServiceImpl implements HijService {
 		//-----------------------------------------------------
 		return prjInfo;
 	}
-//------------------------------------------------------------------------------------------------------------------	
+//------------------------------------------------------------------------------------------------------------------
+	// 알람
+	@Override
+	public int updateAlarmCount(PrjInfo prjInfo) {
+		int resultCount=0;
+		System.out.println("HijServiceImple updateAlarmCount START");
+		//-----------------------------------------------------
+		resultCount = hd.updateAlarmCount(prjInfo);
+		//-----------------------------------------------------
+		return resultCount;
+	}
+//------------------------------------------------------------------------------------------------------------------
 	// 프로젝트 단계조회
 	@Override
 	public List<PrjStep> titleList(int project_id) {
@@ -278,18 +293,21 @@ public class HijServiceImpl implements HijService {
 		int reCreateMem = 0;
 		List<PrjMemList> delMemberList = null;
 		List<PrjMemList> okMemberList = new ArrayList<PrjMemList>() ;
+		
 		System.out.println("prjInfo.getMember_user_id() ---> : " + prjInfo.getMember_user_id());
+		
 		String[] prjMems = prjInfo.getMember_user_id().split(",");
 				
 		try {
 			//---------------------------------
-			resultCount = hd.reqEdit(prjInfo);
+			resultCount = hd.reqEdit(prjInfo); //업데이트
 			//---------------------------------
 			
+			//업데이트 성공시
 			if(resultCount != 0) {
 				HijRequestPrjDto hijRequestPrjDto = new HijRequestPrjDto();
 				hijRequestPrjDto.setProject_id(prjInfo.getProject_id());
-				System.out.println("테스트 : " + prjInfo.getProject_id());
+				System.out.println("prjInfo.getProject_id() : " + prjInfo.getProject_id());
 				
 				//-------------------------------------------------------------------------
 				delMemberList = hd.selectPrjInfoMemberList(hijRequestPrjDto); //1. 멤버리스트 가져옴
@@ -303,39 +321,39 @@ public class HijServiceImpl implements HijService {
 				if(delMemberList.size() > 0) {
 					
 					//-------------------------------------------------------
-					resultCount = hd.updateNullUserProjectId(delMemberList);
+					resultCount = hd.updateNullUserProjectId(delMemberList); //2. 멤버리스트에 있는 사용자 project_id =null 처리
 					//-------------------------------------------------------
 					if(resultCount !=0) {
 						System.out.println("updateNullUserProjectId 성공 : " +resultCount );
 						//-------------------------------------------------------------------------
-						resultCount = hd.deletePrjInfoMemberList(delMemberList); //2. 멤버리스트 삭제
+						resultCount = hd.deletePrjInfoMemberList(delMemberList); //3. 멤버리스트 삭제
 						//-------------------------------------------------------------------------
-						System.out.println("resultCount 확인 deletePrjInfoMemberList*******: " + resultCount);
+						System.out.println("resultCount deletePrjInfoMemberList: " + resultCount);
 						if(resultCount != 0) {
-						
+							//팀장 prj_mem_list 추가
 							PrjMemList pi = new PrjMemList();
 								  
 							pi.setUser_id(prjInfo.getProject_manager_id());
 							pi.setProject_id(prjInfo.getProject_id());	
 							System.out.println("프로젝트 id 확인 :" +prjInfo.getProject_id() );
 							//---------------------------------
-							reCreateMem += hd.memReCreate(pi); 
+							reCreateMem += hd.memReCreate(pi); //4. prj_mem_list에 추가
 							//---------------------------------
 							okMemberList.add(pi);
 								
-							// prj_mem_list에 넣는 작업
+							// 팀원 prj_mem_list에 넣는 작업
 							for(int i=0; i<prjMems.length; i++) {
 								pi = new PrjMemList();
 								pi.setUser_id(prjMems[i]);
 								pi.setProject_id(prjInfo.getProject_id());
 									
 								//---------------------------------
-								reCreateMem += hd.memReCreate(pi); 
+								reCreateMem += hd.memReCreate(pi); //5. prj_mem_list에 추가
 								//---------------------------------
 								okMemberList.add(pi);
 							}							 							  
 							//-----------------------------------------------------
-							resultCount = hd.updateUserInfoProjectId(okMemberList);	//5.						 
+							resultCount = hd.updateUserInfoProjectId(okMemberList);	//6. project_id를 해당 인원들에게 부여
 							//-----------------------------------------------------
 						}
 					}
@@ -359,7 +377,7 @@ public class HijServiceImpl implements HijService {
 		return stepInsert;
 	}
 //------------------------------------------------------------------------------------------------------------------	
-	// 단계 선택 **************************************
+	// 단계 선택 
 	@Override
 	public int prjOrder( List<HijPrjStep> hijPrjStepList) {
 		int resultCount = 0;
@@ -414,29 +432,22 @@ public class HijServiceImpl implements HijService {
 		List<String> tableList = new ArrayList<String>();
 		tableList.add("BD_FREE");
 		tableList.add("BD_QNA");
+		tableList.add("PRJ_BD_DATA");
+		tableList.add("PRJ_BD_REP");
+		tableList.add("TASK");
 		
 		// table 하나씩 검색
 		for(String table : tableList) {
 			hijSearchRequestDto.setTablename(table);
+			
+			//-----------------------------------------------------------
 			hijSearchResponseDtoList = hd.searchAll(hijSearchRequestDto);
+			//-----------------------------------------------------------
 			hijSearchResponsMerge.addAll(hijSearchResponseDtoList);
 		}
 		
 		return hijSearchResponsMerge;
 	}
-//------------------------------------------------------------------------------------------------------------------
-	// 알람
-	@Override
-	public int updateAlarmCount(PrjInfo prjInfo) {
-		int resultCount=0;
-		System.out.println("HijServiceImple updateAlarmCount START");
-		
-		resultCount = hd.updateAlarmCount(prjInfo);
-		
-		return resultCount;
-	}
-
-
 
 }	
 

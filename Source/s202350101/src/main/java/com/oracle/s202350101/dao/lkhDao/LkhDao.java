@@ -6,24 +6,25 @@ import java.util.Optional;
 import com.oracle.s202350101.model.*;
 
 public interface LkhDao {
-	
+
 	// DashBoard Home   도넛 그래프, 진척률 막대그래프
 	// 작업별 상태 count -> 도넛차트
 	List<Integer> 		doughnut_chart(int project_id);
 	//회원별 작업 진척도
 	List<Task>			workload_chart(int project_id);
 
+	PrjInfo				project_day(int project_id);
+
 	List<PrjStep>	    project_step_select(int project_id);
 	List<Task>	   	 	project_step_chart(int project_id);
 
-	PrjInfo				project_day(int project_id);
+
+
 	// 해당 프로젝트의 작업의 총 개수보기
 	int					task_count(Task task);
-
-
 	// 작업 리스트 보기
 	List<Task>			task_list(Task task);
-	List<Task>			task_search(Task task);
+
 	List<Task>			task_time_decs(Task task);
 	List<Task>			task_time_aces(Task task);
 	// 작업 타임라인보기
@@ -41,7 +42,7 @@ public interface LkhDao {
 
 
 
-//--------------------------------  작업 생성   ---------------------------------//
+	//--------------------------------  작업 생성   ---------------------------------//
 	// 1 . 새작업 폼에서 현재 프로젝트의 단계와 참여하는 인원 보여주는 메서드들 		GET
 	List<PrjStep> 		project_step_list(int project_id);
 	// 현재 속한 팀프로젝트의  인원들보여주기
@@ -93,5 +94,5 @@ public interface LkhDao {
 
 
 
-	
+
 }

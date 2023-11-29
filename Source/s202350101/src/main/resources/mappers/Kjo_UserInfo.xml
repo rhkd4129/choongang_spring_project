@@ -56,6 +56,7 @@
           and user_auth != 'admin'
             and user_info.user_id != #{user_id}
           and ue.env_chat = 'Y'
+          ORDER BY user_info.user_name
     </select>
 <!--사용자 ID로 사용자 조회-->
     <select id="findbyuserId" parameterType="UserInfo" resultType="UserInfo">

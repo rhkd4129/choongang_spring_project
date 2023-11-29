@@ -502,12 +502,12 @@ public class CyjDaoImpl implements CyjDao {
 
 	// 자유_댓글리스트
 	@Override
-	public List<BdFreeComt> freeComtList(int doc_no) {
+	public List<BdFreeComt> freeComtList(BdFreeComt bdFreeComt) {
 		System.out.println("CyjDaoImpl freeComtList Start");
 		
 		List<BdFreeComt> freeComt = new ArrayList<BdFreeComt>();
 		try {
-			freeComt = session.selectList("cyFreeComtList", doc_no);
+			freeComt = session.selectList("cyFreeComtList", bdFreeComt);
 			System.out.println("CyjDaoImpl freeComt-> " + freeComt);
 		} catch (Exception e) {
 			System.out.println("CyjDaoImpl freeComtList Exception-> " + e.getMessage());

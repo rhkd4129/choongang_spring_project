@@ -30,10 +30,12 @@ import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.Code;
+import com.oracle.s202350101.model.Meeting;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 import com.oracle.s202350101.model.PrjInfo;
 import com.oracle.s202350101.model.PrjMemList;
+import com.oracle.s202350101.model.Task;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.service.jmhSer.JmhServiceMain;
@@ -103,28 +105,111 @@ public class JmhController {
 		return mainBoardList;
 	}
 
-	//#######################################################################
-	//############  완료 프로젝트 목록 prj_complete_list  ############
-	//#######################################################################
-
-	
 	//프로젝트 Home
-	@RequestMapping(value = "prj_home")
-	public String prjHome(HttpServletRequest request, Model model) {
+	@PostMapping(value = "prj_home")
+	public String prjHome(String s_project_id, HttpServletRequest request, Model model) {
 
-		int project_status = 1; //진행중
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
-		//-------------------------------------------------------------------
-		List<PrjInfo> prjInfoList = jmhPrjInfoSer.selectList(project_status);
-		//-------------------------------------------------------------------
-
-		model.addAttribute("prjInfoList", prjInfoList);
-		model.addAttribute("ProjectCount", prjInfoList.size());
+		int project_id = 0;
+		System.out.println("project_id="+s_project_id);
+		if(s_project_id.equals("")) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
+			project_id = userInfoDTO.getProject_id();
+		}else {
+			project_id = Integer.parseInt(s_project_id);
+		}
+		
+		//프로젝트 기본정보 가져오기
+		//----------------------------------------------------------------------
+		PrjInfo prjInfo = jmhPrjInfoSer.selectOne(project_id);
+		//----------------------------------------------------------------------
+		System.out.println("prjInfo="+prjInfo.getProject_name());
+		
+		//팀원정보
+		//-------------------------------------------------------------------------------------
+		List<UserInfo> prjMemList = jmhPrjInfoSer.selectMemList(prjInfo.getProject_id());
+		//-------------------------------------------------------------------------------------
+		System.out.println("prjMemList.size->" + prjMemList.size());
+		
+		//프로젝트 팀원별 진척률
+		//-----------------------------------------------------------------------------------------
+		List<Task> prjTaskProgressList = jmhPrjInfoSer.selectTaskProgress(prjInfo.getProject_id());
+		//-----------------------------------------------------------------------------------------
+		System.out.println("prjTaskProgressList.size->"+prjTaskProgressList.size());
+		for(Task t : prjTaskProgressList) {
+			System.out.println("총 작업수->" + t.getUser_id() + ":" + t.getStatus_all_count());
+		}
+		
+		model.addAttribute("userInfoDTO", userInfoDTO);
+		model.addAttribute("prjInfo", prjInfo);
+		model.addAttribute("prjMemList", prjMemList);
+		model.addAttribute("prjTaskProgressList", prjTaskProgressList);
 		
 		return "/project/prj_home";
 	}
 	
+	//프로젝트 Home : 일정
+	@GetMapping("/main_prj_meeting")
+	@ResponseBody
+	public List<Meeting> mainPrjBdData(Meeting board, HttpServletRequest request, Model model) {
+		List<Meeting> boardList = null;
+		
+		board.setStart(1);
+		board.setEnd(3);
+		
+		boardList = jmhMainSer.selectMainMeeting(board);
+		
+		return boardList;
+	}
+
+	//프로젝트 Home : 공지/자료
+	@GetMapping("/main_prj_board_data")
+	@ResponseBody
+	public List<PrjBdData> mainPrjBdData(PrjBdData board, HttpServletRequest request, Model model) {
+		List<PrjBdData> boardList = null;
+		
+		board.setStart(1);
+		board.setEnd(5);
+		
+		boardList = jmhMainSer.selectMainData(board);
+		
+		return boardList;
+	}
+
+	//프로젝트 Home : 업무보고
+	@GetMapping("/main_prj_board_report")
+	@ResponseBody
+	public List<PrjBdRep> mainPrjBdRep(PrjBdRep board, HttpServletRequest request, Model model) {
+		List<PrjBdRep> boardList = null;
+		
+		board.setStart(1);
+		board.setEnd(5);
+		
+		boardList = jmhMainSer.selectMainReport(board);
+		
+		return boardList;
+	}
+
+	//프로젝트 Home : 작업
+	@GetMapping("/main_prj_task")
+	@ResponseBody
+	public List<Task> mainTask(Task board, HttpServletRequest request, Model model) {
+		List<Task> boardList = null;
+		
+		board.setStart(1);
+		board.setEnd(5);
+		
+		boardList = jmhMainSer.selectMainTask(board);
+		
+		return boardList;
+	}
+
 	
+	//#######################################################################
+	//############  완료 프로젝트 목록 prj_complete_list  ############
+	//#######################################################################
+
+		
 	//완료 프로젝트 목록
 	@RequestMapping(value = "prj_complete_list")
 	public String prjCompleteList(HttpServletRequest request, Model model) {
@@ -140,9 +225,9 @@ public class JmhController {
 		for(PrjInfo prjInfo : prjInfoList) {
 			memberNames = "";
 			//-------------------------------------------------------------------------------------
-			List<PrjMemList> prjMemList = jmhPrjInfoSer.selectMemList(prjInfo.getProject_id());
+			List<UserInfo> prjMemList = jmhPrjInfoSer.selectMemList(prjInfo.getProject_id());
 			//-------------------------------------------------------------------------------------
-			for(PrjMemList prjMem : prjMemList) {
+			for(UserInfo prjMem : prjMemList) {
 				if(memberNames.isEmpty()) {
 					memberNames = prjMem.getUser_name();
 				}else {

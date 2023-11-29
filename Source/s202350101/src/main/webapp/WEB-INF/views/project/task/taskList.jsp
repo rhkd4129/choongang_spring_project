@@ -12,7 +12,7 @@
         // 테이블을 업데이트하는 함수 정렬함수
         function updateTable(table, data) {
             var tbody = $(table).find('tbody');
-
+			
             tbody.empty();
             for (var i = 0; i < data.length; i++) {
                 var statusText = "";
@@ -42,16 +42,24 @@
                         break;
                 }
 
-                var newRow = "<tr>" +
-                    "<td>" + data[i].rn + "</td>" +
-                    "<td>" + data[i].user_name + "</td>" +
-                    "<td>" + data[i].project_s_name + "</td>" +
-                    "<td><a href='task_detail?task_id=" + data[i].task_id + "&project_id=" + data[i].project_id + "'>" + data[i].task_subject + "</a></td>" +
-                    "<td>" + data[i].task_start_time + "</td>" +
-                    "<td>" + data[i].task_end_time + "</td>" +
-                    "<td>" + statusText + "</td>" +
-                    "<td>" + task_priority + "</td>" +
-                    "</tr>";
+                var newRow = '<tr>' +
+                    '<td>' + data[i].rn + '</td>' +
+                    '<td>' + data[i].project_s_name + '</td>' +
+                    '<td><a href="task_detail?task_id=' + data[i].task_id + '&project_id="' + data[i].project_id + '">' + data[i].task_subject + '</a></td>' +
+                    '<td>' + data[i].user_name + 
+                    ' <span class="iconChat" onclick="chat_room(\'' + data[i].user_id + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chat-text" viewBox="0 0 16 16">'+
+					'<path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>'+
+					'<path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8zm0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>'+
+					'</svg>'+
+					'<input type="hidden" name="chat_id" value="' + data[i].user_id + '">'+
+					'</span>' + 
+					'</td>' +
+                    '<td>' + data[i].task_start_time + '</td>' +
+                    '<td>' + data[i].task_end_time + '</td>' +
+                    '<td>' + statusText + '</td>' +
+                    '<td>' + task_priority + '</td>' +
+                    '</tr>';
+                
                 tbody.append(newRow);
             }
         }
@@ -85,14 +93,13 @@
             var table = $("#table1"); // 기본 테이블
             var button = $("#sort");
             console.log(keyword_division,keyword);
-            if (button.val()=== "내") {
+            if (button.val() == "내") {
                 button.val("오");
                 $.ajax({
                     url: '/task_time_desc',
                     data:{"keyword":keyword, "keyword_division":keyword_division},
                     dataType: 'json',
                     success: function (data) {
-
                         console.log("내림차순으로 데이터 ");
                         updateTable(table, data.onelist);
                     }
@@ -106,7 +113,6 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log("오름차순으로 데이터 ");
-
                         updateTable(table, data.onelist);
                     }
                 });
@@ -237,8 +243,8 @@
 	                        <th>작업명</th>
 	                        <th>작업 담당자</th>
 	                        <th>작업시작일</th>
-	                        <th>마감일 
-	                        <span id="sort" onclick="toggleButtonText('${keyword_division}','${keyword}')" style="cursor:pointer;vertical-align: -0.1em;"> 
+	                        <th>마감일 <input type="hidden" id="sort" value="내">
+	                        <span onclick="toggleButtonText('${keyword_division}','${keyword}')" style="cursor:pointer;vertical-align: -0.1em;"> 
 		                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
 									<path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
 								</svg>
@@ -286,17 +292,25 @@
 	                    </tbody>
 	                </table>
 	            </div>
-				<div class="pagination justify-content-center">
-		            <c:if test="${page.startPage > page.pageBlock}">
-		                <a href="task_list?currentPage=${page.startPage - page.pageBlock}" class="btn btn-primary">이전</a>
-		            </c:if>
-		            <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-		                <a href="task_list?currentPage=${i}" class="btn btn-primary">${i}</a>
-		            </c:forEach>
-		            <c:if test="${page.endPage < page.totalPage}">
-		                <a href="task_list?currentPage=${page.startPage + page.pageBlock}" class="btn btn-primary">다음</a>
-		            </c:if>
-				</div>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
+		            
+			            <c:if test="${page.startPage > page.pageBlock}">
+			                <li class="page-item disabled"><a class="page-link" href="task_list?currentPage=${page.startPage - page.pageBlock}" tabindex="-1" aria-disabled="true">이전</a></li>
+			            </c:if>
+			            <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+							<c:choose>
+								<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+								<c:otherwise><li class="page-item"></c:otherwise>
+							</c:choose>
+							<a class="page-link" href="task_list?currentPage=${i}">${i}</a></li>
+						</c:forEach>
+			            <c:if test="${page.endPage < page.totalPage}">
+			                <li class="page-item"><a class="page-link" href="task_list?currentPage=${page.startPage + page.pageBlock}">다음</a></li>
+			            </c:if>
+		            
+					</ul>
+				</nav>
 			</div>
 			<p><p>
 		</main>

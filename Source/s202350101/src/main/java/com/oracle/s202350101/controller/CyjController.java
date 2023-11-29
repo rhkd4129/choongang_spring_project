@@ -34,6 +34,7 @@ import com.oracle.s202350101.service.cyjSer.CyjService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import oracle.net.aso.f;
 
 @Slf4j
 @Controller
@@ -45,36 +46,56 @@ public class CyjController {
 // ------------------------- 공지 게시판 ------------------------------------
 	
 	// 전체 공지사항 리스트  
-	@RequestMapping(value = "board_notify")
-	public String notifyList(HttpServletRequest request, BdFree bdFree, String currentPage, Model model) {
-		System.out.println("CyjController notify_list Start--------------------------");
-		
-		// userInfo 정보 get
-		System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo")); // userInfo 정보 갖고옴
-		UserInfo userInfoDTO  = (UserInfo) request.getSession().getAttribute("userInfo");          // 정보를 UserInfo model의 인스턴스에 담음
-		
-		// 추천수 가장 높은 row 3개
-		List<BdFree> goodListRow = cs.goodRow(bdFree);
-		System.out.println("CyjController goodListRow-> " + goodListRow);
-		model.addAttribute("goodListRow", goodListRow);
-		
-		// 총 갯수
-		int totalBdFree = cs.totalBdFree();
-		model.addAttribute("totalBdFree", totalBdFree);
-		
-		// paging 작업
-		Paging page = new Paging(totalBdFree, currentPage);
-		bdFree.setStart(page.getStart());  // 시작시 1
-		bdFree.setEnd(page.getEnd());      // 시작시 10
-		model.addAttribute("page", page);
-		
-		// 전체 list
-		List<BdFree> bdFreeList = cs.listBdFree(bdFree);
-		System.out.println("CyjController board_notify bdFreeList.size()-> " + bdFreeList.size());
-		model.addAttribute("bdFreeList", bdFreeList);
-		
-		return "board/board_notify/board_notify_list";
-	}
+	   @RequestMapping(value = "board_notify")
+	   public String notifyList(HttpServletRequest request, BdFree bdFree, String currentPage, Model model) {
+	      System.out.println("CyjController notify_list Start--------------------------");
+	      
+	      // userInfo 정보 get
+	      System.out.println("session.userInfo-> " + request.getSession().getAttribute("userInfo")); // userInfo 정보 갖고옴
+	      UserInfo userInfoDTO  = (UserInfo) request.getSession().getAttribute("userInfo");          // 정보를 UserInfo model의 인스턴스에 담음
+	      
+	      // loginId : Id가 admin인 것만 공지사항 작성할 수 있게 하기 위함 
+	      String loginId = userInfoDTO.getUser_id();
+	      
+	      // 접속자가 admin인지 비교 --> 같으면 1, 다르면 0
+	      int result = 0;
+	      if (loginId.equals("admin")){
+	         result = 1;
+	         System.out.println("admin 계정으로 접속 O");
+	      } else {
+	         result = 0;
+	         System.out.println("admin 계정으로 접속 X");
+	      }
+	      model.addAttribute("result", result);
+	      
+	      // 추천수 가장 높은 row 3개
+	      //--------------------------------------------------------------
+	      List<BdFree> goodListRow = cs.goodRow(bdFree);
+	      //--------------------------------------------------------------
+	      System.out.println("CyjController goodListRow-> " + goodListRow);
+	      model.addAttribute("goodListRow", goodListRow);
+	      
+	      // 총 갯수
+	      //--------------------------------------------------------------
+	      int totalBdFree = cs.totalBdFree();
+	      //--------------------------------------------------------------
+	      model.addAttribute("totalBdFree", totalBdFree);
+	      
+	      // paging 작업
+	      Paging page = new Paging(totalBdFree, currentPage);
+	      bdFree.setStart(page.getStart());  // 시작시 1
+	      bdFree.setEnd(page.getEnd());      // 시작시 10
+	      model.addAttribute("page", page);
+	      
+	      // 전체 리스트
+	      //--------------------------------------------------------------
+	      List<BdFree> bdFreeList = cs.listBdFree(bdFree);
+	      //--------------------------------------------------------------
+	      System.out.println("CyjController board_notify bdFreeList.size()-> " + bdFreeList.size());
+	      model.addAttribute("bdFreeList", bdFreeList);
+	      
+	      return "board/board_notify/board_notify_list";
+	   }
 
 // -----------------------------------------------------------------------	
 	
@@ -128,13 +149,15 @@ public class CyjController {
 		
 		if(!file1.isEmpty()) {
 			log.info("파일이 존재합니다  ");
-			bdFree.setAttach_path(attach_path);
-			bdFree.setAttach_name(saveName);
+			bdFree.setAttach_path(saveName);
+			bdFree.setAttach_name(file1.getOriginalFilename());
 		}
 		
+		// 새 글 입력 
+		//--------------------------------------------------------------
 		int insertResult = cs.insertBdFree(bdFree);
+		//--------------------------------------------------------------
 		System.out.println("CyjController board_notify insertResult-> " + insertResult);
-		
 		model.addAttribute("insertResult", insertResult);
 
 		return "redirect:/board_notify"; 
@@ -174,11 +197,14 @@ public class CyjController {
 		// loginId : 상세 페이지에서 접속자 (수정 버튼 보이게) / 작성자 아님 (수정 버튼 안 보이게)
 		String loginId = userInfoDTO.getUser_id();
 		
-		// 상세 
+		// 상세 내역 
+		//--------------------------------------------------------------
 		BdFree bdFreeContent = cs.bdFreeContent(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController board_content boardContent-> " + bdFreeContent);
 		System.out.println(loginId);
 		System.out.println(bdFreeContent.getUser_id());
+		model.addAttribute("content", bdFreeContent);
 		
 		// 접속자랑 작성자 비교 --> 같으면 1, 다르면 0
 		int result;
@@ -190,11 +216,11 @@ public class CyjController {
 		}
 		model.addAttribute("result", result);
 		
-		// 조회수 
+		// 조회수 증가
+		//--------------------------------------------------------------
 		int bdCount = cs.bdCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController board_content bdCount-> " + bdCount);
-		
-		model.addAttribute("content", bdFreeContent);
 		model.addAttribute("bdCount", bdCount);
 		
 		return "board/board_notify/board_notify_content";
@@ -202,12 +228,15 @@ public class CyjController {
 					
 // -----------------------------------------------------------------------	
 	
-	// 전체 공지사항_수정: 상세 정보 get
+	// 전체 공지사항_수정하기 위한 상세 정보 get
 	@GetMapping(value = "board_update")
 	public String boardUpdate(int doc_no, Model model) {
 		System.out.println("CyjController board_update Start--------------------------");
 		
+		// 상세 정보 get
+		//--------------------------------------------------------------
 		BdFree free = cs.bdFreeContent(doc_no); 
+		//--------------------------------------------------------------
 		System.out.println("CyjController board_content free-> " + free);
 		model.addAttribute("free", free);
 		
@@ -219,7 +248,9 @@ public class CyjController {
 	public String boardUpdate2(BdFree bdFree, Model model, RedirectAttributes redirectAttributes) {
 		System.out.println("CyjController board_update2 Start--------------------------");
 		
+		//--------------------------------------------------------------
 		int bdBoardUpdate = cs.bdFreeUpdate2(bdFree);
+		//--------------------------------------------------------------
 		System.out.println("CyjController bdBoardUpdate-> " + bdBoardUpdate);
 		model.addAttribute("bdBoardUpdate", bdBoardUpdate);
 		
@@ -236,7 +267,9 @@ public class CyjController {
 	public int ajaxDelete(int doc_no) {
 		System.out.println("CyjController ajaxDelete Start--------------------------");
 		
+		//--------------------------------------------------------------
 		int ajaxDelete = cs.boardDelete(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("ajaxDelete-> " + ajaxDelete);
 		 
 		return ajaxDelete; 
@@ -263,7 +296,9 @@ public class CyjController {
 		System.out.println(bdFreeGood.getUser_id()); 
 	
 		// 1. 추천자 목록에 있는지 중복 체크
+		//--------------------------------------------------------------
 		int goodConfirm = cs.goodConfirm(bdFreeGood);
+		//--------------------------------------------------------------
 		System.out.println("CyjController goodConfirm-> " + goodConfirm);  
 		
 		String result = "";
@@ -272,17 +307,20 @@ public class CyjController {
 		
 		if (goodConfirm == 1) { 		// 중복 0
 			result = "duplication";		           
-		} else {                        // 중복 X 
-			// 2. 추천 insert
+		} else {                        // 중복 X
+			//--2. 추천 insert_ 추천기록이 없으면 BdFreeGood 테이블에 추천 추가----
 			int notifyGoodInsert = cs.notifyGoodInsert(bdFreeGood);  
+			//--------------------------------------------------------------
 			System.out.println("CyjController notifyGoodInsert-> " + notifyGoodInsert);
 		
 			if(notifyGoodInsert == 1) {
-				// 3. 추천 update
+				//--3. 추천 update_ bd_free 테이블에 good_count를 업데이트 -----
 				int notifyGoodUpdate = cs.notifyGoodUpdate(bdFreeGood);
+				//--------------------------------------------------------------
 				System.out.println("CyjController notifyGoodUpdate-> " + notifyGoodUpdate);
-				// 4. 추천 select
+				//--4. 추천 select_ bd_free 테이블에서 추천수 select------
 				int notifyGoodSelect = cs.notifyGoodSelect(bdFree);
+				//--------------------------------------------------------------
 				System.out.println("CyjController notifyGoodSelect-> " + notifyGoodSelect);
 				result = String.valueOf(notifyGoodSelect);
 			} else {
@@ -304,12 +342,16 @@ public class CyjController {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
 		// 추천수 가장 높은 row 3개 
+		//--------------------------------------------------------------
 		List<BdFree> eventGood = cs.eventCount(bdFree);
+		//--------------------------------------------------------------
 		System.out.println("eventGood.size()-> " + eventGood.size());
 		model.addAttribute("eventGood", eventGood);
 		
 		// 총 갯수
+		//--------------------------------------------------------------
 		int eventCount = cs.eventCount();
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventCount-> " + eventCount);
 		model.addAttribute("eventCount", eventCount);
 		
@@ -320,7 +362,9 @@ public class CyjController {
 		model.addAttribute("page", page);
 		
 		// 전체 리스트
+		//--------------------------------------------------------------
 		List<BdFree> eventList = cs.eventList(bdFree);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventList.size()-> " + eventList.size());
 		model.addAttribute("eventList", eventList);;
 		
@@ -342,14 +386,18 @@ public class CyjController {
 		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
 		
 		// 이벤트_상세
+		//--------------------------------------------------------------
 		BdFree eventContent = cs.eventContent(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventContent-> " + eventContent);
 		model.addAttribute("eventContent", eventContent);
 		
+		// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 		if(userInfoDTO.getUser_id().equals(eventContent.getUser_id())) {
-			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			//--------------------------------------------------------------
 			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(eventContent);
+			//--------------------------------------------------------------
 		}	
 //		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
 		
@@ -364,12 +412,16 @@ public class CyjController {
 		model.addAttribute("result", result);
 		
 		// 이벤트_조회수 
+		//--------------------------------------------------------------
 		int eventCount = cs.eventBdCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventCount-> " + eventCount);
 		model.addAttribute("eventCount", eventCount);
 		
-		// 이벤트_해당 게시글에 대한 댓글 총 갯수
+		// 이벤트_해당 게시글에 대한 댓글 총 갯수(free도 같이 쓰임)
+		//--------------------------------------------------------------
 		int eventComtCount = cs.eventComtCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventComtCount-> " + eventComtCount);
 		model.addAttribute("eventComtCount", eventComtCount);
 		
@@ -382,15 +434,17 @@ public class CyjController {
 		bdFreeComt.setEnd(page.getEnd());
 		model.addAttribute("page", page);
 		
-		// 이벤트_댓글리스트 보여주기 위해 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		// 이벤트_페이징 작업한 댓글리스트 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		//--------------------------------------------------------------
 		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
+		//--------------------------------------------------------------
 		System.out.println("CyjController commentList.size()-> " + commentList.size());
 		model.addAttribute("commentList", commentList);
 
 		return "board/board_event/board_event_content";
 	}
 	
-	// 이벤트_댓글 입력
+	// 이벤트_댓글 입력 (free 같이 사용)
 	@PostMapping(value = "comtInsert")
 	public String eventComtInsert(HttpServletRequest request, BdFreeComt bdFreeComt) {
 		System.out.println("CyjController comtInsert Start--------------------------");	
@@ -404,7 +458,9 @@ public class CyjController {
 		bdFreeComt.setUser_id(loginId);
 		
 		// 댓글 입력 (free도 사용)
+		//--------------------------------------------------------------
 		int comt = cs.comtInsert(bdFreeComt);
+		//--------------------------------------------------------------
 		System.out.println("CyjController comt-> " + comt);  
 		
 		return "redirect:/event_content?doc_no="+bdFreeComt.getDoc_no();
@@ -422,7 +478,10 @@ public class CyjController {
 		bdFreeComt.setDoc_no(doc_no);
 		bdFreeComt.setComment_doc_no(comment_doc_no);
 		
-		int comtDelete = cs.freeComtDelete(bdFreeComt);  // 자유와 같이 쓰임
+		// free와 같이 쓰임 (mapper id="cyFreeComtDelete")
+		//--------------------------------------------------------------
+		int comtDelete = cs.freeComtDelete(bdFreeComt);  
+		//--------------------------------------------------------------
 		System.out.println("CyjController comtDelete-> " + comtDelete);
 		
 		return comtDelete;
@@ -448,8 +507,11 @@ public class CyjController {
 		System.out.println(bdFreeGood.getDoc_no());
 		System.out.println(bdFreeGood.getUser_id());
 		
+		// 공지와 같은 mapper
 		// 1. 추천자 목록에 있는지 중복 체크 
+		//--------------------------------------------------------------
 		int eventGoodConfirm = cs.goodConfirm(bdFreeGood);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventGoodConfirm-> " + eventGoodConfirm);
 		
 		String result = "";
@@ -459,16 +521,20 @@ public class CyjController {
 		if (eventGoodConfirm == 1) {   // 중복 O
 			result = "duplication";
 		} else {					   // 중복 X
-			// 2. 추천 insert
+			// 공지와 같은 mapper
+			// 2. 추천 insert----------------------------------------------
 			int eventGoodInsert = cs.notifyGoodInsert(bdFreeGood);
+			//--------------------------------------------------------------
 			System.out.println("CyjController eventGoodInsert-> " + eventGoodInsert);
 			
 			if (eventGoodInsert == 1) {
-				// 3. 추천 update
+				// 3. 추천 update----------------------------------------------
 				int eventGoodUpdate = cs.notifyGoodUpdate(bdFreeGood);
+				//--------------------------------------------------------------
 				System.out.println("CyjController eventGoodUpdate-> " + eventGoodUpdate);
-				// 4. 추천 select
+				// 4. 추천 select----------------------------------------------
 				int eventGoodSelect = cs.notifyGoodSelect(bdFree);
+				//--------------------------------------------------------------
 				System.out.println("CyjController eventGoodSelect-> " + eventGoodSelect);
 				result = String.valueOf(eventGoodSelect);
 			} else {
@@ -499,6 +565,7 @@ public class CyjController {
 		
 		System.out.println("CyjController eventInsert Start--------------------------");
 		
+		// validation
 		if (bindingResult.hasErrors()) {
 			System.out.println("CyjController event_insert hasErrors");
 			return "board/board_event/board_event_insert";
@@ -529,11 +596,13 @@ public class CyjController {
 		
 		if(!file1.isEmpty()) {
 			log.info("파일이 존재합니다  ");
-			bdFree.setAttach_path(attach_path);
-			bdFree.setAttach_name(saveName);
+			bdFree.setAttach_path(saveName);
+			bdFree.setAttach_name(file1.getOriginalFilename());
 		}
 		
+		//--------------------------------------------------------------
 		int eventInsert = cs.eventInsert(bdFree);
+		//--------------------------------------------------------------
 		System.out.println("event 새 글 입력-> " + eventInsert);
 		model.addAttribute("eventInsert", eventInsert);
 		
@@ -547,7 +616,9 @@ public class CyjController {
 	public String eventUpdate(int doc_no, Model model) {
 		System.out.println("CyjController eventUpdate Start--------------------------");
 		
+		//--------------------------------------------------------------
 		BdFree eventGet = cs.eventContent(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("event 수정 상세정보 get-> " + eventGet);
 		
 		model.addAttribute("event", eventGet);
@@ -560,9 +631,10 @@ public class CyjController {
 	public String eventUpdate2(BdFree bdFree, Model model, RedirectAttributes redirectAttributes) {
 		System.out.println("CyjController eventUpdate2 Start--------------------------");
 		
+		//--------------------------------------------------------------
 		int eventUpdate = cs.eventUpdate(bdFree);
+		//--------------------------------------------------------------
 		System.out.println("event 수정-> " + eventUpdate);
-		
 		model.addAttribute("eventUpdate", eventUpdate);
 		
 		redirectAttributes.addAttribute("doc_no", bdFree.getDoc_no());
@@ -572,13 +644,15 @@ public class CyjController {
 	
 // ------------------------------------------------------------------------	
 
-	// 이벤트_삭제
+	// 이벤트_삭제 (qna 같이 사용)
 	@ResponseBody
 	@RequestMapping(value = "ajaxDelete")
 	public int delete(int doc_no) {
 		System.out.println("CyjController delete Start--------------------------");
 		
+		//--------------------------------------------------------------
 		int delete = cs.eventDelete(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("event 삭제-> " + delete);
 		
 		return delete;
@@ -599,14 +673,18 @@ public class CyjController {
 		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
 		
 		// 이벤트_상세
+		//--------------------------------------------------------------
 		BdFree content = cs.bdFreeContent(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventContent-> " + content);
 		model.addAttribute("notifyContent", content);
 		
+		// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 		if(userInfoDTO.getUser_id().equals(content.getUser_id())) {
-			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			//--------------------------------------------------------------
 			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(content);
+			//--------------------------------------------------------------
 		}	
 //		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
 		
@@ -621,7 +699,9 @@ public class CyjController {
 		model.addAttribute("result", result);
 		
 		// 이벤트_조회수 
+		//--------------------------------------------------------------
 		int count = cs.eventBdCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController count-> " + count);
 		model.addAttribute("count", count);
 				
@@ -641,14 +721,18 @@ public class CyjController {
 		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
 		
 		// 이벤트_상세
+		//--------------------------------------------------------------
 		BdFree eventContent = cs.eventContent(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventContent-> " + eventContent);
 		model.addAttribute("eventContent", eventContent);
 		
+		// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 		if(userInfoDTO.getUser_id().equals(eventContent.getUser_id())) {
-			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			//--------------------------------------------------------------
 			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(eventContent);
+			//--------------------------------------------------------------
 		}	
 //		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
 		
@@ -663,12 +747,16 @@ public class CyjController {
 		model.addAttribute("result", result);
 		
 		// 이벤트_조회수 
+		//--------------------------------------------------------------
 		int eventCount = cs.eventBdCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventCount-> " + eventCount);
 		model.addAttribute("eventCount", eventCount);
 		
 		// 이벤트_해당 게시글에 대한 댓글 총 갯수
+		//--------------------------------------------------------------
 		int eventComtCount = cs.eventComtCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventComtCount-> " + eventComtCount);
 		model.addAttribute("eventComtCount", eventComtCount);
 		
@@ -682,7 +770,9 @@ public class CyjController {
 		model.addAttribute("page", page);
 		
 		// 이벤트_댓글리스트 보여주기 위해 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		//--------------------------------------------------------------
 		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
+		//--------------------------------------------------------------
 		System.out.println("CyjController commentList.size()-> " + commentList.size());
 		model.addAttribute("commentList", commentList);
 
@@ -702,14 +792,18 @@ public class CyjController {
 		System.out.println("상세페이지의 접속자 loginId-> " + loginId);
 		
 		// 이벤트_상세
+		//--------------------------------------------------------------
 		BdFree content = cs.freeContent(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController eventContent-> " + content);
 		model.addAttribute("freeContent", content);
 		
+		// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 		if(userInfoDTO.getUser_id().equals(content.getUser_id())) {
-			// 현재 로그인 사용자가 글작성자인 경우 댓글들 alarm_flag='Y'로 일괄 변경처리
 			System.out.println("글작성자가 자신글 조회시 댓글들 alarm_flag='Y'로 일괄 변경처리");
+			//--------------------------------------------------------------
 			int updateCommentAlarmCount = cs.cyUpdateCommentAlarmFlag(content);
+			//--------------------------------------------------------------
 		}	
 //		model.addAttribute("userInfoDTO", userInfoDTO); // 로그인사용자 정보
 		
@@ -724,12 +818,16 @@ public class CyjController {
 		model.addAttribute("result", result);
 		
 		// 이벤트_조회수 
+		//--------------------------------------------------------------
 		int count = cs.eventBdCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController count-> " + count);
 		model.addAttribute("eventCount", count);
 		
 		// 이벤트_해당 게시글에 대한 댓글 총 갯수
+		//--------------------------------------------------------------
 		int comtCount = cs.eventComtCount(doc_no);
+		//--------------------------------------------------------------
 		System.out.println("CyjController comtCount-> " + comtCount);
 		model.addAttribute("eventComtCount", comtCount);
 		
@@ -743,7 +841,9 @@ public class CyjController {
 		model.addAttribute("page", page);
 		
 		// 이벤트_댓글리스트 보여주기 위해 -> doc_no가 아닌 객체가 들어가야 페이징 작업 가능 
+		//--------------------------------------------------------------
 		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
+		//--------------------------------------------------------------
 		System.out.println("CyjController commentList.size()-> " + commentList.size());
 		model.addAttribute("commentList", commentList);
 

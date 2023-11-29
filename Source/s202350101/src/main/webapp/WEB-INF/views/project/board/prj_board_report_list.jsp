@@ -156,10 +156,10 @@
 						<table class="table table-hover">
 							<colgroup>
 								<col width="5%"></col>
-								<col width="50%"></col>
+								<col width="45%"></col>
 								<col width="10%"></col>
-								<col width="12%"></col>
-								<col width="8%"></col>
+								<col width="15%"></col>
+								<col width="10%"></col>
 								<col width="15%"></col>
 							</colgroup>
 							<thead class="table-light">

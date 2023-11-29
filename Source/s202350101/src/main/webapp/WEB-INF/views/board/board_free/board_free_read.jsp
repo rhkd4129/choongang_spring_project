@@ -70,7 +70,7 @@
 			<tr> <th>본문</th>        <td>${freeContent.doc_body}</td> </tr>
 			<tr> <th>조회수</th>       <td>${freeContent.bd_count}</td> </tr>
 			<tr> <th>추천</th>        <td>${freeContent.good_count}</td> </tr>
-			<tr> <th>첨부파일</th>     <td>${freeContent.attach_name}<img alt="" src="${pageContext.request.contextPath}/${freeContent.attach_path}/${freeContent.attach_name}"></td> </tr>	
+			<tr> <th>첨부파일</th>     <td><a href="javascript:popup('/upload/${freeContent.attach_path}',800,600)">${freeContent.attach_name}</a></td> </tr>	
 		</table>
 		
 		<div class="bd-example m-0 border-0">

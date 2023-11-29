@@ -20,11 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClassRoomServiceImpl implements ClassRoomService{
 
 	private final ClassRoomDao CRdao;
-	//	ClassRoom	생성
-	@Override
-	public int saveClassRoom(ClassRoom cr) {
-		return CRdao.saveClassRoom(cr);
-	}
 //	모든 ClassRoom 조회
 	@Override
 	public List<ClassRoom> findAllClassRoom() {
@@ -32,6 +27,11 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 		return CRList;
 	}
 
+//	ClassRoom	생성
+	@Override
+	public int saveClassRoom(ClassRoom cr) {
+		return CRdao.saveClassRoom(cr);
+	}
 
 //	강의실 id를 기준으로 삭제
     @Override
@@ -39,8 +39,16 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 		int result = 0;
 
 		try{
+////	강의실 id를 기준으로 삭제_USENV
+//			result += CRdao.deleteUsEnvbyClassId(cr);
+////	강의실 id를 기준으로 삭제_TODO
+//			result += CRdao.deleteTodobyClassId(cr);
+//	강의실 id를 기준으로 삭제_UserInfo
+//			result += CRdao.deleteUsInfobyUsClassId(cr);
 //	강의실 id를 기준으로 delstatus 변경 _UserInfo
 			result += CRdao.updateUsInfobyUsClassId(cr);
+//	강의실 id를 기준으로 삭제_Class
+//			result += CRdao.deletebyId(cr);
 		} catch (Exception e) {
             log.info("deletebyId ERROR : {}",e.getMessage());
         }

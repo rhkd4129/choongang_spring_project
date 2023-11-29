@@ -25,6 +25,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 						, "/send_save_mail", "/write_user_info", "/id_confirm", "/user_find_pw_update", "/user_login_check"
 						, "/bootstrap-5.3.2-examples/assets/dist/css/bootstrap.min.css"
 						, "/bootstrap-5.3.2-examples/css/sign-in.css"
+						, "/bootstrap-5.3.2-dist/css/bootstrap.css"
 						)
 				;
 		

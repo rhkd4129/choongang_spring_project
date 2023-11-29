@@ -65,11 +65,12 @@
     display: block;
     width: fit-content;
     max-width:300px;
-    background-color: #383838 ;
+    background-color: #6c757d ;
     color:#fff;
     border-radius:10px;
     padding:10px;
     margin:5px 0px;
+    text-align: left;
 }
 #right_chat_msg{
     /* display: flex;
@@ -83,10 +84,11 @@
     border-radius:10px;
     padding:10px;
     margin:5px 0px;
+    text-align: left;
 }
 
 #chat_msg_con {
-    font-size: 15px;
+    font-size: 13px;
 }
 #chat_msg_time {
     font-size: 12px;
@@ -294,13 +296,13 @@
     	<table width="100%">
     		<tr>
 	    		<td align="left">
-			        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" alt="UpLoad File" 
+			        <img class="uploadFile" style=" width: 32px; height: 32px; border-radius: 50%;" alt="UpLoad File" 
 			        src="${pageContext.request.contextPath}/${your.attach_path }/${your.attach_name}">
 			        <span style="margin-left:10px">${your.user_name}</span>
 	    		</td>
 	    		<td align="right">
 			        <span style="margin-right:10px">${userInfo.user_name}</span>
-			        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" alt="UpLoad File" 
+			        <img class="uploadFile" style=" width: 32px; height: 32px; border-radius: 50%;" alt="UpLoad File" 
 			        src="${pageContext.request.contextPath}/${userInfo.attach_path }/${userInfo.attach_name}">
 	    		</td>
     		</tr>

@@ -142,7 +142,7 @@ function send_save_mail() {
 		});
 		
     	var display = $('#time');
-    	var leftSec = 30;
+    	var leftSec = 120;
     	// 남은 시간
     	// 이미 타이머가 작동중이면 중지
     	if (isRunning){
@@ -307,7 +307,7 @@ function confirm_authNumber() {
 							<div class="col-12">
 								<label for="user_id" class="form-label">아이디</label>
 								<div class="input-group has-validation">
-								<span class="input-group-text" style="background-color:var(--bs-warning)">ID</span>
+								<span class="input-group-text">ID</span>
 								<input type="text" class="form-control" id="user_id" value="${userInfoDTO.user_id}" readonly style="margin-left:-5px;">
 								</div>
 							</div>
@@ -366,7 +366,7 @@ function confirm_authNumber() {
 								<label for="user_email" class="form-label">Email <span class="text-body-danger">*</span></label>
 								<div class="input-group has-validation">
 									<input type="email" class="form-control" id="user_email" name="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com" style="margin-right:5px;">
-									<span><button id="timerButton" type="button" class="btn btn-primary btn-lg" onclick="send_save_mail()">수정</button></span>
+									<span><button id="timerButton" type="button" class="btn btn-dark btn-lg" onclick="send_save_mail()">수정</button></span>
 								</div>
 								<br>
 								<div id="mail_number" name="mail_number" style="display:none; margin-tip:10px;">

@@ -25,25 +25,84 @@ import lombok.RequiredArgsConstructor;
 public class MkhServiceImpl implements MkhService {
 	
 	private final MkhDao	mkhdao;
-
+//--------------------------------------------------------------------------------------	
 	@Override
-	public int insertUserInfo(UserInfo userInfo) {
-		int result = 0;
-		System.out.println("MkhServiceImpl insert Start...");
-		result = mkhdao.insertUserInfo(userInfo);
-		return result;
+	public UserInfo userLoginCheck(UserInfo userInfoDTO) {
+		System.out.println("MkhServiceImpl userLoginCheck Start..");
+		//-------------------------------------------------
+		UserInfo userInfo = mkhdao.userLoginCheck(userInfoDTO);
+		//-------------------------------------------------
+		return userInfo;
 	}
-
+//--------------------------------------------------------------------------------------
 	@Override
 	public List<ClassRoom> createdClass() {
 		List<ClassRoom> classList = null;
 		System.out.println("MkhServiceImpl createdClass Start...");
+		//-------------------------------------------------
 		classList = mkhdao.createdClass();
+		//-------------------------------------------------
 		System.out.println("MkhServiceImpl classList.size()->" +classList.size());
 		
 		return classList;
 	}
-
+//--------------------------------------------------------------------------------------	
+	@Override
+	public UserInfo confirm(String user_id) {
+		System.out.println("MkhServiceImpl confirm Start...");
+		//-------------------------------------------------
+		UserInfo userInfo = mkhdao.confirm(user_id);
+		//-------------------------------------------------
+		
+		return userInfo;
+	}
+//--------------------------------------------------------------------------------------
+	@Override
+	public int insertUserInfo(UserInfo userInfo) {
+		int result = 0;
+		System.out.println("MkhServiceImpl insert Start...");
+		//-------------------------------------------------
+		result = mkhdao.insertUserInfo(userInfo);
+		//-------------------------------------------------
+		return result;
+	}
+//--------------------------------------------------------------------------------------
+	@Override
+	public UserEnv selectEnv(String user_id) {
+		System.out.println("MkhServiceImpl selectEnv Start...");
+		//-------------------------------------------------
+		UserEnv userEnv = mkhdao.selectEnv(user_id);
+		//-------------------------------------------------
+		return userEnv;
+	}
+//--------------------------------------------------------------------------------------
+	@Override
+	public ClassRoom selectClass(String user_id) {
+		System.out.println("MkhServiceImpl selectClass Start...");
+		//-------------------------------------------------
+		ClassRoom classRoom = mkhdao.selectClass(user_id);
+		//-------------------------------------------------	
+		return classRoom;
+	}
+//--------------------------------------------------------------------------------------
+	@Override
+	public int updateUser(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl updateUser Start...");
+		//-------------------------------------------------	
+		int result = mkhdao.updateUser(userInfo);
+		//-------------------------------------------------	
+		return result;
+	}
+//--------------------------------------------------------------------------------------
+	@Override
+	public int updateEnv(UserEnv userEnv) {
+		System.out.println("MkhServiceImpl updateEnv Start...");
+		//-------------------------------------------------	
+		int result = mkhdao.updateEnv(userEnv);
+		//-------------------------------------------------	
+		return result;
+	}
+//--------------------------------------------------------------------------------------
 	@Override
 	public int totalBDcount(PrjBdData prjBdData) {
 		System.out.println("MkhServiceImpl totalBDcount Start...");
@@ -72,71 +131,18 @@ public class MkhServiceImpl implements MkhService {
 
 		return totalCnt;
 	}
-
+//--------------------------------------------------------------------------------------	
 	@Override
-	public UserInfo userLoginCheck(UserInfo userInfoDTO) {
-		System.out.println("MkhServiceImpl userLoginCheck Start..");
-		UserInfo userInfo = mkhdao.userLoginCheck(userInfoDTO);
-
-		return userInfo;
+	public List<Code> codeList(Code code) {
+		System.out.println("MkhServiceImpl codeList START...");
+		List<Code> reCodeList = null;
+		//-------------------------------------
+		reCodeList = mkhdao.codeList(code);
+		//-------------------------------------
+		System.out.println("MkhServiceImpl codeList END...");
+		return reCodeList;
 	}
-
-	@Override
-	public UserInfo confirm(String user_id) {
-		System.out.println("MkhServiceImpl confirm Start...");
-		UserInfo userInfo = mkhdao.confirm(user_id);
-		
-		return userInfo;
-	}
-
-	@Override
-	public int updatePw(Map<String, String> map) {
-		System.out.println("MkhServiceImpl updatePw Start...");
-		int result = mkhdao.updatePw(map);
-
-		return result;
-	}
-
-	@Override
-	public UserInfo userFindId(UserInfo userInfo) {
-		System.out.println("MkhServiceImpl userFindId Start...");
-		UserInfo userInfoDto = mkhdao.userFindId(userInfo);
-
-		return userInfoDto;
-	}
-
-	@Override
-	public UserEnv selectEnv(String user_id) {
-		System.out.println("MkhServiceImpl selectEnv Start...");
-		UserEnv userEnv = mkhdao.selectEnv(user_id);
-
-		return userEnv;
-	}
-
-	@Override
-	public ClassRoom selectClass(String user_id) {
-		System.out.println("MkhServiceImpl selectClass Start...");
-		ClassRoom classRoom = mkhdao.selectClass(user_id);
-	
-		return classRoom;
-	}
-
-	@Override
-	public int updateUser(UserInfo userInfo) {
-		System.out.println("MkhServiceImpl updateUser Start...");
-		int result = mkhdao.updateUser(userInfo);
-		
-		return result;
-	}
-	
-	@Override
-	public int updateEnv(UserEnv userEnv) {
-		System.out.println("MkhServiceImpl updateEnv Start...");
-		int result = mkhdao.updateEnv(userEnv);
-
-		return result;
-	}
-
+//--------------------------------------------------------------------------------------
 	@Override
 	public List<PrjBdData> bdSelectAll(PrjBdData prjBdData) {
 		List<PrjBdData> selectAll = null;
@@ -155,7 +161,7 @@ public class MkhServiceImpl implements MkhService {
 		
 		return selectAll;
 	}
-
+//--------------------------------------------------------------------------------------
 	@Override
 	public int totalComt(PrjBdData prjBdData) {
 		System.out.println("MkhServiceImpl totalComt Start...");
@@ -165,7 +171,7 @@ public class MkhServiceImpl implements MkhService {
 			System.out.println("★검색 Search---->"+prjBdData.getSearch());
 			if(!prjBdData.getKeyword().equals("")) {
 				System.out.println("★검색 SearchKeyword---->"+prjBdData.getKeyword());
-				//검색 건수 가져오기
+				//댓글 검색 건수 가져오기
 				//------------------------------------------
 				totalComt = mkhdao.searchComtCount(prjBdData);
 				//------------------------------------------
@@ -183,7 +189,7 @@ public class MkhServiceImpl implements MkhService {
 		
 		return totalComt;
 	}
-
+//--------------------------------------------------------------------------------------
 	@Override
 	public List<BdDataComt> selectAllComt(PrjBdData prjBdData) {
 		
@@ -198,14 +204,14 @@ public class MkhServiceImpl implements MkhService {
 				return selectAllComt;
 			}
 		}
+		//-----------------------------------------------
 		selectAllComt = mkhdao.selectAllComt(prjBdData);
+		//-----------------------------------------------
 		System.out.println("MkhServiceImpl bdSelectAll.size()->" +selectAllComt.size());
 		
 		return selectAllComt;
-		
-		
 	}
-
+//--------------------------------------------------------------------------------------
 	@Override
 	public int totalGood(PrjBdData prjBdData) {
 		System.out.println("MkhServiceImpl totalGood Start...");
@@ -215,7 +221,7 @@ public class MkhServiceImpl implements MkhService {
 			System.out.println("★검색 Search---->"+prjBdData.getSearch());
 			if(!prjBdData.getKeyword().equals("")) {
 				System.out.println("★검색 SearchKeyword---->"+prjBdData.getKeyword());
-				//검색 건수 가져오기
+				// 내가 추천한 게시글 검색 건수 가져오기
 				//------------------------------------------
 				totalGood = mkhdao.searchGoodCount(prjBdData);
 				//------------------------------------------
@@ -227,41 +233,50 @@ public class MkhServiceImpl implements MkhService {
 		//------------------------------------------
 		totalGood = mkhdao.totalGood(prjBdData);
 		//------------------------------------------
-
 		System.out.println("MkhServiceImpl totalCount totalCnt->" + totalGood);
 		System.out.println("MkhServiceImpl totalCount END...");
-		
 
 		return totalGood;
 	}
-
+//--------------------------------------------------------------------------------------
 	@Override
 	public List<BdDataGood> selectAllGood(PrjBdData prjBdData) {
 		List<BdDataGood> selectAllGood = null;
 		System.out.println("MkhServiceImpl selectAllGood Start...");
 		if(prjBdData.getKeyword() != null) {
 			if(!prjBdData.getKeyword().equals("")) {
+				//------------------------------------------
 				selectAllGood = mkhdao.searchGoodList(prjBdData);
-				
+				//------------------------------------------
 				return selectAllGood;
 			}
 		}
+		//------------------------------------------
 		selectAllGood = mkhdao.selectAllGood(prjBdData);
+		//------------------------------------------
 		System.out.println("MkhServiceImpl selectAllGood.size()->" +selectAllGood.size());
 		
 		return selectAllGood;
-	}
-
+	}	
+//--------------------------------------------------------------------------------------
 	@Override
-	public List<Code> codeList(Code code) {
-		System.out.println("MkhServiceImpl codeList START...");
-		List<Code> reCodeList = null;
-		//-------------------------------------
-		reCodeList = mkhdao.codeList(code);
-		//-------------------------------------
-		System.out.println("MkhServiceImpl codeList END...");
-		return reCodeList;
+	public UserInfo userFindId(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl userFindId Start...");
+		//------------------------------------------
+		UserInfo userInfoDto = mkhdao.userFindId(userInfo);
+		//------------------------------------------
+		return userInfoDto;
 	}
+//--------------------------------------------------------------------------------------
+	@Override
+	public int updatePw(Map<String, String> map) {
+		System.out.println("MkhServiceImpl updatePw Start...");
+		//------------------------------------------
+		int result = mkhdao.updatePw(map);
+		//------------------------------------------
 
+		return result;
+	}
+//--------------------------------------------------------------------------------------
 	
 }

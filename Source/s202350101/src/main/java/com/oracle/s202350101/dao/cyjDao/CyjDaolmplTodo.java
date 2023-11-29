@@ -61,20 +61,7 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 		return todoListDelete;
 	}
 
-	// 각각의 todoList 갖고 옴
-	@Override
-	public Todo oneRowTodoList(Todo todo) {
-		System.out.println("CyjDaolmplTodo oneRowTodoList Start..");
-		
-		Todo oneRowTodoList = null;
-		try {
-			oneRowTodoList = session.selectOne("cyRowTodoList", todo);
-			System.out.println("CyjDaolmplTodo oneRowTodoList-> " + oneRowTodoList);
-		} catch (Exception e) {
-			System.out.println("CyjDaolmplTodo oneRowTodoList Exception-> " + e.getMessage());
-		}
-		return oneRowTodoList;
-	}
+
 	
 	 // 할 일 완료 -> Y로 변경
 	@Override
@@ -104,13 +91,23 @@ public class CyjDaolmplTodo implements CyjDaoTodo {
 			System.out.println("CyjDaolmplTodo todoListTodoCheckN Exception-> " + e.getMessage());
 		}
 		return todoListTodoCheckN;
+
+
+
+	}
+
+	@Override
+	public List<Todo> todoDate(Todo todo) {
+
+		List<Todo> todoDateList = null;
+		try {
+			todoDateList = session.selectList("todoDatecount", todo);
+			System.out.println("CyjDaolmplTodo todoDate-> " + todo);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoDate Exception-> " + e.getMessage());
+		}
+		return todoDateList;
 	}
 
 
-
-	
-
-	
-	
-	
 }

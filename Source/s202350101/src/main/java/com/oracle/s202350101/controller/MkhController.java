@@ -61,7 +61,9 @@ public class MkhController {
 	// SMTP(Send Mail Transport protocol) 메일 전송 객체
 	private final JavaMailSender mailSender;
 	
-	/* 로그인  */
+//--------------------------------------------------------------------------------------	
+// 로그인 & 로그아웃
+//--------------------------------------------------------------------------------------
 	// 로그인 화면
 	@RequestMapping(value = "user_login")
 	public String userLogin(Model model) {
@@ -69,9 +71,8 @@ public class MkhController {
 	
 		return "user/user_login";
 	}
-	
-	// 로그인 인터셉터 체크
-	// 2번째 실행
+//--------------------------------------------------------------------------------------		
+	// 인터셉터 체크(preHandler -> Controller)
 	@PostMapping(value = "user_login_check")
 	public String interCeptor(UserInfo userInfo, HttpSession session, Model model) {
 		System.out.println("MkhController userLoginCheck Start..");
@@ -79,7 +80,9 @@ public class MkhController {
 		System.out.println("MkhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
 		
 		// Login 검증
+		//-------------------------------------------------
 		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
+		//-------------------------------------------------
 		
 		if(userInfo.getUser_id() == "" && userInfo.getUser_pw() == "") {
 			System.out.println("ID, PW 공백");
@@ -102,13 +105,13 @@ public class MkhController {
 		} else {
 			System.out.println("user_login_check userInfo exists");
 			session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
-			session.setAttribute("userInfo", userInfoDTO);
+			session.setAttribute("userInfo", userInfoDTO); // 세션 생성 + 저장
 			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
 			return "redirect:/main";
 		}
 		
 	}
-	
+//--------------------------------------------------------------------------------------			
 	// 로그아웃
 	@RequestMapping(value = "user_logout")
 	public String userLogout(HttpSession session) {
@@ -116,63 +119,52 @@ public class MkhController {
 		session.invalidate();
 		return "redirect:/user_login";
 	}
-	
-	/* 회원가입 */
+//--------------------------------------------------------------------------------------	
+// 회원가입
+//--------------------------------------------------------------------------------------
 	// 회원가입 동의 페이지로 이동
 	@RequestMapping(value = "user_join_agree")
 	public String userJoinAgree() {
 		System.out.println("MkhController userJoinAgree Start..");
 		return "user/user_join_agree";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 회원가입 페이지로 이동
 	@RequestMapping(value = "user_join_write")
 	public String userJoinWrite(Model model) {
 		System.out.println("MkhController userJoinWrite Start..");
+		//-------------------------------------------------
 		// classroom 모든 정보 가져옴
 		List<ClassRoom> classList = mkhService.createdClass();
+		//-------------------------------------------------
 		System.out.println("MkhController user_join_write classList.size->"+classList.size());
 		model.addAttribute("classList", classList);
 		
 		return "user/user_join_write";
 	}
-	
-	// 회원가입 페이지 ajax
-//	@ResponseBody
-//	@RequestMapping(value = "validation_ajax")
-//	public String validationAjax(@ModelAttribute("userInfo") @Valid UserInfo userInfo
-//			  					, BindingResult bindingResult, Model model) {
-//		System.out.println("MkhController writeUserIvalidationAjaxnfo Start...");
-//		if(bindingResult.hasErrors()) {
-//			System.out.println("MkhController user_login_check hasErrors...");
-//			// 오류 메세지를 띄어주기 위해 forward
-//			return "forward:user_join_write";
-//		} else {
-//			model.addAttribute("userInfo", userInfo.getUser_id());
-//			return "";
-//		}
-//	}
-	
-	// 중복확인 (PK를 주고 모든 정보 SELECT) .Ver 1
+//--------------------------------------------------------------------------------------	
+	// 회원가입 ID 중복확인
 	@ResponseBody
 	@GetMapping(value = "id_confirm")
 	public String confirm(String user_id, Model model) {
-		// ID을 주면 dto를 돌려주는 메소드
 		System.out.println("userId->"+user_id);
+		//-------------------------------------------------
+		// 회원가입 ID 중복확인 (PK를 주고 모든 정보 SELECT)
 		UserInfo userInfo = mkhService.confirm(user_id);
-		// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
+		//-------------------------------------------------
+
 		if (userInfo != null) {
 			System.out.println("중복된 ID..");
 			return "1";
 		} else {
 			System.out.println("MkhController confirm 사용 가능한 사번..");
+			// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
 			model.addAttribute("user_id", user_id);
 			return "2";
 		}
 	}
-	
-	
-	// 회원가입 정보 insert (ver.1)
+//--------------------------------------------------------------------------------------	
+	// 회원가입 정보 insert
 	@PostMapping(value = "write_user_info")
 	public String writeUserInfo(HttpServletRequest request
 							  , @RequestParam(value = "file1", required = false)MultipartFile file1
@@ -193,7 +185,6 @@ public class MkhController {
 		}
 		System.out.println("sample6_postcode->"+sample6_postcode);
 		System.out.println("sample6_detailAddress->"+sample6_detailAddress);
-//		ample6_address == null || sample6_detailAddress == null || sample6_extraAddress == null
 		// 주소
 		if(sample6_postcode.isEmpty() || sample6_address.isEmpty()) {
 			System.out.println("주소값 NULL");
@@ -203,20 +194,17 @@ public class MkhController {
 			System.out.println("user_address->"+ user_address);
 			userInfo.setUser_address(user_address);
 		}
-		
-		// user_Env
-//		userInfo.setEnv_alarm_comm(userEnv.getEnv_alarm_comm());
-		
-		
+	
 		// 이미지파일 업로드
 		String attach_path = "upload";	// 파일경로
-		
 		// userInfo에 디폴트 이미지와 파일경로 세팅
 		userInfo.setAttach_name("user_default.png");
 		userInfo.setAttach_path(attach_path);
-		
+		//-------------------------------------------------
+		// 회원가입 정보 Insert
 		int result = mkhService.insertUserInfo(userInfo);
-		
+		//-------------------------------------------------
+
 		if(result > 0) {
 			System.out.println("가입완료");
 			return "user/user_login";
@@ -225,8 +213,9 @@ public class MkhController {
 			return "redirect:user_join_write";
 		}
 	}
-	
-	/* 마이페이지 */
+//--------------------------------------------------------------------------------------	
+// 마이페이지
+//--------------------------------------------------------------------------------------
 	// 마이페이지 수정으로 이동
 	@RequestMapping(value = "mypage_main")
 	public String mypageMain(HttpServletRequest request, Model model) {
@@ -237,16 +226,22 @@ public class MkhController {
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 		System.out.println("userInfo.getUser_id() -> " + userInfo.getUser_id());
 		
+		//-------------------------------------------------
 		// user_id 마이페이지
 		UserInfo userInfoDto = mkhService.confirm(userInfo.getUser_id());
+		//-------------------------------------------------
 		model.addAttribute("userInfoDto", userInfoDto);
 		
+		//-------------------------------------------------
 		// user_id 환경설정
 		UserEnv userEnv = mkhService.selectEnv(userInfo.getUser_id());
+		//-------------------------------------------------
 		model.addAttribute("userEnv", userEnv);
 		
+		//-------------------------------------------------
 		// user_id 소속
 		ClassRoom classRoom = mkhService.selectClass(userInfo.getUser_id());
+		//-------------------------------------------------
 		model.addAttribute("classRoom", classRoom);
 		
 		// user_birth
@@ -260,7 +255,7 @@ public class MkhController {
 			model.addAttribute("user_birth", "");
 		return "mypage/mypage_main";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 개인정보 수정용 비밀번호 확인 페이지
 	@RequestMapping(value = "mypage_check_pw")
 	public String mypageCheckPw() {
@@ -268,7 +263,7 @@ public class MkhController {
 	
 		return "mypage/mypage_check_pw";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 개인정보 수정 페이지로 이동
 	@RequestMapping(value = "mypage_update")
 	public String mypageUpdate(HttpServletRequest request, Model model, UserInfo userInfo, HttpSession session) {
@@ -280,6 +275,7 @@ public class MkhController {
 		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
 		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
 		System.out.println("userInfoDTO.getUser_birth()->"+userInfoDTO.getUser_birth());
+		
 		// user_birth
 		if(userInfoDTO.getUser_birth() != null) {
 			System.out.println("생일있음");
@@ -294,6 +290,7 @@ public class MkhController {
 		System.out.println("userInfoDTO.getUser_address()->"+userInfoDTO.getUser_address());
 		String address = userInfoDTO.getUser_address();
 		System.out.println("address -> " + address);
+		
 		//if(!(address == null)) 
 		log.info("{}",address != null); 
 		if(address != null && !address.isEmpty() ) {			//	address != null
@@ -320,8 +317,11 @@ public class MkhController {
 		} else 
 			userInfoDTO.setUser_address("");
 		
+		//-------------------------------------------------
 		// 반 목록 출력
 		List<ClassRoom> classList = mkhService.createdClass();
+		//-------------------------------------------------
+
 		// validation 에러처리 하기 위해 modelAttribute="userInfo"로 보내기 위해 new
 		UserInfo userinfo = new UserInfo();
 		model.addAttribute("userInfo", userinfo);
@@ -330,7 +330,8 @@ public class MkhController {
 		// 수정 페이지에서 받은 값들
 		System.out.println("user_id->"+userInfo.getUser_id());
 		System.out.println("user_pw->"+userInfo.getUser_pw());
-			
+		
+		// 유효성 검사
 		if(!userInfo.getUser_id().equals(userInfoDTO.getUser_id()) || 
 		   !userInfo.getUser_pw().equals(userInfoDTO.getUser_pw())) {
 			System.out.println("아이디와 비밀번호 재확인 인증 실패");
@@ -338,8 +339,10 @@ public class MkhController {
 			//return "forward:/mypage_check_pw";
 			return "forward:/mypage_main"; //비밀번호 재확인 modal창 모드
 		} else {
-			// 재확인 인증 성공시 로직으로 검증
+			//-------------------------------------------------
+			// 재확인 인증 성공시 로그인 로직으로 검증
 			userInfoDTO = mkhService.userLoginCheck(userInfo);
+			//-------------------------------------------------
 			if(userInfoDTO == null) {
 				System.out.println("인증 실패");
 				model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
@@ -352,7 +355,7 @@ public class MkhController {
 			}
 		}
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 수정페이지 이미지첨부 + update
 	@PostMapping(value = "mypage_update_result")
 	public String mypageUpdateResult (@ModelAttribute("userInfo") @Valid UserInfo userInfo
@@ -367,10 +370,11 @@ public class MkhController {
 		
 		if(bindingResult.hasErrors()) {
 			System.out.println("validation 에러 발생");
+			//-------------------------------------------------
 			// 에러 발생해도 반 목록 출력
 			List<ClassRoom> classList = mkhService.createdClass();
+			//-------------------------------------------------
 			model.addAttribute("classList", classList);
-			
 			model.addAttribute("msg", "fail");
 			return "mypage/mypage_update";
 		}
@@ -423,8 +427,10 @@ public class MkhController {
 			userInfo.setAttach_path(attach_path);
 		}
 		
-
+		//-------------------------------------------------
+		// 모든 회원정보 userInfo에 set하고 회원정보수정 로직 실행
 		int result = mkhService.updateUser(userInfo);
+		//-------------------------------------------------
 		System.out.println("result->"+result);
 		
 		if(result == 1) {
@@ -442,7 +448,7 @@ public class MkhController {
 			return "forward:/mypage_update"; //msg전달 redirect->forward
 		}
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 파일 업로드 메소드
 	private String uploadFile(String originalFilename, byte[] bytes, String uploadPath) throws IOException {
 		// Universally Unique Identity (UUID)
@@ -466,8 +472,9 @@ public class MkhController {
 		
 		return savedName;
 	}
-	
-	/* 환경설정 */
+//--------------------------------------------------------------------------------------	
+// 환경설정
+//--------------------------------------------------------------------------------------
 	@ResponseBody
 	@RequestMapping(value = "user_env")
 	public String userEnvUpdate(UserEnv userEnv, HttpServletRequest request) {
@@ -483,9 +490,10 @@ public class MkhController {
 		if(userEnv.getEnv_alarm_mine() == null) {
 			userEnv.setEnv_alarm_mine("Y");
 		}
-		
+		//-------------------------------------------------
+		// 세션의 user_id를 userEnv에 세팅하고 업데이트 로직 실행
 		int result = mkhService.updateEnv(userEnv);
-		
+		//-------------------------------------------------
 		if(result > 0) {
 			System.out.println("수정완료");
 			return "1";
@@ -493,8 +501,10 @@ public class MkhController {
 		System.out.println("수정실패");
 		return "0";
 	}
-	
-	/* MYPOST - 내 글 모음*/
+//--------------------------------------------------------------------------------------	
+// MYPOST - 내 글 모음
+//--------------------------------------------------------------------------------------
+	// 내가 쓴 게시글
 	@RequestMapping(value = "mypost_board_list")
 	public String mypostBoardList(PrjBdData prjBdData, HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") String currentPage) {
 		System.out.println("MkhController mypostBoardList Start..");
@@ -503,9 +513,11 @@ public class MkhController {
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    
 	    prjBdData.setUser_id(userInfoDTO.getUser_id());
-	    
-		/* 내가 쓴 게시글  Count */
+		
+	    //-------------------------------------------------
+		// 내가 쓴 게시글  Count
 		int totalBDCount = mkhService.totalBDcount(prjBdData);
+		//-------------------------------------------------
 		System.out.println("totalBdCount->"+totalBDCount);
 		model.addAttribute("totalBDCount", totalBDCount);
 		
@@ -516,29 +528,27 @@ public class MkhController {
  		prjBdData.setEnd(page.getEnd());
  		model.addAttribute("page", page);
  		
- 		//검색 분류코드 가져오기
+ 		// 검색 분류코드
 		Code code = new Code();
 		code.setTable_name("MYPOST_BOARD");
 		code.setField_name("MYPOST_CATEGORY");
 		//-----------------------------------------------------
+		// 검색 분류코드 가져오기
 		List<Code> search_codelist = mkhService.codeList(code);
 		//-----------------------------------------------------
 		model.addAttribute("search", prjBdData.getSearch()); //검색필드
 		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
 		model.addAttribute("search_codelist", search_codelist); //검색 분류
- 	
- 		// Select ALL
+		//-----------------------------------------------------
+ 		// 내가 쓴 전체 게시글 Select
  		List<PrjBdData> selectAll = mkhService.bdSelectAll(prjBdData);
+		//-----------------------------------------------------
 		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
 		model.addAttribute("selectAll", selectAll);
 		
-//		System.out.println("app_id : " + selectAll.get(0).getApp_id());
-//		System.out.println("app_name : " + selectAll.get(0).getApp_name());
-//		System.out.println("Subject : " + selectAll.get(0).getSubject());
-		
 		return "/mypost/mypost_board_list";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 내가 쓴 댓글
 	@RequestMapping(value = "mypost_comment_list")
 	public String mypostCommentList(@RequestParam(defaultValue = "1") String currentPage
@@ -548,8 +558,10 @@ public class MkhController {
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    
 	    prjBdData.setUser_id(userInfoDTO.getUser_id());
-	    // All Comment Count
+		//-----------------------------------------------------
+	    // 내가 쓴 댓글  Count
 	    int totalComt = mkhService.totalComt(prjBdData);
+		//-----------------------------------------------------
 		System.out.println("totalComt->"+totalComt);
 		model.addAttribute("totalComt", totalComt);
 
@@ -565,18 +577,21 @@ public class MkhController {
   		code.setTable_name("MYPOST_COMMENT");
   		code.setField_name("MYPOST_CATEGORY");
   		//-----------------------------------------------------
+  		// 내가 쓴 전체 게시글 Select
   		List<Code> search_codelist = mkhService.codeList(code);
   		//-----------------------------------------------------
   		model.addAttribute("search", prjBdData.getSearch()); //검색필드
   		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
   		model.addAttribute("search_codelist", search_codelist); //검색 분류
-	    
+  		//-----------------------------------------------------
+  		// 내가 쓴 전체 게시글 Select
  		List<BdDataComt> selectAllComt = mkhService.selectAllComt(prjBdData);
+  		//-----------------------------------------------------
  		model.addAttribute("selectAllComt", selectAllComt);
 	  	
 		return "mypost/mypost_comment_list";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 내가 추천한 게시글
 	@RequestMapping(value = "mypost_good_list")
 	public String mypostGoodList(HttpServletRequest request, Model model, String currentPage, PrjBdData prjBdData) {
@@ -585,9 +600,11 @@ public class MkhController {
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 
 		prjBdData.setUser_id(userInfoDTO.getUser_id());
-	    // All Good Count
+		//-----------------------------------------------------
+	    // 내가 추천한 게시글  Count
 	    int totalGood = mkhService.totalGood(prjBdData);
-		System.out.println("totalGood->"+totalGood);
+		//-----------------------------------------------------
+	    System.out.println("totalGood->"+totalGood);
 		model.addAttribute("totalGood", totalGood);
 
 	  	/* 내가 추천한 게시글 출력  */
@@ -597,25 +614,28 @@ public class MkhController {
 	  	prjBdData.setEnd(page.getEnd());
 	  	model.addAttribute("page", page);
 	  	
-	  	//검색 분류코드 가져오기
+	  	//검색 분류코드
   		Code code = new Code();
   		code.setTable_name("MYPOST_BOARD");
   		code.setField_name("MYPOST_CATEGORY");
   		//-----------------------------------------------------
+  		// 분류코드 가져오기
   		List<Code> search_codelist = mkhService.codeList(code);
   		//-----------------------------------------------------
   		model.addAttribute("search", prjBdData.getSearch()); //검색필드
   		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
   		model.addAttribute("search_codelist", search_codelist); //검색 분류
-	    
+  		//-----------------------------------------------------
+  		// 내가 추천한 게시글 Select
  		List<BdDataGood> selectAllGood = mkhService.selectAllGood(prjBdData);
+  		//-----------------------------------------------------
  		model.addAttribute("selectAllGood", selectAllGood);
 		
 		return "mypost/mypost_good_list";
 	}
 	
+//--------------------------------------------------------------------------------------
 	/* 로그인 페이지 */
-	
 	// 아이디 찾기
 	@RequestMapping(value = "user_find_id")
 	public String userFindId() {
@@ -623,16 +643,18 @@ public class MkhController {
 		
 		return "user/user_find_id";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 아이디 찾기 결과
 	@RequestMapping(value = "user_find_id_result")
 	public String userFindIdResult(UserInfo userInfo, Model model) {
 		System.out.println("MkhController userFindIdResult Start..");
 		System.out.println("userInfo.getUser_name()->"+userInfo.getUser_name());
 		System.out.println("userInfo.getUser_number()->"+userInfo.getUser_number());
-		
+  		//-----------------------------------------------------
+		// user_name과 user_number로 UserInfo 모든 정보 Select
 		UserInfo userInfoDto = mkhService.userFindId(userInfo);
-		
+  		//-----------------------------------------------------
+
 		if(userInfoDto == null) {
 			System.out.println("이름과 번호가 다름");
 			model.addAttribute("msg", "가입되어 있지 않습니다");
@@ -643,7 +665,7 @@ public class MkhController {
 		return "user/user_find_id_result";
 		
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 비밀번호 찾기
 	@RequestMapping(value = "user_find_pw")
 	public String userFindPw() {
@@ -651,20 +673,20 @@ public class MkhController {
 		
 		return "user/user_find_pw";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 비밀번호 찾기 인증
 	@ResponseBody
 	@RequestMapping(value = "user_find_pw_auth")
 	public String userFindPwAuth(String user_id, String auth_email) {
 		System.out.println("MkhController userFindPwAuth Start..");
 		
-//		String auth_email = auth_email;
 		System.out.println("userFindPwAuth userId->"+user_id);
 		System.out.println("auth_email->"+auth_email);
 		
-		// user_id의 email 가져오기 위함
+		//-----------------------------------------------------
+		// user_id로 UserInfo 모든 정보 Select (email 가져오기 위해)
 		UserInfo userInfo = mkhService.confirm(user_id);
-
+		//-----------------------------------------------------
 		// 입력한 ID가 가입할 때 E-mail과 맞는지 확인		
 		if (userInfo != null) {
 			System.out.println("ID 존재");
@@ -681,10 +703,8 @@ public class MkhController {
 			System.out.println("아이디가 존재X");
 			return "2";
 		}
-
 	}
-
-	
+//--------------------------------------------------------------------------------------	
 	// 이메일 값 가져옴 + 이메일 전송
 	@ResponseBody
 	@PostMapping(value = "send_save_mail")
@@ -719,7 +739,7 @@ public class MkhController {
 		}  
 		return authNumber; 	// 인증번호 돌려줌
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 새로운 비밀번호 만들기 페이지
 	@RequestMapping(value = "user_find_pw_new")
 	public String userFindPwNew(String user_id, Model model) {
@@ -730,7 +750,7 @@ public class MkhController {
 		
 		return "user/user_find_pw_new";
 	}
-	
+//--------------------------------------------------------------------------------------	
 	// 비밀번호 업데이트
 	@PostMapping(value = "user_find_pw_update")
 	@ResponseBody
@@ -743,10 +763,12 @@ public class MkhController {
 		map.put("user_id", user_id);
 		map.put("user_pw", user_pw);
 		
+		//-----------------------------------------------------
+		// user_id와 user_pw 업데이트
 		int result = mkhService.updatePw(map);
 		System.out.println("result->"+result);
-	
-		//return "redirect:/user_login";
+		//-----------------------------------------------------
+
 		if(result > 0) {
 			return "success"; //ajax호출한 곳에서 분기처리 user_login
 		}else {

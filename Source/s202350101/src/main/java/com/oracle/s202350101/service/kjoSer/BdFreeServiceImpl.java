@@ -20,26 +20,36 @@ import java.util.List;
 public class BdFreeServiceImpl implements BdFreeService {
 
     private final BdFreeDao BFdao;
+    //<!--모든 BdFree조회-->
+    @Override
+    public List<BdFree> findAllBdFree() {
+        return BFdao.findAllBdFree();
+    }
 //<!--카테고리별 BdFree, 작성자 정보 조회-->
+
     @Override
     public List<BdFree> findBdFreeByCategory(BdFree bf) {
         return BFdao.findBdFreeByCategory(bf);
     }
 //<!--카테고리별 BdFree, 작성자 정보 조회 및 페이징-->
+
     @Override
     public List<BdFree> pageBdFreeByCategoryAndPage(BdFree bf) {
         return BFdao.pageBdFreeByCategoryAndPage(bf);
     }
-//<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
-    @Override
-    public int findByCategorySearch(BdFree bf) {
-        return BFdao.findByCategorySearch(bf);
-    }
 //<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 페이징-->
+
     @Override
     public List<BdFree> findByCategorySearchAndPage(BdFree bf) {
         return BFdao.findByCategorySearchAndPage(bf);
     }
+//<!--카테고리별 BdFree, 작성자 정보 조회 및 검색 개수-->
+
+    @Override
+    public int findByCategorySearch(BdFree bf) {
+        return BFdao.findByCategorySearch(bf);
+    }
+
 //<!--게시글 id로 삭제-->
     @Override
     public int del_bdf(KjoRequestDto kjorequest) {
@@ -54,14 +64,6 @@ public class BdFreeServiceImpl implements BdFreeService {
         }
         return del_cnt;
     }
-    //<!--모든 BdFree조회-->
-    @Override
-    public List<BdFree> findAllBdFree() {
-        return BFdao.findAllBdFree();
-    }
-
-
-
 
 
 }

@@ -96,7 +96,9 @@ public class CommonController {
 //		return chatUIList;
 //	}
 	@RequestMapping(value = "/main_menu")
-	public String mainMenuPage(Model model) {
+	public String mainMenuPage(HttpServletRequest request, Model model) {
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfo", userInfoDTO);
 		return "main_menu";
 	}
 

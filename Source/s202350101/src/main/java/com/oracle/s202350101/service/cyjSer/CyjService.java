@@ -50,7 +50,7 @@ public interface CyjService {
 	List<BdFree>      freeList(BdFree bdFree);
 	BdFree            freeContent(int doc_no);
 	int               freeCount(int doc_no);
-	List<BdFreeComt>      freeComtList(int doc_no);
+	List<BdFreeComt>      freeComtList(BdFreeComt bdFreeComt);
 	int               freeInsert(BdFree bdFree);
 	int               freeUpdate(BdFree bdFree);
 	int               freeDelete(int doc_no);

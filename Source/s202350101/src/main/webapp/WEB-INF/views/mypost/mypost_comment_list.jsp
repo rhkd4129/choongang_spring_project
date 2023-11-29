@@ -142,14 +142,14 @@
 											<c:if test="${allComt.bd_category == '공지'}">
 												<tr>
 													<td>${allComt.bd_category }</td>
-													<td><a href="javascript:popup('board_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
+													<td><a href="javascript:popup('board_notify_read?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 													<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 												</tr>
 											</c:if>
 											<c:if test="${allComt.bd_category == '자유'}">
 												<tr>
 													<td>${allComt.bd_category }</td>
-													<td><a href="javascript:popup('free_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
+													<td><a href="javascript:popup('board_free_read?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 													<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 												</tr>
 											</c:if>
@@ -157,7 +157,7 @@
 												<tr>
 													<td>${allComt.bd_category }</td>
 													
-													<td><a href="javascript:popup('event_content?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
+													<td><a href="javascript:popup('board_event_read?doc_no=${allComt.doc_no }&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 													<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 												</tr>
 											</c:if>
@@ -165,7 +165,7 @@
 										<c:when test="${allComt.app_id == 2}">
 											<tr>
 												<td>${allComt.app_name }</td>
-												<td><a href="javascript:popup('bdQnaContent?doc_no=${allComt.doc_no }#${allComt.comment_doc_no}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
+												<td><a href="javascript:popup('board_qna_read?doc_no=${allComt.doc_no }#${allComt.comment_doc_no}&comment_doc_no=${allComt.comment_doc_no}')">${allComt.comment_context }</a></td>
 												<td><fmt:formatDate value="${allComt.create_date }" type="date" pattern="yyyy-MM-dd"/></td>
 											</tr>
 										</c:when>

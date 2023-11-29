@@ -211,13 +211,27 @@
 		SELECT a.*
 		FROM (
 			SELECT t.*, u.user_name user_name, 
-					(SELECT app_name FROM app_info WHERE app_id=t.app_id) app_name 
+					(SELECT app_name FROM app_info WHERE app_id=t.app_id) app_name,
+					(SELECT app_path FROM app_info WHERE app_id=t.app_id) app_path 
 			FROM ${tablename} t, USER_INFO u
 			WHERE t.user_id = u.user_id
 		) a
-		WHERE a.subject like '%' || #{keyword} || '%' 
-		OR  a.doc_body like '%' || #{keyword} || '%' 
-		OR  a.user_name like '%' || #{keyword} || '%' 
+		WHERE ( a.user_name like '%' || #{keyword} || '%' 
+		<choose>
+			<when test="tablename == 'TASK'">
+				OR  a.task_subject like '%' || #{keyword} || '%' 
+				OR  a.task_content like '%' || #{keyword} || '%'
+			)			
+			</when>
+			<otherwise>
+				OR a.subject like '%' || #{keyword} || '%' 
+				OR  a.doc_body like '%' || #{keyword} || '%'
+			) 			
+			</otherwise>
+		</choose>
+		<if test="tablename != 'BD_FREE' and tablename != 'BD_QNA'">
+			AND project_id = #{project_id}
+		</if>
 	</select>
 	
 	<!-- 알람 업데이트 -->

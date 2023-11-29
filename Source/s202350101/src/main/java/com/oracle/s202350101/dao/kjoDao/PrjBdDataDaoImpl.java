@@ -65,17 +65,17 @@ public class PrjBdDataDaoImpl implements PrjBdDataDao{
         return prjBdDataList;
     }
 
-//  pbd 게시글 댓글 삭제
+//  pbd 게시글 삭제
     @Override
-    public int del_bdpc(PrjBdData pbd) {
-        log.info("del_bdpc start");
+    public int delpbd(PrjBdData pbd) {
+        log.info("delpbd start");
         int result = 0;
         try {
-            result = session.delete("del_bdpc",pbd);
+            result = session.delete("delPrjBdData",pbd);
         } catch (Exception e) {
-            log.info("del_bdpc Exception : {}",e.getMessage());
+            log.info("delpbd Exception : {}",e.getMessage());
         }
-        log.info("del_bdpc END");
+        log.info("delpbd END");
         return result;
     }
 //  pbd 게시글 추천 삭제
@@ -91,17 +91,17 @@ public class PrjBdDataDaoImpl implements PrjBdDataDao{
         log.info("del_bdpg END");
         return result;
     }
-//  pbd 게시글 삭제
+//  pbd 게시글 댓글 삭제
     @Override
-    public int delpbd(PrjBdData pbd) {
-        log.info("delpbd start");
+    public int del_bdpc(PrjBdData pbd) {
+        log.info("del_bdpc start");
         int result = 0;
         try {
-            result = session.delete("delPrjBdData",pbd);
+            result = session.delete("del_bdpc",pbd);
         } catch (Exception e) {
-            log.info("delpbd Exception : {}",e.getMessage());
+            log.info("del_bdpc Exception : {}",e.getMessage());
         }
-        log.info("delpbd END");
+        log.info("del_bdpc END");
         return result;
     }
 }

@@ -18,33 +18,52 @@ import lombok.extern.slf4j.Slf4j;
 public class UserInfoDaoImpl implements UserInfoDao{
 
 	private final SqlSession session;
-//	특정 강의실 전체 학생 조회
+
+//<!--사용자 ID로 사용자 조회-->
+	@Override
+	public UserInfo findbyuserId(UserInfo ui) {
+//		log.info("findbyuserId start ID : " + ui.getUser_id());
+		try {
+			ui = session.selectOne("findbyuserId", ui);
+		} catch (Exception e) {
+			log.info("findbyuserId Error : " + e.getMessage());
+		}
+		return ui;
+	}
+
+	//	특정 강의실 전체 학생 조회
 	@Override
 	public List<UserInfo> findbyclassuser(UserInfo ui) {
 		log.info("findbyclassuser START");
 		List<UserInfo> UIList = null;
 		try {
 			UIList = session.selectList("findbyClassUser", ui);
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
+
 		}catch (Exception e) {
 			log.info("findbyclassuser ERROR : {}",e.getMessage());
 		}
+		
 		return UIList;
 	}
-//<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
-	@Override
-	public List<UserInfo> pageUserInfo(UserInfo userInfo) {
 
-		log.info("pageUserInfo start");
+	//	특정 강의실 내 전체 학생 및 참여 프로젝트 조회
+	@Override
+	public List<UserInfo> findbyClassUserProject(int cl_id) {
+		log.info("findbyClassUserProject START");
 		List<UserInfo> UIList = null;
 		try {
-			UIList = session.selectList("pageUserInfo", userInfo);
+			UIList = session.selectList("findbyClassUserProject", cl_id);
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
 
 		}catch (Exception e) {
-			log.info("pageUserInfo ERROR : {}",e.getMessage());
+			log.info("findbyClassUserProject ERROR : {}",e.getMessage());
 		}
 		return UIList;
 	}
-//	학생들	Manager권한	수정
+
+
+	//	학생들	Manager권한	수정
 	@Override
 	public int auth_modify_manager(List<String> userManager) {
 		log.info("auth_modify_manager start");
@@ -58,7 +77,8 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		return result;
 
 	}
-//	학생들	Student권한	수정
+
+	//	학생들	Student권한	수정
 	@Override
 	public int auth_modify_student(List<String> userStudent) {
 		log.info("auth_modify_student start");
@@ -71,15 +91,19 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		}
 		return result;
 	}
-//	어드민의 모든 학생 조회
+
+//<!--어드민 제외 사용자 정보, 사용자 참여 프로젝트 조회-->
 	@Override
-	public List<UserInfo> findAllUser() {
-		log.info("findAllUser start");
+	public List<UserInfo> pageUserInfo(UserInfo userInfo) {
+
+		log.info("pageUserInfo start");
 		List<UserInfo> UIList = null;
 		try {
-			UIList = session.selectList("findAllUserWithAdmin");
+			UIList = session.selectList("pageUserInfo", userInfo);
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
+
 		}catch (Exception e) {
-			log.info("findAllUser ERROR : {}",e.getMessage());
+			log.info("pageUserInfo ERROR : {}",e.getMessage());
 		}
 		return UIList;
 	}
@@ -90,37 +114,31 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		List<UserInfo> UIList = null;
 		try {
 			UIList = session.selectList("findbyClassUserAndChatEnv", ui);
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
+
 		}catch (Exception e) {
 			log.info("findbyClassUserAndChatEnv ERROR : {}",e.getMessage());
 		}
+
 		return UIList;
 	}
-//<!--사용자 ID로 사용자 조회-->
-	@Override
-	public UserInfo findbyuserId(UserInfo ui) {
-//		log.info("findbyuserId start ID : " + ui.getUser_id());
-		try {
-			ui = session.selectOne("findbyuserId", ui);
-		} catch (Exception e) {
-			log.info("findbyuserId Error : " + e.getMessage());
-		}
-		return ui;
-	}
-//	특정 강의실 내 전체 학생 및 참여 프로젝트 조회
-	@Override
-	public List<UserInfo> findbyClassUserProject(int cl_id) {
-		log.info("findbyClassUserProject START");
+
+//	어드민의 모든 학생 조회	
+    @Override
+    public List<UserInfo> findAllUser() {
+		log.info("findAllUser start");
 		List<UserInfo> UIList = null;
 		try {
-			UIList = session.selectList("findbyClassUserProject", cl_id);
+			UIList = session.selectList("findAllUserWithAdmin");
+//			System.out.println(UIList.stream().collect(Collectors.toList()));
+
 		}catch (Exception e) {
-			log.info("findbyClassUserProject ERROR : {}",e.getMessage());
+			log.info("findAllUser ERROR : {}",e.getMessage());
 		}
+
 		return UIList;
-	}
 
 
 
-
-
+    }
 }

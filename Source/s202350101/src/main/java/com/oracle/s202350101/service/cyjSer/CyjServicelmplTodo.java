@@ -13,17 +13,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CyjServicelmplTodo implements CyjServiceTodo {
-	
+
 	private final CyjDaoTodo cdt;
 
-	
+
 	// 리스트 입력
 	@Override
 	public int todoInsert(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoInsert Start..");
+		// ########################################################
 		int todoInsert = cdt.todoInsert(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoInsert-> " + todoInsert);
-		
+
 		return todoInsert;
 	}
 
@@ -31,9 +33,11 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public List<Todo> todoTotalSelect(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoTotalSelect Start..");
+		// ########################################################
 		List<Todo> todoTotalSelect = cdt.todoTotalSelect(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoTotalSelect-> " + todoTotalSelect);
-		
+
 		return todoTotalSelect;
 	}
 
@@ -41,47 +45,58 @@ public class CyjServicelmplTodo implements CyjServiceTodo {
 	@Override
 	public int todoListDelete(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoListDelete Start..");
+		// ########################################################
 		int todoListDelete = cdt.todoListDelete(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoListDelete-> " + todoListDelete);
-		
+
 		return todoListDelete;
 	}
 
-	// 각각의 todoList 갖고 옴
-	@Override
-	public Todo oneRowTodoList(Todo todo) {
-		System.out.println("CyjServicelmplTodo oneRowTodoList Start..");
-		Todo oneRowTodoList = cdt.oneRowTodoList(todo);
-		System.out.println("CyjServicelmplTodo oneRowTodoList-> " + oneRowTodoList);
-		
-		return oneRowTodoList;
-	}
-	
+
 	// Y로 변경
 	@Override
 	public int todoListTodoCheckY(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoListTodoCheckY Start..");
+		// ########################################################
 		int todoListTodoCheckY = cdt.todoListTodoCheckY(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoListTodoCheckY-> " + todoListTodoCheckY);
-		
+
 		return todoListTodoCheckY;
 	}
 
-	// N으로 변경 
+	// N으로 변경
 	@Override
 	public int todoListTodoCheckN(Todo todo) {
 		System.out.println("CyjServicelmplTodo todoListTodoCheckN Start..");
+		// ########################################################
 		int todoListTodoCheckN = cdt.todoListTodoCheckN(todo);
+		// ########################################################
 		System.out.println("CyjServicelmplTodo todoListTodoCheckN-> " + todoListTodoCheckN);
-		
+
 		return todoListTodoCheckN;
 	}
 
 
-	
-	
-	
-	
-	
+	@Override
+	public List<Todo> todoDate(Todo todo) {
+		List<Todo> todoDateList = null;
+		try {
+			// ########################################################
+			todoDateList = cdt.todoDate(todo);
+			// ########################################################
+			System.out.println("CyjDaolmplTodo todoDate-> " + todo);
+		} catch (Exception e) {
+			System.out.println("CyjDaolmplTodo todoDate Exception-> " + e.getMessage());
+		}
+		return todoDateList;
+	}
+
+
+
+
+
+
 
 }

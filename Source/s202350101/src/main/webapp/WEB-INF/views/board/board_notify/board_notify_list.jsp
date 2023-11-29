@@ -90,8 +90,9 @@
 			</div>
 			
 			<div class="container-fluid">
-				<input type="button" class="btn btn-dark btn-sm" value="작성" onclick="location.href='board_write_insert_form'">
-		 		
+				<c:if test="${result == 1}">
+					<input type="button" class="btn btn-dark btn-sm" value="작성" onclick="location.href='board_write_insert_form'">
+		 		</c:if>
 		 		
 		 		<!-- 추천수 가장 높은 row 3개 -->
 		 		<div style="text-align:center;"><h6><b><추천 게시글></b></h6></div>
