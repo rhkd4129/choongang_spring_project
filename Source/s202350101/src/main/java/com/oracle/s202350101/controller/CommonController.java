@@ -32,6 +32,8 @@ public class CommonController {
 
 	@RequestMapping(value = "/main")
 	public String mainPage(HttpServletRequest request,UserInfo userInfoDTO, Model model) {
+		userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		model.addAttribute("userInfo", userInfoDTO);
 		return "main";
 	}
 

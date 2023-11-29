@@ -94,7 +94,7 @@
 			        </a>
 			      </li>
 			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="dashboard">프로젝트</a>
+			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="prj_home">프로젝트</a>
 			      </li>
 			      <li class="breadcrumb-item active" aria-current="page">공지/자료</li>
 			    </ol>

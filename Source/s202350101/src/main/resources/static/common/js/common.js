@@ -21,19 +21,12 @@ function goto(url) {
 	location.href = url;
 }
 
-function gotoCheckProjectID(url, p_project_id) {
-	$.ajax({
-		url : url,
-		type : 'POST',
-		async : false,
-		data : {s_project_id : p_project_id},
-		dataType : 'html',
-		success : function(data) {
-			//alert(data);
-			$("#center").html(data);
-		}
-	});
-	//location.href = url + "?project_id=" + project_id;
+function gotoCheckProjectID(url, s_project_id) {
+	if(typeof s_project_id == "undefined") {
+		location.href = url;
+	}else{
+		location.href = url+"?s_project_id="+s_project_id;
+	}
 }
 
 function loadCalendar() {

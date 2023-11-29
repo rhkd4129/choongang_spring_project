@@ -398,14 +398,10 @@ public class LkhDaoImpl implements LkhDao {
 	//#######################################################################
 	@Override
 	public List<Task> garbage_list(Task task) {
-		System.out.println(task.getStart());
-		System.out.println(task.getEnd());
-		System.out.println(task.getProject_id());
 		List<Task> garbageList = null;
 		try {
 			garbageList = sqlSession.selectList("garbage_list", task);
-			System.out.println("--------------");
-			System.out.println(garbageList);
+			log.info(garbageList.get(0).getUser_name());
 
 		} catch (Exception e) {
 			log.info("dao :garbage_list error Message -> {}", e.getMessage());
@@ -419,7 +415,6 @@ public class LkhDaoImpl implements LkhDao {
 		int result = 0;
 		try {
 			result = sqlSession.selectOne("garbage_count", project_id);
-
 		} catch (Exception e) {
 			log.info("dao :garbage_count error Message -> {}", e.getMessage());
 		}

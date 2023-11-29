@@ -46,7 +46,7 @@
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#center').html(data);
-				loadCalendar();
+				//loadCalendar();
 			}
 		});
 	
@@ -63,7 +63,6 @@
 </script>
 </head>
 <body>
-
 <!-- HEADER -->
 <header id="header"></header>
 
