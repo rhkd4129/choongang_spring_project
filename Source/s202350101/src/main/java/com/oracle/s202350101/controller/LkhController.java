@@ -400,7 +400,7 @@ public class LkhController {
 		//--------------------------------------------------------------------------------------------
 		int taskCount = lkhService.garbage_count(userInfo.getProject_id());
 		//--------------------------------------------------------------------------------------------
-
+		
 		Paging page = new Paging(taskCount, currentPage);
 		task.setStart(page.getStart());
 		task.setEnd(page.getEnd());

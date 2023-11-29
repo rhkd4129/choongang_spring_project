@@ -166,7 +166,8 @@
                                 current_task.add(cur_task)
                                 break;
                             }
-                            cur_task.html("<a href='task_detail?task_id=" + onelist[i].task_id + '&project_id=' + onelist[i].project_id + "'>" + onelist[i].task_subject + "</a>");
+                            cur_task.html("<a href='task_detail?task_id=" + onelist[i].task_id +
+									'&project_id=' + onelist[i].project_id + "'>" + onelist[i].task_subject + "</a>");
                             current_task.append(cur_task);
                         }
                     }

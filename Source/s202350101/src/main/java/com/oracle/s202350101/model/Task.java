@@ -19,13 +19,11 @@ public class Task {
 		private int		project_id;
 		private int		project_step_seq;
 		private String	user_id;
-
 		@NotEmpty(message = "이 항목은 필수입니다")
 		@Length(min = 1, max = 150, message = "길이는 1에서 150 사이여야 합니다.")
 		private String	task_subject;
 		@NotEmpty(message = "이 항목은 필수입니다")
 		private String	task_content;
-
 		private java.sql.Date task_start_time;
 		private java.sql.Date task_end_time;
 		private java.sql.Date create_date;
@@ -34,8 +32,7 @@ public class Task {
 		@NotNull(message = "이 항목은 필수입니다")
 		private String	task_status;
 		private int		garbage;
-		
-		//읽기 전용 
+		//읽기 전용
 		private int status_progress; //진척률
 		private int status_all_count; //개인별 총 작업수
 		private int status_0_count; //개인별 예정
@@ -43,7 +40,6 @@ public class Task {
 		private int status_2_count; //개인별 완료
 		private String project_s_name;
 		private String user_name;
-
 		private String keyword;
 		private String keyword_division;
 		private String pageNum;

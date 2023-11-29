@@ -42,12 +42,11 @@
 	// 게시글 삭제
 	function freeDelete(doc_no, user_id) {
 //		alert("free 게시글 삭제 !!");
-		var inputUserId = prompt('회원 아이디를 입력하세요');
-		if (inputUserId != user_id) {
-			alert('회원ID가 올바르지 않습니다');
-			return;
-		}
-		
+//		var inputUserId = prompt('회원 아이디를 입력하세요');
+//		if (inputUserId != user_id) {
+//			alert('회원ID가 올바르지 않습니다');
+//			return;
+//		}	
 		// 아이디 같으므로 삭제
 		$.ajax({
 			url      : 'freeDelete'
@@ -67,16 +66,18 @@
 	}
 	
 	// 댓글 삭제
-	function freeComtDelete(doc_no, comment_doc_no, user_id){
-		alert('free 댓글 삭제 doc_no: ' + doc_no);
-		alert('free 댓글 삭제 user_id: ' + user_id);
-		
-		var inputUserId = prompt('회원 아이디를 입력하세요');
-		if (inputUserId != user_id) {
-			alert("회원ID가 올바르지 않습니다");
+	function freeComtDelete(doc_no, comment_doc_no, writer_id, current_id){
+//		alert('free 댓글 삭제 doc_no: ' + doc_no);
+//		alert('free 댓글 삭제 user_id: ' + user_id);
+//		var inputUserId = prompt('회원 아이디를 입력하세요');
+//		if (inputUserId != user_id) {
+//			alert("회원ID가 올바르지 않습니다");
+//			return;
+//		}
+		if (current_id != writer_id) {
+			alert("작성자만 삭제 할 수 있습니다.");
 			return;
 		}
-		
 		$.ajax({
 			url 		: 'free_comt_delete',
 			type 		: 'POST',
@@ -207,7 +208,7 @@
 						<td>${comt.user_name}</td>
 						<td>${comt.create_date}</td>
 						<td>${comt.comment_context}</td>
-						<td><input type="button" value="댓글 삭제" onclick="freeComtDelete(${comt.doc_no}, ${comt.comment_doc_no}, '${comt.user_id}' )"></td>
+						<td><input type="button" value="댓글 삭제" onclick="freeComtDelete(${comt.doc_no}, ${comt.comment_doc_no}, '${comt.user_id}','${userInfo.user_id}' )"></td>
 					</tr>
 				</c:forEach>
 				</tbody>

@@ -290,7 +290,7 @@ function onSocket() {
                              console.log(cntAlarm);
                         }
                      }
-                  };
+                  }
             }
             
                comtNotify.append(comtStr);
