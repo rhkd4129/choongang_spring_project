@@ -112,11 +112,14 @@ public class JmhController {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
 		int project_id = 0;
-		System.out.println("project_id="+s_project_id);
-		if(s_project_id.equals("")) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
+		if(s_project_id == null) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
 			project_id = userInfoDTO.getProject_id();
 		}else {
+			if(s_project_id.equals("")) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
 				project_id = userInfoDTO.getProject_id();
+			}else {
+				project_id = Integer.parseInt(s_project_id);
+			}
 		}
 		System.out.println("project_id="+project_id);
 		
