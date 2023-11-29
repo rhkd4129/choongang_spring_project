@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.oracle.s202350101.뒤에 매핑하고 싶은 모델쓰면 됩니다 
+	 mapper 여러개 쓰셔도 됩니다. -->
+	 
+	 
+<mapper namespace="com.oracle.s202350101.PrjBdDataMapper">
+	<!-- user_id에 해당하는 게시물 -->
+	<select id="DataListSelect" parameterType="UserInfo" resultType="PrjBdData">
+		Select a.app_id, a.app_name, p.subject, p.user_id, p.doc_no,
+			   p.create_date, p.bd_count, p.good_count
+		From   prj_bd_data p, app_info a
+		Where  a.app_id = p.app_id
+		And    user_id = #{user_id}
+	</select>
+	
+	<!-- 분류 -->
+	<select id="mkhPrjBdDataCodeList" parameterType="Code" resultType="Code">
+		SELECT * 
+		FROM CODE 
+		WHERE UPPER(table_name)=#{table_name} AND UPPER(field_name)=#{field_name}
+		ORDER BY table_name, field_name, cate_code
+	</select>
+	
+	<!-- 내가 쓴 게시글 count -->
+	<select id="mkhTotalBDListCount" parameterType="prjBdData" resultType="int">
+		Select 
+		    (select count(*) from bd_free       where user_id = #{user_id}) +
+		    (select count(*) from prj_bd_rep    where user_id = #{user_id}) +
+		    (select count(*) from prj_bd_data  	where user_id = #{user_id}) +
+		    (select count(*) from bd_qna  	    where user_id = #{user_id})
+		From DUAL
+	</select>
+	
+	<!-- 내가 쓴 댓글 count -->
+	<select id="mkhTotalComt" parameterType="UserInfo" resultType="int">
+		Select 
+		    (select count(*) from bd_free_comt      where user_id = #{user_id}) +
+		    (select count(*) from bd_rep_comt     	where user_id = #{user_id}) +
+		    (select count(*) from bd_data_comt  	where user_id = #{user_id})
+		From DUAL
+	</select>
+	
+	<!-- 내가 추천한 게시글 count -->
+	<select id="mkhTotalGood" parameterType="UserInfo" resultType="int">
+		Select 
+		    (select count(*) from bd_free_good      where user_id = #{user_id}) +
+		    (select count(*) from bd_qna_good     	where user_id = #{user_id}) +
+		    (select count(*) from bd_data_good  	where user_id = #{user_id})
+		From DUAL
+	</select>
+	
+	<!-- 내가 쓴 게시글 검색 문서수 -->
+	<select id="mkhBDListSearchCount" parameterType="PrjBdData" resultType="int">
+		SELECT Count(*)
+	    FROM 
+	    (
+	        SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, bdq.doc_body, NULL AS project_id, NULL AS bd_category, ui.user_name
+	        FROM bd_qna bdq, app_info ai, user_info ui
+	        WHERE bdq.app_id = ai.app_id
+	        And   ui.user_id = bdq.user_id
+	        AND bdq.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, bdf.doc_body, NULL AS project_id, bdf.bd_category, ui.user_name
+	        FROM bd_free bdf, app_info ai, user_info ui
+	        WHERE bdf.app_id = ai.app_id
+	        And   ui.user_id = bdf.user_id
+	        AND bdf.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.doc_body, pbd.project_id, NULL AS bd_category, ui.user_name
+	        FROM prj_bd_data pbd, app_info ai, user_info ui
+	        WHERE pbd.app_id = ai.app_id
+	        And   ui.user_id = pbd.user_id
+	        AND pbd.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.doc_body, pbr.project_id, NULL AS bd_category, ui.user_name
+	        FROM prj_bd_rep pbr, app_info ai, user_info ui
+	        WHERE pbr.app_id = ai.app_id
+	        AND pbr.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	    )
+	</select>
+	
+	<!-- 내가 추천한 게시글 검색 문서수 -->
+	<select id="mkhGoodListSearchCount" parameterType="PrjBdData" resultType="int">
+		SELECT Count(*)
+	    FROM 
+	    (
+	        Select ai.app_name, ai.app_id, bdfg.user_id, bdfg.doc_no, bdf.subject, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category, ui.user_name
+			From bd_free_good bdfg, app_info ai, bd_free bdf, user_info ui
+			Where bdfg.doc_no = bdf.doc_no
+			And   ai.app_id = bdf.app_id
+			And   ui.user_id = bdf.user_id
+			And   bdfg.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        Select ai.app_name, ai.app_id, bdqg.user_id, bdqg.doc_no, bdq.subject,bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, bdq.bd_category, ui.user_name
+			From bd_qna_good bdqg, app_info ai, bd_qna bdq, user_info ui
+			Where bdqg.doc_no = bdq.doc_no
+			And   ai.app_id = bdq.app_id
+			And   ui.user_id = bdq.user_id
+			And   bdqg.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        Select ai.app_name, ai.app_id, bddg.user_id, bddg.doc_no, pbd.subject, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, pbd.bd_category, ui.user_name
+			From bd_data_good bddg, app_info ai, prj_bd_data pbd, user_info ui
+			Where bddg.doc_no = pbd.doc_no
+			And   ai.app_id = pbd.app_id
+			And   ui.user_id = pbd.user_id
+			And   bddg.user_id = #{user_id}
+			AND
+	        <choose>
+	            <when test="search == '1_subject'">
+	                subject like '%' || #{keyword} || '%'
+	            </when>
+	            <when test="search == '2_user_id'">
+	                user_id like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	    )
+	</select>
+	
+	<!-- 내가 쓴 댓글 검색 문서수 -->
+	<select id="mkhComtListSearchCount" parameterType="PrjBdData" resultType="int">
+		SELECT Count(*)
+	    FROM 
+	    (
+	        Select 	info.app_name, info.app_id, pdata.project_id, pdata.bd_category, pdata.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+			From 	app_info info, prj_bd_data pdata, bd_data_comt comt
+			Where 	info.app_id = pdata.app_id
+			And 	pdata.doc_no = comt.doc_no
+			And 	comt.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == 's_comment_context'">
+	                comment_context like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        Select 	info.app_name, info.app_id, rep.project_id, rep.bd_category, rep.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+			From 	app_info info, prj_bd_rep rep, bd_rep_comt comt
+			Where 	info.app_id = rep.app_id
+			And 	rep.doc_no = comt.doc_no
+			And 	comt.user_id = #{user_id}
+	        AND
+	        <choose>
+	            <when test="search == 's_comment_context'">
+	                comment_context like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	
+	        UNION ALL
+	
+	        Select 	info.app_name, info.app_id, NULL as project_id, free.bd_category, free.doc_no, comt.user_id, comt.comment_context, comt.comment_doc_no, comt.create_date
+			From 	app_info info, bd_free free, bd_free_comt comt
+			Where 	info.app_id = free.app_id
+			And 	free.doc_no = comt.doc_no
+			And 	comt.user_id = #{user_id}
+			AND
+	        <choose>
+	            <when test="search == 's_comment_context'">
+	                comment_context like '%' || #{keyword} || '%'
+	            </when>
+	            <otherwise>
+	                doc_body like '%' || #{keyword} || '%'
+	            </otherwise>
+	        </choose>
+	    )
+	</select>
+	
+	
+	<!-- 내가 쓴 게시글 검색 목록 -->
+	<select id="mkhSearchAllList" parameterType="prjBdData" resultType="prjBdData">
+		    SELECT * 
+		    FROM 
+		    (
+		        SELECT ROWNUM rn, a.* 
+		        FROM 
+		        (
+		            SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, NULL AS bd_category, ui.user_name
+		            FROM bd_qna bdq, app_info ai, user_info ui
+		            WHERE bdq.app_id = ai.app_id
+		            And   ui.user_id = bdq.user_id
+		            AND bdq.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		
+		            UNION ALL
+		
+		            SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category, ui.user_name
+		            FROM bd_free bdf, app_info ai, user_info ui
+		            WHERE bdf.app_id = ai.app_id
+		            And   ui.user_id = bdf.user_id
+		            AND bdf.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		
+		            UNION ALL
+		
+		            SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, NULL AS bd_category, ui.user_name
+		            FROM prj_bd_data pbd, app_info ai, user_info ui
+		            WHERE pbd.app_id = ai.app_id
+		            And   ui.user_id = pbd.user_id
+		            AND pbd.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		
+		            UNION ALL
+		
+		            SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.project_id, NULL AS bd_category, ui.user_name
+		            FROM prj_bd_rep pbr, app_info ai, user_info ui
+		            WHERE pbr.app_id = ai.app_id
+		            And   ui.user_id = pbr.user_id
+		            AND pbr.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		            ORDER BY create_date DESC
+		        ) a
+		    ) 
+		    WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 내가 쓴 댓글 검색 목록 -->
+	<select id="mkhSearchComtList" parameterType="prjBdData" resultType="BdDataComt">
+		    SELECT * 
+		    FROM 
+		    (
+		        SELECT ROWNUM rn, a.* 
+		        FROM 
+		        (
+		            Select 	info.app_name, info.app_id, pdata.project_id, pdata.bd_category, pdata.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+					From 	app_info info, prj_bd_data pdata, bd_data_comt comt
+					Where 	info.app_id = pdata.app_id
+					And 	pdata.doc_no = comt.doc_no
+					And 	comt.user_id = #{user_id}
+		            AND
+		            <choose>
+			            <when test="search == 's_comment_context'">
+			                comment_context like '%' || #{keyword} || '%'
+			            </when>
+			            <otherwise>
+			                doc_body like '%' || #{keyword} || '%'
+			            </otherwise>
+			        </choose>
+		
+		            UNION ALL
+		
+		            Select 	info.app_name, info.app_id, rep.project_id, rep.bd_category, rep.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+					From 	app_info info, prj_bd_rep rep, bd_rep_comt comt
+					Where 	info.app_id = rep.app_id
+					And 	rep.doc_no = comt.doc_no
+					And 	comt.user_id = #{user_id}
+		            AND
+		            <choose>
+			            <when test="search == 's_comment_context'">
+			                comment_context like '%' || #{keyword} || '%'
+			            </when>
+			            <otherwise>
+			                doc_body like '%' || #{keyword} || '%'
+			            </otherwise>
+			        </choose>
+		
+		            UNION ALL
+		
+		            Select 	info.app_name, info.app_id, NULL as project_id, free.bd_category, free.doc_no, comt.user_id, comt.comment_context, comt.comment_doc_no, comt.create_date
+					From 	app_info info, bd_free free, bd_free_comt comt
+					Where 	info.app_id = free.app_id
+					And 	free.doc_no = comt.doc_no
+					And 	comt.user_id = #{user_id}
+		            AND
+		            <choose>
+			            <when test="search == 's_comment_context'">
+			                comment_context like '%' || #{keyword} || '%'
+			            </when>
+			            <otherwise>
+			                doc_body like '%' || #{keyword} || '%'
+			            </otherwise>
+			        </choose>
+		            ORDER BY create_date DESC
+		        ) a
+		    ) 
+		    WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	<!-- 내가 추천한 게시글 검색 목록 -->
+	<select id="mkhSearchGoodList" parameterType="prjBdData" resultType="BdDataGood">
+		    SELECT * 
+		    FROM 
+		    (
+		        SELECT ROWNUM rn, a.* 
+		        FROM 
+		        (
+		            Select ai.app_name, ai.app_id, bdfg.user_id, bdfg.doc_no, bdf.subject, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category, ui.user_name
+					From bd_free_good bdfg, app_info ai, bd_free bdf, user_info ui
+					Where bdfg.doc_no = bdf.doc_no
+					And   ai.app_id = bdf.app_id
+					And   ui.user_id = bdf.user_id
+					And   bdfg.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		
+		            UNION ALL
+		
+		            Select ai.app_name, ai.app_id, bdqg.user_id, bdqg.doc_no, bdq.subject,bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, bdq.bd_category, ui.user_name
+					From bd_qna_good bdqg, app_info ai, bd_qna bdq, user_info ui
+					Where bdqg.doc_no = bdq.doc_no
+					And   ai.app_id = bdq.app_id
+					And   ui.user_id = bdq.user_id
+					And   bdqg.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		
+		            UNION ALL
+		
+		            Select ai.app_name, ai.app_id, bddg.user_id, bddg.doc_no, pbd.subject, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, pbd.bd_category, ui.user_name
+					From bd_data_good bddg, app_info ai, prj_bd_data pbd, user_info ui
+					Where bddg.doc_no = pbd.doc_no
+					And   ai.app_id = pbd.app_id
+					And   ui.user_id = pbd.user_id
+					And   bddg.user_id = #{user_id}
+		            AND
+		            <choose>
+		                <when test="search == '1_subject'">
+		                    subject like '%' || #{keyword} || '%'
+		                </when>
+		                <when test="search == '2_user_id'">
+		                    user_id like '%' || #{keyword} || '%'
+		                </when>
+		                <otherwise>
+		                    doc_body like '%' || #{keyword} || '%'
+		                </otherwise>
+		            </choose>
+		            ORDER BY create_date DESC
+		        ) a
+		    ) 
+		    WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 내가 쓴 게시글 전체 List + 페이징 -->
+	<select id="mkhBdSelectAll" parameterType="PrjBdData" resultType="PrjBdData">
+		<![CDATA[
+			SELECT * 
+			FROM 
+			(
+			    SELECT rownum rn, a.* 
+			    FROM 
+			    	(
+			        SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, NULL AS bd_category, ui.user_name
+			        FROM bd_qna bdq, app_info ai, user_info ui
+			        WHERE bdq.app_id = ai.app_id
+			        And   ui.user_id = bdq.user_id
+			        AND bdq.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, bdf.doc_no, bdf.subject, bdf.user_id, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category, ui.user_name
+			        FROM bd_free bdf, app_info ai, user_info ui
+			        WHERE bdf.app_id = ai.app_id
+			        And   ui.user_id = bdf.user_id
+			        AND bdf.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, pbd.doc_no, pbd.subject, pbd.user_id, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, NULL AS bd_category, ui.user_name
+			        FROM prj_bd_data pbd, app_info ai, user_info ui
+			        WHERE pbd.app_id = ai.app_id
+			        And   ui.user_id = pbd.user_id
+			        AND pbd.user_id = #{user_id}
+			
+			        UNION ALL
+			
+			        SELECT ai.app_name, ai.app_id, pbr.doc_no, pbr.subject, pbr.user_id, pbr.create_date, NULL, NULL, pbr.project_id, NULL AS bd_category, ui.user_name
+			        FROM prj_bd_rep pbr, app_info ai, user_info ui
+			        WHERE pbr.app_id = ai.app_id
+			        And   ui.user_id = pbr.user_id
+			        AND pbr.user_id = #{user_id}
+			        ORDER BY create_date DESC
+			    ) a
+			) WHERE rn >= #{start} 
+			  AND   rn <= #{end}
+		   ]]>
+	</select>
+		
+	<!-- 내가 쓴 댓글 전체 List + 페이징 -->
+	<select id="mkhSelectAllComt" parameterType="prjBdData" resultType="BdDataComt">
+		<![CDATA[
+			SELECT * 
+			FROM 
+			(
+			    SELECT rownum rn, a.* 
+			    FROM 
+			    	(
+			        Select 	info.app_name, info.app_id, pdata.project_id, pdata.bd_category, pdata.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+					From 	app_info info, prj_bd_data pdata, bd_data_comt comt
+					Where 	info.app_id = pdata.app_id
+					And 	pdata.doc_no = comt.doc_no
+					And 	comt.user_id = #{user_id}
+					
+					UNION ALL
+					
+					Select 	info.app_name, info.app_id, rep.project_id, rep.bd_category, rep.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+					From 	app_info info, prj_bd_rep rep, bd_rep_comt comt
+					Where 	info.app_id = rep.app_id
+					And 	rep.doc_no = comt.doc_no
+					And 	comt.user_id = #{user_id}
+					
+					UNION ALL
+					
+					Select 	info.app_name, info.app_id, NULL as project_id, free.bd_category, free.doc_no, comt.user_id, comt.comment_context, comt.comment_doc_no, comt.create_date
+					From 	app_info info, bd_free free, bd_free_comt comt
+					Where 	info.app_id = free.app_id
+					And 	free.doc_no = comt.doc_no
+					And 	comt.user_id = #{user_id}
+			        ORDER BY create_date DESC
+			    ) a
+			) WHERE rn >= #{start} 
+			  AND   rn <= #{end}
+		   ]]>
+	</select>
+	
+	<!-- 내가 추천한 게시글 전체 List +  페이징 -->
+	<select id="mkhSelectAllGood" parameterType="prjBdData" resultType="prjBdData">
+		<![CDATA[
+			SELECT * 
+			FROM 
+			(
+			    SELECT rownum rn, a.* 
+			    FROM 
+			    	(
+			        select ai.app_name, ai.app_id, bdfg.user_id, bdfg.doc_no, bdf.subject, bdf.create_date, bdf.bd_count, bdf.good_count, NULL AS project_id, bdf.bd_category, ui.user_name
+					from bd_free_good bdfg, app_info ai, bd_free bdf, user_info ui
+					where bdfg.doc_no = bdf.doc_no
+					and   ai.app_id = bdf.app_id
+					And   ui.user_id = bdf.user_id
+					And   bdfg.user_id = #{user_id}
+					
+					UNION ALL
+					
+					select ai.app_name, ai.app_id, bdqg.user_id, bdqg.doc_no, bdq.subject,bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, bdq.bd_category, ui.user_name
+					from bd_qna_good bdqg, app_info ai, bd_qna bdq, user_info ui
+					where bdqg.doc_no = bdq.doc_no
+					and   ai.app_id = bdq.app_id
+					And   ui.user_id = bdq.user_id
+					And   bdqg.user_id = #{user_id}
+					
+					UNION ALL
+					
+					select ai.app_name, ai.app_id, bddg.user_id, bddg.doc_no, pbd.subject, pbd.create_date, pbd.bd_count, pbd.good_count, pbd.project_id, pbd.bd_category, ui.user_name
+					from bd_data_good bddg, app_info ai, prj_bd_data pbd, user_info ui
+					where bddg.doc_no = pbd.doc_no
+					and   ai.app_id = pbd.app_id
+					And   ui.user_id = pbd.user_id
+					And   bddg.user_id = #{user_id}
+			        ORDER BY create_date DESC
+			    ) a
+			) WHERE rn >= #{start} 
+			  AND   rn <= #{end}
+		   ]]>
+	</select>
+	
+	
+
+	
+</mapper>
+
