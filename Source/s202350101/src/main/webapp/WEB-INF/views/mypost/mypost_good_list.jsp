@@ -213,7 +213,7 @@
 			<nav aria-label="Page navigation example">
 			  <ul class="pagination justify-content-center">
 				<c:if test="${page.startPage > page.pageBlock}">
-				   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
+				   	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
 				</c:if>
 			    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
 					<c:choose>

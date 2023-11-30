@@ -57,7 +57,7 @@ const proejctOption = {
     plugins: {
       title: {
         display: true,
-        text: '언제 '
+        text: '기간 '
       }
     },
     scales: {

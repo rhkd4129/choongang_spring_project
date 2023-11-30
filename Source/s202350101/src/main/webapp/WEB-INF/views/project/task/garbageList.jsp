@@ -188,17 +188,25 @@
 	                    </tbody>
 	                </table>
 	            </div>
-	            <div class="pagination justify-content-center">
+	            
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination justify-content-center">
 	                <c:if test="${page.startPage > page.pageBlock}">
-	                <a href="garbage_list?currentPage=${page.startPage - page.pageBlock}" class="btn btn-primary">이전</a>
+	                	<li class="page-item"><a class="page-link" href="garbage_list?currentPage=${page.startPage - page.pageBlock}" tabindex="-1" aria-disabled="true">이전</a></li>
 	                </c:if>
 	                <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-	                <a href="garbage_list?currentPage=${i}" class="btn btn-primary">${i}</a>
+						<c:choose>
+							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+							<c:otherwise><li class="page-item"></c:otherwise>
+						</c:choose>
+						<a class="page-link" href="garbage_list?currentPage=${i}">${i}</a></li>
 	                </c:forEach>
 	                <c:if test="${page.endPage < page.totalPage}">
-	                <a href="garbage_list?currentPage=${page.startPage + page.pageBlock}" class="btn btn-primary">다음</a>
+	                	<li class="page-item"><a class="page-link" href="garbage_list?currentPage=${page.startPage + page.pageBlock}">다음</a></li>
 	                </c:if>
-	            </div>
+				  </ul>
+				</nav>
+
 			</div>
 			<p><p>
         </main>

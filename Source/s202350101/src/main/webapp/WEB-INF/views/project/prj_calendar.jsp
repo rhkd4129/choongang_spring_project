@@ -15,7 +15,7 @@
 	}
 
 	div #calendar {
-		width: 80%;
+		width: 85%;
 		margin-top: 50px;
 		padding-left: 15px;
 	}
@@ -54,6 +54,10 @@
 	.fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
 	    padding: 1px;
 	    font-size: 9pt;
+	}
+	
+	.event-1 {		/*  이벤트에 클래스 추가해 해당 이벤트만 커서 포인터 보이도록 스타일 지정 */
+		cursor: pointer;
 	}
 </style>
 <!-- CSS END -->
@@ -115,7 +119,8 @@
 			start : '${prj.project_startdate}',
 			end : '${prj.project_enddate}',
 			color : '#B2CCFF',
-			textColor : '#000000'
+			textColor : '#000000',
+			classNames: 'event-1'		// 이벤트에 클래스 추가해 해당 이벤트만 커서 포인터 보이도록 스타일 지정
 
 		});
 
@@ -184,7 +189,7 @@
 					      <li class="breadcrumb-item">
 					        <a class="link-body-emphasis fw-semibold text-decoration-none" href="prj_home">프로젝트</a>
 					      </li>
-					      <li class="breadcrumb-item active" aria-current="page">회의록</li>
+					      <li class="breadcrumb-item active" aria-current="page">프로젝트 캘린더</li>
 					    </ol>
 					</nav>
 				</div>

@@ -42,9 +42,34 @@ public class LkhController {
 	//#######################################################################
 
 	@GetMapping("task_read")
-	public String prjTaskRead(HttpServletRequest request, Model model) {
+	public String prjTaskRead(int task_id, int project_id, HttpServletRequest request, Model model) {
 		log.info("prj_task_read Controller init");
 		UserInfo user = (UserInfo) request.getSession().getAttribute("userInfo");
+
+		//현재 task 정보
+		//-----------------------------------------------------
+		Task task = lkhService.task_detail(task_id, project_id);
+		//-----------------------------------------------------
+
+
+		// 현재 task의 잇는 첨부파일들
+		//-----------------------------------------------------------------------------------
+		List<TaskAttach> taskAttachList = lkhService.task_attach_list(task_id, project_id);
+		//-----------------------------------------------------------------------------------
+
+		// 현재 task의 잇는 공동 작업자들
+		TaskSub taskSub = new TaskSub();
+		taskSub.setProject_id(project_id);
+		taskSub.setTask_id(task_id);
+		//----------------------------------------------------------------
+		List<TaskSub> taskSubList = lkhService.taskWorkerlist(taskSub);
+		//----------------------------------------------------------------
+
+
+		model.addAttribute("taskAttachList", taskAttachList);
+		model.addAttribute("taskSubList", taskSubList);
+		model.addAttribute("task", task);
+		
 		return "project/task/task_read";
 	}
 

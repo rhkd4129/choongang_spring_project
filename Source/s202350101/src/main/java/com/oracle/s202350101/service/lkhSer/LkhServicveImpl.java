@@ -116,8 +116,8 @@ public class LkhServicveImpl implements LkhService {
 
 	//프로젝트 타임라인
 	@Override
-	public List<Task> task_timeline(int project_id) {
-		return lkhDao.task_timeline(project_id);
+	public List<Task> task_timeline(int project_id, String timeline_type) {
+		return lkhDao.task_timeline(project_id, timeline_type);
 	}
 
 	@Override

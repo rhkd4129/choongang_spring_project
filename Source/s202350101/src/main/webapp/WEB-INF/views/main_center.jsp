@@ -12,7 +12,7 @@
 	display: none;
 }
 .pms-step {
-	line-height: 25px;
+	line-height: 22px;
 }
 .pms-center-title{
 	margin-left:10px;
@@ -322,58 +322,58 @@
 
 			<!-- PMS소개란 -->
 			<div class="dropdown-menu position-static d-flex flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow mt-3" data-bs-theme="light">
-				<nav id="navPMS" class="col-lg-8">
+				<nav id="navPMS" class="col-lg-8"">
 					<ul class="list-unstyled d-flex flex-column gap-2">
 						<li>
 							<a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-1 px-3 lh-sm text-start">
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
-								<div>
+								<div class="m-2">
 									<strong class="d-block">전체 작업 체계화/시각화 제공</strong>
-									<span>Take a tour through the product</span>
+									<span></span>
 								</div>
 							</a>
 						</li>
 						<li>
 							<a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-1 px-3 lh-sm text-start">
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
-								<div>
+								<div class="m-2">
 									<strong class="d-block">작업진행 과정 공유로 원활한 의사소통 가능</strong>
-									<span>Take a tour through the product</span>
+									<span> </span>
 								</div>
 							</a>
 						</li>
 						<li>
 							<a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-1 px-3 lh-sm text-start">
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
-								<div>
+								<div class="m-2">
 									<strong class="d-block">프로젝트 스케쥴 관리의 편의성</strong>
-									<span>Take a tour through the product</span>
+									<span> </span>
 								</div>
 							</a>
 						</li>
 						<li>
 							<a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-1 px-3 lh-sm text-start">
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
-								<div>
+								<div class="m-2">
 									<strong class="d-block">개발 표준화 제공 및 프로젝트 품질 향상</strong>
-									<span>Take a tour through the product</span>
+									<span> </span>
 								</div>
 							</a>
 						</li>
 						<li>
 							<a href="#" class="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-1 px-3 lh-sm text-start">
 								<svg class="bi" width="24" height="24"><use xlink:href="#image-fill"></use></svg>
-								<div>
+								<div class="m-2">
 									<strong class="d-block">효율적인 프로젝트 산출물 관리 (문서화 폴더링)</strong>
-									<span>Take a tour through the product</span>
+									<span> </span>
 								</div>
 							</a>
 						</li>
 					</ul>
 				</nav>
 				<nav id="navStepInfo" class="col-lg-8 pms-nav-step">
-					<ul class="list-unstyled d-flex flex-column gap-2">
-						<li id="step1" class="pms-step gap-2 py-1 px-3 text-start">
+					<ul class="list-unstyled d-flex flex-column">
+						<li id="step1" class="pms-step px-2 text-start">
 1. 요구사항 분석<br>
 다양한 분야에 이해관계자들의 사용자의 요구사항을 고려해 새로운 제품이나 변경된 제품에 대해 부합하는 요구와 조건을 결정하고,
 변경된 제품에 대해서는 기존 시스템의 문제점을 파악해 새로운 요구사항을 도출하여 수집<br>
@@ -381,18 +381,17 @@
  1) 사용자 요구사항 : 단순 시스템이 제공해야 하는 서비스에 대한 추상적 서술 및 시스템 제약 사항<br>
  2) 시스템 요구사항 : 시스템 기능에 대한 상세하고 정형화된 정의
 						</li>
-						<li id="step2" class="pms-step gap-2 py-1 px-3 text-start">
+						<li id="step2" class="pms-step px-2 text-start">
 요구사항 분석 단계에서 산출된 요구사항들을 설계하는 과정이다.<br>
 시스템의 내부 프로그램 또는 모듈 간의 관계와 구조를 설계한다.<br>
 프로그램 내의 각 모듈에서의 처리 절차나 알고리즘을 설계한 후 설계 명세서를 작성<br>
 각 화면을 그리고 화면과 기능에 맞는 ERD를 작성한다.<br>
 각 인원별로 담당할 기능들에 대해 구현 방법을 생각하고, 그에 해당하는 자료를 조사하여 설계 내용을 수정<br>
-설계 방법을 생각했다면 버전 관리 방법도 생각해함<br>
  1) 시스템 설계 : 시스템을 여러 컴포넌트의 집합체로 보고 각 컴포넌트들이 요청한 결과를 <br>
  어떻게 상호작용하는지에 초점<br>
  2) 프로그램 설계(상세설계) : 각 모듈의 내부 논리 작성
 						</li>
-						<li id="step3" class="pms-step gap-2 py-1 px-3 text-start">
+						<li id="step3" class="pms-step px-2 text-start">
 설계 단계에서 논리적으로 결정한 문제 해결 방법을 토대로 프로그래밍 언어를 사용해 실제로 프로그램을 만드는 단계<br>
 많은 사람이 참여하여 작업하기 때문에 다양한 규칙이 존재하므로 결정된 규칙에 맞춰 진행<br>
 (개발에 사용할 프로그래밍 언어와 기법, 스타일, 순서 등을 결정)<br>
@@ -402,7 +401,7 @@
  2) 테스팅과 유지보수하기 쉬운 코드<br>
  3) 리팩토링
 						</li>
-						<li id="step4" class="pms-step gap-2 py-1 px-3 text-start">
+						<li id="step4" class="pms-step px-2 text-start">
 개발한 시스템이 요구사항과 부합하는지 실행 결과를 검사하고 평가함<br>
 테스트는 단위/통합/시스템/인수 테스트로 나뉘며 테스트 계획서 및 통합 테스트 결과 보고서를 작성<br>
 테스트를 하며 누락된 기능 및 항목이 있는지 확인함<br>

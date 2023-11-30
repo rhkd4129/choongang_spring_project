@@ -33,22 +33,24 @@ public class SampleInterceptor implements HandlerInterceptor {
 	
 	// 1번째 실행
 	@Override
-	public boolean preHandle(HttpServletRequest request, 
-							 HttpServletResponse response, 
-							 Object handler
-							 ) throws Exception {
-//		System.out.println("pre handle....................................");
+   public boolean preHandle(HttpServletRequest request, 
+           HttpServletResponse response, 
+           Object handler
+           ) throws Exception {
+		//System.out.println("pre handle....................................");
 		// 세션이 있으면 만들지마 (로그인할때 이미 만듬)
 		System.out.println();
 		HttpSession session = request.getSession(false);
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 		
 		if(userInfo == null) {
-			System.out.println("preHandle userInfo is no exists");
-			response.sendRedirect("user_login");
-			return false;	// 컨트롤러 진행 x
+		  System.out.println("preHandle userInfo is no exists");
+		  response.sendRedirect("user_login");
+		  return false;   // 컨트롤러 진행 x
 		} else
-		return true;	// 컨트롤러 진행 o
+		  session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
+		  
+		return true;   // 컨트롤러 진행 o
 	}
 
 }

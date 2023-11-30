@@ -47,17 +47,17 @@
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.5)', // 빨간색
                                 'rgba(54, 162, 235, 0.5)', // 파란색
-                                'rgba(153, 102, 255, 0.5)', // 보라색
+                                'rgba(176, 136, 255, 0.5)', // 보라색
                             ],
                             borderColor: [
                                 'rgb(255, 99, 132)', // 빨간색
                                 'rgb(54, 162, 235)', // 파란색
-                                'rgb(153, 102, 255)', // 보라색
+                                'rgb(176, 136, 255)', // 보라색
                             ],
                             borderWidth: 1
                         }]
                     };
-
+                    
                     createDrawChart(doughnutCtx, 'doughnut', doughnut_data, doughnut_options);
                 }
             });
@@ -90,14 +90,14 @@
                             {
                                 label: '진행중인 작업',
                                 data: stats_1,
-                                backgroundColor: 'rgba(75, 192, 192, 0.5)',  // 녹색 배경
-                                borderColor: 'rgb(75, 192, 192)',  // 녹색 테두리
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)',  // 파란 배경
+                                borderColor: 'rgb(54, 162, 235)',  // 파란 테두리
                             },
                             {
                                 label: '완료된 작업',
                                 data: stats_2,
-                                backgroundColor: 'rgba(153, 102, 255, 0.5)',  // 보라색 배경
-                                borderColor: 'rgb(153, 102, 255)',  // 보라색 테두리
+                                backgroundColor: 'rgba(176, 136, 255, 0.5)',  // 보라색 배경
+                                borderColor: 'rgb(176, 136, 255)',  // 보라색 테두리
                             },
                         ]
                     };

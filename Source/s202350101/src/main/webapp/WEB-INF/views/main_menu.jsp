@@ -54,7 +54,6 @@
             <li><a href="prj_mgr_req_create" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 생성</a></li>
             <li><a href="prj_mgr_step_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded">프로젝트 단계 프로파일</a></li>
             <li><a href="javascript:gotoCheckProjectID('prj_home')" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>프로젝트 Home</a></li>
-            <li><a href="dashboard" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>작업 보드</a></li>
             <li>
             	<a href="task_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><img src="/common/images/icon_board.png" width="16" height="14" style="margin-top:2px;margin-right:8px">작업 목록</a>
             	<span style="margin-left:10px;cursor:pointer" onclick="goto('garbage_list')">
@@ -64,7 +63,8 @@
 					</svg>
             	</span>
             </li>
-            <li><a href="task_timeline" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>작업 타임 라인</a></li>
+            <li><a href="dashboard" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>작업 보드</a></li>
+            <li><a href="task_timeline" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>작업 타임라인</a></li>
             <li><a href="prj_calendar" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>프로젝트 캘린더</a></li>
             <li><a href="prj_board_data_list" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>공지/자료</a></li>
             <li><a href="prj_meeting_calendar" class="link-body-emphasis d-inline-flex text-decoration-none rounded"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>회의록</a></li>

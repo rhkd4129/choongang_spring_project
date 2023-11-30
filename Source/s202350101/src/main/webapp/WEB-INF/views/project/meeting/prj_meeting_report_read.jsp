@@ -36,6 +36,9 @@
 		height: 100px;
 		padding-right: 20px;
 	}
+	pre {
+	     margin-top: 16px;
+	}
 </style>
 <!-- CSS END -->
 
@@ -174,9 +177,9 @@
 					</c:forEach>
 					<tr>
 						<td colspan="2" class="button">
-						<input type="button" value="목록" onclick="location.href='/prj_meeting_calendar?project_id=${project_id}'">
-						<input type="button" value="수정" onclick="location.href='/prj_meeting_report_update?meeting_id=${meeting_id}&project_id=${project_id}'">
-						<input type="button" value="삭제" id="deleteChk" onclick="delchk()">
+						<input type="button" class="btn btn-dark btn-sm" value="목록" onclick="location.href='/prj_meeting_calendar?project_id=${project_id}'">
+						<input type="button" class="btn btn-dark btn-sm" value="수정" onclick="location.href='/prj_meeting_report_update?meeting_id=${meeting_id}&project_id=${project_id}'">
+						<input type="button" class="btn btn-dark btn-sm" value="삭제" id="deleteChk" onclick="delchk()">
 						</td>
 					</tr>
 				</table>

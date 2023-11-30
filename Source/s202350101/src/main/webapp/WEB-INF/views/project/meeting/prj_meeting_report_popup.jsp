@@ -10,13 +10,13 @@
 <!--CSS START -->
 <style type="text/css">
 	#meeting {
-		width: 80%;
+		width: 100%;
 		padding: 20px;
 		text-align: center;
 		margin-top: 30px;
 	}
 	#title {
-		width: 80%;
+		width: 100%;
 		text-align: center;
 		font-size: 25pt;
 	}

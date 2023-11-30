@@ -213,16 +213,20 @@
 			                    </select>
                   			</td>
 						</tr>
-						<tr>
-                  			<td>시작 날짜</td>
-                  			<td><input type="date" name="class_start_date" id="" class="form-control" value="${cr.class_start_date}">
-								<form:errors path="class_start_date" class="errors"/></td>
-
-                  			<td>종료 날짜</td>
-                  			<td><input type="date" name="class_end_date" class="form-control" value="${cr.class_end_date}">
-								<form:errors path="class_end_date" class="errors"/><br></td>
-
-						</tr>
+		                <tr>
+		                    <td>시작 날짜</td>
+		                    <td>
+		                    	<input type="date" name="class_start_date" id="" class="form-control" value="${cr.class_start_date}">
+		                        <form:errors path="class_start_date" class="errors"/>
+		                        <form:errors path="startDate" class="errors"/><br>
+		                    </td>      <%--에러표시용--%>
+                            <td>종료 날짜</td>
+                            <td>
+                            	<input type="date" name="class_end_date" class="form-control" value="${cr.class_end_date}">
+		                        <form:errors path="class_end_date" class="errors"/>
+		                        <form:errors path="startDate" class="errors"/><br>
+		                    </td>      <%--에러표시용--%>
+		                </tr>
 					</tbody>
                     </table>
                     <button class="btn btn-dark" type="submit">반 생성하기</button>

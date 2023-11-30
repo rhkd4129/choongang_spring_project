@@ -76,9 +76,6 @@ public class LkhAsynController {
         /*****************************************************/
     }
 
-
-
-
     //프로젝트 단계별 그래프
     @GetMapping("project_step_chart")
     public AjaxResponse project_step_chart(HttpServletRequest request){
@@ -108,12 +105,20 @@ public class LkhAsynController {
      ****   작업 타임라인 페이지 들어가자마자 ajax로  뿌리기 /task_timeline/       ******
      ****************************************************************************/
     @GetMapping("task_timeline_asyn")
-    public List<Task> task_timeline(HttpServletRequest request){
+    public List<Task> task_timeline(String timeline_type, HttpServletRequest request){
         log.info("task_timeline AsynController init");
 
         UserInfo userInfo =(UserInfo) request.getSession().getAttribute("userInfo");
         /********************************************************************************/
-        return  lkhService.task_timeline(userInfo.getProject_id());
+        //2023-11-29 수정함 by jmh
+        if(timeline_type == null) {
+        	timeline_type = "by_step"; //기본-단계별
+        }else {
+        	if(timeline_type.equals("")) {
+        		timeline_type = "by_step"; //기본-단계별
+        	}
+        }        
+        return  lkhService.task_timeline(userInfo.getProject_id(), timeline_type);
         // serivce에 로직이 구현되어 잇음
         /********************************************************************************/
     }

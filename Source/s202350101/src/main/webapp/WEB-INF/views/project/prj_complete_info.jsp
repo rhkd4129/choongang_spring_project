@@ -8,22 +8,140 @@
 <title>Insert title here</title>
 
 <!--CSS START -->
-<style type="text/css">
-	.pagebox {
-		margin-top: 10px;
-		text-align: center;
-	}
-</style>
 <!-- CSS END -->
 
 <!-- JS START -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 <!-- JS END -->
 
+<!-- 채팅 -->
+<link rel="stylesheet" type="text/css" href="/pmschat/css/chat.css">
+<script type="text/javascript" src="/pmschat/js/chat.js"></script>
+
+<!-- 그래프 -->
+<link rel="stylesheet" type="text/css" href="/lkh/css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/lkh/js/chart_options.js"></script>
+
+<style>
+.bg-yellow {
+  background-color: #ffc107; /*#ffc107; #fdb933 9ad0f5*/
+}
+/*프로젝트 소개란*/
+.pms-nav-step {
+	background-color:#fff;
+	height: 273px;
+	display: none;
+}
+.pms-step {
+	line-height: 25px;
+}
+.pms-circle-home {
+	width:32px;
+	height:32px;
+	background-color:#5588ff;
+	text-align:center;
+	color:#fff;
+	line-height:32px;
+	border-radius:50% !important;
+	flex-shrink:0 !important;
+}
+.pms-circle-home.bg-3 { /*공지/자료  8994BD*/
+	background-color:#ffc107;
+	color:#fff;
+}
+.pms-circle-home.bg-4 { /*업무보고 */
+	background-color:#78ABAC;
+	color:#fff;
+}
+.pms-circle-home.bg-5 { /*작업 */
+	background-color:#55B4D1;
+	color:#fff;
+}
+.pms-overflow {
+	display:block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 300px;
+}
+.pms-overflow-task {
+	display:block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 700px;
+}
+.pms-p-3{
+	padding-top:16px;
+	padding-left:16px;
+	padding-right:16px;
+	padding-bottom:0px;
+}
+.pms-py-3{
+	padding-top:13px;
+	padding-bottom:13px;
+}
+
+/*오늘 할 일*/
+#todolistMain {	
+	height: 393px;
+}
+
+/*달력*/
+#calendarMain {
+	height: 393px;
+	padding:10px;
+}
+.fc-scrollgrid-sync-table {
+	height:355px;
+}
+.fc-theme-standard td, .fc-theme-standard th {
+	border-radius:20%;
+    border: 0px solid var(--fc-border-color);
+}
+.fc-daygrid-day-frame:hover {
+	border-radius:20%;
+    background-color: #f8f9fa;
+}
+.fc .fc-daygrid-day-top {
+    justify-content: center;
+}
+.fc-theme-standard .fc-scrollgrid {
+    border: 0px solid var(--fc-border-color);
+}
+.fc .fc-col-header-cell-cushion {
+	text-decoration: none;
+	--bs-text-opacity: 1;
+	font-family: var(--bs-body-font-family);
+	color: var(--bs-secondary-color) !important;
+}
+.fc .fc-daygrid-day-number {
+    padding: 1px;
+}
+.fc-daygrid-day-top a {
+    color: #555555;
+    text-decoration: none;
+}
+.fc .fc-toolbar-title {
+    font-size: 1.5em;
+    margin: 0px;
+}
+.fc .fc-button {
+	padding: 0.2em 0.35em;
+}
+.align-items-center {
+    align-items: normal;
+}
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: var(--fc-today-bg-color);
+}
+</style>
 <script type="text/javascript">
 	$(function() {
-		
 		$.ajax({
 			url			: '/main_header',
+			async		: false, //동기식 호출
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
@@ -32,24 +150,26 @@
 		
 		$.ajax({
 			url			: '/main_menu',
+			async		: false, //동기식 호출
 			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
 			}
 		});
-	
+
 		$.ajax({
 			url			: '/main_footer',
-			dataType 	: 'html',
+			dataType 	: 'text',
 			success		: function(data) {
 				$('#footer').html(data);
 			}
 		});
+		
 	});
+		
 </script>
 </head>
 <body>
-
 <!-- HEADER -->
 <header id="header"></header>
 
@@ -63,137 +183,94 @@
 		
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-			<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-			  <symbol id="house-door-fill" viewBox="0 0 16 16">
-			    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
-			  </symbol>
-			</svg>		
-			<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
-			    <ol class="breadcrumb breadcrumb-chevron p-1">
-			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis" href="/main">
-			          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
-			          <span class="visually-hidden">Home</span>
-			        </a>
-			      </li>
-			      <li class="breadcrumb-item">
-			        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">전체 게시판</a>
-			      </li>
-			      <li class="breadcrumb-item active" aria-current="page">이벤트</li>
-			    </ol>
-			</nav>
-			<div class="container-fluid">
-				<div style="margin-top:15px;height:45px">
-					<span class="apptitle">이벤트</span>
-				</div>
-			</div>	
-		
-			<div class="container-fluid">
-	    		<input type="button" class="btn btn-dark btn-sm" value="작성" onclick="location.href='event_insert_form'">	 	
-		 	
-		 	
-		 		<!-- 추천수 가장 높은 row 3개 -->
-		 		<div style="text-align:center;"><h6><b><추천 게시글></b></h6></div>
-		 		<table class="table">
-			 		<colgroup>
-						<col width="5%"></col><col width="10%"></col><col width="37%"></col><col width="12%"></col>
-						<col width="10%"></col><col width="12%"></col><col width="7%"></col><col width="7%"></col>
-					</colgroup>	
-		 			<thead class="table-light">
-		 				<tr>
-		 					<th>번호</th><th>게시종류</th><th>제목</th><th>이름</th>       
-						    <th>작성일</th><th>수정일</th><th>조회</th><th>추천</th>
-		 				</tr>
-		 			</thead>
-		 			<tbody>
-		 			<c:forEach var="good" items="${eventGood }" varStatus="status">
-		 				<tr id="good${status.count}">
-		 					<td>${status.count }</td>
-		 					<td>${good.bd_category }</td>
-		 					<td><a href="event_content?doc_no=${good.doc_no}">${good.subject }</a></td>
-		 					<td>
-		 						${good.user_name }
-								<span class="iconChat">
-									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chat-text" viewBox="0 0 16 16">
-										<path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
-										<path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8zm0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
-									</svg>
-									<input type="hidden" name="chat_id" value="${bdFree.user_id}">
-								</span>
-		 					</td>
-		 					<td>${good.create_date }</td>
-		 					<td>${good.modify_date }</td>
-		 					<td>${good.bd_count }</td>
-		 					<td>${good.good_count }</td>
-		 				</tr>	 				
-		 			</c:forEach>
-		 			</tbody>
-		 		</table>
-		 	
-		 		
-		 		<!-- 전체 리스트 -->
-		 		<h6 class="mt-2 pt-2" style="text-align:right">총 건수 :  ${eventCount}</h6>	 	
-				<table class="table">
-			 		<colgroup>
-						<col width="5%"></col><col width="10%"></col><col width="37%"></col><col width="12%"></col>
-						<col width="10%"></col><col width="12%"></col><col width="7%"></col><col width="7%"></col>
-					</colgroup>	
-					<thead class="table-light">
-						<tr>
-		 					<th>번호</th><th>게시종류</th><th>제목</th><th>이름</th>       
-						    <th>작성일</th><th>수정일</th><th>조회</th><th>추천</th>
-						</tr> 
-					</thead>
-					<tbody>
-					<c:forEach var="bdFree" items="${eventList}" varStatus="status">
-						<tr id="bdFree${bdFree.rn }"> 
-							<td>${bdFree.rn}</td> 
-							<td>${bdFree.bd_category}</td>
-							<td><a href="event_content?doc_no=${bdFree.doc_no}">${bdFree.subject}</a></td>
-							<td>
-								${bdFree.user_name}
-								<span class="iconChat">
-									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chat-text" viewBox="0 0 16 16">
-										<path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
-										<path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8zm0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
-									</svg>
-									<input type="hidden" name="chat_id" value="${bdFree.user_id}">
-								</span>
-							</td>
-						    <td>${bdFree.create_date}</td>
-							<td>${bdFree.modify_date}</td>
-						    <td>${bdFree.bd_count}</td>
-						    <td>${bdFree.good_count}</td> 
-						</tr>
-					</c:forEach>
-					</tbody>
-				</table>
-					
-					
-				<nav aria-label="Page navigation example">
-				  <ul class="pagination justify-content-center">
+<!------------------------------ //개발자 소스 입력 START ------------------------------->
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="house-door-fill" viewBox="0 0 16 16">
+    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+  </symbol>
+</svg>		
+<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+    <ol class="breadcrumb breadcrumb-chevron p-1">
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis" href="/main">
+          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+          <span class="visually-hidden">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis fw-semibold text-decoration-none" href="prj_home">프로젝트</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">프로젝트 Home</li>
+    </ol>
+</nav>
+<div class="container-fluid">
+	<div style="margin-top:15px;height:25px">
+		<span class="apptitle">프로젝트 Home</span>
+	</div>
+</div>
 
-					<c:if test="${page.startPage > page.pageBlock }">
-						<li class="page-item"><a class="page-link" href="board_event?currentPage=${page.startPage - page.pageBlock }" tabindex="-1" aria-disabled="true">이전</a></li>
-					</c:if>
-					
-					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
-						<c:choose>
-							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
-							<c:otherwise><li class="page-item"></c:otherwise>
-						</c:choose>
-						<a class="page-link" href="board_event?currentPage=${i}">${i}</a></li>
-					</c:forEach>
-					
-					<c:if test="${page.endPage < page.totalPage }">
-						<li class="page-item"><a class="page-link" href="board_event?currentPage=${page.startPage + page.pageBlock }')">다음</a></li>
-					</c:if>
-				  </ul>
-				</nav>
+<table width="100%">
+	<tr>
+		<td width="65%" style="vertical-align:top">
+		
+			<!-- 스크롤 이미지 -->
+			<div class="dropdown-menu position-static d-flex flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow mt-3" data-bs-theme="light">
+				<div class="card w-100per shadow-sm">
+		            <div class="card-body">
+		              <p class="card-text"><h5 class="text-primary"><b>${prjInfo.project_name}</b></h5></p>
+		              <p class="card-text">${prjInfo.project_intro}</p>
+		              <img src="/common/images/intro/project_step.png" style="margin:10px 0px">
+		              <p class="card-text">프로젝트 기간 : ${prjInfo.project_startdate} ~ ${prjInfo.project_enddate}</p>
+		              <c:if test="${prjInfo.attach_name ne ''}">
+		              	<p class="card-text">첨부파일 : <a href="javascript:popup('/upload/${prjInfo.attach_path}',800,600)">${prjInfo.attach_name}</a></p>
+		              </c:if>
+		              <p class="card-text">팀장 : 
+		              	<c:forEach var="prjMember" items="${prjMemList}">
+		              		<c:if test="${prjMember.user_id eq prjInfo.project_manager_id}">
+				              	<img style=" width: 32px; height: 32px; border-radius: 50%; margin-left:10px; margin-right:5px;" 
+				              	alt="${prjMember.user_name}" 
+				              	src="${pageContext.request.contextPath}/${prjMember.attach_path }/${prjMember.attach_name}">
+				              	${prjMember.user_name}
+				              	<span class="iconChat">
+									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chat-text" viewBox="0 0 16 16">
+										<path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+										<path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8zm0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
+									</svg>
+									<input type="hidden" name="chat_id" value="${prjMember.user_id}">
+								</span>	
+				            </c:if>
+		              	</c:forEach>	
+	              
+		              </p>
+		              <p class="card-text">팀원 : 
+		              	<c:forEach var="prjMember" items="${prjMemList}">
+		              		<c:if test="${prjMember.user_id ne prjInfo.project_manager_id}">
+				              	<img style=" width: 32px; height: 32px; border-radius: 50%; margin-left:10px; margin-right:5px;" 
+				              	alt="${prjMember.user_name}" 
+				              	src="${pageContext.request.contextPath}/${prjMember.attach_path }/${prjMember.attach_name}">
+				              	${prjMember.user_name}
+							    <span class="iconChat">
+									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chat-text" viewBox="0 0 16 16">
+										<path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+										<path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8zm0 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
+									</svg>
+									<input type="hidden" name="chat_id" value="${prjMember.user_id}">
+								</span>				              	
+				            </c:if>
+		              	</c:forEach>	
+		              </p>
+		            </div>
+	          	</div>
 			</div>
+			
+		</td>
+		<td width="35%" style="vertical-align:top">
+		</td>
+	</tr>
+</table>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
-		</main>		
+	
+			</main>		
 		
 	</div>
 </div>
@@ -255,7 +332,6 @@
         </li>
       </ul>
     </div>
-    
+    	
 </body>
 </html>
-

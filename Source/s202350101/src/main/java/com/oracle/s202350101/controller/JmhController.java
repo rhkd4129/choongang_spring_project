@@ -150,8 +150,8 @@ public class JmhController {
 		model.addAttribute("prjTaskProgressList", prjTaskProgressList);
 		
 		return "/project/prj_home";
-	}
-
+	}	
+	
 	//프로젝트 Home : 일정
 	@GetMapping("/main_prj_meeting")
 	@ResponseBody
@@ -248,6 +248,43 @@ public class JmhController {
 		return "/project/prj_complete_list";
 	}
 	
+	//완료 프로젝트 정보 보기
+	@GetMapping(value = "prj_complete_info")
+	public String prjCompleteInfo(String s_project_id, HttpServletRequest request, Model model) {
+
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		int project_id = 0;
+		if(s_project_id == null) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
+			project_id = userInfoDTO.getProject_id();
+		}else {
+			if(s_project_id.equals("")) { //넘어온 id가 없으면 현재 로그인 사용자의 project_id
+				project_id = userInfoDTO.getProject_id();
+			}else {
+				project_id = Integer.parseInt(s_project_id);
+			}
+		}
+		System.out.println("project_id="+project_id);
+		
+		//프로젝트 기본정보 가져오기
+		//----------------------------------------------------------------------
+		PrjInfo prjInfo = jmhPrjInfoSer.selectOne(project_id);
+		//----------------------------------------------------------------------
+		System.out.println("prjInfo="+prjInfo.getProject_name());
+		
+		//팀원정보
+		//-------------------------------------------------------------------------------------
+		List<UserInfo> prjMemList = jmhPrjInfoSer.selectMemList(prjInfo.getProject_id());
+		//-------------------------------------------------------------------------------------
+		System.out.println("prjMemList.size->" + prjMemList.size());
+		
+		model.addAttribute("userInfoDTO", userInfoDTO);
+		model.addAttribute("prjInfo", prjInfo);
+		model.addAttribute("prjMemList", prjMemList);
+		
+		return "/project/prj_complete_info";
+	}
+
 
 	//#######################################################################
 	//############  프로젝트 프로젝트 공지/자료 게시판 prj_board_data_OOO  ############

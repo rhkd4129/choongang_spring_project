@@ -134,7 +134,7 @@
 	
 		 		
 		 		<!-- 전체 리스트 -->
-		 		<h6 class="mt-5 pt-3" style="text-align:right">총 건수 : ${totalBdFree}</h6>
+		 		<h6 class="mt-2 pt-2" style="text-align:right">총 건수 : ${totalBdFree}</h6>
 				<table class="table">
 			 		<colgroup>
 						<col width="5%"></col><col width="10%"></col><col width="37%"></col><col width="12%"></col>
@@ -173,19 +173,26 @@
 				
 				
 				<!-- 페이징 작업 -->
-				<div class="pagebox">
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination justify-content-center">
+
 					<c:if test="${page.startPage > page.pageBlock }">
-						<a href="board_notify?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+						<li class="page-item"><a class="page-link" href="board_notify?currentPage=${page.startPage - page.pageBlock }" tabindex="-1" aria-disabled="true">이전</a></li>
 					</c:if>
 					
-					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-						<a href="board_notify?currentPage=${a }">[${a }]</a>
+					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
+						<c:choose>
+							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+							<c:otherwise><li class="page-item"></c:otherwise>
+						</c:choose>
+						<a class="page-link" href="board_notify?currentPage=${i}">${i}</a></li>
 					</c:forEach>
 					
 					<c:if test="${page.endPage < page.totalPage }">
-						<a href="board_notify?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+						<li class="page-item"><a class="page-link" href="board_notify?currentPage=${page.startPage + page.pageBlock }')">다음</a></li>
 					</c:if>
-				</div>
+				  </ul>
+				</nav>
 			</div>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

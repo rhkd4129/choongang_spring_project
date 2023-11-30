@@ -14,7 +14,6 @@
 }
 
 
-
 /*  task dashboard home */
 .chart_1,.chart_2 {
     margin: 1%;
@@ -49,7 +48,7 @@
     display: flex;
     justify-content: center;
     width: 60%;
-    border: 1px solid black;
+    border: 1px solid darkgray;
     border-radius: 10px;
     flex-grow: 1; /* 내부 요소에 따라 유동적으로 크기 조절 */
 }
@@ -57,30 +56,42 @@
 .project_step{
     display: flex;
     flex-direction: column-reverse;
-    margin: 3%;
+    margin: 3% 2.5% 2% 2.5%;
     color: black;
 
 }
 
-.project_step_subject {
+/* .project_step_subject {
 
-        background-color:rgba(75, 192, 192, 0.2);
+	background-color: rgba(75, 192, 192, 0.2);
     border: 1px solid black;
     border-radius: 10px;
     text-align: center;
     margin: 5%;
     width: 170px;
     color: black;
+} */
+
+.project_step_subject{
+    color: black;
+	font-weight: bold;
+    background-color: rgba(255, 236, 179);
+    border: 2px solid #BDB76B;
+    border-radius: 10px;
+    text-align: center;
+    margin: 5% 2% 2% 2%;
+    width: 170px;
 }
 
 .project_step_task_subject{
     color: black;
-    background-color:    rgba(54, 162, 235, 0.4);
-    border: 2px solid black;
+	background-color: rgba(255, 248, 225);
+    border: 1px solid #BDB76B;
     border-radius: 10px;
     text-align: center;
     margin: 2%;
     width: 170px;
+    padding: 1%;
 }
 
 .current_task{
@@ -89,16 +100,17 @@
     flex-direction: column-reverse;
     justify-content: space-evenly;
     align-items: center;
-    border: 2px solid black;
+    border: 1px solid darkgray;
     border-radius: 10px;
-
+	width: 20%;
 }
 .cur_task {
-    background-color:    rgba(54, 162, 235, 0.4);
-    border: 2px solid black;
-    margin: 4%;
+	background-color: rgba(135, 206, 250, 0.5);
+    border: 1px solid #C0C0C0;
+    margin: 2% 4%;
     padding: 2%;
-    width: 170px;
+    /* width: 170px; */
+    width: 90%;
     text-align: center;
     border-radius: 10px;
     transition: transform 0.3s ease;
@@ -108,10 +120,17 @@
 }
 
 .current_name{
-    border: 2px solid black;
+    border: 1px solid #C0C0C0;
     display: block;
     text-align: center;
     padding: 5px;
-    background-color: rgba(75, 192, 192, 0.2);
+    background-color: #2C3E50;
+    color: white;
     border-radius: 0 0 10px 10px;
+    margin-top: 5%;
+	width: 90%;
+}
+
+a:link, a:visited {
+    color: black;
 }
