@@ -844,7 +844,7 @@ public class CyjController {
 		List<BdFreeComt> commentList = cs.eventComt(bdFreeComt);
 		//--------------------------------------------------------------
 		System.out.println("CyjController commentList.size()-> " + commentList.size());
-		model.addAttribute("commentList", commentList);
+		model.addAttribute("freeComtList", commentList);
 
 		return "board/board_free/board_free_read";
 	}
