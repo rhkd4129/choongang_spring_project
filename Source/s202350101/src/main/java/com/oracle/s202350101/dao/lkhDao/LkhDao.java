@@ -28,7 +28,7 @@ public interface LkhDao {
 	List<Task>			task_time_decs(Task task);
 	List<Task>			task_time_aces(Task task);
 	// 작업 타임라인보기
-	List<Task>			task_timeline(int project_id);
+	List<Task>			task_timeline(int project_id, String timeline_type);
 
 
 	// ----------------------작업 상세 내용 ----------------------//

@@ -66,14 +66,19 @@ public class KjoController {
     public String admin_add_class(@Validated @ModelAttribute("cr")
                                   ClassRoom cr, BindingResult bindingResult, Model model) {
         log.info("admin_add_class POST");
-
+        
+        int crtimeresult = 0;
         //  강의 종료 날짜가 강의 시작 날짜보다 작을 때 -> 에러 발생 & 표시
-        int crtimeresult = cr.getClass_start_date().compareTo(cr.getClass_end_date());
+        if (cr.getClass_start_date() != null && cr.getClass_end_date() != null) {
+            crtimeresult = cr.getClass_start_date().compareTo(cr.getClass_end_date());
+        }
         if (crtimeresult > 0) {
             bindingResult.rejectValue("startDate", "Classroom.dateError.Object");
         }
+        
         if (bindingResult.hasErrors()) {
             log.info("admin_add_class POST .ERROR : {}", bindingResult);
+            model.addAttribute("cr", cr);
             log.info(bindingResult.getFieldError().toString());
             log.info("admin_add_class POST .ERROR Return");
             return "admin/admin_add_class";

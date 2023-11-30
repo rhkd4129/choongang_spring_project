@@ -242,10 +242,14 @@
 						<ul class="pagination justify-content-center">
                    
 						<c:if test="${page.startPage > page.pageBlock}">
-						    <li class="page-item disabled"><a class="page-link" href="admin_approval?currentPage=${page.startPage-page.pageBlock}" tabindex="-1" aria-disabled="true">Previous</a></li>
+						    <li class="page-item"><a class="page-link" href="admin_approval?currentPage=${page.startPage-page.pageBlock}" tabindex="-1" aria-disabled="true">Previous</a></li>
 						</c:if>
 						<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-							<li class="page-item"><a class="page-link" href="admin_approval?currentPage=${i}">[${i}]</a></li>
+							<c:choose>
+								<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+								<c:otherwise><li class="page-item"></c:otherwise>
+							</c:choose>
+							<a class="page-link" href="admin_approval?currentPage=${i}">${i}</a></li>							
 						</c:forEach>                  
 						<c:if test="${page.endPage > page.totalPage}">
 							<li class="page-item"><a class="page-link" href="admin_approval?currentPage=${page.startPage+page.pageBlock}">Next</a></li>

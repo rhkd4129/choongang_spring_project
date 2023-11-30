@@ -210,19 +210,26 @@
 				
 				
 				<!-- 페이징 작업 -->
-				<div class="pagebox">
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination justify-content-center">
+
 					<c:if test="${page.startPage > page.pageBlock }">
-						<a href="board_qna?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+						<li class="page-item"><a class="page-link" href="board_qna?currentPage=${page.startPage - page.pageBlock }" tabindex="-1" aria-disabled="true">이전</a></li>
 					</c:if>
 					
-					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-						<a href="board_qna?currentPage=${a }">[${a }]</a>
+					<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }">
+						<c:choose>
+							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+							<c:otherwise><li class="page-item"></c:otherwise>
+						</c:choose>
+						<a class="page-link" href="board_qna?currentPage=${i}">${i}</a></li>
 					</c:forEach>
 					
 					<c:if test="${page.endPage < page.totalPage }">
-						<a href="board_qna?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+						<li class="page-item"><a class="page-link" href="board_qna?currentPage=${page.startPage + page.pageBlock }')">다음</a></li>
 					</c:if>
-				</div>
+				  </ul>
+				</nav>
 			</div>
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		

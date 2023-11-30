@@ -91,7 +91,8 @@
       	<c:forEach var="prjInfo" items="${prjInfoList}">      	
 	        <div class="col">
 	          <div class="card shadow-sm">
-	            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+	            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+	            <img src="/upload/${prjInfo.attach_path}">	            
 	            <div class="card-body">
 	              <p class="card-text"><h5>${prjInfo.project_name} </h5></p>
 	              <p class="card-text">${prjInfo.project_intro}</p>
@@ -100,8 +101,7 @@
 	              <p class="card-text">팀원 : ${prjInfo.member_user_name}</p>
 	              <div class="d-flex justify-content-between align-items-center">
 	                <div class="btn-group">
-	                  <button type="button" class="btn btn-sm btn-outline-secondary">더보기</button>
-	                  <button type="button" class="btn btn-sm btn-outline-secondary">입장</button>
+	                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="gotoCheckProjectID('prj_complete_info','${prjInfo.project_id}')">더보기</button>
 	                </div>
 	                <small class="text-body-secondary">9 mins</small>
 	              </div>

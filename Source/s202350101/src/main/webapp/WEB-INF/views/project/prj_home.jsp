@@ -361,7 +361,7 @@
 				}
 				list 	= '';
 				list 	+= '<label class="list-group-item d-flex gap-2" style="cursor:pointer" onclick="popup(\'';
-				list	+= 'task_read?doc_no=' + board.doc_no + '&project_id='+show_project_id+'\')">';
+				list	+= 'task_read?task_id=' + board.task_id + '&project_id='+show_project_id+'\')">';
 				//list 	+= '<input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="">';
 				
 				//list 	+= '<img style=" width: 32px; height: 32px; border-radius: 50%; margin-left:10px; margin-right:5px;" alt="${prjMember.user_name}"'; 
@@ -382,20 +382,6 @@
 		}
 	} 
 	
-	function showStepInfo(i) {		
-		$(".pms-step").each(function(){
-			$(this).hide();
-		});
-		$("#step"+i.toString()).show();
-		$("#navStepInfo").show();
-		$("#navPMS").hide();
-	}
-	
-	function hideStepInfo(i) {
-		$("#navPMS").show();
-		$("#navStepInfo").hide();
-	}
-		
 </script>
 </head>
 <body>
@@ -450,6 +436,9 @@
 		              <p class="card-text">${prjInfo.project_intro}</p>
 		              <img src="/common/images/intro/project_step.png" style="margin:10px 0px">
 		              <p class="card-text">프로젝트 기간 : ${prjInfo.project_startdate} ~ ${prjInfo.project_enddate}</p>
+		              <c:if test="${prjInfo.attach_name ne ''}">
+		              	<p class="card-text">첨부파일 : <a href="javascript:popup('/upload/${prjInfo.attach_path}',800,600)">${prjInfo.attach_name}</a></p>
+		              </c:if>
 		              <p class="card-text">팀장 : 
 		              	<c:forEach var="prjMember" items="${prjMemList}">
 		              		<c:if test="${prjMember.user_id eq prjInfo.project_manager_id}">

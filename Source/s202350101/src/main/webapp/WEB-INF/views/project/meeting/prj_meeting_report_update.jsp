@@ -38,11 +38,14 @@
 	textarea {
 		width: 80%;
 	}
-	input.form-control.form-control-sm.uploadFile {
+	/* input.form-control.form-control-sm.uploadFile {
     	width: 80%;
-	}
+	} */
 	.textbox {
 		height: 150px;
+	}
+	pre {
+	     margin-top: 16px;
 	}
 </style>
 <!-- CSS END -->
@@ -128,15 +131,15 @@
 							<c:forEach items="${meeting }" var="meeting" begin="0" end="0">
 								<tr>
 									<th>회의제목</th>
-									<td><input type="text" class="box" name="meeting_title" value="${meeting.meeting_title}"></td>
+									<td><input type="text" class="form-control" name="meeting_title" value="${meeting.meeting_title}"></td>
 								</tr>
 								<tr>
 									<th>회의일정</th>
-									<td><input type="date" class="box" name="meeting_date" value="${meeting.meeting_date}"></td>
+									<td><input type="date" class="form-control" name="meeting_date" value="${meeting.meeting_date}"></td>
 								</tr>
 								<tr>
 									<th>회의장소</th>
-									<td><input type="text" class="box" name="meeting_place" value="${meeting.meeting_place}"></td>
+									<td><input type="text" class="form-control" name="meeting_place" value="${meeting.meeting_place}"></td>
 								</tr>
 							</c:forEach>
 							<tr>
@@ -164,7 +167,7 @@
 								<tr>
 									<th>회의유형</th>
 									<td>
-										<select name="meeting_category" class="box">
+										<select name="meeting_category" class="form-select">
 											<option value="킥오프미팅"
 												<c:if test="${meeting.meeting_category == '킥오프미팅'}">selected</c:if>>킥오프미팅</option>
 											<option value="주간 업무보고"
@@ -198,13 +201,13 @@
 								</tr>
 								<tr>
 									<th>회의내용</th>
-									<td class="textbox"><textarea rows="6" cols="30" name="meeting_content">${meeting.meeting_content}</textarea></td>
+									<td class="textbox"><textarea rows="6" cols="30" name="meeting_content" class="form-control">${meeting.meeting_content}</textarea></td>
 								</tr>
 							</c:forEach>
 							<tr>
 								<td colspan="2" class="button">
-									<input type="button" value="취소" onclick="location.href='prj_meeting_report_read?meeting_id=${meeting_id }&project_id=${project_id}'">
-									<input type="submit" value="수정 완료">
+									<input type="submit" class="btn btn-dark btn-sm" value="수정 완료">
+									<input type="button" class="btn btn-dark btn-sm" value="취소" onclick="location.href='prj_meeting_report_read?meeting_id=${meeting_id }&project_id=${project_id}'">
 								</td>
 							</tr>
 						</table>

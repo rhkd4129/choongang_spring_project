@@ -90,11 +90,12 @@ public class LkhDaoImpl implements LkhDao {
 	//#######################################################################
 	//작업별 타임라인
 	@Override
-	public List<Task> task_timeline(int project_id) {
+	public List<Task> task_timeline(int project_id, String timeline_type) {
 		List<Task> timelineTask = null;
 		try {
-			timelineTask = sqlSession.selectList("task_timeline",project_id);
-
+			//timelineTask = sqlSession.selectList("task_timeline",project_id);
+			//by_step(단계별 오름차순), by_user(팀원별 오름차순), by_create(작성일 내림차순)
+			timelineTask = sqlSession.selectList("task_timeline_"+timeline_type, project_id);
 		} catch (Exception e) {
 			log.info("dao :task_timeline error Message -> {}", e.getMessage());
 		}
