@@ -1,19 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/header_main.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta  charset="UTF-8">
 <title>Insert title here</title>
 
+<!--CSS START -->
+<!-- CSS END -->
+
+<!-- JS START -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+<!-- JS END -->
+
+<!-- 그래프 -->
+<link rel="stylesheet" type="text/css" href="/lkh/css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/lkh/js/chart_options.js"></script>
+
 <script type="text/javascript">
-
-
 	$(function() {
+				
 		$.ajax({
 			url			: '/main_header',
-			dataType 	: 'text',
+			async		: false, //동기식 호출
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
@@ -21,7 +33,8 @@
 		
 		$.ajax({
 			url			: '/main_menu',
-			dataType 	: 'text',
+			async		: false, //동기식 호출
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
 			}
@@ -29,9 +42,11 @@
 		
 		$.ajax({
 			url			: '/main_center',
-			dataType 	: 'text',
+			async		: false, //동기식 호출
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#center').html(data);
+				//loadCalendar();
 			}
 		});
 	
@@ -42,11 +57,12 @@
 				$('#footer').html(data);
 			}
 		});
+		
 	});
+	
 </script>
 </head>
 <body>
-
 <!-- HEADER -->
 <header id="header"></header>
 

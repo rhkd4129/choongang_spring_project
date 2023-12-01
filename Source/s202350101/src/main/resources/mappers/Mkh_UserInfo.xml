@@ -7,19 +7,66 @@
 	 
 <mapper namespace="com.oracle.s202350101.UserInfoMapper">
 	
-	<!-- 회원가입 sql -->
+	<!-- 회원가입 + userEnv insert -->
 	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
-		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_number,    user_email,  user_auth) 
-					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_number}, #{user_email}, 'student')  
+		Insert All 
+			Into user_info(user_id,      class_id,    user_pw,    user_name,    user_gender,   						user_number,    user_birth,   	 					user_address,    user_email,  user_auth, attach_name, 	attach_path)  
+		    Values 		(#{user_id},  	#{class_id}, #{user_pw}, #{user_name}, #{user_gender, jdbcType = VARCHAR}, #{user_number}, #{user_birth, jdbcType = VARCHAR}, #{user_address}, #{user_email}, 'student', #{attach_name}, #{attach_path})
+			Into user_env(user_id, env_alarm_comm, env_alarm_reply, env_alarm_mine, env_alarm_meeting, env_chat) 
+		    Values 		(#{user_id}, 'Y', 'Y', 'Y', 'Y', 'Y')
+		Select * from dual
 	</insert>
 	
 	<!-- 로그인 check -->
 	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">
 		Select *
-		From  user_info 
-		Where user_id = #{user_id}
-		And   user_pw = #{user_pw}
+		From   user_info 
+		Where  user_id = #{user_id}
+		And    user_pw = #{user_pw}
 	</select>
 	
+	<!-- 회원가입 ID 중복확인 -->
+	<select id="IdConfirm" parameterType="String" resultType="userInfo">
+		Select *
+		From   user_info
+		Where  user_id = #{user_id}
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="userFindId" parameterType="userInfo" resultType="userInfo">
+		Select *
+		From   user_info
+		Where  user_name   = #{user_name}
+		And    user_number = #{user_number}
+	</select>
+	
+	<!-- 비밀번호 업데이트 -->
+	<update id="pwUpdate" parameterType="hashmap">
+		Update user_info
+		Set    user_pw = #{user_pw}
+		where  user_id = #{user_id}
+	</update>
+	            
+	<update id="userInfoUpdate" parameterType="UserInfo">
+        UPDATE user_info
+        SET
+	            class_id   = #{class_id}
+				<choose>
+					<when test="project_id == 0">,project_id = NULL</when>
+					<otherwise>,project_id = #{project_id}</otherwise>
+				</choose>
+	            ,user_pw    = #{user_pw}
+	            ,user_name  = #{user_name}
+		        ,user_gender = #{user_gender, jdbcType=VARCHAR}
+ 	            ,user_number = #{user_number}
+	            ,user_birth  = #{user_birth, jdbcType=DATE}
+	            ,user_address = #{user_address}
+	            ,user_email   = #{user_email}
+	            ,attach_name  = #{attach_name, jdbcType=VARCHAR}
+	            ,attach_path  = #{attach_path, jdbcType=VARCHAR}
+        WHERE user_id = #{user_id}
+	</update>
 
+	
+	
 </mapper>

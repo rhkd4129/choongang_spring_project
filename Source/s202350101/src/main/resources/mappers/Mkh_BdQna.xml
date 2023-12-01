@@ -7,24 +7,24 @@
 	 
 	 
 <mapper namespace="com.oracle.s202350101.BdQnaMapper">
-	<!-- user_id에 해당하는 게시물 -->
+	<!-- user_id에 해당하는 내가 쓴 게시물 -->
 	<select id="QnaListSelect" parameterType="UserInfo" resultType="BdQna">
-		Select a.app_id, a.app_name, b.subject, b.user_id, 
+		Select a.app_id, a.app_name, b.subject, b.user_id, b.doc_no,
 			   b.create_date, b.bd_count, b.good_count
 		From   bd_qna b, app_info a
 		Where  a.app_id = b.app_id
 		And    user_id = #{user_id}
 	</select>
 	
-	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
+	<!-- user_id에 해당하는 내가 쓴 게시글 count -->
+	<select id="totalQnaCount" parameterType="UserInfo" resultType="int">
 		select count(*) 
 		from   bd_qna 
 		where  user_id = #{user_id}
-	</select> -->
+	</select>
 	
-	<!-- user_id에 해당하는 count -->
-	<select id="userIdQnaListCount" parameterType="UserInfo" resultType="int">
+	<!-- user_id에 해당하는 총 count -->
+	<select id="totalBDListCount" parameterType="UserInfo" resultType="int">
 		Select 
 		    (select count(*) from bd_qna      where user_id = #{user_id}) +
 		    (select count(*) from bd_free     where user_id = #{user_id}) +
@@ -32,6 +32,16 @@
 		    (select count(*) from prj_bd_data where user_id = #{user_id}) 
 		From DUAL
 	</select>
+	
+	<!-- 내가 추천한 게시글 -->
+	<select id="qnaGoodSelect" parameterType="UserInfo" resultType="BdQna">
+		Select s.user_id, a.app_name, m.doc_no, m.app_id, m.subject, m.create_date, m.bd_count, m.good_count
+		From   bd_qna m, bd_qna_good s, app_info a
+		Where  m.doc_no = s.doc_no
+		And    m.app_id = a.app_id
+		And    s.user_id = #{user_id}
+	</select>
+
 	
 </mapper>
 

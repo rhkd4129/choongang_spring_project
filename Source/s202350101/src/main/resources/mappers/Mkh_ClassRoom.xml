@@ -9,8 +9,15 @@
 <mapper namespace="com.oracle.s202350101.ClassRoomMapper">
 	<!-- ClassRoom의 class_id, class_room_num, class_area select -->
 	<select id="createdClassSelect" resultType="ClassRoom">
-		select class_id, class_room_num, class_area
+		select *
 		from   class_room
+	</select>
+	
+	<select id="selectUserClass" resultType="ClassRoom" parameterType="String">
+		Select c.class_room_num, c.class_start_date, c.class_end_date, c.class_area, c.class_master
+		From   user_info u, class_room c
+		Where  u.class_id = c.class_id
+		And    user_id = #{user_id}
 	</select>
 
 </mapper>

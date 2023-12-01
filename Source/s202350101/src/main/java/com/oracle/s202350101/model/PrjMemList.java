@@ -11,8 +11,7 @@ import lombok.ToString;
 public class PrjMemList {
 	private int		project_id;
 	private String	user_id;
-
-
-	//조회용
-	private String        user_name;
+	
+	// 조회용
+	private String user_name;
 }

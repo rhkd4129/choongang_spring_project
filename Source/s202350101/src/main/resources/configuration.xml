@@ -20,7 +20,7 @@
     <typeAlias alias="ClassRoom" type="com.oracle.s202350101.model.ClassRoom" />
     <typeAlias alias="Code" type="com.oracle.s202350101.model.Code" />
     <typeAlias alias="Meeting" type="com.oracle.s202350101.model.Meeting" />
-    <typeAlias alias="Meeting_member" type="com.oracle.s202350101.model.Meeting_member" />
+    <typeAlias alias="MeetingMember" type="com.oracle.s202350101.model.MeetingMember" />
     <typeAlias alias="PrjBdData" type="com.oracle.s202350101.model.PrjBdData" />
     <typeAlias alias="PrjBdRep" type="com.oracle.s202350101.model.PrjBdRep" />
     <typeAlias alias="PrjInfo" type="com.oracle.s202350101.model.PrjInfo" />
@@ -32,6 +32,12 @@
     <typeAlias alias="Todo" type="com.oracle.s202350101.model.Todo" />
     <typeAlias alias="UserEnv" type="com.oracle.s202350101.model.UserEnv" />
     <typeAlias alias="UserInfo" type="com.oracle.s202350101.model.UserInfo" />
+    <typeAlias alias="HijRequestDto" type="com.oracle.s202350101.model.HijRequestDto" />
+    <typeAlias alias="HijRequestPrjDto" type="com.oracle.s202350101.model.HijRequestPrjDto" />
+    <typeAlias alias="HijPrjStep" type="com.oracle.s202350101.model.HijPrjStep" />
+    <typeAlias alias="HijSearchRequestDto" type="com.oracle.s202350101.model.HijSearchRequestDto" />
+    <typeAlias alias="HijSearchResponseDto" type="com.oracle.s202350101.model.HijSearchResponseDto" />
+
 </typeAliases>
 		
 </configuration>

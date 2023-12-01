@@ -19,7 +19,8 @@ public class ProjectCheckIntercepter implements HandlerInterceptor {
                              Object handler) throws Exception {
         System.out.println("project_check_intercepter");
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-        if(userInfo.getProject_id()== null){
+        //if(userInfo.getProject_id() == null){
+        if("null".equals(String.valueOf(userInfo.getProject_id()))){
             // 리다이렉트
             response.sendRedirect("main");
             // 처리를 중단하기 위해 false 반환
@@ -32,7 +33,7 @@ public class ProjectCheckIntercepter implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response,
                            Object handler,
-                             ModelAndView modelAndView) throws Exception {
+                           ModelAndView modelAndView) throws Exception {
     }
 
 }

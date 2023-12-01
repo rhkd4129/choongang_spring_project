@@ -14,7 +14,4 @@ public class PrjStep {
 	private int		project_order;
 	private String	project_s_name;
 	private String	project_s_context;
-
-	private String user_name;
-	private String user_id;
 }

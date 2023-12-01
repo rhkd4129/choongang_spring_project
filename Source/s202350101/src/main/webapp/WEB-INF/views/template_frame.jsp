@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/header_main.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,24 +17,24 @@
 	$(function() {
 		
 		$.ajax({
-			url			: '../main_header',
-			dataType 	: 'text',
+			url			: '/main_header',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#header').html(data);
 			}
 		});
 		
 		$.ajax({
-			url			: '../main_menu',
-			dataType 	: 'text',
+			url			: '/main_menu',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#menubar').html(data);
 			}
 		});
 	
 		$.ajax({
-			url			: '../main_footer',
-			dataType 	: 'text',
+			url			: '/main_footer',
+			dataType 	: 'html',
 			success		: function(data) {
 				$('#footer').html(data);
 			}
@@ -52,7 +52,7 @@
 	<div class="row">
  		
  		<!-- 메뉴 -->
-		<div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+		<div id="menubar" class="menubar border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style="position:fixed">
 		</div>
 		
 		<!-- 본문 -->

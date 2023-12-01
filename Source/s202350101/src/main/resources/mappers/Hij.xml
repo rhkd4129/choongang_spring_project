@@ -6,10 +6,240 @@
 	 mapper 여러개 쓰셔도 됩니다. -->
 	 
 	 
-<mapper namespace="com.oracle.s202350101.">
-	 
+<mapper namespace="com.oracle.s202350101.PrjInfoMapper">
 
+<!-- admin(관리자) -->
+
+	<!-- 프로젝트 갯수 -->
+	<select id="ijTotalCount" resultType="int">
+		SELECT COUNT(*) 
+		FROM prj_info 
+	</select>
+
+	<!-- 프로젝트 관리 리스트 + paging -->
+	<select id="ijApproveList" parameterType="PrjInfo" resultType="PrjInfo">
+	SELECT *
+	FROM(	
+		SELECT rownum rn, a.*
+		FROM (
+			SELECT p.*, u.user_name project_manager_name, u.class_id project_manager_class, 
+				   (SELECT cate_name FROM code WHERE table_name = 'PRJ_INFO' AND field_name = 'PROJECT_APPROVE' AND cate_code = p.project_approve) project_approve_name,
+				   (SELECT cate_name FROM code WHERE table_name = 'PRJ_INFO' AND field_name = 'PROJECT_STATUS' AND cate_code = p.project_status) project_status_name,
+				   (SELECT cate_name FROM code WHERE table_name = 'PRJ_INFO' AND field_name = 'DEL_STATUS' AND cate_code = p.del_status) del_status_name
+			FROM prj_info p, user_info u
+			WHERE p.project_manager_id = u.user_id
+			ORDER BY p.project_approve
+			) a
+	)
+	WHERE rn BETWEEN #{start} and #{end}	
+	</select>
+	
+	<!-- 관리자 페이지 project_approve=2 -->
+	<update id="ijAppOk" parameterType="HijRequestPrjDto">
+			UPDATE prj_info 
+			SET project_approve=#{project_approve}
+			WHERE project_id=#{project_id}
+	</update>
+	
+	<!-- 멤버목록 가져오기 -->
+ 	<select id="ijAppOkGetUser" parameterType="HijRequestPrjDto" resultType="PrjMemList">
+		SELECT * FROM prj_mem_list WHERE project_id=#{project_id}
+	</select>
+
+	<!-- user_info에 project_id 해당 id로 넣어줌 -->
+	<update id="ijAppOkUpdateUser" parameterType="java.util.List">
+		<foreach collection="list" item="PrjMemList" index="index" open="DECLARE BEGIN" separator=";" close="; END;" >
+			UPDATE user_info
+			SET project_id=#{PrjMemList.project_id}
+			WHERE user_id=#{PrjMemList.user_id} 
+		</foreach>
+	</update>
+
+	<!-- 단계 기본값 조회하기 (prj_step project_id=0) -->
+	<select id="ijDefaultList"  resultType="PrjStep">
+			SELECT * FROM prj_step WHERE project_id=0 ORDER BY project_step_seq
+	</select>
+
+	<!-- 단계 기본값 조회한것을 새로운 project 단계 생성에 넣어줌-->
+	<insert id="ijAppDefaultStep" parameterType="java.util.List">
+		<foreach collection="list" item="Step" index="index" open="DECLARE BEGIN" separator=";" close="; END;">
+			INSERT INTO 
+				prj_step 	(project_id, project_step_seq, project_order, project_s_name, project_s_context) 
+				VALUES (
+						#{Step.project_id},
+						(SELECT NVL (MAX(project_step_seq)+1,1) FROM prj_step),
+						#{Step.project_order},
+						#{Step.project_s_name},
+						#{Step.project_s_context}
+				)
+		</foreach>
+	</insert>
+	
+<!-- 2. 프로젝트 생성	 -->
+
+	 <!-- 삭제전 user_info project_id = null 처리 -->
+	<update id="ijAppDelUpdateUser" parameterType="java.util.List">
+		<foreach collection="list" item="PrjMemList" index="index" open="DECLARE BEGIN" separator=";" close="; END;" >
+			UPDATE user_info SET project_id=NULL WHERE user_id=#{PrjMemList.user_id} 
+		</foreach>
+	</update>
+
+	<!-- 프로젝트 삭제시 멤버목록에서 삭제 -->
+	<delete id="ijAppDelUser" parameterType="java.util.List">
+		<foreach collection="list" item="PrjMemList" index="index" open="DECLARE BEGIN" separator=";" close="; END;" >
+			DELETE FROM prj_mem_list WHERE project_id=#{PrjMemList.project_id} AND user_id=#{PrjMemList.user_id} 
+		</foreach>
+	</delete>
+	
+	<!-- 프로젝트 삭제시 삭제 상태 바꿔주기 -->
+	<update id="ijAppDel" parameterType="HijRequestPrjDto">
+			UPDATE prj_info 
+			SET del_status=#{del_status}
+			WHERE project_id=#{project_id}
+	</update>
+	
+	 <!-- user_id랑 같은 class_id를 가진학생 리스트 -->
+	<select id="ijlistName" parameterType="String"  resultType="UserInfo">
+		SELECT *
+		FROM user_info
+		WHERE class_id = (SELECT class_id 
+	                 	  FROM user_info
+	                  	  WHERE User_id =#{User_id})	    
+	    ORDER BY user_name
+	</select>
+
+	<!-- 프로젝트 생성 -->
+	<insert id="ijReqCreate" parameterType="PrjInfo">
+		INSERT INTO prj_info (project_id, project_name, project_startdate, project_enddate,
+							  project_manager_id, project_intro, project_approve,
+							  project_status, project_create_date)
+		VALUES (project_id_seq.nextval, #{project_name}, #{project_startdate}, #{project_enddate}, 
+				#{project_manager_id}, #{project_intro}, #{project_approve}, #{project_status}, sysdate)
+	</insert>
+
+	<!-- prj_mem_list에 팀원 추가 -->
+	<insert id="ijMemCreate" parameterType="PrjInfo">
+		INSERT INTO prj_mem_list (project_id, user_id) VALUES (project_id_seq.currval, #{member_user_id})
+	</insert>
 	
 
+<!-- 3. 프로젝트 단계 프로파일 -->
+
+	<!-- 프로젝트 멤버 리스트 -->
+	<select id="ijMemberList" parameterType="int"   resultType="PrjMemList">
+		SELECT p.project_id, u.user_id, u.user_name 
+		FROM user_info u, prj_info p
+		WHERE u.project_id = p.project_id
+		AND p.project_id =#{project_id}
+		ORDER BY u.user_name
+	</select>
+
+	<!-- 프로젝트 조회  -->
+	<select id="ijstepList" parameterType="int" resultType="PrjInfo">
+		SELECT p.*, u.user_name project_manager_name, (SELECT cate_name FROM code WHERE table_name = 'PRJ_INFO' AND field_name = 'PROJECT_APPROVE' AND cate_code = p.project_approve) project_approve_name
+		FROM prj_info p, user_info u
+		WHERE p.project_manager_id = u.user_id
+		AND p.project_id=#{project_id}
+	</select>
+
+	<!-- 프로젝트 단계조회 -->
+	<select id="ijTitleList" parameterType="int" resultType="PrjStep">
+		SELECT *
+		FROM prj_step
+		WHERE project_id=#{project_id}
+		ORDER BY project_order
+	</select>
+	
+	<!-- 프로젝트 진행 상태 -->
+	<update id="ijPrjStatus" parameterType="PrjInfo">
+		UPDATE prj_info SET project_status=#{project_status} WHERE project_id=#{project_id} 
+	</update>
+	
+	<!-- 프로젝트 정보 수정 -->
+	<update id="ijReqEdit" parameterType="PrjInfo">
+		UPDATE prj_info SET project_id=#{project_id}, project_name=#{project_name}, project_startdate=#{project_startdate}, project_enddate=#{project_enddate},
+							  project_manager_id=#{project_manager_id}, project_intro=#{project_intro}, project_approve=#{project_approve},
+							  attach_name=#{attach_name}, attach_path=#{attach_path},
+							  project_status=#{project_status}, project_create_date=sysdate
+	 	WHERE project_id=#{project_id}
+	</update>
+	
+	<!-- 프로젝트 정보 수정 팀원 리스트 -->
+	<insert id="ijMemReCreate" parameterType="PrjMemList">
+		INSERT INTO prj_mem_list (project_id, user_id) VALUES (#{project_id}, #{user_id})
+	</insert>
+
+	<!-- 프로젝트 단계 추가 수행 -->
+	<insert id="ijInsertStep" parameterType="PrjStep">
+		INSERT INTO prj_step 
+		(project_id, project_step_seq, project_order, project_s_name, project_s_context)
+		VALUES(#{project_id}, (SELECT NVL (MAX(project_step_seq)+1,1) FROM prj_step), #{project_order}, #{project_s_name}, #{project_s_context})
+	</insert>
+	
+	<!-- 단계 선택 -->
+	<update id="ijPrjOrder" parameterType="java.util.List">
+		<foreach collection="list" item="HijPrjStep" index="index" open="DECLARE BEGIN" separator=";" close="; END;">
+			UPDATE prj_step 
+			SET project_order=#{HijPrjStep.project_order} 
+			WHERE project_id=#{HijPrjStep.project_id} 
+			AND project_step_seq=#{HijPrjStep.project_step_seq}
+		</foreach>
+	</update>
+
+	<!-- 프로젝트 단계 수정 조회 -->
+	<select id="ijDetailStep" parameterType="PrjStep" resultType="PrjStep">
+		SELECT *
+		FROM prj_step
+		WHERE project_id=#{project_id} 
+		AND project_step_seq =#{project_step_seq}
+	</select>
+	
+	<!-- 프로젝트 단계 수정 수행 -->
+	<update id="ijUpdateStep" parameterType="PrjStep" >
+		UPDATE prj_step 
+		SET project_s_name=#{project_s_name}, project_s_context=#{project_s_context} 
+		WHERE project_id=#{project_id} AND project_step_seq=#{project_step_seq}
+	</update>
+	
+	<!-- 프로젝트 단계 삭제 -->
+	<delete id="ijDeleteStep" parameterType="int">
+		DELETE FROM prj_step WHERE  project_id=#{project_id} AND project_step_seq=#{project_step_seq}
+	</delete>
+	
+	<!-- 통합검색 -->
+	<select id="ijSearchList" parameterType="HijSearchRequestDto" resultType="hijSearchResponseDto">
+		SELECT a.*
+		FROM (
+			SELECT t.*, u.user_name user_name, 
+					(SELECT app_name FROM app_info WHERE app_id=t.app_id) app_name,
+					(SELECT app_path FROM app_info WHERE app_id=t.app_id) app_path 
+			FROM ${tablename} t, USER_INFO u
+			WHERE t.user_id = u.user_id
+		) a
+		WHERE ( a.user_name like '%' || #{keyword} || '%' 
+		<choose>
+			<when test="tablename == 'TASK'">
+				OR  a.task_subject like '%' || #{keyword} || '%' 
+				OR  a.task_content like '%' || #{keyword} || '%'
+			)			
+			</when>
+			<otherwise>
+				OR a.subject like '%' || #{keyword} || '%' 
+				OR  a.doc_body like '%' || #{keyword} || '%'
+			) 			
+			</otherwise>
+		</choose>
+		<if test="tablename != 'BD_FREE' and tablename != 'BD_QNA'">
+			AND project_id = #{project_id}
+		</if>
+	</select>
+	
+	<!-- 알람 업데이트 -->
+	<update id="ijUpdateAlarm" parameterType="PrjInfo">
+		UPDATE prj_info
+		SET alarm_flag = 'Y'
+		WHERE project_id=#{project_id}
+	</update>
+	
 </mapper>
 

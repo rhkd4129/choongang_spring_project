@@ -1,9 +1,18 @@
 package com.oracle.s202350101.service.mkhser;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.oracle.s202350101.model.UserInfo;
+
+import lombok.RequiredArgsConstructor;
 
 public class SampleInterceptor implements HandlerInterceptor {
 	
@@ -17,33 +26,33 @@ public class SampleInterceptor implements HandlerInterceptor {
 						   HttpServletResponse response, 
 						   Object handler,
 						   ModelAndView modelAndView) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("post handle....................................");
-		//UserInfo userInfo = (UserInfo) modelAndView.getModel().get("userInfo");
-		System.out.println("postHandle session.userInfo->"+request.getSession().getAttribute("userInfo"));
 
-		String urlGo = (String) modelAndView.getModel().get("urlGo");
-		System.out.println("postHandle urlGo->"+urlGo);
-		// 기존 로그인 세션이 있는 상태면 urlGo로 이동
-		if(request.getSession().getAttribute("userInfo") != null) {
-			response.sendRedirect(urlGo);
-		} else {
-			System.out.println("userInfo Not exists");
-			response.sendRedirect("user_login");
-		}
+//			System.out.println("post handle....................................");
+
 	}
 	
 	// 1번째 실행
 	@Override
-	public boolean preHandle(HttpServletRequest request, 
-							 HttpServletResponse response, 
-							 Object handler) throws Exception {
+   public boolean preHandle(HttpServletRequest request, 
+           HttpServletResponse response, 
+           Object handler
+           ) throws Exception {
+		//System.out.println("pre handle....................................");
+		// 세션이 있으면 만들지마 (로그인할때 이미 만듬)
+		System.out.println();
+		HttpSession session = request.getSession(false);
+		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 		
-		System.out.println("pre handle....................................");
-		
-		return true;
-
-		
+		if(userInfo == null) {
+		  System.out.println("preHandle userInfo is no exists");
+		  response.sendRedirect("user_login");
+		  return false;   // 컨트롤러 진행 x
+		} else
+		  session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
+		  
+		return true;   // 컨트롤러 진행 o
 	}
 
 }
+
+		

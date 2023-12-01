@@ -1,23 +1,40 @@
 package com.oracle.s202350101.dao.mkhDao;
 
 import java.util.List;
+import java.util.Map;
 
-import com.oracle.s202350101.model.BdFree;
-import com.oracle.s202350101.model.BdQna;
+import com.oracle.s202350101.model.BdDataComt;
+import com.oracle.s202350101.model.BdDataGood;
 import com.oracle.s202350101.model.ClassRoom;
+import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.PrjBdData;
-import com.oracle.s202350101.model.PrjBdRep;
+import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
 
 public interface MkhDao {
 
-	int             insertUserInfo(UserInfo userInfo);
-	List<ClassRoom> createdClass();
-	int             totalQna(UserInfo userInfo);
-	UserInfo        userLoginCheck(UserInfo userInfo);
-	List<BdFree>    bdFreeList(UserInfo userInfo);
-	List<PrjBdData> PrjDataList(UserInfo userInfo);
-	List<PrjBdRep>  PrjRepList(UserInfo userInfo);
-	List<BdQna>     bdQnaList(UserInfo userInfo);
+	int              insertUserInfo(UserInfo userInfo);
+	List<ClassRoom>  createdClass();
+	UserInfo         userLoginCheck(UserInfo userInfo);
+	UserInfo         confirm(String user_id);
+	int              totalBDcount(PrjBdData prjBdData);
+	int              updatePw(Map<String, String> map);
+	UserInfo         userFindId(UserInfo userInfo);
+	UserEnv          selectEnv(String user_id);
+	ClassRoom        selectClass(String user_id);
+	int              updateUser(UserInfo userInfo);
+	int              updateEnv(UserEnv userEnv);
+	List<PrjBdData>  bdSelectAll(PrjBdData prjBdData);
+	int              totalComt(PrjBdData prjBdData);
+	List<BdDataComt> selectAllComt(PrjBdData prjBdData);
+	int              totalGood(PrjBdData prjBdData);
+	List<BdDataGood> selectAllGood(PrjBdData prjBdData);
+	List<Code>       codeList(Code code);
+	int              searchDBCount(PrjBdData prjBdData);
+	List<PrjBdData>  searchBDList(PrjBdData prjBdData);
+	List<BdDataGood> searchGoodList(PrjBdData prjBdData);
+	int              searchGoodCount(PrjBdData prjBdData);
+	int              searchComtCount(PrjBdData prjBdData);
+	List<BdDataComt> searchComtList(PrjBdData prjBdData);
 
 }
