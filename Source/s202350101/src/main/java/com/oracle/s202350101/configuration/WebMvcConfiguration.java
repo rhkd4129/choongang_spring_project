@@ -1,5 +1,6 @@
 package com.oracle.s202350101.configuration;
 
+import com.oracle.s202350101.service.lkhSer.ProjectCheckIntercepter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -32,6 +33,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		registry.addInterceptor(new adminInterceptor())		//	어드민 권한 조회
 				.addPathPatterns("/admin_add_class", "/admin_del_class", "/admin_class_list", "/admin_board",
 				"/admin_projectmanager", "/admin_approval");
+
+		registry.addInterceptor(new ProjectCheckIntercepter()).addPathPatterns("/dashboard");
 	}
 
 }
