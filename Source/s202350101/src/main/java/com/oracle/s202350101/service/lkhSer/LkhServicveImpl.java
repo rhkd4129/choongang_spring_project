@@ -70,29 +70,21 @@ public class LkhServicveImpl implements LkhService {
 		// 현재 프로젝트에 있는 단계 리스트
 		List<PrjStep> stepList = lkhDao.project_step_select(project_id);
 		/***************************************************************/
-
 		List<String> stepNameList = stepList.stream().map(m->m.getProject_s_name()).collect(Collectors.toList());
 		//현재 프로젝트에 잇는 단계에 이름만 따로 갖고옴
-
 		/***************************************************************/
 		// 현재 프로젝트에 잇는 작업 리스트
 		List<Task> stepTaskList =  lkhDao.project_step_chart(project_id);
 		/***************************************************************/
-
 		// 작업 리스트중에 진행중인 작업만 가져오기  -> 최종적으로 보낼 데이터
 		List<Task> currentTaskList = stepTaskList.stream().filter(t->t.getTask_status().equals("1")).collect(Collectors.toList());
 		// task_state -> 진행중인 작업만 갖고오는 거
-
-
 		// 우선 map을 선언후 키로 각 프로젝트 단계 이름을 지정
 		// 값에는 빈리스트 지정  map < 프로젝트 이름, 빈 리스트 형태>
 		Map<String, List<String>> mapData = new LinkedHashMap<>();
 		stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
-
-
 		// map의 키를 순회(프로젝트 단계이름)하면서 작업들도 같이 순회 ->
 		// 작업의 단계이름과 키의 단계이름이 같으면 해당 키의 값에 잇는 리스트에 추가함
-
 		for (String key : mapData.keySet()) {
 			for (Task t : stepTaskList) {
 				if (t.getProject_s_name().equals(key)) {
@@ -105,10 +97,8 @@ public class LkhServicveImpl implements LkhService {
 				}
 			}
 		}
-
 		// 최종적으로 키에는 단계이름 값에는 그 단계에 해당하는 작업들이 들어잇는 map이 완성됨
 		AjaxResponse data = new AjaxResponse();
-
 		data.setMapData(mapData);
 		data.setOnelist(currentTaskList);
 		return data;

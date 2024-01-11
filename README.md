@@ -59,7 +59,7 @@
 </ul>
 
 
-
+---
 ### 🔥 작업목록 🔥  
  
     <!-- 작업목록 검색기능 -->
@@ -94,12 +94,12 @@
     </select>
      
 ![taskList](readme_image/taskList.PNG)
-
+---
 ### 🔥 작업조회 🔥  
 
 ![taskDetail](readme_image/taskDetail.PNG)
 
-
+---
 ### 🔥 작업생성 🔥  
 ❗ 팀 프로젝트 팀원들의 작업 생성 요구 조건
 
@@ -108,7 +108,7 @@
 ![taskCreate](readme_image/taskCreate.PNG)
 
 
-
+---
  ###  🔥 작업 생성 프로세스  🔥
 
 작업 생성 시 3개의 테이블이 모두 project_id와 task_id를 주요 키(PK)로 사용합니다.
@@ -126,13 +126,13 @@ Task(Table)에 Insert할 때는 **max+1** 을 하고, 그 이후 두 개의 테�
 
 
 ![taskCreate2](readme_image/taskCreate2.PNG)
-
+---
 ### 🔥 작업수정 🔥  
 ❗ 팀 프로젝트 팀원들의 작업 수정 요구 조건
 >  결국 3개의 테이블(Task, TaskSub, TaskAttach)에 DML작업을 하는 것은 비슷하지만 약간의 차이가 있습니다.
 
 ![taskUpdate2](readme_image/taskUpdate2.PNG)
-
+---
  ###  🔥 작업 수정 프로세스  🔥
 1. **수정 버튼 클릭**: 먼저 수정 버튼을 누르면 기존 정보가 표시되며, 여기에서 수정을 진행합니다.
 
@@ -150,7 +150,7 @@ Task(Table)에 Insert할 때는 **max+1** 을 하고, 그 이후 두 개의 테�
 ![taskUpdate](readme_image/taskUpdate.PNG)
 
 
-
+---
 ### 🔥 작업삭제 및 휴지통  🔥  
 먼저 작업 상세 내역에 삭제 버튼을 누르면 휴지통으로 이동합니다.  
 이는 데이터베이스 상에서 0과1의 상태값이  있는데 휴지통으로 이동하면서 0에서1로 변합니다.   
@@ -160,7 +160,7 @@ Task(Table)에 Insert할 때는 **max+1** 을 하고, 그 이후 두 개의 테�
 휴지통에서 영구삭제를 누를시에 Delete 처리가 되는 프로세스입니다.
 ![taskDelete](readme_image/taskDelete.PNG)
 
-
+---
 ### 🔥 작업보드(대시보드) 🔥  
 > 1. 3개의 그래프는 chart.js라는 API를 활용하였습니다.  
 >>> 프로젝트 기간 그래프는 Project의 시작일과 마감일을 가져와 시간연산을 하여 막대그래프로 나타냈습니다.  
@@ -188,10 +188,33 @@ Task(Table)에 Insert할 때는 **max+1** 을 하고, 그 이후 두 개의 테�
 
 
 > 2번과 3번은 마땅한 그래프가 없어 Javascript로 만들어서 보여주었습니다.
->> 2. 프로젝트 단계별로 최신순으로 어떤 작업들이 있는지 보여줍니다.   
+>> 2. 프로젝트 단계별로 최신순으로 어떤 작업들이 있는지 보여줍니다.  
+>> 핵심 프로세스 
+  >>> 프로젝트 단계를 key로 하는 map을 생성후  
+  >>> 작업들을 순회하면서 작업의 프로젝트 단계와 key가 맞으면 value(List)에 넣습니다.
+  >>> 최종적으로 프로젝트 단계를 Key로 갖고 value에는 단계에 해당하는 작업들이 List에 저장됩니다.
+  <pre>
+        -코드 중 일부-
+        stepNameList.stream().forEach(m->mapData.put(m, new ArrayList<>()));
+                // map의 키를 순회(프로젝트 단계이름)하면서 작업들도 같이 순회 ->
+                // 작업의 단계이름과 키의 단계이름이 같으면 해당 키의 값에 잇는 리스트에 추가함
+                for (String key : mapData.keySet()) {
+                    for (Task t : stepTaskList) {
+                        if (t.getProject_s_name().equals(key)) {
+                            // 해당하는 키에 맞는 값 목록 가져오기
+                            List<String> values = mapData.get(key);
+                            if (values != null) {
+                                // 값을 List<String>에 추가
+                                values.add(t.getTask_subject());
+                            }
+                        }
+                    }
+                }
+  </pre>
 >> 3.  현재 진행중인 작업이 보여집니다. 클릭하면 해당 작업 상세보기로 이동합니다.
 
 ![taskBoard](readme_image/taskBoard.PNG)
+---
 ### 🔥 타임라인 🔥  
 팀원들의 작업의 시작일과 종료일을 타임라인 형태로 시각화하여 보여줍니다.  
 Google Chart  API를 사용했습니다.
@@ -203,7 +226,7 @@ Google Chart  API를 사용했습니다.
 
 
 
-
+---
 ## 📌 프로젝트 회고 
 
 
