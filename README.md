@@ -45,60 +45,159 @@
 
 ## 🔭 나의 구현 기능
 
-###  ❗ 나의 기능 간단 정리 
+###  ❗ 나의 기능요약정리
+
+#### 내가 관여하는 Table들
 <img src="readme_image/my_erd.PNG" alt="myErd" width="800" height="400">
 
+
 <ul>
-  <li>팀장이 생성신청시 관리자가 승인하면 프로젝트가 만들어진다.</li>
-  <li>그 안에서 프로젝트 단계별[ex) 분석/설계, 기능구현,테스트, 배포]등 작업 생성해 관리(수정,삭제,조회)</li>
-  <li>하나의 작업에는 여러 공동작업자가 았을 수 있고 여러개의 파일을 첨부 할 수 있다.</li>
-  <li> 이러한 작업들을 바탕으로 여러 그래프로 시각화로 한눈에 보여준다.
+  <li> 팀장이 프로젝트 생성을 신청하면 관리자가 승인하여 프로젝트가 생성됩니다.</li>
+  <li> 프로젝트 내에서는 각 작업 단계(ex: 분석/설계, 기능 구현, 테스트, 배포)별로 작업을 생성하고 관리하며, 이를 수정, 삭제, 조회할 수 있습니다.</li>
+  <li> 하나의 작업에는 여러 공동 작업자가 참여할 수 있고, 여러 개의 파일을 첨부할 수 있습니다.</li>
+  <li> 이러한 작업들을 기반으로 다양한 그래프로 시각화하여 한눈에 보여줍니다.</li>
 </ul>
 
 
+
 ### 🔥 작업목록 🔥  
+ 
+    <!-- 작업목록 검색기능 -->
+    <select id="task_list" parameterType="Task" resultType="Task">
+        SELECT *
+            FROM (
+                SELECT rownum rn, a.*
+                    FROM (
+                        SELECT t.*, p.project_s_name, u.user_name
+                            FROM task t
+                                INNER JOIN prj_step p ON t.project_id = p.project_id AND t.project_step_seq = p.project_step_seq
+                                INNER JOIN user_info u ON t.user_id = u.user_id
+                                WHERE t.project_id = #{project_id} AND t.garbage = 0 and
+                                <choose>
+                                    <when test="keyword_division == 'task_subject'">
+                                        t.task_subject like '%' || #{keyword} || '%'
+                                    </when>
+                                    <when test="keyword_division == 'project_s_name'">
+                                        p.project_s_name like '%' || #{keyword} || '%'
+                                    </when>
+                                    <when test="keyword_division == 'user_name'">
+                                        u.user_name like '%' || #{keyword} || '%'
+                                    </when>
+                                    <otherwise>
+                                        1=1
+                                    </otherwise>
+                                </choose>
+                                order by t.create_date desc
+                                ) a
+        ) 
+        WHERE rn BETWEEN #{start} AND #{end}
+    </select>
+     
 ![taskList](readme_image/taskList.PNG)
 
 ### 🔥 작업조회 🔥  
+
 ![taskDetail](readme_image/taskDetail.PNG)
 
-### 🔥 작업생성 🔥  
- 팀프로젝트 팀원들의 작업 생성시 요구 조건  
- ❗ 하나의 작업(Task Table)생성 시 여려 공동작업자(TaskSub Table)와 다수 첨부파일(Task Attach)의 생성이 있을 수 있다.  
 
- 어러 테이블에 다중 Row를 Insert하는 상황 발생    ➡ 여러개의 DAO를 묶어서 한개의 서비스에 트랜잭션 처리
+### 🔥 작업생성 🔥  
+❗ 팀 프로젝트 팀원들의 작업 생성 요구 조건
+
+작업(Task Table)을 생성할 때 여러 공동 작업자(TaskSub Table) 및 다수의 첨부 파일(Task Attach)이 생성될 수 있습니다.  
+***다중 Row를 여러 테이블에 삽입하는 상황이 발생할 수 있습니다. ➡ 이러한 경우, 여러 개의 DAO를 묶어 하나의 서비스에서 트랜잭션을 처리하도록 구현합니다.***
 ![taskCreate](readme_image/taskCreate.PNG)
 
- ### 작업 생성 프로세스
 
-작업 생성시 3개의 테이블 공통적으로 project_id와 task_id가 필요(PK)   
-  ➡ 그 중 project_id는 원래 있던 값을 가져와서 사용하면 되므로 문제  x
 
-task_id 는 Task Table 에서 생성 시  MAX+1형식으로 생성 됨➡  이 값을 가져다 나머지 2개의 TABLE에 insert.
+ ###  🔥 작업 생성 프로세스  🔥
 
-Task(Table)에 Insert할떄 max+1을 하고 그 이후 두개의 테이블은 max+1이 커밋 된 후 그 시점에  max값을 가져오면 같은 값을 가져오게 된다.
+작업 생성 시 3개의 테이블이 모두 project_id와 task_id를 주요 키(PK)로 사용합니다.
 
-Task_sub(Table)는 체크박스 형식으로 user_id를 리스트로 입력받아  List<taskSub> 형식으로 받아서 순서대로 insert 
+➡ project_id는 기존 값에서 가져와 사용되어 문제가 없습니다.
 
-task_attach(Table)인 첨부파일 같은 경우는 pk가 project_id, task_id, attach_no  3개   파일이 리스트 형식으로 넘어온다.  
-그냥 insert문을 3번 처리하여 할 수도 있지만,  다른 방법이 없을까 생각 하던 중  예를 들어 파일이 3개가 들어온다고 가정 시 현재 max 에 값 순서대로 max+1, max+2, max+3 처럼 1씩 커지게 java에서  for 문으로 
-Pk 설정후 다중 insert 처리 
+**task_id(PK)** 는 Task Table에서 **MAX+1** 형식으로 생성됩니다. ➡ 이 값을 가져와 나머지 2개의 테이블(TaskSub, TaskAttach)에 삽입합니다.
+
+Task(Table)에 Insert할 때는 **max+1** 을 하고, 그 이후 두 개의 테이블(TaskSub, TaskAttach)은 Task가 커밋된 후 그 시점에 **max 값** 을 가져와 같은 값을 사용합니다.
+
+**Task_sub(Table)** 는 체크박스 형식으로 user_id를 리스트로 입력받아 List<taskSub> 형식으로 받아서 순서대로 **Insert** 합니다.
+
+**task_attach(Table)** 인 첨부파일은 **PK가 (project_id, task_id, attach_no)** 로 3개입니다. 단순히 insert문을 3번 처리할 수도 있지만, 다른 방법으로 파일이 3개 들어온다고 가정했을 때, 현재의 **max 값** 에서 순서대로 **max+1, max+2, max+3** 과 같이 1씩 증가시키는 Java for문으로 **PK를 설정** 하고 다중 insert를 처리할 수 있습니다.
+
+
+
 ![taskCreate2](readme_image/taskCreate2.PNG)
 
 ### 🔥 작업수정 🔥  
+❗ 팀 프로젝트 팀원들의 작업 수정 요구 조건
+>  결국 3개의 테이블(Task, TaskSub, TaskAttach)에 DML작업을 하는 것은 비슷하지만 약간의 차이가 있습니다.
+
 ![taskUpdate2](readme_image/taskUpdate2.PNG)
+
+ ###  🔥 작업 수정 프로세스  🔥
+1. **수정 버튼 클릭**: 먼저 수정 버튼을 누르면 기존 정보가 표시되며, 여기에서 수정을 진행합니다.
+
+2. **유효성 검증**: 수정 작업 진행 전에 유효성을 검증하고, 성공하면 수정이 이루어집니다.
+
+3. **주의 사항**:
+    - **Task Table**: 별 문제 없음.
+    - **TaskSub 및 TaskAttach Table**: 추가 또는 삭제 가능. Update가 아닌 Insert와 Delete 경우에 해당됩니다.
+
+    ➡ 따라서 해당 작업에 대한 공동작업자들을 모두 Delete 처리한 후, 입력된 값을 기반으로 다시 Insert합니다. 파일도 체크박스에 선택된 파일들을 먼저 삭제한 후에 다시 Insert합니다.
+
+    (성능 측면에서는 Delete 처리 후에 Insert 처리를 하는 것이 데이터 낭비를 줄일 수 있습니다.)
+
+   결국, 3개의 테이블에 대해 다중 Row를 Update, Insert, Delete 하는 경우이므로 생성과 마찬가지로 트랜잭션 처리를 수행합니다.
 ![taskUpdate](readme_image/taskUpdate.PNG)
 
+
+
 ### 🔥 작업삭제 및 휴지통  🔥  
+먼저 작업 상세 내역에 삭제 버튼을 누르면 휴지통으로 이동합니다.  
+이는 데이터베이스 상에서 0과1의 상태값이  있는데 휴지통으로 이동하면서 0에서1로 변합니다.   
+복구를 누를시에는 1에서 0으로 변하면서 다시 작업목록에 보여집니다.
+
+
+휴지통에서 영구삭제를 누를시에 Delete 처리가 되는 프로세스입니다.
 ![taskDelete](readme_image/taskDelete.PNG)
 
 
 ### 🔥 작업보드(대시보드) 🔥  
+> 1. 3개의 그래프는 chart.js라는 API를 활용하였습니다.  
+>>> 프로젝트 기간 그래프는 Project의 시작일과 마감일을 가져와 시간연산을 하여 막대그래프로 나타냈습니다.  
+>>> 작업현활도는  Task상태의 합계를 가져와 도넛 차트로 나타냈습니다.  
 
 
+>>> 멤버별 작업 현황도는 프로젝트의 각 인원별/작업 상태별로 데이터를 가공 후 누적막대그래프로 나타냈습니다.
+>>><pre>
+        <!-- 진척률 그래프 -->
+      <select id="workload_chart" parameterType="java.lang.Integer" resultType="Task">
+        <![CDATA[
+            SELECT U.USER_NAME,
+                  SUM(CASE WHEN T.TASK_STATUS = 0 THEN 1 ELSE 0 END) AS STATUS_0_COUNT,
+                  SUM(CASE WHEN T.TASK_STATUS = 1 THEN 1 ELSE 0 END) AS STATUS_1_COUNT,
+                  SUM(CASE WHEN T.TASK_STATUS = 2 THEN 1 ELSE 0 END) AS STATUS_2_COUNT
+            FROM
+                TASK T, USER_INFO U
+            WHERE
+                T.PROJECT_ID = #{project_id} AND T.USER_ID = U.USER_ID
+            GROUP BY U.USER_NAME
+            ]]>
+      </select>
+  </pre>   
+
+
+
+> 2번과 3번은 마땅한 그래프가 없어 Javascript로 만들어서 보여주었습니다.
+>> 2. 프로젝트 단계별로 최신순으로 어떤 작업들이 있는지 보여줍니다.   
+>> 3.  현재 진행중인 작업이 보여집니다. 클릭하면 해당 작업 상세보기로 이동합니다.
+
+![taskBoard](readme_image/taskBoard.PNG)
 ### 🔥 타임라인 🔥  
-![taskDelete](readme_image/taskTimeLine.PNG)
+팀원들의 작업의 시작일과 종료일을 타임라인 형태로 시각화하여 보여줍니다.  
+Google Chart  API를 사용했습니다.
 
+버튼을 활용하여 프로젝트 단계별, 팁원별, 최근 작성별로 페이지 이동없이 보여집니다.
+![taskTimeLine](readme_image/taskTimeLine.PNG)
 
 
 
